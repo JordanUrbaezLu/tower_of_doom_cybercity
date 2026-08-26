@@ -1,0 +1,13 @@
+material,mc/mtl_xmas_freeze
+weapon,xmas_gun_zm
+weapon,xmas_gun_up_zm
+
+scriptparsetree,scripts/zm/zm_weap_xmas_gun.gsc
+scriptparsetree,scripts/zm/zm_weap_xmas_gun.csc
+scriptparsetree,scripts/zm/cheese_man/zombie_slow_util.gsc
+
+stringtable,gamedata/weapons/zm/xmas_gun_weapon.csv
+stringtable,gamedata/weapons/zm/xmas_gun_weapon_no_box.csv
+
+fx,xmas_gun/xmas_gun_projectile
+fx,xmas_gun/xmas_gun_zmb_freeze

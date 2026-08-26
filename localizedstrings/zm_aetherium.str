@@ -1,0 +1,65 @@
+VERSION             "1"
+CONFIG              "C:\projects\cod\t7\bin\StringEd.cfg"
+FILENOTES           "ACC kill-feed strings. REFERENCE keys are BARE (KF_*): the T7 compiler auto-prepends the filename ZM_AETHERIUM_ so KF_MELEE becomes ZM_AETHERIUM_KF_MELEE in game. Do NOT prefix the keys here or they double up. VERSION must stay line 1, no comment lines."
+
+REFERENCE            KF_ELIMINATION
+LANG_ENGLISH         "Elimination"
+
+REFERENCE            KF_CRITICAL
+LANG_ENGLISH         "Critical Kill"
+
+REFERENCE            KF_MELEE
+LANG_ENGLISH         "Melee Kill"
+
+REFERENCE            KF_BURNED
+LANG_ENGLISH         "Burned Kill"
+
+REFERENCE            KF_BLAST_FURNACE
+LANG_ENGLISH         "Blast Furnace Kill"
+
+REFERENCE            KF_DEAD_WIRE
+LANG_ENGLISH         "Electric Kill"
+
+REFERENCE            KF_FIRE_WORKS
+LANG_ENGLISH         "Fireworks Kill"
+
+REFERENCE            KF_THUNDER_WALL
+LANG_ENGLISH         "Thunderwall Kill"
+
+REFERENCE            KF_TURNED
+LANG_ENGLISH         "Turned Kill"
+
+REFERENCE            KF_ZOMBIE_DOG
+LANG_ENGLISH         "Zombie Dog"
+
+REFERENCE            KF_ROCKET_SHIELD
+LANG_ENGLISH         "Rocket Shield Kill"
+
+REFERENCE            KF_GRENADE
+LANG_ENGLISH         "Grenade Kill"
+
+REFERENCE            KF_MONKEY_BOMB
+LANG_ENGLISH         "Monkey Bomb Kill"
+
+REFERENCE            KF_LIL_ARNIE
+LANG_ENGLISH         "Li'l Arnie Kill"
+
+REFERENCE            KF_RAGNAROK_DG4
+LANG_ENGLISH         "Ragnarok Kill"
+
+REFERENCE            BK_PICKUP
+LANG_ENGLISH         "Retrieve Ballistic Knife"
+
+REFERENCE            KF_SHARD
+LANG_ENGLISH         "Data Shard"
+
+REFERENCE            KF_SHARDS
+LANG_ENGLISH         "Data Shards"
+
+REFERENCE            KF_MEGA_BOTTLE
+LANG_ENGLISH         "Mega Bottle"
+
+REFERENCE            KF_MEGA_BOTTLES
+LANG_ENGLISH         "Mega Bottles"
+
+ENDMARKER

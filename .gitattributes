@@ -1,0 +1,10 @@
+# Line-ending policy: LF in the repo, LF on checkout, machine-independent.
+# Same policy as abandoned_cyber_city_zombies (proven there 2026-06):
+# Radiant/GSC/linker all accept LF; Radiant re-saves CRLF on Windows and a
+# commit normalizes back, so the repo never churns line endings.
+* text=auto eol=lf
+
+# Binaries - never touch.
+*.png binary
+*.jpg binary
+*.jpeg binary

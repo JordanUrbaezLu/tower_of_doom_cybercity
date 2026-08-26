@@ -1,0 +1,14 @@
+// [tod] .gsh scriptparsetree lines dropped from the shipped zpkg — they are
+// #insert headers, not compiled scripts (map 1's vendoring convention).
+
+// INFINITE AMMO
+scriptparsetree,scripts/zm/logical/powerups/_zm_powerup_infiniteammo.gsc
+scriptparsetree,scripts/zm/logical/powerups/_zm_powerup_infiniteammo.csc
+xmodel,logical_m_powerups_infiniteammo
+material,logical_powerup_infiniteammo
+
+// TIME WARP
+scriptparsetree,scripts/zm/logical/powerups/_zm_powerup_timewarp.gsc
+scriptparsetree,scripts/zm/logical/powerups/_zm_powerup_timewarp.csc
+xmodel,logical_m_powerups_timewarp
+material,logical_powerup_timewarp

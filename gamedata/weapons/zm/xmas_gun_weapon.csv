@@ -1,0 +1,2 @@
+weapon_name,upgrade_name,hint,cost,weaponVO,weaponVOresp,ammo_cost,create_vox,obsolete_false,in_box,upgrade_in_box,is_limited,limit,upgrade_limit,obsolete2_false,wallbuy_autospawn,class,is_aat_exempt,is_wonder_weapon,force_attachments
+xmas_gun,xmas_gun_up,,10000,,,,,,TRUE,FALSE,TRUE,1,,FALSE,TRUE,special,TRUE,TRUE,

@@ -1,0 +1,10 @@
+{
+  "floorNodes": 64725,
+  "standableNodes": 52612,
+  "misplacedWalls": 0,
+  "unguardedEdges": 0,
+  "unreachableRoadNodes": 0,
+  "unreachableTowerNodes": 0,
+  "baseReachesTerrace": true,
+  "terraceReachesCitadel": true
+}
