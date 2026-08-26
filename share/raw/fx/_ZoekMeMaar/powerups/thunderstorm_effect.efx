@@ -1,0 +1,347 @@
+iwfx 3
+
+	editorFlags;
+	efFlags;
+	efPriority 255;
+	efBoundingBoxMin 0 0 0;
+	efBoundingBoxMax 0 0 0;
+	occlusionQueryDepthBias 0;
+	occlusionQueryFadeIn 0;
+	occlusionQueryFadeOut 0;
+	occlusionQueryScaleRange 1 0;
+	normalsShape 0;
+	normalsShapeOffset 0 0 0;
+	normalsShapeRadius 0;
+	normalsShapeLength 0;
+	normalsShapeAngles 0 0 0;
+	normalsShapeVisualizationColor 0 0 0 0;
+	efCompletion 0;
+	lodDefault0 0 0;
+	lodDefault1 0 0;
+	lodDefault2 0 0;
+	lodDefault3 0 0;
+{
+	name "lightning_trail";
+	editorFlags looping useRandVel0 useBackCompatVel;
+	flags spawnFrustumCull spawnOffsetNone runRelToWorld;
+	extraFlags;
+	spawnRange 0 200000;
+	fadeInRange 0 0;
+	fadeOutRange 0 200;
+	spawnFrustumCullRadius 600;
+	spawnLooping 5000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 1 0;
+	spawnDelayMsec 0 0;
+	lifeSpanMsec 1000 0;
+	spawnOrgX 0 0;
+	spawnOrgY 0 0;
+	spawnOrgZ 0 0;
+	spawnOffsetRadius 60 0;
+	spawnOffsetHeight 1 0;
+	spawnOffsetCylindricalAxis 0;
+	spawnAnglePitch 0 0;
+	spawnAngleYaw 0 0;
+	spawnAngleRoll 0 0;
+	angleVelPitch 0 0;
+	angleVelYaw 0 0;
+	angleVelRoll 0 0;
+	initialRot 0 0;
+	rotationAxis 0 0 0 1;
+	gravity 0 0;
+	elasticity 1 0;
+	windinfluence 0;
+	atlasBehavior startRandom;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 0;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 0;
+	atlasIndexRange 0;
+	velGraph0X 300
+	{
+		{
+			0 0.341312
+			0.220187 0.229788
+			1 0.00076758
+		}
+		{
+			0 -0.000717749
+			0.003 -0.00363586
+			1 -0.000717786
+		}
+	};
+	velGraph0Y 1200
+	{
+		{
+			0 0.341312
+			0.191829 0.204414
+			1 0
+		}
+		{
+			0 -0.5
+			0.003 -0.0051151
+			1 0
+		}
+	};
+	velGraph0Z 1200
+	{
+		{
+			0 0.341312
+			0.168052 0.174807
+			1 0
+		}
+		{
+			0 -0.5
+			0.003 0.00104753
+			1 0
+		}
+	};
+	velGraph1X 0
+	{
+		{
+			0 -0.000713266
+			1 0
+		}
+		{
+			0 0
+			1 0
+		}
+	};
+	velGraph1Y 0
+	{
+		{
+			0 -0.00154066
+			1 0
+		}
+		{
+			0 0
+			1 0
+		}
+	};
+	velGraph1Z 0
+	{
+		{
+			0 -0.00154066
+			1 0
+		}
+		{
+			0 0
+			1 0
+		}
+	};
+	rotGraph 0
+	{
+		{
+			0 0.000713266
+			1 0.00225392
+		}
+		{
+			0 0.5
+			1 0.5
+		}
+	};
+	sizeGraph0 100
+	{
+		{
+			0 0.194123
+			0.18302 0.194123
+			0.365258 0.331018
+			0.540355 0.423201
+			0.770053 0.486712
+			1 0.497187
+		}
+		{
+			0 0.0584416
+			0.329412 0.123377
+			0.632353 0.324675
+			0.811765 0.571429
+			1 1
+		}
+	};
+	sizeGraph1 10
+	{
+		{
+			0 1
+			1 0
+		}
+		{
+			0 1
+			1 0
+		}
+	};
+	scaleGraph 1
+	{
+		{
+			0 1
+			1 0
+		}
+		{
+			0 1
+			1 0
+		}
+	};
+	childSizeScaleGraph 1
+	{
+		{
+			0 0
+			1 0
+		}
+		{
+			0 1
+			1 1
+		}
+	};
+	colorGraph 1
+	{
+		{
+			0 0.224936 0.307413 0.529986
+			0.337439 0.00209503 0.00838021 0.194123
+			1 0.00209503 0.00419011 0.507662
+		}
+		{
+			0 1 1 1
+			0.067065 0.0858972 0.0858972 0.176644
+			1 0.0858972 0.0858972 0.176644
+		}
+	};
+	alphaGraph 1
+	{
+		{
+			0 1
+			0.195808 1
+			0.5573 0.326828
+			0.753108 0.0921823
+			1 0
+		}
+		{
+			0 1
+			0.0552326 1
+			0.0988372 0.483254
+			0.18314 0.344498
+			0.322674 0.239234
+			1 0
+		}
+	};
+	lightIntensityGraph 0
+	{
+		{
+			0 0
+			0.69771 0.331355
+			1 1
+		}
+		{
+			0 1
+			1 1
+		}
+	};
+	lightRadiusGraph 100
+	{
+		{
+			0 1
+			1 1
+		}
+		{
+			0 1
+			1 1
+		}
+	};
+	lightFovGraph 90
+	{
+		{
+			0 1
+			1 1
+		}
+		{
+			0 1
+			1 1
+		}
+	};
+	inheritParentMovementGraph 1
+	{
+		{
+			0 1
+			1 1
+		}
+		{
+			0 1
+			1 1
+		}
+	};
+	attractorGraph 1
+	{
+		{
+			0 1
+			1 1
+		}
+		{
+			0 1
+			1 1
+		}
+	};
+	attractorLocalPosition 0 0 0;
+	lightingFrac 0;
+	collOffset 0 0 0;
+	collRadius 0;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 0;
+	emission "";
+	emitDist 1 0;
+	emitDistVariance 0 0;
+	emitDensity 1 0;
+	emitSizeForDensity 1;
+	attachment "";
+	attachmentDensity 1 0;
+	attachmentSizeForDensity 1;
+	trailSplitDist 80;
+	trailScrollTime 0;
+	trailRepeatDist 300;
+	trailFadeInDist 0;
+	trailFadeOutDist 0;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 0;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0.5;
+	spotLightStartRadius 36;
+	spotLightEndRadius 196;
+	alphaDissolve 0.192157;
+	zFeather 0;
+	falloffBeginAngle 65;
+	falloffEndAngle 85;
+	lfSourceDir 1 0 0;
+	lfSourceSize 15;
+	trailDef
+	{
+		0.9 -0.9 0
+		-0.9 0.9 1
+		0.9 -0.9 2
+		-0.9 -0.9 0
+		0.9 0.9 1
+		-0.9 -0.9 2
+	} {
+		0
+		1
+		1
+		2
+		3
+		4
+		4
+		5
+	};
+	billboardPivot 0 0;
+	levelOfDetail 0;
+	trail
+	{
+		"gfx_lightning_bolt_trail_em_i256"
+	};
+}

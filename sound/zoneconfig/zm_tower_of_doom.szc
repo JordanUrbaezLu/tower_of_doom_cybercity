@@ -1,0 +1,85 @@
+{
+ "Name" : "zm_tower_of_doom",
+ "GameMode" : "mpl",
+ "IsCommon" : false,
+ "Parent" : "",
+ "Overlay" : "",
+ "IsStandalone" : true,
+ "IsProduction" : false,
+ "IsShipped" : false,
+ "DontDeploy" : false,
+ "NoStreamBank" : false,
+ "MapFile" : "",
+ "Standalone" : true,
+ "Builds" : [ "T7" ],
+ "Sources" : [
+ {
+ "Type" : "ALIAS",
+ "Name" : "user_aliases",
+ "Filename" : "user_aliases.csv",
+ "Specs" : [ ]
+},
+{
+ "Type" : "ALIAS",
+ "Name" : "tod_weapons",
+ "Filename" : "tod_weapons.csv",
+ "Specs" : [ ]
+},
+{
+ "Type" : "ALIAS",
+ "Name" : "tod_combat_knife",
+ "Filename" : "tod_combat_knife.csv",
+ "Specs" : [ ]
+},
+{
+ "Type" : "ALIAS",
+ "Name" : "tod_ports",
+ "Filename" : "tod_ports.csv",
+ "Specs" : [ ]
+},
+{
+ "Type" : "ALIAS",
+ "Name" : "mechz_spiki",
+ "Filename" : "mechz_spiki.csv",
+ "Specs" : [ ]
+},
+{
+ "Type" : "ALIAS",
+ "Name" : "zm_ai_zod_companion",
+ "Filename" : "zm_ai_zod_companion.csv",
+ "Specs" : [ ]
+},
+{
+ "Type" : "ALIAS",
+ "Name" : "tod_bosses",
+ "Filename" : "tod_bosses.csv",
+ "Specs" : [ ]
+},
+{
+ "Type" : "ALIAS",
+ "Name" : "tod_ui",
+ "Filename" : "tod_ui.csv",
+ "Specs" : [ ]
+},
+{
+ "Type" : "ALIAS",
+ "Name" : "logical_powerups",
+ "Filename" : "logical_powerups.csv",
+ "Specs" : [ ]
+},
+{
+ "Type" : "ALIAS",
+ "Name" : "xmas_gun",
+ "Filename" : "xmas_gun.csv",
+ "Specs" : [ ]
+},
+{
+ "Type" : "AMBIENT",
+ "Name" : "ambient_mod",
+ "Filename" : "ambient_mod.csv",
+ "Specs" : [
+  "mpl_mod"
+  ]
+}
+]
+}
