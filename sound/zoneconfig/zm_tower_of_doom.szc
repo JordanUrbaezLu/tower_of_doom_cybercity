@@ -80,6 +80,18 @@
  "Specs" : [
   "mpl_mod"
   ]
+},
+{
+ "Type" : "ALIAS",
+ "Name" : "zm_cwpap_sound",
+ "Filename" : "zm_cwpap_sound.csv",
+ "Specs" : [ ]
+},
+{
+ "Type" : "ALIAS",
+ "Name" : "tod_wisp_tea",
+ "Filename" : "tod_wisp_tea.csv",
+ "Specs" : [ ]
 }
 ]
 }

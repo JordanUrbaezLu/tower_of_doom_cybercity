@@ -64,6 +64,7 @@ const REPO = path.join(__dirname, '..');
 const MAP_OUT = process.env.TOD_MAP_OUT || path.join(REPO, 'map_source', 'zm', 'zm_tower_of_doom.map');
 const DOOR_GSC_OUT = path.join(REPO, 'scripts', 'zm', 'zm_tower_of_doom', '_tod_door_data.gsc');
 const CROWN_GSC_OUT = path.join(REPO, 'scripts', 'zm', 'zm_tower_of_doom', '_tod_crown_data.gsc');
+const BREATHER_GSC_OUT = path.join(REPO, 'scripts', 'zm', 'zm_tower_of_doom', '_tod_breather_data.gsc');
 
 // ---------------------------------------------------------------------------
 // Layout constants
@@ -120,19 +121,47 @@ const SLAB = 16;
 // With its own zone the risers only wake when the door is bought.
 const TPB_DOOR  = 160;    // half-width of the opening in the south wall
 const TPB_X     = 240;    // bay interior half-width
-const TPB_Y1    = -1120;  // bay interior south edge
+// ROOM DEEPENED 2026-08-27 (user: "the teleporter room lets expand it by pushing
+// the back wall a bit further back, This is because the landing pad overlaps with
+// the teleporter pads and that doesnt look good").
+//
+// THE OVERLAP WAS REAL AND PURELY VISUAL — the trigger clearances were always
+// fine, which is why it never showed up as a bug. Measured on the old numbers:
+//   arrival decal   x[-88,88]    y[-708,-532]
+//   front-row decal x[-198,-22]  y[-848,-672]   (and its mirror)
+// -> they intersected over 66 x 36 units. The pad CENTRES were 178u apart,
+// comfortably past the 120u gather, so nothing malfunctioned; two 176u floor
+// squares simply drew through each other.
+//
+// Fix: push the south wall back 160 and slide BOTH rows 80 further south. The
+// row-to-row spacing stays exactly 220 so the "tangent triggers either way"
+// property is untouched; only the gap to the arrival grows.
+// -1120 -> -1280 buys the room for it, and every clearance improves:
+//   arrival-to-nearest-pad   178u -> 246u
+//   decal gap                -66u (overlapping) -> +44u
+//   back row to south wall   56u  -> 132u
+//   riser to nearest pad     186u -> 258u
+// KEEP _tod_teleport.gsc's up_orgs IN STEP — that file HARDCODES these four pad
+// coordinates and there is no generated bridge for them, so a change here alone
+// separates the visible pad from the trigger that uses it.
+const TPB_Y1    = -1280;  // bay interior south edge
 const TPB_Y2    = -(ARENA + WALL);  // -560, flush with the arena wall's south face
 // The 2x2: centres 220 apart on BOTH axes (tangent triggers either way), the
 // pair of rows 52u apart at the pad edges so you can still walk between them.
 const TPB_PAD_X = 110;
-const TPB_PAD_YN = -760;  // front row  (floors 10 / 20)
-const TPB_PAD_YS = -980;  // back row   (floors 30 / 40)
+const TPB_PAD_YN = -840;  // front row  (floors 10 / 20)
+const TPB_PAD_YS = -1060; // back row   (floors 30 / 40)
 const TPB_ARR_Y = -620;   // arrival, in the entry apron north of the front row
 const TPB_RISER_Y = -600; // the two risers flank the doorway (see the zone below)
 const TPB_RISER_X = 205;
 
 const LAPS = 50;                              // v8: DOUBLED (user 2026-08-21) — top z=19200
 const STEPS = 16, TREAD = 32, RISE = 12;      // per flight: 512 run, 192 rise
+// A flight spans exactly one core face, so STEPS*TREAD must equal 2*CORE. That
+// was an unguarded hand-maintained coincidence until 2026-08-27 — docs/39's
+// blast-radius trial set TREAD 48 and got a 50-storey map with the climb
+// SILENTLY severed (no throw; only the geometry lint caught it). Free insurance:
+if (STEPS * TREAD !== 2 * CORE) throw new Error(`STEPS*TREAD (${STEPS * TREAD}) must equal 2*CORE (${2 * CORE}) — the flight no longer spans its core face`);
 const FLIGHT_RISE = STEPS * RISE;             // 192
 const LAP_RISE = 2 * FLIGHT_RISE;             // 384 — v6: TWO flights per floor (user 2026-08-20)
 const TOP = LAPS * LAP_RISE;                  // 19200 — rooftop level
@@ -141,6 +170,65 @@ const PARA_EVERY = 2;                         // parapet box per N steps (bake k
 // user 2026-08-21). 112 is well over a BO3 jump from a rail top; the rails
 // themselves stay 56 so the city stays visible while you climb.
 const RAIL_CAP_H = 112;
+
+// ---------------------------------------------------------------------------
+// STAIR RAMP CLIP (2026-08-27) — the stair-feel fix. Full research: docs/39.
+//
+// Players complained the stairs are "slippery going down / sticky going up".
+// The geometry is NOT defective (docs/39 §2: every transition on the climb is
+// exactly 0 or +12, zero anomalies on a 1-unit walk) — the problem is that this
+// was the only staircase in shipped-or-custom BO3 content that players WALK ON
+// STEPPED COLLISION. Every stock Treyarch stair carries a sloped clip wedge
+// over its treads (verified in the shipped prefab source: zm_giant staircases
+// use metal_clip at atan(8/12); stairs_curved clips a HELICAL stair with a
+// 16-brush fan). The wedge removes all ~1,616 discrete step events per climb:
+// no riser planes to catch a diagonal move going up, no per-step camera
+// correction, continuous ground contact (friction + full steering) going down.
+//
+// MATERIAL = clip_player, chosen over Treyarch's own metal_clip/plain clip
+// after reading the local tools (2026-08-27):
+//   * clip.gdt: clip_player = playerClip 1, aiClip 0, bulletClip 0,
+//     canShootClip 0, missileClip 0 — blocks PLAYERS ONLY. Bullets, grenades
+//     and zombies pass through and keep using the visible treads.
+//   * radiant/configs/navmesh.json lists clip_player in "exclusions", so the
+//     navmesh — and therefore every zombie path — is BYTE-IDENTICAL with the
+//     ramps in or out. Plain `clip`/metal_clip are NOT excluded and would
+//     re-cut the whole tower's navmesh (Treyarch's config; fine, but a much
+//     bigger change than a feel experiment needs).
+//   * measure_lit_area.js's UNLIT regex is start-anchored: `clip_player`
+//     matches ^clip and stays out of the lit-area budget; metal_clip would be
+//     mis-counted as ~30M u² of phantom lit area.
+//
+// PLANE PLACEMENT (Treyarch's, measured from their prefabs, not guessed): the
+// wedge top is the plane through the FRONT-TOP NOSING CORNER of every tread —
+// the unique lowest plane at the stair's slope that never dips below a tread
+// top. It touches each tread at its front edge and stands at most +RISE above
+// it at the back. Both ends land flush: the top end welds into the landing at
+// exactly landing height, and the bottom end knife-edges into the approach
+// floor over the last TREAD units before the first riser (a 0->12 feather,
+// exactly the stock arrangement). Underside = the same plane RAMP_T lower,
+// which stays inside the tread slabs the whole way (tread slab bottom is
+// top-16 and consecutive treads overlap 4 in z), so NO invisible face is ever
+// exposed under the open-air stairs — the lap-1 arena strip under the east
+// flight stays walkable.
+//
+// TOOLING CONTRACT (all verified before this shipped):
+//   * lint_tod_geometry.js parses axis-constant planes only and drops a wedge
+//     at `planes.length !== 6` BEFORE the material table lookup — so the lint
+//     neither aborts on the material nor sees the ramps at all. Its proofs
+//     still hold for the treads underneath, which stay exactly as they were;
+//     the ramps themselves are proven by the generator's own construction
+//     (slope asserted = RISE/TREAD, ends asserted flush by arithmetic here).
+//   * measure_lit_area.js counts them in its skipped/unlit bucket (^clip).
+//   * The wedges do NOT go through addBox(), so the crown self-measure
+//     (crownBB) never sees the crown-stair ramp — irrelevant, it is inside the
+//     crown stair's existing envelope.
+//
+// REVERT: set STAIR_RAMP_CLIP = false, node tools/gen_tower_map.js, FULL
+// rebuild. Nothing else references it — no GSC, no zone, no data file.
+// ---------------------------------------------------------------------------
+const STAIR_RAMP_CLIP = true;
+const RAMP_T = 16;             // vertical thickness = SLAB: underside stays buried in the tread slabs
 
 // ---------------------------------------------------------------------------
 // THE CROWN (v9) — the top of the map.
@@ -377,6 +465,54 @@ const CR_MOUTH_Z1  = CR_C1_Z, CR_MOUTH_Z2 = CR_C3_Z;   // C1 and C4 stay continu
 const CR_OUT_X     = CR_HX + CR_ERM;            // 2112
 const CR_OUT_Y     = CR_CY + CR_HY + CR_ERM;    // 10304 (north face, odd frame)
 
+// ---------------------------------------------------------------------------
+// THE ENDLESS SPIRE (docs/44, user 2026-08-29) — the post-victory endless
+// tower: 100 laps of the SAME spiral grammar, far east in the void, reached
+// only by the one-way ascension teleporter on the crown hall dais. Visible
+// from the whole climb (user: "players should be able to see and wonder what
+// that tower is") — it sits INSIDE the existing sky seal, ~9,500 units off
+// the tower's east face, and its monochrome red glow lines are the mystery.
+//
+// SPIRE_ENABLED is the emission gate, agreed with the publish lane
+// 2026-08-29: while false this file's output is BYTE-IDENTICAL to the
+// pre-spire generator — no brush, no entity, no guid consumed, no
+// _tod_spire_data.gsc written — so an accidental regen by any session can
+// never leak half-finished spire geometry into a shipping build. The proof
+// is mechanical (scratch-copy byte-diff), not a promise. Flip to true only
+// when the spire lane wires up (docs/44 build-order).
+const SPIRE_ENABLED = true;
+const SP_X = 10240, SP_Y = 0;   // spire axis — due EAST: every odd lap's E flight faces it
+const SP_LAPS = 100;            // the ask: "a tower that goes up 100 floors"
+const SP_TOP = SP_LAPS * LAP_RISE;      // 38400
+const SP_TOP2 = SP_TOP + FLIGHT_RISE;   // 38592 — summit deck (the crown-stair pattern)
+const SP_DOOR_COST = 3000;      // user: every door = the original ladder's cap
+const SP_SUMMIT_COST = 7500;    // summit extraction (the roof door's price) — the chosen WIN
+const SP_HUB_EVERY = 10;        // vendor hub balcony every 10th floor
+const SP_ZONE_CHUNK = 5;        // floors per spawn zone (riser gating rides a script filter)
+const SP_BEACON_H = 512;        // summit beacon mast above the deck
+// Crate shelf (every non-hub floor): the mid landing is 160 sq with a riser in
+// its centre and both other landings are door territory (a 96-radius door
+// trigger owns each one), so "an ammo crate at every floor" needs its own
+// ground: a 128x120 railed bump-out through a gap cut in the mid landing's
+// outer parapet. Crate trigger at the shelf's far edge = 190u from the landing
+// riser — the power-hall precedent (189u) for "no two things in one trigger".
+const SP_SHELF_Y1 = 276, SP_SHELF_Y2 = 396;   // the parapet gap (odd frame)
+const SP_SHELF_X1 = PX + PARA, SP_SHELF_X2 = PX + PARA + 128;   // 436..564
+const SP_CRATE_LX = 526, SP_CRATE_LY = 336;   // crate org on the shelf (local, odd frame)
+// Monochrome menace: on this map red means danger, and the spire IS the
+// danger. Steps stay navy silhouette; every glow line is red; the hubs go
+// GOLD — the crown's colour marks the reward rhythm every 10th floor.
+const SP_MAT_STEP = 'mwiii_vertigo_retro_synth_dark_blue_tinted';
+const SP_MAT_LAND = 'mwiii_vertigo_retro_synth_red_tinted_edge';
+const SP_MAT_PARA = 'mwiii_vertigo_retro_synth_red';
+const SP_MAT_CORE = 'mwiii_vertigo_retro_synth_red_tinted';
+const SP_MAT_HUBF = 'mwiii_vertigo_retro_synth_yellow_tinted_edge';
+const SP_MAT_HUBP = 'mwiii_vertigo_retro_synth_yellow';
+const SP_LIGHT_RED = '1 0.3 0.3';
+const SP_LIGHT_GOLD = '1 0.85 0.35';
+if (SP_LAPS % 2 !== 0) throw new Error('SP_LAPS must be EVEN — the summit flight and hub furniture are authored for the frame that parity produces (the tower paid for silent parity drift once; the spire refuses to build instead of drifting)');
+if (SP_HUB_EVERY % 2 !== 0) throw new Error('SP_HUB_EVERY must be even — hubs reuse the breathers\' mirrored-frame furniture table (BR_FURN)');
+
 // Sky enclosure (the SEAL)
 // v9: widened 1900 -> 2900 for the crown hall (outer face at y=2656 in either
 // frame) and raised to clear the mast tip + corner needles.
@@ -394,7 +530,9 @@ const CR_OUT_Y     = CR_CY + CR_HY + CR_ERM;    // 10304 (north face, odd frame)
 // section 5f asserts the crown against them.
 const SKY_IN = Math.max(2900, HN + 384, CR_OUT_Y + 512, CR_OUT_X + 512), SKY_TH = 32;
 const SKY_BOT = -96, SKY_FLOOR = -64;
-const SKY_TOP = Math.max(MAST_TOP, CROWN_TOP) + 300;
+// v14: max()'d over the SPIRE's beacon when it is enabled — same rule as the
+// crown (the seal must be derived from everything under it, never a literal).
+const SKY_TOP = Math.max(MAST_TOP, CROWN_TOP, SPIRE_ENABLED ? SP_TOP2 + SP_BEACON_H + 64 : 0) + 300;
 
 // Neon palette, cycled per lap (ALL names verified in the installed
 // emox_mwiii_vertigo_assets.gdt 2026-08-17/18).
@@ -424,8 +562,38 @@ const MAT = {
   landing: 'mwiii_vertigo_retro_synth_dark_white',        // fallback only — landings now use edgeMatOf(lap)
   roofFloor: 'mwiii_vertigo_retro_synth_pap',             // the payoff floor under PaP
   roofPara: 'mwiii_vertigo_retro_synth_yellow',
-  door: 'mwiii_vertigo_retro_synth_red',
+  // BUYABLE DOORS — GLOWING GREEN SEAM (user 2026-08-27: "making the doors more
+  // obvious to buy. They look quite similar to the walls ... see if we have a
+  // wall in that same pack that can be used").
+  //
+  // WHY THE OLD FLAT RED FAILED, measured rather than guessed:
+  //   * the wall a door is set into is the CORE BAND, stepMatOf(lap) =
+  //     `<PALETTE>_tinted`, and PALETTE cycles EIGHT colours — one of which is
+  //     RED. On lap % 8 == 6 the door was red-on-red against its own wall, i.e.
+  //     6 of the 50 floors.
+  //   * every landing and balcony is `_tinted_edge` (glowing seams), so a flat
+  //     door was the ONLY major surface in the map with no glow at all. It did
+  //     not read as a door; it read as wall.
+  //
+  // A FIXED HUE CANNOT SOLVE THIS — with eight wall colours cycling, whatever
+  // colour the door takes, one lap in eight matches it. So the door has to
+  // differ in KIND, not in hue: `_tinted_edge` makes it the only VERTICAL
+  // glowing-grid surface in the map, on every lap, against flat `_tinted` walls.
+  //
+  // GREEN because this map already speaks it: exfilPad below is
+  // green_tinted_edge, so green already means "the way through". Green is also
+  // the universal buyable convention. Residual: the wall is green_tinted on
+  // lap % 8 == 3, so on 6 floors the HUE matches — but the door still carries a
+  // seam grid the wall does not, which is the read that was missing before.
+  //
+  // Same pack (emox_mwiii_vertigo_assets), so the theme is untouched. NOTE the
+  // `_tinted_edge` family exists ONLY for blue/green/orange/red/yellow — the
+  // geometry lint will not catch an invented name, the linker just substitutes.
+  door: 'mwiii_vertigo_retro_synth_green_tinted_edge',
   clip: 'clip',
+  // player-only clip for the stair ramps — see the STAIR RAMP CLIP block up in
+  // the constants for why it is NOT plain `clip` (navmesh + AI + lit-area).
+  rampClip: 'clip_player',
   sky: 'sky',
   // --- the crown (v9) ---
   crownStep: 'mwiii_vertigo_retro_synth_yellow_tinted',        // the last flight is GOLD — you can see the prize
@@ -498,21 +666,52 @@ const SSI = 'acc_ssi_miami_night';
 // the old row already reached 525, so a slot at 675 would have parked a machine
 // OUTSIDE the arena wall. Parking is only the fallback position (the scatter
 // relocates these at load) but it has to stay reachable if capture ever fails.
+// v13.3 (user 2026-08-28: "I have downloaded the Bo7 perk machines. Can we
+// miggrate to those machines?") — THE WHOLE ROSTER WEARS THE BO7/BO6 MESHES
+// (wetegg/sat port, install-side at <root>\_custom\_wetegg\models\sat\ +
+// per-machine GDTs in the shared source_data — root-only, our sync COPIES and
+// never mirrors, so they survive builds; credits owed before publish, the
+// pack ships no readme). Every machine is now the INLINE-STRUCT lane the
+// widow's/cherry/nuke entries proved across v6-v13: stock
+// perk_machine_spawn_init builds the machine script_model AND the
+// zombie_vending trigger from the struct's model/noteworthy/script_string
+// (_tod_perk_scatter.gsc:253's verified chain), so a model swap is JUST a
+// model name. The retired stock prefabs carried only two extras: 6 clientside
+// spot lights and 3 attack_spot structs — both pinned to the PARK ROW, which
+// players never see lit (machines scatter at load), so nothing player-facing
+// is lost. Noteworthies are copied VERBATIM from the stock prefabs (read
+// 2026-08-28, map_source\_prefabs\zm\zm_core — doubletap is
+// specialty_doubletap2, not "doubletap"). Every t10/sat machine has an _on
+// twin with lit emissive maps; _tod_perk_lights swaps models at power-on.
+// In-game verify list (first armed run): yaw convention (ports usually keep
+// the stock -Y front — if all nine face backwards, flip the one yaw below),
+// footprint vs the 130u park pitch and pad clearances, base seam at z=0.
 const PERK_PARK = [
-  { prefab: 'vending_juggernaut_struct.map', x: -520 },
-  { prefab: 'vending_sleight_struct.map',    x: -390 },
-  { prefab: 'vending_revive_struct.map',     x: -260 },
-  { prefab: 'vending_marathon_struct.map',   x: -130 },
-  { struct: 'p7_zm_vending_widows_wine',  noteworthy: 'specialty_widowswine',        x: 0 },
-  { struct: 'electric_cherry_model',      noteworthy: 'specialty_combat_efficiency', x: 130 },
-  { prefab: 'vending_doubletap_struct.map',  x: 260 },
-  { prefab: 'vending_deadshot_struct.map',   x: 390 },
+  { struct: 't10_zm_machine_juggernog',                  noteworthy: 'specialty_armorvest',         x: -520 },
+  { struct: 't10_zm_machine_speed_cola_lava_all_fxanim', noteworthy: 'specialty_fastreload',        x: -390 },
+  { struct: 't10_zm_machine_quick_revive',               noteworthy: 'specialty_quickrevive',       x: -260 },
+  { struct: 't10_zm_machine_staminup',                   noteworthy: 'specialty_staminup',          x: -130 },
+  // sat's custom Widow's Wine build — identified by the literal "WIDOW'S
+  // WINE" on its emissive text plate (the pack's codenames say nothing).
+  { struct: 'sat_zm_machine_y_mod',                      noteworthy: 'specialty_widowswine',        x: 0 },
+  // v14.16: struct model caught up with the v13.19 Death Perception swap —
+  // this row still said elemental_pop, which v13.19 deliberately UN-ZONED, so
+  // the .map's pre-registration window pointed at an unpacked xmodel (the
+  // runtime machine_assets stamp hid it within a frame; cosmetic, but wrong).
+  { struct: 't10_zm_machine_death_perception',           noteworthy: 'specialty_combat_efficiency', x: 130 },
+  { struct: 't10_zm_machine_d_mod_cowboy_fxanim',        noteworthy: 'specialty_doubletap2',        x: 260 },
+  // v14.16: WISP TEA (BO7, SAT custom mesh) replaces Deadshot — same slot,
+  // same everything. Deadshot's yaw-359.999 override died with its off-mesh
+  // rotation exception; the wisp pair is one mesh + a skin override, so it
+  // takes the uniform yaw. Module: scripts/zm/_zm_perk_wisp_tea.gsc (sets
+  // its own machine_assets off/on pair — _tod_perk_lights leaves it alone).
+  { struct: 'sat_zm_machine_w_mod_fxanim',               noteworthy: 'specialty_nomotionsensor',    x: 390 },
   // PhD FLOPPER — registered OVER the stock cherry specialty (_tod_perk_phd.gsc).
-  // Nuke vending model: reads as ordnance for the explode-on-down perk, and keeps
-  // it visually distinct from the Electric Cherry machine two slots over.
-  { struct: 'p7_zm_vending_nuke',         noteworthy: 'specialty_electriccherry',    x: 520 },
+  // v13.3: a REAL PhD machine at last — the nuke vending model was only ever a
+  // stand-in ("reads as ordnance") from the era when no PhD mesh existed.
+  { struct: 't10_zm_machine_phd_flopper',                noteworthy: 'specialty_electriccherry',    x: 520 },
 ];
-const PERK_PARK_Y = 500;   // base N wall interior, machines face south
+const PERK_PARK_Y = 511;   // base N wall interior, machines face south (500 -> 511 v13.5: the BO7 meshes are shallower than the p7 stock ones — user: "QR has a bit of space between its back and the wall"; the scatter pads moved 11u wallward in lockstep)
 // (WALLBUYS REMOVED — user 2026-08-20: never asked for; the box + class guns carry weapons)
 // x1.5 2026-08-20 (user): was 750 +250/lap cap 4000 -> 1125 +375/lap cap 6000.
 // v9.41 2026-08-23 (user: "Doors cost too much. Lets make it so they
@@ -578,7 +777,127 @@ const BREATHER_LAPS = new Set([10, 20, 30, 40]);   // respaced for 50 laps (stil
 // (SE quarter), _tod_powerups PaP (N edge). Keep those four in lockstep.
 const BR_DEPTH = 576;   // extension beyond PX (was 400)
 const BR_EAST = 384;    // widening beyond PX (was 224)
-// balcony outer edges (708 / 564) stay well inside SKY_IN (1200)
+
+// ---------------------------------------------------------------------------
+// v13 — THE BREATHER LOUNGES (user 2026-08-28: "redesign the breather areas so
+// they are nicer and more atmospheric ... space things out a bit better ...
+// pap and ammo box are so close to each other that it can trigger the wrong
+// thing ... Maybe each one can have its own color theme ... Teleporter can be
+// off in its own pathway that stems from the breather room ... maybe the idea
+// of putting a roof and walls in these breathers. I dont really want to add
+// furniture.") Three moves, ZERO new models — brushwork plus the furniture
+// that already exists:
+//
+// 1. ROOF + WALLS. The open deck becomes an enclosed room: each old parapet
+//    band grows into a full wall — 56 SILL (the old rail line), a 136-tall
+//    WINDOW BAND (glowing mullions; the voids carry clip_player so nobody
+//    climbs out but BULLETS PASS — zombies on the gantry and on the stairs
+//    above are shootable through the windows), a 96 LINTEL band, and a dark
+//    roof with a glowing theme trim ring. The climb stays open-air; the
+//    breather now reads as shelter. THE ROOF IS 72 THICK ON PURPOSE:
+//    lint_tod_geometry calls any _tinted/_tinted_edge slab <= 64 thick a
+//    walkable DECK and would demand guards on a surface nobody can reach
+//    (every approach above it is already railed + rail-capped).
+//
+// 2. ONE COLOR PER BREATHER (BREATHER_THEME): floor grid, sill, mullions,
+//    roof trim, gate and the room lights all speak a single hue — 10 BLUE
+//    (the base arena's color: the city follows you up), 20 GREEN, 30 ORANGE,
+//    40 GOLD (the crown's color — the last stop foreshadows the prize). All
+//    four keys come from the `_tinted_edge` five (blue/green/orange/red/
+//    yellow) so the floor can carry the theme; RED is deliberately unused —
+//    on this map red means danger (beacon, ruby, boss), never rest. What
+//    this replaces: laps 10/20/30/40 all hit EDGE_COLORS[4], so all four
+//    floors were the SAME yellow with rails in four unrelated palette colors.
+//
+// 3. THE TELEPORTER SPUR: the porter moves off the room floor entirely —
+//    through a doorway in the outer wall, down an open-air 160-wide gantry,
+//    onto a 288x288 pad platform floating in the void. Room = shelter,
+//    gantry = exposure, and the pad's idle beam marks the departure lounge
+//    from the whole tower. The doorway is a double frame: the wall's own
+//    192-tall opening, then a 240-tall gate (posts + lintel) at the gantry's
+//    head. The spur has NO risers and no roof; pressure walks in through the
+//    gate — the deck riser 42u inside the mouth keeps the annex from ever
+//    being a quiet camp pocket.
+//
+// THE SPACING FIX RIDES ON THIS — each interactable now owns a wall:
+//    N wall (entrance side)  UPGRADE STATION   (was W wall)
+//    W wall                  PACK-A-PUNCH      (was parked IN the entrance
+//                            path at (-320,-470), its trigger 174u from the
+//                            crate's with both costing 5000 — the reported
+//                            wrong-buy)
+//    E wall                  AMMO CRATE        (unchanged)
+//    S wall                  the two PERK PADS (unchanged) + the spur doorway
+// BR_FURN below is the single source of truth: asserted for pairwise trigger
+// clearance at generation time and emitted as GENERATED
+// scripts/zm/zm_tower_of_doom/_tod_breather_data.gsc (the door-data no-drift
+// contract), which _tod_powerups / _tod_upgrades / _tod_ammo_crate /
+// _tod_teleport read. _tod_perk_scatter keeps its own pad table (machines
+// relocate at runtime); its two S-wall pads are mirrored into BR_FURN for the
+// assert with a lockstep note there.
+// ---------------------------------------------------------------------------
+const BR_WALL_H  = 288;      // room wall: 56 sill + 136 window + 96 lintel
+const BR_SILL_H  = PARA_H;   // 56 — the old parapet height IS the sill
+const BR_WIN_TOP = 192;      // window band spans z mid+56 .. mid+192
+// BR_ROOF_TH: RETIRED v13.6 (user 2026-08-29: open-top lounges — "You cant
+// look up and see the tower so it kinda makes it worse"). Kept as a comment,
+// not a live define, so nobody reads a roof-thickness constant and concludes
+// the lounges have roofs. If a lid ever returns, it must be >64 thick or the
+// geometry lint's DECK rule classifies it walkable and demands edge guards —
+// that was the whole reason the retired value was 72.
+const BR_MULL_W  = 28;       // window mullion width (thin bright strut)
+const BR_TRIM_W  = 24;       // glowing trim ring on the roof, 8 proud
+// The spur, authored in the ODD frame like the rest of the breather block
+// (brBox mirrors it; every shipped breather lap is EVEN — asserted below).
+const SPUR_CX    = 704;                      // gantry centreline
+const SPUR_W     = 80;                       // walkway half-width (160 clear)
+const SPUR_Y0    = PX + BR_DEPTH;            // 992  — leaves the room here
+const SPUR_Y1    = SPUR_Y0 + 320;            // 1312 — gantry ends, platform starts
+const SPUR_Y2    = SPUR_Y1 + 288;            // 1600 — platform far edge
+const SPUR_PAD_Y = (SPUR_Y1 + SPUR_Y2) / 2;  // 1456 — porter centre
+const BREATHER_THEME = {
+  10: { key: 'blue',   light: '0.35 0.55 1' },
+  20: { key: 'green',  light: '0.35 1 0.6'  },
+  30: { key: 'orange', light: '1 0.6 0.25'  },
+  40: { key: 'yellow', light: '1 0.85 0.35' },
+};
+for (const l of BREATHER_LAPS) {
+  // The furniture data file and the crate's collision clip are emitted in the
+  // EVEN (mirrored) frame because every breather lap is even. If one ever
+  // lands on an odd lap the geometry mirrors itself (brBox), but the data
+  // emission needs a parity pass — refuse to build a half-mirrored map.
+  if (l % 2 !== 0) throw new Error(`breather lap ${l} is ODD — _tod_breather_data emission assumes the mirrored frame`);
+  if (!BREATHER_THEME[l]) throw new Error(`breather lap ${l} has no BREATHER_THEME entry`);
+}
+// Furniture, EVEN-frame absolutes (the frame all four breathers sit in).
+// trig = where the use-trigger stands, r = its radius (r mirrored from each
+// owner script: PaP/station 64, crate 72, perk vending ~48, teleporter 110).
+// MIN_TRIG_GAP makes the v10.4 rule mechanical: rims must clear by a stride,
+// not merely avoid touching — the shipped PaP/crate pair had a 38u rim gap
+// and produced the wrong-buy report this redesign exists to fix.
+const BR_FURN = {
+  pap:     { org: [-744, -680], trig: [-688, -680], yaw: 90,      r: 64 },  // W wall, faces east
+  station: { org: [-500, -460], trig: [-500, -516], yaw: 359.999, r: 64 },  // N wall, faces south
+  crate:   { org: [-310, -700], trig: [-310, -700], yaw: 270,     r: 72 },  // E wall, faces west (unchanged)
+  perk_e:  { trig: [-360, -970], r: 48 },   // _tod_perk_scatter pads — HAND-SYNCED there (v13.5: -959 -> -970, wallward with the BO7 meshes)
+  perk_w:  { trig: [-536, -970], r: 48 },   //   (v13.5 lockstep; listed for the assert only)
+  tp:      { trig: [-SPUR_CX, -SPUR_PAD_Y], r: 110 },   // the spur pad (TOD_TP_TRIG_RADIUS)
+};
+const MIN_TRIG_GAP = 64;
+const TP_ARRIVE_OFF = 160;   // up-riders land this far up the gantry, toward the room
+const TP_GATHER = 120;       // mirrored from _tod_teleport.gsc TOD_TP_GATHER (assert only)
+{
+  const ks = Object.keys(BR_FURN);
+  for (let i = 0; i < ks.length; i++) for (let j = i + 1; j < ks.length; j++) {
+    const a = BR_FURN[ks[i]], b = BR_FURN[ks[j]];
+    const d = Math.hypot(a.trig[0] - b.trig[0], a.trig[1] - b.trig[1]);
+    const need = a.r + b.r + MIN_TRIG_GAP;
+    if (d < need) throw new Error(`breather furniture ${ks[i]}<->${ks[j]}: triggers ${Math.round(d)}u apart, rims need ${need}`);
+  }
+  // A landing rider inside the pad's own gather is swept along by the next
+  // departure (v10.4); and the pad trigger must not reach the platform rails.
+  if (TP_ARRIVE_OFF <= TP_GATHER) throw new Error('tp arrival lands inside the pad gather');
+  if ((SPUR_Y2 - SPUR_Y1) / 2 - BR_FURN.tp.r < 24) throw new Error('tp pad trigger reaches the platform rails');
+}
 
 // ---------------------------------------------------------------------------
 // Emitters (proven plane family — do not touch the placeholder numbers)
@@ -643,6 +962,57 @@ function cbox(label, x1, x2, y1, y2, z1, z2, tex) {
 function cpt(x, y, z) { return [CM * x, CM * y, z]; }
 function cyaw(y) { return CM === 1 ? y : ((y + 180) % 360); }
 
+// --- STAIR RAMP CLIP emitters (see the constants block for the full note) ---
+// These are the map's ONLY non-axis-aligned brushes, and that is deliberate:
+// box() stays the sole general-purpose writer, and every tool that parses the
+// .map (geometry lint, parity lint, measure_lit_area, audit_hidden_faces,
+// preview_crown) either skips or buckets a brush whose planes are not all
+// axis-constant — verified per-tool on 2026-08-27, docs/39 §5-G1.
+// Plane convention (matches box()): three points per plane, outward normal
+// = (P1-P2)x(P3-P2). The slope is ASSERTED equal to RISE/TREAD, which is what
+// welds the wedge to the nosing line and both landings by arithmetic.
+function rampPlane(p1, p2, p3, tex) {
+  const t = `${tex} 128 128 0 0 0 0 lightmap_gray 16384 16384 0 0 0 0`;
+  return ` ( ${p1.join(' ')} ) ( ${p2.join(' ')} ) ( ${p3.join(' ')} ) ${t}`;
+}
+function rampWedge(label, planes, tex) {
+  worldBrushes.push({
+    label,
+    text: ['{', ` guid "${guid()}"`, ...planes.map((p) => rampPlane(p[0], p[1], p[2], tex)), '}'].join('\n'),
+  });
+}
+// A wedge whose top slopes along Y: z = zAtY1 at y1, zAtY2 at y2 (either end
+// may be the high one). x1<x2, y1<y2 always — these are bounds, not direction.
+// rise/tread default to the tower's stair scale; roadStair passes its own
+// (CW_RISE/CW_TREAD) — the assert is what welds the plane to the nosings.
+function rampWedgeY(label, x1, x2, y1, y2, zAtY1, zAtY2, tex, rise = RISE, tread = TREAD) {
+  if (x1 >= x2 || y1 >= y2) throw new Error(`ramp wedge ${label}: degenerate bounds`);
+  if (Math.abs(zAtY2 - zAtY1) * tread !== (y2 - y1) * rise)
+    throw new Error(`ramp wedge ${label}: slope must be rise/tread or it misses the nosings`);
+  rampWedge(label, [
+    [[x2, y1, zAtY1], [x1, y1, zAtY1], [x1, y2, zAtY2]],                               // top (sloped, up)
+    [[x1, y1, zAtY1 - RAMP_T], [x2, y1, zAtY1 - RAMP_T], [x2, y2, zAtY2 - RAMP_T]],    // bottom (sloped, down)
+    [[x1, y1, zAtY1], [x2, y1, zAtY1], [x2, y1, zAtY1 - 64]],                          // end -y
+    [[x2, y2, zAtY2], [x1, y2, zAtY2], [x1, y2, zAtY2 - 64]],                          // end +y
+    [[x1, y1 + 64, zAtY1], [x1, y1, zAtY1], [x1, y1, zAtY1 - 64]],                     // side -x
+    [[x2, y1, zAtY1], [x2, y1 + 64, zAtY1], [x2, y1 + 64, zAtY1 - 64]],                // side +x
+  ], tex);
+}
+// The X-sloping mirror: z = zAtX1 at x1, zAtX2 at x2.
+function rampWedgeX(label, y1, y2, x1, x2, zAtX1, zAtX2, tex, rise = RISE, tread = TREAD) {
+  if (y1 >= y2 || x1 >= x2) throw new Error(`ramp wedge ${label}: degenerate bounds`);
+  if (Math.abs(zAtX2 - zAtX1) * tread !== (x2 - x1) * rise)
+    throw new Error(`ramp wedge ${label}: slope must be rise/tread or it misses the nosings`);
+  rampWedge(label, [
+    [[x1, y1, zAtX1], [x1, y2, zAtX1], [x2, y2, zAtX2]],                               // top (sloped, up)
+    [[x1, y2, zAtX1 - RAMP_T], [x1, y1, zAtX1 - RAMP_T], [x2, y1, zAtX2 - RAMP_T]],    // bottom (sloped, down)
+    [[x1, y2, zAtX1], [x1, y1, zAtX1], [x1, y1, zAtX1 - 64]],                          // end -x
+    [[x2, y1, zAtX2], [x2, y2, zAtX2], [x2, y2, zAtX2 - 64]],                          // end +x
+    [[x1, y1, zAtX1], [x1 + 64, y1, zAtX1], [x1 + 64, y1, zAtX1 - 64]],                // side -y
+    [[x1 + 64, y2, zAtX1], [x1, y2, zAtX1], [x1, y2, zAtX1 - 64]],                     // side +y
+  ], tex);
+}
+
 // ---------------------------------------------------------------------------
 // 1. Sky enclosure
 // ---------------------------------------------------------------------------
@@ -686,6 +1056,43 @@ addBox('base clip W', -(ARENA + WALL), -ARENA, -ARENA, ARENA, BASE_WALL_H, BASE_
 addBox('base clip E', ARENA, ARENA + WALL, -420, ARENA, BASE_WALL_H, BASE_CLIP_TOP, MAT.clip);
 // clip ABOVE the hallway pass-through (the wall line stays sealed over z=128)
 addBox('power hall doorway clip', ARENA, ARENA + WALL, -ARENA, -420, BASE_WALL_H, BASE_CLIP_TOP, MAT.clip);
+
+// THE BASE AMMO CRATE (v14.3) — core WEST face. This is the single source of
+// truth for its position: the collision clip is cut HERE (exactly like the
+// five breather/crown crates — the model ships NO collision data) and the
+// origin/yaw are emitted into GENERATED _tod_breather_data.gsc
+// (base_crate_org/base_crate_yaw), which _tod_ammo_crate.gsc reads — the
+// door-data no-drift contract. HISTORY THAT MUST NOT REPEAT: v13.23 placed
+// this crate script-side at (320,0,0) — "the emptiest base wall" — which is
+// the strip UNDER LAP 1'S EAST FLIGHT (x[256,416], the very strip the
+// teleport bay was moved out of, see the TPB note near the top), and its
+// three script-clip DisconnectPaths carves severed the stair navmesh both
+// ways (Workshop report Pinkbrotha4310 2026-08-30). A wall strip is "empty"
+// precisely when a flight runs over it. The asserts below make that mistake
+// mechanical: the geometry lint CANNOT see script collision, and now there
+// is none — the clip is a real brush the lint and the navmesh compiler both
+// understand. Yaw 270 = front toward -x, out into the arena; box literals =
+// the measured yaw-270 occupancy shared by every "ammo crate body" cut.
+const BASE_CRATE = { org: [-320, 0], yaw: 270 };
+{
+  const [bcx, bcy] = BASE_CRATE.org;
+  const box = { x1: bcx - 37, x2: bcx + 38, y1: bcy - 19, y2: bcy + 45 };  // z 0..58
+  // 1. NEVER inside a ground-level flight footprint (+24u margin). The only
+  //    flight at base z is lap 1's E flight (odd laps climb E+N): x[CORE,PX],
+  //    y[-CORE,CORE], z 0..192 — the Pinkbrotha strip.
+  if (box.x2 > CORE - 24 && box.x1 < PX + 24 && box.y2 > -CORE - 24 && box.y1 < CORE + 24)
+    throw new Error('base ammo crate box overlaps the lap-1 E flight footprint (the v13.23 navmesh break) — move BASE_CRATE');
+  // 2. It must BACK the core's west face (a crate floating mid-arena is a
+  //    different design and would need its own review): back edge within 64u
+  //    of x=-CORE and not inside the core.
+  if (box.x2 > -CORE || box.x2 < -CORE - 64)
+    throw new Error('base ammo crate no longer backs the core west face — re-review the placement');
+  // 3. The walkway past its front must stay at least a doorway wide (128u)
+  //    to the arena W wall inner face, so the clip can never become a choke.
+  if (box.x1 - (-ARENA) < 128)
+    throw new Error(`base ammo crate leaves only ${box.x1 + ARENA}u of west walkway — needs >= 128`);
+  addBox('base ammo crate body', box.x1, box.x2, box.y1, box.y2, 0, 58, MAT.clip);
+}
 
 // ---------------------------------------------------------------------------
 // 3. The core (one palette band per lap; its top IS the rooftop)
@@ -735,6 +1142,15 @@ for (let lap = 0; lap < LAPS; lap++) {
     // landing, and the CROWN section below grows the final flight off whichever
     // landing the parity actually produced.
     addBox(`lap${lap + 1} NW landing`, -PX, -CORE, CORE, PX, ...slabZ(end), edgeMatOf(lap + 1));
+    if (STAIR_RAMP_CLIP) {
+      // E flight: nosing line from (y=-CORE-TREAD, z=b) to (y=CORE-TREAD, z=b+192).
+      // The low TREAD units feather over the approach floor (SE landing / the
+      // arena at lap 1, slab z[b-16,b] — the underside stays buried); the high
+      // end face sits exactly in step 16's slab z[b+176,b+192].
+      rampWedgeY(`lap${lap + 1} E stair ramp`, CORE, PX, -CORE - TREAD, CORE - TREAD, b, b + FLIGHT_RISE, MAT.rampClip);
+      // N flight: mirrored form, sloping down toward +x into the NE landing.
+      rampWedgeX(`lap${lap + 1} N stair ramp`, CORE, PX, -CORE + TREAD, CORE + TREAD, mid + FLIGHT_RISE, mid, MAT.rampClip);
+    }
   } else {
     // W flight (x[-PX,-CORE], y CORE -> -CORE)
     for (let i = 1; i <= STEPS; i++) {
@@ -748,28 +1164,150 @@ for (let lap = 0; lap < LAPS; lap++) {
       addBox(`lap${lap + 1} S step ${i}`, -CORE + TREAD * (i - 1), -CORE + TREAD * i, -PX, -CORE, z1, z2, stepMat);
     }
     addBox(`lap${lap + 1} SE landing`, CORE, PX, -PX, -CORE, ...slabZ(end), edgeMatOf(lap + 1));
+    if (STAIR_RAMP_CLIP) {
+      // Point mirrors of the odd lap's pair (x,y -> -x,-y), same welds.
+      rampWedgeY(`lap${lap + 1} W stair ramp`, -PX, -CORE, -CORE + TREAD, CORE + TREAD, b + FLIGHT_RISE, b, MAT.rampClip);
+      rampWedgeX(`lap${lap + 1} S stair ramp`, -PX, -CORE, -CORE - TREAD, CORE - TREAD, mid, mid + FLIGHT_RISE, MAT.rampClip);
+    }
   }
 
-  // BREATHER BALCONY on the floor's MID landing (BREATHER_LAPS — parity
-  // alternates: odd floors NE (extends N+E), even floors SW (S+W mirrored)).
+  // BREATHER LOUNGE (v13) on the floor's MID landing — an enclosed themed room
+  // (roof + walls + windows) with the teleporter on an open-air spur. Authored
+  // ONCE in the ODD frame (balcony extends N+E off the NE landing); bb()
+  // mirrors every box for the even/SW parity all four shipped breathers use.
+  // The old deck's parapet bands ARE the new wall bands, so the room footprint
+  // is unchanged; only the spur extends it. Design record: the v13 block at
+  // BREATHER_THEME. Wall anatomy (z above mid): 0-56 sill (the old rail),
+  // 56-192 window band (mullions + clip_player voids — players stay in,
+  // bullets pass), 192-288 lintel, 288-360 roof, 360-368 glowing trim ring.
   if (BREATHER_LAPS.has(lap + 1)) {
-    if (odd) {
-      addBox(`lap${lap + 1} breather floor`, CORE, PX + BR_EAST, PX, PX + BR_DEPTH, ...slabZ(mid), edgeMatOf(lap));
-      addBox(`lap${lap + 1} breather para N`, CORE - PARA, PX + BR_EAST + PARA, PX + BR_DEPTH, PX + BR_DEPTH + PARA, mid, mid + PARA_H, paraMat);
-      addBox(`lap${lap + 1} breather para E`, PX + BR_EAST, PX + BR_EAST + PARA, PX, PX + BR_DEPTH, mid, mid + PARA_H, paraMat);
-      addBox(`lap${lap + 1} breather para W`, CORE - PARA, CORE, PX, PX + BR_DEPTH, mid, mid + PARA_H, paraMat);
-      // SOUTH edge of the EAST extension (x[PX,PX+BR_EAST]) has no landing
-      // beneath it — seal it or you fall off the map (user 2026-08-20). The
-      // landing (x[CORE,PX]) covers the west part; this wall covers the rest.
-      addBox(`lap${lap + 1} breather para S`, PX, PX + BR_EAST + PARA, PX - PARA, PX, mid, mid + PARA_H, paraMat);
-    } else {
-      addBox(`lap${lap + 1} breather floor`, -(PX + BR_EAST), -CORE, -(PX + BR_DEPTH), -PX, ...slabZ(mid), edgeMatOf(lap));
-      addBox(`lap${lap + 1} breather para S`, -(PX + BR_EAST + PARA), -(CORE - PARA), -(PX + BR_DEPTH + PARA), -(PX + BR_DEPTH), mid, mid + PARA_H, paraMat);
-      addBox(`lap${lap + 1} breather para W`, -(PX + BR_EAST + PARA), -(PX + BR_EAST), -(PX + BR_DEPTH), -PX, mid, mid + PARA_H, paraMat);
-      addBox(`lap${lap + 1} breather para E`, -CORE, -(CORE - PARA), -(PX + BR_DEPTH), -PX, mid, mid + PARA_H, paraMat);
-      // NORTH edge of the WEST extension (mirror of the odd south seal) —
-      // no landing beneath x[-(PX+BR_EAST),-PX], so wall it or fall off.
-      addBox(`lap${lap + 1} breather para N`, -(PX + BR_EAST + PARA), -PX, -PX, -PX + PARA, mid, mid + PARA_H, paraMat);
+    const T = BREATHER_THEME[lap + 1];
+    const mFloor = `mwiii_vertigo_retro_synth_${T.key}_tinted_edge`;   // theme grid floor
+    const mGlow  = `mwiii_vertigo_retro_synth_${T.key}`;               // sill / mullions / gate / trim
+    const mPanel = `mwiii_vertigo_retro_synth_${T.key}_tinted`;        // lintel band + pier (softer)
+    const bb = (label, x1, x2, y1, y2, z1, z2, mat) => odd
+      ? addBox(`lap${lap + 1} breather ${label}`, x1, x2, y1, y2, z1, z2, mat)
+      : addBox(`lap${lap + 1} breather ${label}`, -x2, -x1, -y2, -y1, z1, z2, mat);
+    // Wall band lines (odd frame): outer N y[992,1012], E x[800,820],
+    // W x[236,256], inner S y[396,416] with the 160 entrance at x[256,416].
+    const NB1 = PX + BR_DEPTH, NB2 = NB1 + PARA;          // 992,1012
+    const EB1 = PX + BR_EAST,  EB2 = EB1 + PARA;          // 800,820
+    const WB1 = CORE - PARA,   WB2 = CORE;                // 236,256
+    const SB1 = PX - PARA,     SB2 = PX;                  // 396,416
+    const zSill = [mid, mid + BR_SILL_H];
+    const zWin  = [mid + BR_SILL_H, mid + BR_WIN_TOP];
+    const zLin  = [mid + BR_WIN_TOP, mid + BR_WALL_H];
+
+    bb('floor', CORE, EB1, PX, NB1, ...slabZ(mid), mFloor);
+
+    // OUTER WALL (N) — carries the spur doorway at x[624,784]. East of it the
+    // wall is a full-height solid pier (36 wide: too narrow for a window, and
+    // the gate's east post lands against it).
+    bb('wall N sill', WB1, SPUR_CX - SPUR_W, NB1, NB2, ...zSill, mGlow);
+    bb('wall N mull', 416, 444, NB1, NB2, ...zWin, mGlow);
+    bb('wall N win', WB1, SPUR_CX - SPUR_W, NB1, NB2, ...zWin, MAT.rampClip);
+    bb('wall N lintel', WB1, SPUR_CX + SPUR_W, NB1, NB2, ...zLin, mPanel);
+    bb('wall N pier', SPUR_CX + SPUR_W, EB2, NB1, NB2, mid, mid + BR_WALL_H, mPanel);
+    // SIDE WALLS (E long / W long) — the city-view walls: sill, two mullions
+    // at the third points, the window clip, the lintel. The E wall starts at
+    // y=396 and owns the SE corner cube; the W wall starts at y=436 because
+    // y[416,436] in its band belongs to the lap's own N-flight parapet
+    // (emitting both would coplanar-fight two materials on the x=256 plane).
+    for (const [tag, x1, x2, y1] of [['E', EB1, EB2, SB1], ['W', WB1, WB2, SB2 + PARA]]) {
+      bb(`wall ${tag} sill`, x1, x2, y1, NB1, ...zSill, mGlow);
+      bb(`wall ${tag} mull a`, x1, x2, 594, 622, ...zWin, mGlow);
+      bb(`wall ${tag} mull b`, x1, x2, 786, 814, ...zWin, mGlow);
+      bb(`wall ${tag} win`, x1, x2, y1, NB1, ...zWin, MAT.rampClip);
+      bb(`wall ${tag} lintel`, x1, x2, y1, NB1, ...zLin, mPanel);
+    }
+    // INNER WALL (S) — the entrance side. The wall proper runs x[436,800]
+    // (x[416,436] is the NE landing's own parapet, breather variant); the old
+    // landing gap x[256,416] is now a real 192-tall doorway — the lintel
+    // reaches west over it and becomes the door header.
+    bb('wall S sill', SB2 + PARA, EB1, SB1, SB2, ...zSill, mGlow);
+    bb('wall S mull', 604, 632, SB1, SB2, ...zWin, mGlow);
+    bb('wall S win', SB2 + PARA, EB1, SB1, SB2, ...zWin, MAT.rampClip);
+    bb('wall S lintel', WB2, EB1, SB1, SB2, ...zLin, mPanel);
+    // THE DOORWAY CORNER PIER (v13.1, user live report 2026-08-28: "the roof
+    // panels dont connect on one corner for all breather zones"). The W wall
+    // starts at y=436 (the y[416,436] band belongs to the lap's own N-flight
+    // parapet) and the S lintel starts at x=256 — which left the corner column
+    // x[236,256] y[396,436] EMPTY from rail height to the roof at +288: the
+    // roof corner floated over an L-shaped hole beside the entrance (the
+    // flight's rail cap made it collision-tight, so it was purely visible).
+    // Two flush brushes, no overlaps: the base stands on the N-flight's
+    // FIRST TREAD (top mid+12; it narrows that one tread by 20u at its far
+    // corner — cosmetically a doorjamb, the flight is 160 wide); the upper
+    // pier sits exactly on the base AND the flight para (both top out at
+    // mid+80) and carries the roof corner. It doubles as the doorway's east
+    // jamb in the even frame, matching the spur gate's post language.
+    bb('corner pier base', WB1, WB2, SB1, SB2, mid + RISE, mid + 80, mGlow);
+    bb('corner pier', WB1, WB2, SB1, SB2 + PARA, mid + 80, mid + BR_WALL_H, mGlow);
+    // ROOF: REMOVED v13.6 (user 2026-08-29: "The roof on the breathers I think
+    // look better when open. You cant look up and see the tower so it kinda
+    // makes it worse. Lets remove that"). The lounges are OPEN-TOP rooms now —
+    // walls, sills, windows and lintels stand as before; standing inside you
+    // look straight up the tower's flank. Gone with the slab: the trim ring
+    // (it sat ON the roof) and the v13.1 ceiling halo (it hung UNDER it). The
+    // v13.1 corner pier STAYS — it is the doorway's east jamb first and a roof
+    // carrier second, and as a free-standing glow post it still frames the
+    // entrance. A glowing TOP-EDGE band on the wall heads replaces the trim
+    // ring's night-read silhouette (same mGlow, 8 tall, sits on the lintels —
+    // the open room still draws its theme-colour outline against the tower).
+    const zCap = [mid + BR_WALL_H, mid + BR_WALL_H + 8];
+    bb('wall cap N', WB1, EB2, NB1, NB2, ...zCap, mGlow);
+    bb('wall cap S', WB1, EB2, SB1, SB2, ...zCap, mGlow);
+    bb('wall cap W', WB1, WB2, SB2, NB1, ...zCap, mGlow);
+    bb('wall cap E', EB1, EB2, SB2, NB1, ...zCap, mGlow);
+
+    // THE SPUR — gantry + pad platform, open-air. Rails ride the 20-unit band
+    // OUTSIDE the walk surface exactly like every other rail on this map, and
+    // every rail top is capped (RAIL_CAP_H). The gate: two 240-tall posts
+    // where the neck rails meet the wall, lintel spanning the walkway between
+    // them at door height.
+    bb('spur neck floor', SPUR_CX - SPUR_W, SPUR_CX + SPUR_W, NB1, SPUR_Y1, ...slabZ(mid), mFloor);
+    bb('spur gate post w', SPUR_CX - SPUR_W - PARA, SPUR_CX - SPUR_W, NB2, NB2 + 48, mid, mid + 240, mGlow);
+    bb('spur gate post e', SPUR_CX + SPUR_W, SPUR_CX + SPUR_W + PARA, NB2, NB2 + 48, mid, mid + 240, mGlow);
+    bb('spur gate lintel', SPUR_CX - SPUR_W, SPUR_CX + SPUR_W, NB2, NB2 + 48, mid + BR_WIN_TOP, mid + 240, mGlow);
+    for (const [tag, rx1, rx2] of [['w', SPUR_CX - SPUR_W - PARA, SPUR_CX - SPUR_W], ['e', SPUR_CX + SPUR_W, SPUR_CX + SPUR_W + PARA]]) {
+      bb(`spur neck rail ${tag}`, rx1, rx2, NB2 + 48, SPUR_Y1 - PARA, mid, mid + PARA_H, mGlow);
+      bb(`spur neck cap ${tag}`, rx1, rx2, NB2 + 48, SPUR_Y1 - PARA, mid + PARA_H, mid + PARA_H + RAIL_CAP_H, MAT.clip);
+    }
+    const PL1 = SPUR_CX - 144, PL2 = SPUR_CX + 144;   // platform x[560,848]
+    bb('spur platform', PL1, PL2, SPUR_Y1, SPUR_Y2, ...slabZ(mid), mFloor);
+    const PRAILS = [
+      ['w', PL1 - PARA, PL1, SPUR_Y1 - PARA, SPUR_Y2 + PARA],
+      ['e', PL2, PL2 + PARA, SPUR_Y1 - PARA, SPUR_Y2 + PARA],
+      ['n', PL1, PL2, SPUR_Y2, SPUR_Y2 + PARA],
+      ['s w', PL1, SPUR_CX - SPUR_W, SPUR_Y1 - PARA, SPUR_Y1],
+      ['s e', SPUR_CX + SPUR_W, PL2, SPUR_Y1 - PARA, SPUR_Y1],
+    ];
+    for (const [tag, rx1, rx2, ry1, ry2] of PRAILS) {
+      bb(`spur plat rail ${tag}`, rx1, rx2, ry1, ry2, mid, mid + PARA_H, mGlow);
+      bb(`spur plat cap ${tag}`, rx1, rx2, ry1, ry2, mid + PARA_H, mid + PARA_H + RAIL_CAP_H, MAT.clip);
+    }
+    // PAD RING (v13.1 polish): a 1-proud glowing theme ring inlaid in the
+    // platform around the porter — the base arena's inlay construct, so the
+    // pad reads as a landing pad from the whole tower. Inner edge 100u from
+    // the pad centre: clear of the ~83u-half assembly, walk-over (1 unit).
+    const PR1 = PL1 + 24, PR2 = PL2 - 24, PRY1 = SPUR_Y1 + 24, PRY2 = SPUR_Y2 - 24, PRW = 20;
+    bb('spur pad ring s', PR1, PR2, PRY1, PRY1 + PRW, mid, mid + 1, mGlow);
+    bb('spur pad ring n', PR1, PR2, PRY2 - PRW, PRY2, mid, mid + 1, mGlow);
+    bb('spur pad ring w', PR1, PR1 + PRW, PRY1 + PRW, PRY2 - PRW, mid, mid + 1, mGlow);
+    bb('spur pad ring e', PR2 - PRW, PR2, PRY1 + PRW, PRY2 - PRW, mid, mid + 1, mGlow);
+
+    // AMMO CRATE COLLISION — the crate model ships NO collision (CollisionMap
+    // "" / BulletCollisionFile ""), so the .map carries a clip brush inside
+    // the mesh; lint_tod_geometry knows it via MODEL_CLIP_COLUMNS (the label
+    // MUST end "ammo crate body"). Bounds are the measured yaw-270 occupancy
+    // of zeroy_s4_ammo_crate at SetScale 2.5 around the crate origin — which
+    // now COMES FROM BR_FURN, the same table _tod_ammo_crate.gsc reads via
+    // generated _tod_breather_data.gsc, so clip and model can never drift.
+    // Even/mirrored frame only, which is every breather (asserted at
+    // BREATHER_THEME). Full history: git log this label.
+    if (!odd) {
+      const [ccx, ccy] = BR_FURN.crate.org;
+      addBox(`lap${lap + 1} ammo crate body`, ccx - 37, ccx + 38, ccy - 19, ccy + 45, mid, mid + 58, MAT.clip);
     }
   }
 
@@ -787,12 +1325,17 @@ for (let lap = 0; lap < LAPS; lap++) {
     } else {
       for (let j = 1; j <= STEPS / PARA_EVERY; j++) {
         const top = b + RISE * PARA_EVERY * j;
-        addBox(`lap${lap + 1} E para ${j}`, PX, PX + PARA, -CORE + TREAD * PARA_EVERY * (j - 1), -CORE + TREAD * PARA_EVERY * j, top, top + PARA_H, paraMat);
+        // z1 is top - RISE*(PARA_EVERY-1), NOT top (fixed 2026-08-27, docs/39 §4#7):
+        // a parapet box spans PARA_EVERY treads but used to start at the HIGHER
+        // tread's top, leaving a 12-tall see-through slot to the void under the
+        // rail over every lower tread — ~800 map-wide. The box now drops to the
+        // lowest tread it guards. Top face unchanged, so RAIL_CAP_H still holds.
+        addBox(`lap${lap + 1} E para ${j}`, PX, PX + PARA, -CORE + TREAD * PARA_EVERY * (j - 1), -CORE + TREAD * PARA_EVERY * j, top - RISE * (PARA_EVERY - 1), top + PARA_H, paraMat);
       }
     }
     for (let j = 1; j <= STEPS / PARA_EVERY; j++) {
       const top = mid + RISE * PARA_EVERY * j;
-      addBox(`lap${lap + 1} N para ${j}`, CORE - TREAD * PARA_EVERY * j, CORE - TREAD * PARA_EVERY * (j - 1), PX, PX + PARA, top, top + PARA_H, paraMat);
+      addBox(`lap${lap + 1} N para ${j}`, CORE - TREAD * PARA_EVERY * j, CORE - TREAD * PARA_EVERY * (j - 1), PX, PX + PARA, top - RISE * (PARA_EVERY - 1), top + PARA_H, paraMat); // ankle gap: see E para
     }
     if (BREATHER_LAPS.has(lap + 1)) {
       addBox(`lap${lap + 1} NE landing para a`, PX, PX + PARA, CORE, PX, mid, mid + PARA_H, paraMat);
@@ -807,11 +1350,11 @@ for (let lap = 0; lap < LAPS; lap++) {
   } else {
     for (let j = 1; j <= STEPS / PARA_EVERY; j++) {
       const top = b + RISE * PARA_EVERY * j;
-      addBox(`lap${lap + 1} W para ${j}`, -PX - PARA, -PX, CORE - TREAD * PARA_EVERY * j, CORE - TREAD * PARA_EVERY * (j - 1), top, top + PARA_H, paraMat);
+      addBox(`lap${lap + 1} W para ${j}`, -PX - PARA, -PX, CORE - TREAD * PARA_EVERY * j, CORE - TREAD * PARA_EVERY * (j - 1), top - RISE * (PARA_EVERY - 1), top + PARA_H, paraMat); // ankle gap: see E para
     }
     for (let j = 1; j <= STEPS / PARA_EVERY; j++) {
       const top = mid + RISE * PARA_EVERY * j;
-      addBox(`lap${lap + 1} S para ${j}`, -CORE + TREAD * PARA_EVERY * (j - 1), -CORE + TREAD * PARA_EVERY * j, -PX - PARA, -PX, top, top + PARA_H, paraMat);
+      addBox(`lap${lap + 1} S para ${j}`, -CORE + TREAD * PARA_EVERY * (j - 1), -CORE + TREAD * PARA_EVERY * j, -PX - PARA, -PX, top - RISE * (PARA_EVERY - 1), top + PARA_H, paraMat); // ankle gap: see E para
     }
     if (BREATHER_LAPS.has(lap + 1)) {
       addBox(`lap${lap + 1} SW landing para a`, -PX - PARA, -PX, -PX, -CORE, mid, mid + PARA_H, paraMat);
@@ -884,83 +1427,10 @@ for (let lap = 0; lap < LAPS; lap++) {
     addBox(`lap${lap + 1} rail cap SE b`, CORE, PX, -PX - PARA, -PX, end + PARA_H, end + PARA_H + RAIL_CAP_H, MAT.clip);
   }
 
-  // Breather balcony rails get their own caps — the balconies are exactly where
-  // players stand still, so they are the most tempting rail to hop.
-  if (BREATHER_LAPS.has(lap + 1)) {
-    const cz1 = mid + PARA_H, cz2 = mid + PARA_H + RAIL_CAP_H;
-    if (odd) {
-      addBox(`lap${lap + 1} breather cap N`, CORE - PARA, PX + BR_EAST + PARA, PX + BR_DEPTH, PX + BR_DEPTH + PARA, cz1, cz2, MAT.clip);
-      addBox(`lap${lap + 1} breather cap E`, PX + BR_EAST, PX + BR_EAST + PARA, PX, PX + BR_DEPTH, cz1, cz2, MAT.clip);
-      addBox(`lap${lap + 1} breather cap W`, CORE - PARA, CORE, PX, PX + BR_DEPTH, cz1, cz2, MAT.clip);
-      addBox(`lap${lap + 1} breather cap S`, PX, PX + BR_EAST + PARA, PX - PARA, PX, cz1, cz2, MAT.clip);
-    } else {
-      addBox(`lap${lap + 1} breather cap S`, -(PX + BR_EAST + PARA), -(CORE - PARA), -(PX + BR_DEPTH + PARA), -(PX + BR_DEPTH), cz1, cz2, MAT.clip);
-      addBox(`lap${lap + 1} breather cap W`, -(PX + BR_EAST + PARA), -(PX + BR_EAST), -(PX + BR_DEPTH), -PX, cz1, cz2, MAT.clip);
-      addBox(`lap${lap + 1} breather cap E`, -CORE, -(CORE - PARA), -(PX + BR_DEPTH), -PX, cz1, cz2, MAT.clip);
-      addBox(`lap${lap + 1} breather cap N`, -(PX + BR_EAST + PARA), -PX, -PX, -PX + PARA, cz1, cz2, MAT.clip);
-    }
-    // AMMO CRATE COLLISION (user 2026-08-24: "Also the ammo crates dont have
-    // clips"). The crate was spawned NOT SOLID on purpose in v10.22 and that
-    // call is reversed here.
-    //
-    // IT CANNOT BE DONE WITH Solid() ON THE MODEL: acc_west_ammo_crate.gdt has
-    // CollisionMap "" and BulletCollisionFile "" — the xmodel carries no
-    // collision whatsoever, so there is nothing for Solid() to switch on.
-    //
-    // IT IS A CLIP BRUSH. The first attempt (earlier the same day) used a SOLID
-    // brush of MAT.baseWall tucked inside the mesh, reasoning that lint CHECK 1
-    // fires on `clip && !solid` and a solid brush would keep it quiet. That was
-    // wrong twice over and the user reported both (2026-08-24: "whoever added
-    // clips to the ammo boxes added blocks to them. Its not even a clip. They
-    // literally added material too it and it not triggerable anymore"):
-    //
-    //   1. VISIBLE. MAT.baseWall is mwiii_vertigo_retro_synth_blue, a real
-    //      drawn material. The 4-unit inset was measured against the model's
-    //      BOUNDING BOX, but a bbox is not the mesh silhouette — the crate is
-    //      narrower than its bounds in places, so a blue block showed through.
-    //   2. IT KILLED THE PURCHASE. A solid brush is world geometry: it blocks
-    //      traces and pathing, and the crate's trigger_radius_use is spawned at
-    //      origin + (0,0,40) — a point INSIDE that brush. The ammo crate simply
-    //      stopped responding.
-    //
-    // A player clip is the right tool and the obvious one: invisible by
-    // definition, so no inset guesswork, and CONTENTS_PLAYERCLIP stops bodies
-    // without being world geometry in the way a drawn solid is.
-    //
-    // THE LINT IS TAUGHT ABOUT THIS RATHER THAN WORKED AROUND. CHECK 1 flags an
-    // invisible blocker in a walkable column, which is the correct rule and
-    // caught a real shipped bug — but it parses BRUSHES ONLY, so it cannot see
-    // that a script-spawned crate model is standing in this column. That is a
-    // structural blind spot, not a false rule, so lint_tod_geometry carries an
-    // explicit MODEL_CLIP_COLUMNS entry for these four crates. See it there
-    // before adding another intentional clip anywhere.
-    //
-    // BOUNDS ARE MEASURED, not eyeballed. zeroy_s4_ammo_crate_LOD0.XMODEL_BIN
-    // decompressed gives x[-19.59,9.29] y[-16.59,16.71] z[0,25.20]; at the
-    // crate's SetScale 2.5 that is 72 x 83 x 63 — and note it is NOT centred on
-    // its origin (49 units of it hang off the -x side against 23 on the +x).
-    // The crate is placed at yaw 270, which maps model +X onto world -Y and
-    // model +Y onto world +X, so in world terms it occupies
-    //     x[-351.5, -268.2]  y[-723.2, -651.0]  z[floor, floor+63]
-    // around its origin at (TOD_CRATE_X, TOD_CRATE_Y) = (-310, -700).
-    //
-    // SAFE TO MAKE STANDABLE at its full 63: the balcony parapet is 56 and
-    // would be a hop from a 63-tall box, but every breather rail is already
-    // capped RAIL_CAP_H (112) above its top by the block right above this, so
-    // the cap reaches 168 over the floor and the crate cannot launch anyone.
-    //
-    // ONLY THE EVEN/MIRRORED FRAME: every breather lap (10/20/30/40) is even,
-    // and _tod_ammo_crate.gsc's TOD_CRATE_X/Y are written in that frame. If a
-    // breather ever lands on an odd lap this needs the parity treatment the
-    // rest of the balcony gets. KEEP THESE IN LOCKSTEP WITH THAT FILE.
-    if (!odd) {
-      // Full model height (58 of the crate's 63) and NO inset needed any more —
-      // a clip draws nothing, so the bbox-vs-silhouette guesswork that made the
-      // solid version show through is gone. Keep this label: the lint's
-      // MODEL_CLIP_COLUMNS matches on it.
-      addBox(`lap${lap + 1} ammo crate body`, -347, -272, -719, -655, mid, mid + 58, MAT.clip);
-    }
-  }
+  // (v13: the breather rail caps, the window guards and the ammo-crate
+  // collision clip are all emitted by the BREATHER LOUNGE block above — the
+  // room's window band carries clip_player, the spur rails carry MAT.clip
+  // caps, and the crate clip derives from BR_FURN so it tracks the data file.)
 }
 
 // ---------------------------------------------------------------------------
@@ -995,11 +1465,82 @@ for (let i = 1; i <= STEPS; i++) {
   const [z1, z2] = slabZ(TOP + RISE * i);
   cbox(`crown step ${i}`, CORE, PX, -CORE + TREAD * (i - 1), -CORE + TREAD * i, z1, z2, MAT.crownStep);
 }
+if (STAIR_RAMP_CLIP) {
+  // The crown stair's ramp, mirrored by hand because the wedge emitters do not
+  // go through cbox (they are not AABBs). CM point-mirror maps the odd-frame E
+  // form onto the W form — the same mapping the spiral's own even laps use.
+  // (Does not register in crownBB — it sits inside the crown stair's envelope.)
+  if (CM === 1) rampWedgeY('crown stair ramp', CORE, PX, -CORE - TREAD, CORE - TREAD, TOP, TOP + FLIGHT_RISE, MAT.rampClip);
+  else rampWedgeY('crown stair ramp', -PX, -CORE, -CORE + TREAD, CORE + TREAD, TOP + FLIGHT_RISE, TOP, MAT.rampClip);
+}
 for (let j = 1; j <= STEPS / PARA_EVERY; j++) {
   const top = TOP + RISE * PARA_EVERY * j;
-  cbox(`crown stair rail ${j}`, PX, PX + PARA, -CORE + TREAD * PARA_EVERY * (j - 1), -CORE + TREAD * PARA_EVERY * j, top, top + RAIL_H, MAT.roofPara);
+  cbox(`crown stair rail ${j}`, PX, PX + PARA, -CORE + TREAD * PARA_EVERY * (j - 1), -CORE + TREAD * PARA_EVERY * j, top - RISE * (PARA_EVERY - 1), top + RAIL_H, MAT.roofPara); // ankle gap: see E para
 }
 cbox('crown stair rail cap', PX, PX + PARA, -CORE, CORE, TOP + RAIL_H, TOP2 + RAIL_H + RAIL_CAP_H, MAT.clip);
+
+// --- 5a2. THE TOWER SHELL (v13.5, user 2026-08-28: "Im considering add walls
+// to the toer so you cant see outside except for the side that can see the
+// crown" / "Except for the side facing the crown. It gives visuals for
+// players") ------------------------------------------------------------------
+// Three walls enclose the spiral — EAST, SOUTH, WEST — and the NORTH stays
+// fully open: the crown floats north of the tower, so the open side IS the
+// crown view, revealed more with every lap climbed. What this changes: the
+// climb becomes a shaft — Tron floors and door glow against dark walls, the
+// Miami sky and the crown visible only through the north opening (and through
+// each lounge's own windows, which poke out past the shell).
+//
+// GEOMETRY RULES, each load-bearing:
+//  * Inner faces at +/-SHELL_IN = PX+PARA+24 — a 24u air gap outside the
+//    parapets, so nothing is coplanar with a parapet face (z-fight rule) and
+//    the lint's edge logic is untouched (walls stand in the void, never on
+//    deck; boss/zombie navmesh never knew the void existed).
+//  * STARTS at z = LAP_RISE (384): the base arena (half-extent 540) is WIDER
+//    than the shell, so the shell begins above lap 1 and the arena keeps its
+//    open-air street feel; from the arena you look UP into the shaft mouth.
+//  * ENDS at z = TOP (19200): the roof deck, terrace, crown stair and
+//    causeway stay open to the sky.
+//  * BREATHER GAPS: the four lounges (all even laps -> all on the SW side)
+//    span x[-800,-256] y[-992,-416] — they CROSS both the S and W shell
+//    planes, so those two walls open for each breather's full z band
+//    [mid-16, mid+400] (floor slab underside to just past the roof trim).
+//    The lounges are their own walls there; the teleporter spurs stay
+//    floating outside the shell, exactly the v13 exposure design. The E wall
+//    has no breathers and runs unbroken.
+//  * Corners: E and W own the S corners (their y spans run to -SHELL_OUT);
+//    the S wall spans between their inner faces. Zero overlap, zero gap.
+//  * MAT.ground (dark navy) on all faces — the decade-banding decoration
+//    pass (docs/24 / Fifty Floors review) has a canvas now, not a decision.
+const TOWER_SHELL = false;  // OFF (user 2026-08-29: "Remove the walls. They are
+                            // ugly and you didnt vene implement them correctly.")
+                            // The v13.5 shell lasted one build. Kept as a flag,
+                            // not deleted: the geometry was lint/bake-proven, so
+                            // if a future enclosed-shaft look is wanted, start
+                            // here — but sell the LOOK to the user first with a
+                            // preview render, which is the step this skipped.
+if (TOWER_SHELL) {
+  const SHELL_IN  = PX + PARA + 24;   // 460
+  const SHELL_TH  = 32;
+  const SHELL_OUT = SHELL_IN + SHELL_TH;   // 492
+  const SHELL_Z0  = LAP_RISE;         // 384
+  const SHELL_Z1  = TOP;              // 19200
+  // Breather z bands (ascending), derived — never hand-copied.
+  const shellGaps = [...BREATHER_LAPS].sort((a, b) => a - b)
+    .map(lap => { const mid = (lap - 1) * LAP_RISE + FLIGHT_RISE; return [mid - 16, mid + 400]; });
+  // EAST — one unbroken slab, S corner owned, stops at the N opening.
+  addBox('tower shell E', SHELL_IN, SHELL_OUT, -SHELL_OUT, SHELL_IN, SHELL_Z0, SHELL_Z1, MAT.ground);
+  // SOUTH + WEST — five segments each, gapped at the four breather bands.
+  let zlo = SHELL_Z0;
+  const bands = [...shellGaps, [SHELL_Z1, SHELL_Z1]];
+  for (let i = 0; i < bands.length; i++) {
+    const [glo, ghi] = bands[i];
+    if (glo > zlo) {
+      addBox(`tower shell S ${i + 1}`, -SHELL_IN, SHELL_IN, -SHELL_OUT, -SHELL_IN, zlo, glo, MAT.ground);
+      addBox(`tower shell W ${i + 1}`, -SHELL_OUT, -SHELL_IN, -SHELL_OUT, SHELL_IN, zlo, glo, MAT.ground);
+    }
+    zlo = ghi;
+  }
+}
 
 // --- 5b. TERRACE: the forecourt along the capital's arrival face -----------
 // Glow-edge tiles; the stair's last tread (top = TOP2, y up to +CORE) meets its
@@ -1237,6 +1778,24 @@ function roadStair(tag, x1, x2, yA, yB, zA, zB) {
     roadCell(`${tag} ${i + 1}`, x1, x2, y0, y1, zt, true);
     cbox(`${tag} step ${i + 1}`, x1, x2, y0, y1, zt - SLAB, zt, MAT.crownRing);
     cbox(`${tag} step ${i + 1} under-glow`, x1, x2, y0, y1, zt - SLAB - 24, zt - SLAB, MAT.crownFascia);
+  }
+  // STAIR RAMP CLIP (2026-08-27, docs/39) — the road's stairs get the same
+  // invisible clip_player wedge as the tower's flights, emitted here so every
+  // current AND future roadStair is ramped by construction. The nosing plane:
+  //   * FALLING along +y: (yA,zA)->(yB,zB) touches every tread's downhill edge
+  //     and welds flush at both ends — no feather needed.
+  //   * RISING along +y: the same line shifted one tread back,
+  //     (yA-CW_TREAD, zA)->(yB-CW_TREAD, zB) — it passes through every riser
+  //     top, feathers 0->CW_RISE over the last CW_TREAD of the approach flat
+  //     (every rising stair's approach is a wider flat at zA, checked per call
+  //     site 2026-08-27: J1 fork / hollow 2 / cistern / J3 fork), and leaves
+  //     the last tread's own top to carry the deck to yB.
+  // The wedge is not a cell: rails, risers, reachability and every roadEmit
+  // assert see exactly the geometry they saw before. Underside = plane - RAMP_T,
+  // which stays inside the tread slabs (RISE == SLAB == 16 exactly here).
+  if (STAIR_RAMP_CLIP) {
+    if (zB < zA) rampWedgeY(`${tag} ramp`, x1, x2, yA, yB, zA, zB, MAT.rampClip, CW_RISE, CW_TREAD);
+    else rampWedgeY(`${tag} ramp`, x1, x2, yA - CW_TREAD, yB - CW_TREAD, zA, zB, MAT.rampClip, CW_RISE, CW_TREAD);
   }
   roadPiece(tag, 'stair', (x1 + x2) / 2, (yA + yB) / 2, (zA + zB) / 2);
 }
@@ -1722,6 +2281,7 @@ cbox('crown ring inlay N', -RI, RI, RY2 - RW, RY2, TOP2, TOP2 + 1, MAT.crownRing
 cbox('crown ring inlay W', -RI, -RI + RW, RY1 + RW, RY2 - RW, TOP2, TOP2 + 1, MAT.crownRing);
 cbox('crown ring inlay E', RI - RW, RI, RY1 + RW, RY2 - RW, TOP2, TOP2 + 1, MAT.crownRing);
 cbox('uplink dais', -DAIS, DAIS, HYC - DAIS, HYC + DAIS, TOP2, TOP2 + DAIS_H, MAT.crownRing);
+
 // THE FOUR HALL PILLARS ARE BACK — as PURE ARCHITECTURE (v12, user
 // 2026-08-26: "We had pillars inside the boss room. Lets add those back. We
 // had some models on top of those pillars i didnt want. I think the last
@@ -2970,8 +3530,17 @@ const ZONES = [
     name: 'base_zone',
     brushes: [
       volumeBrush(-(ARENA + WALL), ARENA + WALL, -(ARENA + WALL), ARENA + WALL, -SLAB, 368),
-      // the power hallway's exterior leg (drops + spawn logic need coverage)
-      volumeBrush(540, 1660, -580, -380, -SLAB, 368),
+      // THE POWER HALLWAY'S EXTERIOR LEG MOVED OUT OF base_zone (v13.1) into
+      // power_zone below, for the reason the teleport bay is its own zone: it
+      // is a SEALED room until enter_power is bought, and base_zone is live
+      // from round 1, so the riser this change adds would have spawned zombies
+      // behind a DisconnectPaths'd door with no way out — actor slots burnt on
+      // enemies nobody can reach or kill. Coverage is not lost, only deferred:
+      // power_zone carries the same volume and goes live on the same flag, and
+      // nothing can drop in there before the door opens because nothing can
+      // die in there. The 20u threshold strip x[540,560] (the gap cut through
+      // the arena's east wall) stays base_zone — it holds no riser, and
+      // carving it out of the arena box would cost a brush to buy nothing.
     ],
     // SE riser: the (470,-470) corner is now the POWER ROOM, and the y=-360
     // relocation (user 2026-08-20) still landed it in a dead pocket — the east
@@ -2990,10 +3559,16 @@ for (let lap = 1; lap <= LAPS; lap++) {
   const oddz = (lap % 2 === 1);
   const brushes = lapVolumeBrushes(b, lap === LAPS);
   if (BREATHER_LAPS.has(lap)) {
-    // the balcony footprint sits outside the ring volumes — cover it (mirrored by parity)
+    // the lounge footprint sits outside the ring volumes — cover it (mirrored
+    // by parity), plus the v13 teleporter spur (gantry + pad platform, with
+    // margin past the rails). A point outside every zone volume gets no spawn
+    // logic and no drop logic, and nothing says so until someone plays it.
     brushes.push(oddz
       ? volumeBrush(CORE - PARA, PX + BR_EAST + PARA, PX, PX + BR_DEPTH + PARA, b - SLAB, b + LAP_RISE + 200)
       : volumeBrush(-(PX + BR_EAST + PARA), -(CORE - PARA), -(PX + BR_DEPTH + PARA), -PX, b - SLAB, b + LAP_RISE + 200));
+    brushes.push(oddz
+      ? volumeBrush(SPUR_CX - 184, SPUR_CX + 184, PX + BR_DEPTH, SPUR_Y2 + 40, b - SLAB, b + LAP_RISE + 200)
+      : volumeBrush(-(SPUR_CX + 184), -(SPUR_CX - 184), -(SPUR_Y2 + 40), -(PX + BR_DEPTH), b - SLAB, b + LAP_RISE + 200));
   }
   // BREATHERS NOW SPAWN (v10.12, user 2026-08-23 after the full playthrough:
   // "The safe breather zones need to be a lot less safe. Its to easy to camp
@@ -3008,21 +3583,43 @@ for (let lap = 1; lap <= LAPS; lap++) {
   //
   // The balconies get TWO risers, the same count as an ordinary floor — the
   // pacing beat now comes from the balcony being LARGE and open rather than
-  // from it being empty. All four breather laps are EVEN, so every balcony is
+  // from it being empty. All four breather laps are EVEN, so every lounge is
   // the mirrored SW one: floor x[-800,-256] y[-992,-416].
-  // PLACED AT THE TWO OUTER CORNERS, which are the only genuinely clear ground
-  // left on a crowded balcony — both sit OUTSIDE the teleporter ring
-  // (x[-723,-557] y[-883,-717]), clear of the perk wall (y=-959, x -360/-536),
-  // the upgrade station (x=-760, y=-600), the PaP (-320,-470) and the v10.4
-  // respawn spawns (x -340/-460, y -640/-780). Zombies emerge ON the balcony
-  // instead of only arriving up the stairs.
+  // PLACED AT THE TWO WEST CORNERS, still the clearest ground after the v13
+  // relayout (clearances re-measured against BR_FURN): the north riser
+  // (-750,-460) sits 220u from the W-wall PaP model and 250u from the N-wall
+  // station; the south riser (-750,-950) stands 42u inside the spur doorway
+  // (x[-784,-624] in the S wall) ON PURPOSE — zombies boil up right at the
+  // gate, so the teleporter annex is never a quiet camp pocket. Both stay
+  // clear of the perk wall (y=-959, x -360/-536) and the v10.4 respawn spawns
+  // (x -340/-460, y -640/-780). Zombies emerge IN the lounge instead of only
+  // arriving up the stairs.
+  //
+  // v13.2 (user 2026-08-28: "add one zombie spawn in the path from breather
+  // and teleporter for each zone") — THE SPUR GETS ITS OWN RISER, mid-gantry.
+  // This retires v13's "the spur emits NO risers, pressure walks in through
+  // the gate" stance (and the docs/42 watch item that predicted this exact
+  // retune): with only door-side pressure the gantry+pad annex was still a
+  // one-entrance pocket. The y is DERIVED from the up-teleport arrival point
+  // (SPUR_PAD_Y - TP_ARRIVE_OFF, even-frame y=-1296) minus 176, so the v10.22
+  // rule (riser >= ~165u from any point players materialize on) holds by
+  // construction and survives any spur re-proportioning. Clearances at the
+  // emitted spot (-704,-1120): arrival 176u; pad centre 336u (gather ring 120
+  // -> 216u past its edge); gate posts (y ends -1060) 60u behind the riser, so
+  // zombies surface OUTSIDE the gate on the open gantry, cutting the walkway
+  // between a player on the pad and the room; lounge deck riser (-750,-950)
+  // ~176u away — no stacked spawn events on one strip (the power-hall rule);
+  // centred between the gantry rails, 80u each side.
   // NOTE FOR THE BAKE: this adds NO brushes — risers are spawn structs, so the
   // LED atlas is untouched by this change.
   const brz = b + FLIGHT_RISE;   // the balcony sits on the floor's MID landing
+  const spurRiserY = -(SPUR_PAD_Y - TP_ARRIVE_OFF - 176);   // -1120
   ZONES.push({
     name: `lap${lap}_zone`,
     brushes: brushes,
-    risers: BREATHER_LAPS.has(lap) ? [[-750, -460, brz], [-750, -950, brz]] : (oddz
+    risers: BREATHER_LAPS.has(lap)
+      ? [[-750, -460, brz], [-750, -950, brz], [-SPUR_CX, spurRiserY, brz]]
+      : (oddz
       ? [[336, 336, b + FLIGHT_RISE], [-336, 336, b + LAP_RISE]]
       : [[-336, -336, b + FLIGHT_RISE], [336, -336, b + LAP_RISE]]),
     dog: oddz ? [336, 336, b + FLIGHT_RISE] : [-336, -336, b + FLIGHT_RISE],
@@ -3088,6 +3685,44 @@ ZONES.push({
   dog: [0, TPB_RISER_Y + 10, 0],
 });
 
+// POWER HALL (v13.1, user 2026-08-28: "add one zombie spawn in the power switch
+// hallway towards the switch in the back. The issue is players will camp in
+// here so adding a spawn might help that").
+//
+// WHY IT IS ITS OWN ZONE and not two more lines in base_zone: identical to the
+// teleport bay's reasoning above. The hall is sealed by the enter_power door
+// (slab Solid + DisconnectPaths at x=280) until it is bought, and base_zone is
+// live from round 1 — a riser in there on the base's ticket would spawn
+// zombies into a corridor with a severed navmesh from the very first round.
+// They would path nowhere, die to nothing, and hold actor slots against the
+// 45-zombie cap for the whole run. The zone gate is what makes the riser safe.
+//
+// THE CAMP THIS BREAKS: the hall is a 1,060-long dead end with ONE mouth, so a
+// player standing at the east cap covers the only approach and never has to
+// turn around. The riser goes BEHIND that firing line, not in front of it —
+// west of it and the camp is untouched.
+//
+// PLACEMENT x=1400, measured rather than eyeballed:
+//   corridor walkable  x[560,1620], y[-540,-420] -> centreline y=-480
+//   power switch       origin x=1613, USE TRIGGER x[1589,1608]
+//   riser -> trigger   189u clear, so a zombie can never rise standing inside
+//                      the switch's trigger and block the buy (the same
+//                      no-two-things-in-one-trigger rule the tp-bay pads and
+//                      the lounge furniture are spaced by)
+//   riser -> east cap  220u — inside the last fifth of the hall, which is the
+//                      half a camper actually occupies
+//   hall lights (x 800/1200/1560) are z=100 point lights, no collision
+// The dog point sits mid-corridor: a hound needs run-up, and dropping one on
+// top of the riser would stack two spawn events on one 120-wide strip.
+ZONES.push({
+  name: 'power_zone',
+  brushes: [
+    volumeBrush(560, 1660, -580, -380, -SLAB, 368),
+  ],
+  risers: [[1400, -480, 0]],
+  dog: [1100, -480, 0],
+});
+
 for (const zn of ZONES) {
   ent(`${zn.name} info_volume`, [
     '{',
@@ -3126,20 +3761,79 @@ for (const zn of ZONES) {
 }
 
 // --- player start / initial spawns / respawn / intermission -----------------
+//
+// SPAWN MOVED SOUTH BAND -> WEST BAND (user 2026-08-27: "I do want to make sure
+// players dont spawn in at a door buyable in their radius. Currently the spawn
+// for the map is outside doors where you can see the trigger as you are
+// selecting your class. There is one side of the first floor that has no doors
+// or perks. Thats where I want to move the spawn").
+//
+// THE BUG, MEASURED: _tod_doors spawns a trigger_radius_use of RADIUS 96 at each
+// door's org AND at org+off (both sides of the slab). Against the old south-band
+// spawns that put SIX OF THE EIGHT start points inside a live buy trigger:
+//   (-64,-462) (64,-462)   -> enter_tpbay (0,-530)  93.4u   INSIDE
+//   (-64,-498) (64,-498)   -> enter_tpbay (0,-530)  71.6u   INSIDE
+//   (192,-462) (192,-498)  -> enter_power (270,-480) 80.0u  INSIDE
+// so most of the party stared at a "Hold F to buy" prompt through the whole
+// 30-second class draft. The old row also sat 64u from the base dog spawn
+// (0,-470).
+//
+// WHY WEST. Enumerating the base ring by side (ARENA 540 outer, CORE 256 inner,
+// so each band is 284 wide):
+//   NORTH  9 perk parking pads along y=500 (x -520..520)
+//   SOUTH  all three base doors' triggers (enter_tpbay 0,-550 / enter_power
+//          270,-480 / and enter_lap1's south reach), the base upgrade station on
+//          the core south face (0,-320, trigger 0,-360), intermission, tp-bay
+//   EAST   enter_lap1 (336,-256) + the lap1 anti-bypass wall
+//   WEST   NOTHING. No door, no perk pad, no station, no wallbuy (this map has
+//          none), no box (none either). The class-select stations that used to
+//          live at the base were removed 2026-08-20.
+// So the west band is the only side with no interactable at all — exactly the
+// side the user identified.
+//
+// PLACEMENT is the old 4x2 grid TRANSPOSED onto the band: 4 points along y at
+// the same 128 spacing, 2 rows across x at the same 36 spacing, same z=28. That
+// keeps quad/trio/duo/solo behaviour identical — stock fills from the same
+// eight-struct list, it just reads different coordinates. Clearances:
+//   nearest door trigger .......... 572u (enter_tpbay)   vs the 96u radius
+//   base upgrade station trigger .. 491u
+//   nearest perk pad (-520,500) ... 313u
+//   nearest zombie riser .......... 278u  (-470,-470 and -470,470, tied)
+//   base dog spawn (0,-470) ....... 511u
+//   west wall face (x=-540) ....... 42u   (identical to the old row's clearance
+//                                          from the south wall — same margin)
+// All eight sit inside base_zone's volume (it spans the full arena + walls), so
+// the start-room group stays selectable exactly as before.
+//
+// WHAT MOVES WITH THEM: info_player_start, the player_respawn_point GROUP origin
+// (its children are these structs — leaving the parent behind would scatter the
+// group's distance maths across the arena), and 'tod light base spawn', the
+// dedicated warm light that exists to light the spawn. What does NOT move, and
+// why: 'probe base' has radius 2048 and covers the whole 1080-wide arena from
+// anywhere in it; the intermission camera is a spectator view, not a spawn; and
+// _tod_atmosphere's music emitter at (0,-490,100) only needs to be in OPEN AIR
+// (its aliases are 2D), which that point still is.
+//
+// EVERY OTHER KEY ON THESE STRUCTS IS UNCHANGED — in particular
+// script_noteworthy "start_room" and the script_string gametype list. A
+// player_respawn_point is LOCKED at init and unlocks only by noteworthy match
+// (_zm_zonemgr.gsc:827); this map has already shipped an inert respawn group
+// once by dropping that key. Only `origin` moves here.
+const SPAWN_BAND_X = -480;   // centre of the west band (core face -256, wall -540)
 ent('info_player_start', [
   '{', `guid "${guid()}"`, kv('classname', 'info_player_start'),
-  kv('angles', '0 90 0'), kv('origin', '0 -490 40'), '}',
+  kv('angles', '0 90 0'), kv('origin', `${SPAWN_BAND_X - 10} 0 40`), '}',
 ]);
 ent('player_respawn_point', [
   '{', `guid "${guid()}"`, kv('classname', 'script_struct'),
-  kv('angles', '0 90 0'), kv('origin', '0 -480 28'),
+  kv('angles', '0 90 0'), kv('origin', `${SPAWN_BAND_X} 0 28`),
   kv('radius', '2000'), kv('script_int', '2000'),
   kv('script_noteworthy', 'start_room'),
   kv('script_string', 'zclassic_start_room zcleansed_start_room zgrief_start_room'),
   kv('target', 'initial_spawn_points'), kv('targetname', 'player_respawn_point'),
   kv('_color', '1 0 0'), '}',
 ]);
-const SPAWNS = [[-192, -462], [-64, -462], [64, -462], [192, -462], [-192, -498], [-64, -498], [64, -498], [192, -498]];
+const SPAWNS = [[-462, -192], [-462, -64], [-462, 64], [-462, 192], [-498, -192], [-498, -64], [-498, 64], [-498, 192]];
 SPAWNS.forEach(([sx, sy], i) => {
   ent(`initial spawn ${i + 1}`, [
     '{', `guid "${guid()}"`, kv('classname', 'script_struct'),
@@ -3176,13 +3870,14 @@ SPAWNS.forEach(([sx, sy], i) => {
 // `locked` is omitted too, matching the base group — stock never initialises it,
 // and only maps that want a spawn disabled ever set it true (zm_giant.gsc:413).
 //
-// PLACEMENT: all four breather laps are EVEN, so every balcony is the mirrored
+// PLACEMENT: all four breather laps are EVEN, so every lounge is the mirrored
 // SW one (floor x[-800,-256] y[-992,-416]; zone volume x[-820,-236]
-// y[-1012,-416], so all five points below are inside it). They sit EAST of the
-// teleporter ring (x[-723,-557]), NORTH of the perk wall (y=-959), and clear of
-// the PaP at (-320,-470) and the upgrade station at x=-760. Mid-landing top is
-// (lap-1)*LAP_RISE + FLIGHT_RISE; the +28 matches the base spawns' height above
-// their own floor.
+// y[-1012,-416], so all five points below are inside it). Centre-east of the
+// room, re-measured against the v13 BR_FURN layout: >=130u from the N-wall
+// station trigger (-500,-516), >=230u from the W-wall PaP trigger (-688,-680),
+// north of the perk wall (y=-959), and the teleporter is out on the spur now.
+// Mid-landing top is (lap-1)*LAP_RISE + FLIGHT_RISE; the +28 matches the base
+// spawns' height above their own floor.
 const BREATHER_SPAWN_XY = [[-340, -640], [-340, -780], [-460, -640], [-460, -780]];
 [...BREATHER_LAPS].sort((a, b) => a - b).forEach((lap) => {
   const brz = (lap - 1) * LAP_RISE + FLIGHT_RISE + 28;
@@ -3389,7 +4084,26 @@ for (const d of DOORS) {
     kv('classname', 'trigger_use'),
     kv('targetname', 'zombie_door'),
     kv('target', d.target),
-    kv('zombie_cost', `${d.cost}`),
+    // CONSTANT, NOT d.cost — the 250-triggerstring cap (2026-08-30).
+    // Stock _zm_blockers::door_init runs as a system PRELOAD (REGISTER_SYSTEM_EX
+    // -> shared.gsh's __func_init_preload -> system::run_pre_systems, called from
+    // CodeCallback_PreInitialization, i.e. BEFORE the map's main() executes a
+    // single line) and ends in set_hint_string(self,"default_buy_door",cost) ->
+    // SetHintString(&"ZOMBIE_BUTTON_BUY_OPEN_DOOR_COST", cost). That mints ONE
+    // PERMANENT BG-cache 'triggerstring' slot per DISTINCT cost, and the cache
+    // caps at 250 for the whole match. Per-lap pricing put 41 distinct values in
+    // here, so stock burned 41 slots on prompts nobody ever sees — _tod_doors.gsc
+    // TriggerEnable(false)s all 53 of those triggers a second later.
+    //
+    // SAFE BECAUSE THIS VALUE IS DEAD DATA: _tod_doors.gsc seeds cost=1000 from
+    // this key and then overrides it from the GENERATED _tod_door_data.gsc
+    // (info.cost WINS, v9.41 — that is what keeps a price change -GscOnly), and
+    // all 53 rows define info.cost. A door with no data row returns before it
+    // ever gets a trigger. 1000 matches the GSC's own fallback exactly.
+    //
+    // The REAL per-door price is emitted further down as `info.cost = ${d.cost}`
+    // in _tod_door_data.gsc. Do not "fix" this line to match it.
+    kv('zombie_cost', '1000'),
     kv('script_flag', d.flag),
     matBrush(d.trig.x1, d.trig.x2, d.trig.y1, d.trig.y2, d.trig.z1, d.trig.z2, 'trigger'),
     '}',
@@ -3454,11 +4168,50 @@ for (const d of DOORS) {
     '}',
   ]);
 }
+// THE LANE LOTTERY SEALS (v12.13, docs/41 §B1) — five slabs, one across each
+// branch lane's SOUTH mouth just past its fork landing. ALL start OPEN
+// (_tod_finale::lane_seals_init does Hide+NotSolid+ConnectPaths at init); at
+// the extraction buy the finale rolls ONE lane per fork and seals it
+// (Show+Solid+DisconnectPaths) BEFORE the causeway gate opens, so no player
+// can be standing in a slab when it solidifies (they are all behind the
+// still-solid causeway gate; the dev harness opens that gate early, so the
+// script also occupancy-checks before sealing). Same contract, same material,
+// same visual grammar as the causeway gate above. SOUTH mouth only: every lane
+// stays path-connected via its merge, so nothing — player or zombie — can be
+// stranded inside a sealed lane; it is a dead end you walk back out of.
+// Indices are load-bearing (_tod_finale rolls 0-1 for fork 1, 2-4 for fork 2):
+//   0 f1 W ridge | 1 f1 E broken stair | 2 f2 W undercroft | 3 f2 C plank | 4 f2 E weave
+{
+  const seals = [
+    ['f1 ridge',      LX[0],  LX[1],  cwY[2]],
+    ['f1 bstair',     EX[0],  EX[1],  cwY[2]],
+    ['f2 undercroft', LX[0],  LX[1],  cwY[6]],
+    ['f2 plank',      PX_[0], PX_[1], cwY[6]],
+    ['f2 weave',      EX[0],  EX[1],  cwY[6]],
+  ];
+  seals.forEach(([tag, x1, x2, y], i) => {
+    // z1 is TOP2-32, not TOP2: the two DESCENDING lanes (broken stair, under-
+    // croft) drop 16 within their first tread, so a slab based at TOP2 would
+    // hover with a 16u see-through slot beneath it. 32 buries the base inside
+    // the tread/under-glow brushes on every lane (deck slab is 16, glow 24).
+    const s = cspec({ x1, x2, y1: y, y2: y + 24, z1: TOP2 - 32, z2: TOP2 + 256 });
+    ent(`lane seal ${tag}`, [
+      '{', `guid "${guid()}"`,
+      kv('classname', 'script_brushmodel'),
+      kv('targetname', `tod_lane_seal_${i}`),
+      matBrush(s.x1, s.x2, s.y1, s.y2, s.z1, s.z2, MAT.door),
+      '}',
+    ]);
+  });
+}
 // --- prefabs: base kit + the ladder up the tower -----------------------------
 function prefab(label, model, x, y, z, yaw, scriptString) {
+  // v13.6: a model containing '/' is a path under _prefabs/ (e.g.
+  // 'ALXS/alxs_cwpap_prefab.map'); a bare name keeps the legacy zm_core home.
+  const prefabPath = model.includes('/') ? '_prefabs/' + model : '_prefabs/zm/zm_core/' + model;
   const lines = [
     '{', `guid "${guid()}"`, kv('classname', 'misc_prefab'),
-    kv('angles', `0 ${yaw} 0`), kv('model', '_prefabs/zm/zm_core/' + model), kv('origin', `${x} ${y} ${z}`),
+    kv('angles', `0 ${yaw} 0`), kv('model', prefabPath), kv('origin', `${x} ${y} ${z}`),
   ];
   if (scriptString) lines.push(kv('script_string', scriptString));
   lines.push('}');
@@ -3528,17 +4281,21 @@ light('tp bay doorway', 0, -520, 100, BASE_LIGHT, 300, 6, 1);
 // ladder and the PaP state. Do not re-add without the user asking.
 // prefab('base mystery box start', 'buyable_magic_box_start.map', -526, -200, -0.5, 0);
 // PERK PARKING ROW (see PERK_PARK — the scatter relocates these at load).
-// yaw 359.999 = backs a NORTH wall, faces south (map 1's live-verified
-// convention: the vending models' visual front is model-local -Y — 180
-// faced them INTO the wall; verify pass 2026-08-20).
+// yaw 269.999 SINCE v13.3c: these back a NORTH wall and must face south, and
+// the BO7/BO6 port meshes front on model-local +X where the old stock
+// p7_zm_vending_* models fronted on -Y (measured — see the long note on the
+// yaw in _tod_perk_scatter::build_pads, which carries the matching -90 for
+// every scatter pad). This row is only the pre-scatter fallback parking spot,
+// but it is visible at spawn, and it is what a machine keeps if capture ever
+// fails — so it has to be right too. The old value was 359.999.
 for (const pk of PERK_PARK) {
   if (pk.prefab) {
-    prefab(`perk park ${pk.prefab}`, pk.prefab, pk.x, PERK_PARK_Y, 0, 359.999, PERK_LOC);
+    prefab(`perk park ${pk.prefab}`, pk.prefab, pk.x, PERK_PARK_Y, 0, 269.999, PERK_LOC);
   } else {
     ent(`perk park ${pk.noteworthy}`, [
       '{', `guid "${guid()}"`,
       kv('classname', 'script_struct'),
-      kv('angles', '0 359.999 0'),
+      kv('angles', `0 ${pk.yaw !== undefined ? pk.yaw : 269.999} 0`),
       kv('model', pk.struct),
       kv('origin', `${pk.x} ${PERK_PARK_Y} 0`),
       kv('script_noteworthy', pk.noteworthy),
@@ -3556,8 +4313,36 @@ for (const pk of PERK_PARK) {
 // by _tod_finale.gsc from _tod_crown_data.gsc — carved-GDT models are safest
 // as script_model+SetModel (zone `xmodel,` line), never as baked misc_models.
 {
-  const [px, py, pz] = cpt(-480, HS + HWALL + 33, TOP2);
-  prefab('crown pack-a-punch', 'vending_weapon_upgrade_spawnable.map', px, py, pz, cyaw(180), PERK_LOC);
+  // STANDOFF 33 -> 64 (user live report 2026-08-28: "final boss room. Pap is
+  // inside the wall"). THE HALL HAS TWO MACHINES AND BOTH WERE AUTHORED AT 33:
+  // this real Pack-a-Punch, 33u off the SOUTH wall's inner face (HS+HWALL=7880,
+  // so origin y=7913), and the upgrade station 33u off the WEST wall. 33 is a
+  // copied constant in this section, not a measured clearance, and it is the
+  // tightest standoff any vending machine has in the map — the base station
+  // sits 64u off the core face and the breather lounges 44u off theirs.
+  //
+  // I FIXED THE STATION FIRST AND ON A WRONG PREMISE, so the reasoning is
+  // recorded rather than quietly overwritten: I had concluded the hall held no
+  // real PaP at all, because I grepped the emitted .map for "pack_a_punch" and
+  // "packapunch" and the stock prefab is named vending_weapon_upgrade_spawnable
+  // — a name containing neither. VERIFY ASSET EXISTENCE BY WHAT THE GENERATOR
+  // EMITS, NEVER BY STRING-MATCHING ITS OUTPUT; a prefab's filename is not its
+  // subject. Both machines now use the base station's proven 64.
+  //
+  // CLEARANCES at y=7944: nearest hall pillar solid (-448,8160) is 218u away;
+  // the gate opening is x[-128,128] so a machine at x=-480 never approaches it;
+  // the CTOWER 192 corner blocks sit at the wall ENDS, far from x=-480.
+  const [px, py, pz] = cpt(-480, HS + HWALL + 64, TOP2);
+  // v13.6 (user 2026-08-29: "I just downloaded bo6 pap. Lets replace all pap
+  // machines with this new version. Lets keep the FX and animations from this
+  // pack if possible."): the stock vending_weapon_upgrade prefab is REPLACED
+  // by the ALXS CW/BO6 PaP — an animated machine with its own FX, sounds and
+  // buy script (zm_cwpap, singular by design: ONE GetEnt'd machine, so the
+  // crown is the one place it can live; the four breather vendors keep our
+  // tod_pap_owned lane wearing this pack's mesh instead). Same spot, same
+  // 64u standoff; yaw kept — if the port fronts differently the user's eyes
+  // decide the correction, one number.
+  prefab('crown pack-a-punch', 'ALXS/alxs_cwpap_prefab.map', px, py, pz, cyaw(180), PERK_LOC);
   const [mx, my, mz] = cpt(480, HS + HWALL + 33, TOP2);
   // NO PERK ON THE CROWN (user 2026-08-25: "I dont want a perk on the crown").
   // The crown carries Pack-a-Punch and nothing else. Mule Kick used to sit here;
@@ -3605,18 +4390,30 @@ light('tod light base 1', -470, -470, 240, BASE_LIGHT, 520, 6, 1);
 light('tod light base 2', 470, -470, 240, BASE_LIGHT, 520, 6, 1);
 light('tod light base 3', -470, 470, 240, BASE_LIGHT, 520, 6, 1);
 light('tod light base 4', 470, 470, 240, BASE_LIGHT, 520, 6, 1);
-light('tod light base spawn', 0, -490, 200, '1 0.9 0.78', 420, 6, 1);
+// Follows the spawn to the WEST band (2026-08-27) — it exists to light the
+// start point, and leaving it in the south would have left the new spawn lit
+// only by the two blue corner lights while the empty south stayed warm. Same
+// colour, same radius, same height; only x/y move.
+light('tod light base spawn', SPAWN_BAND_X - 10, 0, 200, '1 0.9 0.78', 420, 6, 1);
 for (let lap = 0; lap < LAPS; lap++) {
   const b = lap * LAP_RISE, c = lapPal(lap).light;
   const oddl = (lap % 2 === 0);
   if (oddl) {
     light(`tod light lap${lap + 1} mid`, 336, 336, b + FLIGHT_RISE + 160, c, 420, 6, 1);
     light(`tod light lap${lap + 1} end`, -336, 336, b + LAP_RISE + 160, c, 420, 6, 1);
-    if (BREATHER_LAPS.has(lap + 1)) light(`tod light lap${lap + 1} breather`, 448, PX + BR_DEPTH / 2, b + FLIGHT_RISE + 170, c, 460, 6, 1);
   } else {
     light(`tod light lap${lap + 1} mid`, -336, -336, b + FLIGHT_RISE + 160, c, 420, 6, 1);
     light(`tod light lap${lap + 1} end`, 336, -336, b + LAP_RISE + 160, c, 420, 6, 1);
-    if (BREATHER_LAPS.has(lap + 1)) light(`tod light lap${lap + 1} breather`, -448, -(PX + BR_DEPTH / 2), b + FLIGHT_RISE + 170, c, 460, 6, 1);
+  }
+  // v13 LOUNGE LIGHTS — the room has a roof now, so it must light itself: two
+  // interior pools plus one over the spur pad, all in the lounge's THEME color
+  // (BREATHER_THEME) rather than the lap-cycle color the deck used to borrow.
+  if (BREATHER_LAPS.has(lap + 1)) {
+    const s = oddl ? 1 : -1, mz = b + FLIGHT_RISE;
+    const tl = BREATHER_THEME[lap + 1].light;
+    light(`tod light lap${lap + 1} breather`, s * 448, s * (PX + BR_DEPTH / 2), mz + 220, tl, 460, 6, 1);
+    light(`tod light lap${lap + 1} breather w`, s * 640, s * 540, mz + 220, tl, 380, 6, 1);
+    light(`tod light lap${lap + 1} breather pad`, s * SPUR_CX, s * SPUR_PAD_Y, mz + 190, tl, 380, 6, 1);
   }
 }
 // THE CROWN (v9) — gold on the approach, cyan at the gate, gold in the hall,
@@ -3708,8 +4505,11 @@ ent('volume_sun', [
 // umbra/fpstool volume is not a crash, but it drops out of occlusion culling
 // and out of the fps tool's accounting, and the crown is now the largest single
 // object in the map.
-const VOL_R = Math.max(ARENA + WALL, PX + BR_DEPTH + PARA + 12, 1700, HN + 64,
-  Math.max(-crownBB.x1, crownBB.x2, -crownBB.y1, crownBB.y2) + 128);
+const VOL_R = Math.max(ARENA + WALL, PX + BR_DEPTH + PARA + 12, SPUR_Y2 + 60, 1700, HN + 64,
+  Math.max(-crownBB.x1, crownBB.x2, -crownBB.y1, crownBB.y2) + 128,
+  // v14: the spire drops out of occlusion culling + fps accounting if the
+  // umbra/fpstool volumes stop short of it (the crown's own lesson)
+  SPIRE_ENABLED ? SP_X + ARENA + WALL + 128 : 0);
 if (Math.max(-crownBB.x1, crownBB.x2, -crownBB.y1, crownBB.y2) + 64 > VOL_R)
   throw new Error(`crown reaches ${Math.max(-crownBB.x1, crownBB.x2, -crownBB.y1, crownBB.y2)} but the umbra/fpstool volume stops at ${VOL_R}`);
 ent('umbra_volume', [
@@ -3722,6 +4522,540 @@ ent('volume_fpstool', [
   matBrush(-VOL_R, VOL_R, -VOL_R, VOL_R, -SLAB, SKY_TOP - 200, 'volume_fpstool'),
   '}',
 ]);
+
+// ---------------------------------------------------------------------------
+// 6. THE ENDLESS SPIRE (v14, docs/44) — everything inside this ONE gated block.
+// Emission order is load-bearing for the freeze envelope: the block sits LAST,
+// after every existing brush and entity, so enabling it APPENDS — no existing
+// guid shifts, and with SPIRE_ENABLED=false the output is byte-identical to
+// the pre-spire generator (proven by scratch diff, not assumed).
+// ---------------------------------------------------------------------------
+if (SPIRE_ENABLED) {
+  const SPIRE_GSC_OUT = path.join(REPO, 'scripts', 'zm', 'zm_tower_of_doom', '_tod_spire_data.gsc');
+  const sb0 = worldBrushes.length, se0 = entities.length;
+
+  // local-frame emitters: everything below is authored around (0,0) and offset
+  const sbox = (label, x1, x2, y1, y2, z1, z2, mat) =>
+    addBox(`spire ${label}`, SP_X + x1, SP_X + x2, SP_Y + y1, SP_Y + y2, z1, z2, mat);
+  const svol = (x1, x2, y1, y2, z1, z2) =>
+    volumeBrush(SP_X + x1, SP_X + x2, SP_Y + y1, SP_Y + y2, z1, z2);
+
+  // --- seal fit + clearances, asserted (the crown's own doctrine) -----------
+  const spExtX = Math.max(ARENA + WALL, PX + BR_EAST + PARA, SP_SHELF_X2 + PARA);
+  const spExtY = Math.max(ARENA + WALL, PX + BR_DEPTH + PARA);
+  if (SP_X + spExtX + 256 > SKY_IN) throw new Error(`spire east face ${SP_X + spExtX} inside the sky seal margin (SKY_IN ${SKY_IN})`);
+  if (SP_X - spExtX < Math.max(crownBB.x2, CW_XMAX) + 512) throw new Error('spire west face crowds the crown/causeway envelope');
+  if (Math.abs(SP_Y) + spExtY + 256 > SKY_IN) throw new Error('spire y extent inside the sky seal margin');
+  if (SP_TOP2 + SP_BEACON_H + 300 > SKY_TOP) throw new Error('spire beacon through the sky ceiling — SKY_TOP max() is broken');
+
+  // --- 6a. arrival arena (the base arena's proven shape, no annexes) --------
+  sbox('ground slab', -(ARENA + WALL), ARENA + WALL, -(ARENA + WALL), ARENA + WALL, -SLAB, 0, MAT.ground);
+  sbox('base inlay N', -(ARENA - 20), ARENA - 20, ARENA - 84, ARENA - 20, 0, 1, MAT.jewelRuby);
+  sbox('base inlay S', -(ARENA - 20), ARENA - 20, -(ARENA - 20), -(ARENA - 84), 0, 1, MAT.jewelRuby);
+  sbox('base inlay W', -(ARENA - 20), -(ARENA - 84), -(ARENA - 84), ARENA - 84, 0, 1, MAT.jewelRuby);
+  sbox('base inlay E', ARENA - 84, ARENA - 20, -(ARENA - 84), ARENA - 84, 0, 1, MAT.jewelRuby);
+  // where the ascension drops you — green, the same "landing point" grammar as
+  // the teleport bay's arrival mark. CENTRED ON THE WEST BAND at x=-400 (live
+  // test 2026-08-29: the first cut sat at x=-200 — INSIDE THE CORE COLUMN's
+  // footprint (|x|<256), so the engine shoved arrivals out under the stairs).
+  // The open band is x[-540,-256]; -400 is its centre, players land facing
+  // the tower they are about to climb.
+  sbox('arrival mark', -488, -312, -88, 88, 0, 1, MAT.exfilPad);
+  sbox('wall N', -(ARENA + WALL), ARENA + WALL, ARENA, ARENA + WALL, 0, BASE_WALL_H, SP_MAT_CORE);
+  sbox('wall S', -(ARENA + WALL), ARENA + WALL, -(ARENA + WALL), -ARENA, 0, BASE_WALL_H, SP_MAT_CORE);
+  sbox('wall W', -(ARENA + WALL), -ARENA, -ARENA, ARENA, 0, BASE_WALL_H, SP_MAT_CORE);
+  sbox('wall E', ARENA, ARENA + WALL, -ARENA, ARENA, 0, BASE_WALL_H, SP_MAT_CORE);
+  sbox('clip N', -(ARENA + WALL), ARENA + WALL, ARENA, ARENA + WALL, BASE_WALL_H, 1600, MAT.clip);
+  sbox('clip S', -(ARENA + WALL), ARENA + WALL, -(ARENA + WALL), -ARENA, BASE_WALL_H, 1600, MAT.clip);
+  sbox('clip W', -(ARENA + WALL), -ARENA, -ARENA, ARENA, BASE_WALL_H, 1600, MAT.clip);
+  sbox('clip E', ARENA, ARENA + WALL, -ARENA, ARENA, BASE_WALL_H, 1600, MAT.clip);
+  // the arena's own ammo crate (floors 1-4 have no shelf — the arena E clip
+  // spans z128..1600 and a shelf below floor 5 would bury itself in it).
+  // S wall, clear of the arrival (272u to the nearest riser, 96-door far away).
+  // NO map-cut clip here, DELIBERATELY (live test 2026-08-29, "the trigger
+  // crate and clip are not all aligned"): the first cut emitted the breather
+  // crates' measured YAW-270 occupancy under a crate spawned at another yaw —
+  // three disagreeing collision sources. This crate is script-clipped by
+  // _tod_spire::spawn_crate (the tower base crate's own recipe, where model,
+  // clips and trigger all derive from one org+yaw and cannot disagree).
+  const SP_ARENA_CRATE = [-200, -505];
+
+  // --- 6b. the core (ONE brush — monochrome, no palette cycle) --------------
+  sbox('core column', -CORE, CORE, -CORE, CORE, 0, SP_TOP, SP_MAT_CORE);
+  sbox('core capital', -CORE, CORE, -CORE, CORE, SP_TOP, SP_TOP2, MAT.crownBand);
+
+  // --- 6c. the spiral: the tower's own lap grammar, red, with hubs + shelves -
+  const SP_HUBS = [];
+  for (let lap = 0; lap < SP_LAPS; lap++) {
+    const b = lap * LAP_RISE;
+    const odd = (lap % 2 === 0);
+    const mid = b + FLIGHT_RISE, end = b + LAP_RISE;
+    const hub = ((lap + 1) % SP_HUB_EVERY === 0);
+    const sh = !hub && (lap + 1) >= 5;   // crate shelf (floors 5+, hub floors excluded)
+    if (hub) SP_HUBS.push(lap + 1);
+
+    if (odd) {
+      for (let i = 1; i <= STEPS; i++)
+        sbox(`lap${lap + 1} E step ${i}`, CORE, PX, -CORE + TREAD * (i - 1), -CORE + TREAD * i, ...slabZ(b + RISE * i), SP_MAT_STEP);
+      sbox(`lap${lap + 1} NE landing`, CORE, PX, CORE, PX, ...slabZ(mid), SP_MAT_LAND);
+      for (let i = 1; i <= STEPS; i++)
+        sbox(`lap${lap + 1} N step ${i}`, CORE - TREAD * i, CORE - TREAD * (i - 1), CORE, PX, ...slabZ(mid + RISE * i), SP_MAT_STEP);
+      sbox(`lap${lap + 1} NW landing`, -PX, -CORE, CORE, PX, ...slabZ(end), SP_MAT_LAND);
+      if (STAIR_RAMP_CLIP) {
+        rampWedgeY(`spire lap${lap + 1} E stair ramp`, SP_X + CORE, SP_X + PX, SP_Y - CORE - TREAD, SP_Y + CORE - TREAD, b, b + FLIGHT_RISE, MAT.rampClip);
+        rampWedgeX(`spire lap${lap + 1} N stair ramp`, SP_Y + CORE, SP_Y + PX, SP_X - CORE + TREAD, SP_X + CORE + TREAD, mid + FLIGHT_RISE, mid, MAT.rampClip);
+      }
+      // parapets (the tower's exact stepped grammar, incl. the lap-1 wall)
+      if (lap === 0) {
+        sbox('lap1 E parapet (anti-bypass wall)', PX, PX + PARA, -CORE, CORE, 0, 288, SP_MAT_CORE);
+      } else {
+        for (let j = 1; j <= STEPS / PARA_EVERY; j++) {
+          const top = b + RISE * PARA_EVERY * j;
+          sbox(`lap${lap + 1} E para ${j}`, PX, PX + PARA, -CORE + TREAD * PARA_EVERY * (j - 1), -CORE + TREAD * PARA_EVERY * j, top - RISE * (PARA_EVERY - 1), top + PARA_H, SP_MAT_PARA);
+        }
+      }
+      for (let j = 1; j <= STEPS / PARA_EVERY; j++) {
+        const top = mid + RISE * PARA_EVERY * j;
+        sbox(`lap${lap + 1} N para ${j}`, CORE - TREAD * PARA_EVERY * j, CORE - TREAD * PARA_EVERY * (j - 1), PX, PX + PARA, top - RISE * (PARA_EVERY - 1), top + PARA_H, SP_MAT_PARA);
+      }
+      // mid-landing rails: full / shelf-split / hub-mouth
+      if (sh) {
+        sbox(`lap${lap + 1} NE landing para a1`, PX, PX + PARA, CORE, SP_SHELF_Y1, mid, mid + PARA_H, SP_MAT_PARA);
+        sbox(`lap${lap + 1} NE landing para a2`, PX, PX + PARA, SP_SHELF_Y2, PX + PARA, mid, mid + PARA_H, SP_MAT_PARA);
+      } else if (!hub) {
+        sbox(`lap${lap + 1} NE landing para a`, PX, PX + PARA, CORE, PX + PARA, mid, mid + PARA_H, SP_MAT_PARA);
+      } else {
+        sbox(`lap${lap + 1} NE landing para a`, PX, PX + PARA, CORE, PX, mid, mid + PARA_H, SP_MAT_PARA);
+      }
+      if (!hub) sbox(`lap${lap + 1} NE landing para b`, CORE, PX, PX, PX + PARA, mid, mid + PARA_H, SP_MAT_PARA);
+      sbox(`lap${lap + 1} NW landing para a`, -PX - PARA, -PX, CORE, PX + PARA, end, end + PARA_H, SP_MAT_PARA);
+      sbox(`lap${lap + 1} NW landing para b`, -PX, -CORE, PX, PX + PARA, end, end + PARA_H, SP_MAT_PARA);
+      // rail caps
+      if (lap === 0) {
+        sbox('lap1 rail cap E over wall', PX, PX + PARA, -CORE, CORE, 288, b + FLIGHT_RISE + PARA_H + RAIL_CAP_H, MAT.clip);
+        sbox('lap1 rail cap E landing', PX, PX + PARA, CORE, PX + PARA, mid + PARA_H, b + FLIGHT_RISE + PARA_H + RAIL_CAP_H, MAT.clip);
+      } else if (sh) {
+        sbox(`lap${lap + 1} rail cap E a`, PX, PX + PARA, -CORE, SP_SHELF_Y1, b + PARA_H, b + FLIGHT_RISE + PARA_H + RAIL_CAP_H, MAT.clip);
+        sbox(`lap${lap + 1} rail cap E b`, PX, PX + PARA, SP_SHELF_Y2, PX + PARA, b + PARA_H, b + FLIGHT_RISE + PARA_H + RAIL_CAP_H, MAT.clip);
+      } else {
+        sbox(`lap${lap + 1} rail cap E`, PX, PX + PARA, -CORE, (hub ? PX : PX + PARA), b + PARA_H, b + FLIGHT_RISE + PARA_H + RAIL_CAP_H, MAT.clip);
+      }
+      sbox(`lap${lap + 1} rail cap N`, -CORE, (hub ? CORE : PX + PARA), PX, PX + PARA, mid + PARA_H, mid + FLIGHT_RISE + PARA_H + RAIL_CAP_H, MAT.clip);
+      sbox(`lap${lap + 1} rail cap NW a`, -PX - PARA, -PX, CORE, PX + PARA, end + PARA_H, end + PARA_H + RAIL_CAP_H, MAT.clip);
+      sbox(`lap${lap + 1} rail cap NW b`, -PX, -CORE, PX, PX + PARA, end + PARA_H, end + PARA_H + RAIL_CAP_H, MAT.clip);
+      if (sh) {
+        sbox(`lap${lap + 1} shelf floor`, SP_SHELF_X1, SP_SHELF_X2, SP_SHELF_Y1, SP_SHELF_Y2, mid - SLAB, mid, SP_MAT_LAND);
+        sbox(`lap${lap + 1} shelf rail E`, SP_SHELF_X2, SP_SHELF_X2 + PARA, SP_SHELF_Y1, SP_SHELF_Y2, mid, mid + PARA_H, SP_MAT_PARA);
+        sbox(`lap${lap + 1} shelf rail N`, SP_SHELF_X1, SP_SHELF_X2 + PARA, SP_SHELF_Y2, SP_SHELF_Y2 + PARA, mid, mid + PARA_H, SP_MAT_PARA);
+        sbox(`lap${lap + 1} shelf rail S`, SP_SHELF_X1, SP_SHELF_X2 + PARA, SP_SHELF_Y1 - PARA, SP_SHELF_Y1, mid, mid + PARA_H, SP_MAT_PARA);
+        sbox(`lap${lap + 1} shelf cap E`, SP_SHELF_X2, SP_SHELF_X2 + PARA, SP_SHELF_Y1 - PARA, SP_SHELF_Y2 + PARA, mid + PARA_H, mid + PARA_H + RAIL_CAP_H, MAT.clip);
+        sbox(`lap${lap + 1} shelf cap N`, SP_SHELF_X1, SP_SHELF_X2 + PARA, SP_SHELF_Y2, SP_SHELF_Y2 + PARA, mid + PARA_H, mid + PARA_H + RAIL_CAP_H, MAT.clip);
+        sbox(`lap${lap + 1} shelf cap S`, SP_SHELF_X1, SP_SHELF_X2 + PARA, SP_SHELF_Y1 - PARA, SP_SHELF_Y1, mid + PARA_H, mid + PARA_H + RAIL_CAP_H, MAT.clip);
+      }
+    } else {
+      for (let i = 1; i <= STEPS; i++)
+        sbox(`lap${lap + 1} W step ${i}`, -PX, -CORE, CORE - TREAD * i, CORE - TREAD * (i - 1), ...slabZ(b + RISE * i), SP_MAT_STEP);
+      sbox(`lap${lap + 1} SW landing`, -PX, -CORE, -PX, -CORE, ...slabZ(mid), SP_MAT_LAND);
+      for (let i = 1; i <= STEPS; i++)
+        sbox(`lap${lap + 1} S step ${i}`, -CORE + TREAD * (i - 1), -CORE + TREAD * i, -PX, -CORE, ...slabZ(mid + RISE * i), SP_MAT_STEP);
+      sbox(`lap${lap + 1} SE landing`, CORE, PX, -PX, -CORE, ...slabZ(end), SP_MAT_LAND);
+      if (STAIR_RAMP_CLIP) {
+        rampWedgeY(`spire lap${lap + 1} W stair ramp`, SP_X - PX, SP_X - CORE, SP_Y - CORE + TREAD, SP_Y + CORE + TREAD, b + FLIGHT_RISE, b, MAT.rampClip);
+        rampWedgeX(`spire lap${lap + 1} S stair ramp`, SP_Y - PX, SP_Y - CORE, SP_X - CORE - TREAD, SP_X + CORE - TREAD, mid, mid + FLIGHT_RISE, MAT.rampClip);
+      }
+      for (let j = 1; j <= STEPS / PARA_EVERY; j++) {
+        const top = b + RISE * PARA_EVERY * j;
+        sbox(`lap${lap + 1} W para ${j}`, -PX - PARA, -PX, CORE - TREAD * PARA_EVERY * j, CORE - TREAD * PARA_EVERY * (j - 1), top - RISE * (PARA_EVERY - 1), top + PARA_H, SP_MAT_PARA);
+      }
+      for (let j = 1; j <= STEPS / PARA_EVERY; j++) {
+        const top = mid + RISE * PARA_EVERY * j;
+        sbox(`lap${lap + 1} S para ${j}`, -CORE + TREAD * PARA_EVERY * (j - 1), -CORE + TREAD * PARA_EVERY * j, -PX - PARA, -PX, top - RISE * (PARA_EVERY - 1), top + PARA_H, SP_MAT_PARA);
+      }
+      if (sh) {
+        sbox(`lap${lap + 1} SW landing para a1`, -PX - PARA, -PX, -SP_SHELF_Y1, -CORE, mid, mid + PARA_H, SP_MAT_PARA);
+        sbox(`lap${lap + 1} SW landing para a2`, -PX - PARA, -PX, -PX - PARA, -SP_SHELF_Y2, mid, mid + PARA_H, SP_MAT_PARA);
+      } else if (!hub) {
+        sbox(`lap${lap + 1} SW landing para a`, -PX - PARA, -PX, -PX - PARA, -CORE, mid, mid + PARA_H, SP_MAT_PARA);
+      } else {
+        sbox(`lap${lap + 1} SW landing para a`, -PX - PARA, -PX, -PX, -CORE, mid, mid + PARA_H, SP_MAT_PARA);
+      }
+      if (!hub) sbox(`lap${lap + 1} SW landing para b`, -PX, -CORE, -PX - PARA, -PX, mid, mid + PARA_H, SP_MAT_PARA);
+      sbox(`lap${lap + 1} SE landing para a`, PX, PX + PARA, -PX - PARA, -CORE, end, end + PARA_H, SP_MAT_PARA);
+      sbox(`lap${lap + 1} SE landing para b`, CORE, PX, -PX - PARA, -PX, end, end + PARA_H, SP_MAT_PARA);
+      if (sh) {
+        sbox(`lap${lap + 1} rail cap W a`, -PX - PARA, -PX, -SP_SHELF_Y1, CORE, b + PARA_H, b + FLIGHT_RISE + PARA_H + RAIL_CAP_H, MAT.clip);
+        sbox(`lap${lap + 1} rail cap W b`, -PX - PARA, -PX, -PX - PARA, -SP_SHELF_Y2, b + PARA_H, b + FLIGHT_RISE + PARA_H + RAIL_CAP_H, MAT.clip);
+      } else {
+        sbox(`lap${lap + 1} rail cap W`, -PX - PARA, -PX, (hub ? -PX : -PX - PARA), CORE, b + PARA_H, b + FLIGHT_RISE + PARA_H + RAIL_CAP_H, MAT.clip);
+      }
+      sbox(`lap${lap + 1} rail cap S`, (hub ? -CORE : -PX - PARA), CORE, -PX - PARA, -PX, mid + PARA_H, mid + FLIGHT_RISE + PARA_H + RAIL_CAP_H, MAT.clip);
+      sbox(`lap${lap + 1} rail cap SE a`, PX, PX + PARA, -PX - PARA, -CORE, end + PARA_H, end + PARA_H + RAIL_CAP_H, MAT.clip);
+      sbox(`lap${lap + 1} rail cap SE b`, CORE, PX, -PX - PARA, -PX, end + PARA_H, end + PARA_H + RAIL_CAP_H, MAT.clip);
+      if (sh) {
+        sbox(`lap${lap + 1} shelf floor`, -SP_SHELF_X2, -SP_SHELF_X1, -SP_SHELF_Y2, -SP_SHELF_Y1, mid - SLAB, mid, SP_MAT_LAND);
+        sbox(`lap${lap + 1} shelf rail E`, -SP_SHELF_X2 - PARA, -SP_SHELF_X2, -SP_SHELF_Y2, -SP_SHELF_Y1, mid, mid + PARA_H, SP_MAT_PARA);
+        sbox(`lap${lap + 1} shelf rail N`, -SP_SHELF_X2 - PARA, -SP_SHELF_X1, -SP_SHELF_Y2 - PARA, -SP_SHELF_Y2, mid, mid + PARA_H, SP_MAT_PARA);
+        sbox(`lap${lap + 1} shelf rail S`, -SP_SHELF_X2 - PARA, -SP_SHELF_X1, -SP_SHELF_Y1, -SP_SHELF_Y1 + PARA, mid, mid + PARA_H, SP_MAT_PARA);
+        sbox(`lap${lap + 1} shelf cap E`, -SP_SHELF_X2 - PARA, -SP_SHELF_X2, -SP_SHELF_Y2 - PARA, -SP_SHELF_Y1 + PARA, mid + PARA_H, mid + PARA_H + RAIL_CAP_H, MAT.clip);
+        sbox(`lap${lap + 1} shelf cap N`, -SP_SHELF_X2 - PARA, -SP_SHELF_X1, -SP_SHELF_Y2 - PARA, -SP_SHELF_Y2, mid + PARA_H, mid + PARA_H + RAIL_CAP_H, MAT.clip);
+        sbox(`lap${lap + 1} shelf cap S`, -SP_SHELF_X2 - PARA, -SP_SHELF_X1, -SP_SHELF_Y1, -SP_SHELF_Y1 + PARA, mid + PARA_H, mid + PARA_H + RAIL_CAP_H, MAT.clip);
+      }
+    }
+
+    // vendor HUB balcony (every 10th floor — all even, mirrored SW frame; the
+    // breathers' own footprint so BR_FURN's asserted clearances carry over)
+    if (hub) {
+      const NB1 = PX + BR_DEPTH, NB2 = NB1 + PARA;
+      const EB1 = PX + BR_EAST, EB2 = EB1 + PARA;
+      sbox(`hub lap${lap + 1} floor`, -EB1, -CORE, -NB1, -PX, ...slabZ(mid), SP_MAT_HUBF);
+      sbox(`hub lap${lap + 1} para S`, -EB2, -(CORE - PARA), -NB2, -NB1, mid, mid + PARA_H, SP_MAT_HUBP);
+      sbox(`hub lap${lap + 1} cap S`, -EB2, -(CORE - PARA), -NB2, -NB1, mid + PARA_H, mid + PARA_H + RAIL_CAP_H, MAT.clip);
+      sbox(`hub lap${lap + 1} para W`, -EB2, -EB1, -NB1, -(PX - PARA), mid, mid + PARA_H, SP_MAT_HUBP);
+      sbox(`hub lap${lap + 1} cap W`, -EB2, -EB1, -NB1, -(PX - PARA), mid + PARA_H, mid + PARA_H + RAIL_CAP_H, MAT.clip);
+      sbox(`hub lap${lap + 1} para N`, -EB1, -(PX + PARA), -PX, -(PX - PARA), mid, mid + PARA_H, SP_MAT_HUBP);
+      sbox(`hub lap${lap + 1} cap N`, -EB1, -(PX + PARA), -PX, -(PX - PARA), mid + PARA_H, mid + PARA_H + RAIL_CAP_H, MAT.clip);
+      // CORE-SIDE RAIL — the floor's inner edge only meets the core for
+      // |y|<=256; the rest faces open void (the first lint run found exactly
+      // this: 27 unguarded columns per hub). Same band the lounges' W wall
+      // occupies, mirrored; the y[-436,-416] strip belongs to the lap's own
+      // S-flight parapet, exactly as the lounge note says.
+      sbox(`hub lap${lap + 1} para core`, -CORE, -(CORE - PARA), -(PX + BR_DEPTH), -(PX + PARA), mid, mid + PARA_H, SP_MAT_HUBP);
+      sbox(`hub lap${lap + 1} cap core`, -CORE, -(CORE - PARA), -(PX + BR_DEPTH), -(PX + PARA), mid + PARA_H, mid + PARA_H + RAIL_CAP_H, MAT.clip);
+      const [ccx, ccy] = BR_FURN.crate.org;
+      addBox(`spire hub lap${lap + 1} ammo crate body`, SP_X + ccx - 37, SP_X + ccx + 38, SP_Y + ccy - 19, SP_Y + ccy + 45, mid, mid + 58, MAT.clip);
+    }
+  }
+
+  // --- 6d. the summit (crown-stair pattern: gold flight -> apron + plaza) ---
+  for (let i = 1; i <= STEPS; i++)
+    sbox(`summit step ${i}`, CORE, PX, -CORE + TREAD * (i - 1), -CORE + TREAD * i, ...slabZ(SP_TOP + RISE * i), MAT.crownStep);
+  if (STAIR_RAMP_CLIP)
+    rampWedgeY('spire summit stair ramp', SP_X + CORE, SP_X + PX, SP_Y - CORE - TREAD, SP_Y + CORE - TREAD, SP_TOP, SP_TOP + FLIGHT_RISE, MAT.rampClip);
+  for (let j = 1; j <= STEPS / PARA_EVERY; j++) {
+    const top = SP_TOP + RISE * PARA_EVERY * j;
+    sbox(`summit stair rail ${j}`, PX, PX + PARA, -CORE + TREAD * PARA_EVERY * (j - 1), -CORE + TREAD * PARA_EVERY * j, top - RISE * (PARA_EVERY - 1), top + PARA_H, MAT.crownGold);
+  }
+  sbox('summit stair cap', PX, PX + PARA, -CORE, CORE, SP_TOP + PARA_H, SP_TOP + FLIGHT_RISE + PARA_H + RAIL_CAP_H, MAT.clip);
+  // THE PLAZA DECK — a real floor slab over the capital. The capital is `pap`,
+  // which the lint (and the design language) classes as BLOCK: nothing stands
+  // on bare capital anywhere else in the map, so the summit lays a gold-grid
+  // deck on top. It tops out 16 above the apron/stair arrival — one step.
+  sbox('summit plaza deck', -CORE, CORE, -CORE, CORE, SP_TOP2, SP_TOP2 + SLAB, SP_MAT_HUBF);
+  // CAPITAL RIM RAIL — between the plaza deck and the summit stair's top
+  // treads (the stair rises flush along the plaza's east edge; without this,
+  // treads 13-16 sit above the capital's guard reach — first lint run). The
+  // rail base is sunk 32 into the capital so it guards the top treads too;
+  // it stops at y=224 so the arrival strip (y 224..256) stays open.
+  sbox('summit rim rail', CORE - PARA, CORE, -CORE, 224, SP_TOP2 - 32, SP_TOP2 + SLAB + PARA_H, MAT.crownGold);
+  sbox('summit rim cap', CORE - PARA, CORE, -CORE, 224, SP_TOP2 + SLAB + PARA_H, SP_TOP2 + SLAB + PARA_H + RAIL_CAP_H, MAT.clip);
+  sbox('summit apron', -480, 480, CORE, 480, SP_TOP2 - SLAB, SP_TOP2, SP_MAT_HUBF);
+  // apron + plaza edge rails, every run capped; the stair mouth (E end of the
+  // apron's south edge, x[256,416]) and the apron->plaza seam stay open
+  sbox('summit apron rail N', -500, 500, 480, 500, SP_TOP2, SP_TOP2 + PARA_H, MAT.crownGold);
+  sbox('summit apron cap N', -500, 500, 480, 500, SP_TOP2 + PARA_H, SP_TOP2 + PARA_H + RAIL_CAP_H, MAT.clip);
+  sbox('summit apron rail W', -500, -480, 236, 480, SP_TOP2, SP_TOP2 + PARA_H, MAT.crownGold);
+  sbox('summit apron cap W', -500, -480, 236, 480, SP_TOP2 + PARA_H, SP_TOP2 + PARA_H + RAIL_CAP_H, MAT.clip);
+  sbox('summit apron rail E', 480, 500, 236, 480, SP_TOP2, SP_TOP2 + PARA_H, MAT.crownGold);
+  sbox('summit apron cap E', 480, 500, 236, 480, SP_TOP2 + PARA_H, SP_TOP2 + PARA_H + RAIL_CAP_H, MAT.clip);
+  sbox('summit apron rail S w', -500, -256, 236, 256, SP_TOP2, SP_TOP2 + PARA_H, MAT.crownGold);
+  sbox('summit apron cap S w', -500, -256, 236, 256, SP_TOP2 + PARA_H, SP_TOP2 + PARA_H + RAIL_CAP_H, MAT.clip);
+  sbox('summit apron rail S e', 416, 500, 236, 256, SP_TOP2, SP_TOP2 + PARA_H, MAT.crownGold);
+  sbox('summit apron cap S e', 416, 500, 236, 256, SP_TOP2 + PARA_H, SP_TOP2 + PARA_H + RAIL_CAP_H, MAT.clip);
+  sbox('summit plaza rail W', -276, -256, -256, 256, SP_TOP2, SP_TOP2 + PARA_H, MAT.crownGold);
+  sbox('summit plaza cap W', -276, -256, -256, 256, SP_TOP2 + PARA_H, SP_TOP2 + PARA_H + RAIL_CAP_H, MAT.clip);
+  sbox('summit plaza rail S', -276, 276, -276, -256, SP_TOP2, SP_TOP2 + PARA_H, MAT.crownGold);
+  sbox('summit plaza cap S', -276, 276, -276, -256, SP_TOP2 + PARA_H, SP_TOP2 + PARA_H + RAIL_CAP_H, MAT.clip);
+  // NO east plaza rail on purpose: the summit stair rises flush along that
+  // edge, so a constant-z rail would hang at head height over its top treads —
+  // and stepping east off the plaza lands on walkable stair (<=180 drop), not
+  // void. The stair's own outer rail (x[PX,PX+PARA]) guards the real edge.
+  // beacon mast + the ruby head — the red star the whole map wonders about
+  sbox('summit mast t1', -48, 48, -48, 48, SP_TOP2 + SLAB, SP_TOP2 + 192, MAT.crownGold);
+  sbox('summit mast t2', -32, 32, -32, 32, SP_TOP2 + 192, SP_TOP2 + 352, MAT.crownGold);
+  sbox('summit mast t3', -16, 16, -16, 16, SP_TOP2 + 352, SP_TOP2 + SP_BEACON_H - 48, MAT.crownGold);
+  // PLAIN red, not jewelRuby: a 48-thick _tinted_edge box is a walkable DECK
+  // slab to the lint — a floating unguarded "floor" 500 over the deck (the
+  // crown-moulding rule). The beacon's glow is the light + aura, not the box.
+  sbox('summit mast head', -24, 24, -24, 24, SP_TOP2 + SP_BEACON_H - 48, SP_TOP2 + SP_BEACON_H, SP_MAT_PARA);
+  sbox('summit exfil mark', -80, 80, -230, -70, SP_TOP2 + SLAB, SP_TOP2 + SLAB + 1, MAT.exfilPad);
+
+  // --- 6e. doors: slab + anti-bypass clip, NO map trigger -------------------
+  // _tod_doors replaces every map trigger with its own script-spawned
+  // trigger_radius_use anyway, so the spire emits none: its door triggers are
+  // spawned LAZILY by _tod_spire.gsc in the climb window (the ~1024-slot
+  // gentity table is the budget everything here answers to — docs/44 §4).
+  const SPIRE_DOORS = [];
+  for (let n = 1; n <= SP_LAPS; n++) {
+    const b = (n - 1) * LAP_RISE;
+    const clipTop = Math.min(b + 600, SP_TOP2 - SLAB);
+    if (n % 2 === 1) {
+      SPIRE_DOORS.push({ n, slab: { x1: CORE, x2: PX, y1: -266, y2: -246, z1: b, z2: b + 128 }, clip: { x1: CORE, x2: PX + PARA, y1: -266, y2: -246, z1: b + 128, z2: clipTop } });
+    } else {
+      SPIRE_DOORS.push({ n, slab: { x1: -PX, x2: -CORE, y1: 246, y2: 266, z1: b, z2: b + 128 }, clip: { x1: -PX - PARA, x2: -CORE, y1: 246, y2: 266, z1: b + 128, z2: clipTop } });
+    }
+  }
+  // TWO SLABS, NOT 100 (live failure 2026-08-29: "the crown alter has no
+  // trigger" — G_Spawn pool exhaustion AT INIT. docs/44 §4 named the
+  // ~1024-gentity table as the spire's binding constraint and budgeted the
+  // ascension teardown against it — but the PEAK is at init, when the whole
+  // old world and every spire slab coexist; 100 resident brushmodels tipped
+  // it and the last init-time Spawn() calls failed, the crown altar's
+  // trigger among them). The climb is strictly sequential and one-way, so
+  // only the NEXT door of each parity ever needs a physical slab: door 1's
+  // and door 2's are emitted, and _tod_spire::door_manager SLIDES each +768z
+  // to its next same-parity doorway after every buy (same x/y by parity —
+  // the move is a pure z translation). The anti-bypass CLIPS stay per-door:
+  // they are worldspawn brushes and cost no entities.
+  for (const d of SPIRE_DOORS) {
+    if (d.n <= 2) {
+      ent(`spire door slab ${d.n} (${d.n % 2 === 1 ? 'odd' : 'even'} parity mover)`, [
+        '{', `guid "${guid()}"`,
+        kv('classname', 'script_brushmodel'),
+        kv('targetname', `tod_spire_door${d.n}`),
+        kv('script_vector', '0 0 130'),
+        kv('script_transition_time', '1.5'),
+        matBrush(SP_X + d.slab.x1, SP_X + d.slab.x2, SP_Y + d.slab.y1, SP_Y + d.slab.y2, d.slab.z1, d.slab.z2, MAT.door),
+        '}',
+      ]);
+    }
+    addBox(`spire door clip ${d.n}`, SP_X + d.clip.x1, SP_X + d.clip.x2, SP_Y + d.clip.y1, SP_Y + d.clip.y2, d.clip.z1, d.clip.z2, MAT.clip);
+  }
+
+  // --- 6f. zones + risers + respawn groups ----------------------------------
+  // One square volume per 5-floor chunk (it may cover the solid core — no
+  // walkable point is lost, and 1 brush beats 4 rings). Risers live ONLY on
+  // landings — the road's rule: a riser on a stair hangs in mid-air or buries
+  // itself under a crest. Riser gating above the highest bought door is a
+  // SCRIPT filter (_tod_spire, the finale gate-filter pattern), because a
+  // 5-floor zone wakes all its risers at its first door.
+  const SP_ZONES = [];
+  SP_ZONES.push({
+    name: 'spire_base_zone',
+    brushes: [svol(-(ARENA + WALL), ARENA + WALL, -(ARENA + WALL), ARENA + WALL, -SLAB, 368)],
+    risers: [[-470, -470, 0], [336, -336, 0], [-470, 470, 0], [470, 470, 0]],
+    dog: [0, -470, 0],
+  });
+  for (let k = 1; k <= SP_LAPS / SP_ZONE_CHUNK; k++) {
+    const f1 = (k - 1) * SP_ZONE_CHUNK + 1, f2 = k * SP_ZONE_CHUNK;
+    const brushes = [svol(-600, 600, -600, 600, (f1 - 1) * LAP_RISE - SLAB, f2 * LAP_RISE + 200)];
+    const risers = [];
+    let dog;
+    for (let f = f1; f <= f2; f++) {
+      const b = (f - 1) * LAP_RISE, mid = b + FLIGHT_RISE, end = b + LAP_RISE;
+      const fodd = (f % 2 === 1);
+      risers.push(fodd ? [336, 336, mid] : [-336, -336, mid]);
+      risers.push(fodd ? [-336, 336, end] : [336, -336, end]);
+      if (!dog) dog = fodd ? [336, 336, mid] : [-336, -336, mid];
+      if (f % SP_HUB_EVERY === 0) {
+        brushes.push(svol(-(PX + BR_EAST + PARA), -(CORE - PARA), -(PX + BR_DEPTH + PARA), -PX, b - SLAB, b + LAP_RISE + 200));
+        risers.push([-750, -460, mid], [-750, -950, mid]);
+      }
+    }
+    SP_ZONES.push({ name: `spire_c${k}_zone`, brushes, risers, dog });
+  }
+  SP_ZONES.push({
+    name: 'spire_summit_zone',
+    brushes: [svol(-520, 520, -280, 520, SP_TOP - SLAB, SP_TOP2 + 400)],
+    risers: [[180, -180, SP_TOP2 + SLAB], [-180, -180, SP_TOP2 + SLAB], [180, 100, SP_TOP2 + SLAB], [-180, 100, SP_TOP2 + SLAB]],
+    dog: [0, 368, SP_TOP2],
+  });
+  for (const zn of SP_ZONES) {
+    ent(`${zn.name} info_volume`, [
+      '{', `guid "${guid()}"`,
+      kv('classname', 'info_volume'),
+      kv('script_noteworthy', 'player_volume'),
+      kv('target', `${zn.name}_spawners`),
+      kv('targetname', zn.name),
+      ...zn.brushes,
+      '}',
+    ]);
+    zn.risers.forEach(([sx, sy, sz], i) => {
+      ent(`${zn.name} riser ${i + 1}`, [
+        '{', `guid "${guid()}"`,
+        kv('classname', 'script_struct'),
+        kv('angles', '0 270 0'),
+        kv('origin', `${SP_X + sx} ${SP_Y + sy} ${sz}`),
+        kv('script_noteworthy', 'riser_location'),
+        kv('script_string', 'find_flesh'),
+        kv('targetname', `${zn.name}_spawners`),
+        kv('_color', '1 0 0'), '}',
+      ]);
+    });
+    ent(`${zn.name} dog location`, [
+      '{', `guid "${guid()}"`,
+      kv('classname', 'script_struct'),
+      kv('origin', `${SP_X + zn.dog[0]} ${SP_Y + zn.dog[1]} ${zn.dog[2]}`),
+      kv('script_noteworthy', 'dog_location'),
+      kv('targetname', `${zn.name}_spawners`),
+      kv('_color', '1 0 0'), '}',
+    ]);
+  }
+  // respawn groups: arena + every hub + the summit. script_noteworthy MUST be
+  // the owning zone's name or manage_zones leaves the group locked forever —
+  // the trap that shipped four inert breather groups once.
+  const spGroup = (label, tn, zone, org, spawns) => {
+    ent(`${label} respawn group`, [
+      '{', `guid "${guid()}"`, kv('classname', 'script_struct'),
+      kv('angles', '0 90 0'), kv('origin', `${org[0]} ${org[1]} ${org[2]}`),
+      kv('radius', '2000'), kv('script_int', '2000'),
+      kv('script_noteworthy', zone),
+      kv('target', tn), kv('targetname', 'player_respawn_point'),
+      kv('_color', '1 0 0'), '}',
+    ]);
+    spawns.forEach(([sx, sy, sz], i) => {
+      ent(`${label} spawn ${i + 1}`, [
+        '{', `guid "${guid()}"`, kv('classname', 'script_struct'),
+        kv('_color', i % 2 ? '1 0 1' : '1 1 0'),
+        kv('angles', '0 90 0'), kv('origin', `${sx} ${sy} ${sz}`),
+        kv('radius', '32'), kv('targetname', tn), '}',
+      ]);
+    });
+  };
+  spGroup('spire base', 'tod_respawn_spire_base', 'spire_base_zone',
+    [SP_X - 400, SP_Y, 28],
+    [[SP_X - 430, SP_Y - 140, 28], [SP_X - 430, SP_Y - 20, 28], [SP_X - 430, SP_Y + 100, 28], [SP_X - 360, SP_Y - 20, 28]]);
+  for (const hl of SP_HUBS) {
+    const mz = (hl - 1) * LAP_RISE + FLIGHT_RISE + 28;
+    spGroup(`spire hub lap${hl}`, `tod_respawn_spire${hl}`, `spire_c${Math.ceil(hl / SP_ZONE_CHUNK)}_zone`,
+      [SP_X - 400, SP_Y - 710, mz],
+      BREATHER_SPAWN_XY.map(([sx, sy]) => [SP_X + sx, SP_Y + sy, mz]));
+  }
+  spGroup('spire summit', 'tod_respawn_spire_summit', 'spire_summit_zone',
+    [SP_X, SP_Y + 368, SP_TOP2 + 28],
+    [[SP_X - 240, SP_Y + 368, SP_TOP2 + 28], [SP_X + 240, SP_Y + 368, SP_TOP2 + 28], [SP_X - 360, SP_Y + 420, SP_TOP2 + 28], [SP_X + 360, SP_Y + 420, SP_TOP2 + 28]]);
+
+  // --- 6g. lights + probes (sparse: 1 red pool per lap, gold at the hubs) ---
+  light('spire light base 1', SP_X - 470, SP_Y - 470, 240, SP_LIGHT_RED, 520, 6, 1);
+  light('spire light base 2', SP_X + 470, SP_Y - 470, 240, SP_LIGHT_RED, 520, 6, 1);
+  light('spire light base 3', SP_X - 470, SP_Y + 470, 240, SP_LIGHT_RED, 520, 6, 1);
+  light('spire light base 4', SP_X + 470, SP_Y + 470, 240, SP_LIGHT_RED, 520, 6, 1);
+  light('spire light arrival', SP_X - 200, SP_Y, 200, '1 0.9 0.78', 420, 6, 1);
+  for (let lap = 0; lap < SP_LAPS; lap++) {
+    const mid = lap * LAP_RISE + FLIGHT_RISE;
+    const s = (lap % 2 === 0) ? 1 : -1;
+    light(`spire light lap${lap + 1}`, SP_X + s * 336, SP_Y + s * 336, mid + 160, SP_LIGHT_RED, 420, 6, 1);
+    if ((lap + 1) % SP_HUB_EVERY === 0)
+      light(`spire light hub${lap + 1}`, SP_X - 448, SP_Y - (PX + BR_DEPTH / 2), mid + 220, SP_LIGHT_GOLD, 460, 6, 1);
+  }
+  light('spire light summit 1', SP_X - 180, SP_Y, SP_TOP2 + 200, SP_LIGHT_GOLD, 520, 6, 1);
+  light('spire light summit 2', SP_X + 180, SP_Y, SP_TOP2 + 200, SP_LIGHT_GOLD, 520, 6, 1);
+  light('spire light beacon', SP_X, SP_Y, SP_TOP2 + SP_BEACON_H + 24, '1 0.25 0.2', 900, 6, 1);
+  probe('probe spire base', SP_X, SP_Y, 150);
+  for (let lap = 1; lap <= SP_LAPS; lap += 5) {
+    const s = (lap % 2 === 1) ? 336 : -336;
+    probe(`probe spire lap${lap}`, SP_X + s, SP_Y + s, (lap - 1) * LAP_RISE + FLIGHT_RISE + 150);
+  }
+  probe('probe spire summit', SP_X, SP_Y, SP_TOP2 + 150);
+
+  // --- 6h. _tod_spire_data.gsc ----------------------------------------------
+  const s = [];
+  s.push('// GENERATED by tools/gen_tower_map.js — DO NOT HAND-EDIT (regen instead).');
+  s.push('// THE ENDLESS SPIRE anchors (docs/44): door positions ride the same');
+  s.push('// arithmetic that cut the slabs, so script and geometry cannot drift.');
+  s.push('// Doors have NO map triggers — _tod_spire spawns them lazily in the climb');
+  s.push('// window (the gentity-table budget, docs/44 §4).');
+  s.push('');
+  s.push('#namespace tod_spire_data;');
+  s.push('');
+  s.push(`function spire_x()        { return ${SP_X}; }`);
+  s.push(`function spire_y()        { return ${SP_Y}; }`);
+  s.push(`function spire_laps()     { return ${SP_LAPS}; }`);
+  s.push(`function spire_top()      { return ${SP_TOP}; }`);
+  s.push(`function spire_summit_z() { return ${SP_TOP2}; }`);
+  s.push(`function door_cost()      { return ${SP_DOOR_COST}; }`);
+  s.push(`function summit_cost()    { return ${SP_SUMMIT_COST}; }`);
+  s.push('');
+  s.push('// Is this point anywhere on the spire (arena, spiral, hubs, summit)?');
+  s.push('function in_spire( org )');
+  s.push('{');
+  s.push(`\treturn ( org[ 0 ] > ${SP_X - 1400} && org[ 0 ] < ${SP_X + 1400} && org[ 1 ] > ${SP_Y - 1400} && org[ 1 ] < ${SP_Y + 1400} );`);
+  s.push('}');
+  s.push('');
+  s.push('// Door n gates floor n at z=(n-1)*' + LAP_RISE + '. Same shape as tod_door_data.');
+  s.push('function get_spire_door_info( n )');
+  s.push('{');
+  s.push(`\tb = ( n - 1 ) * ${LAP_RISE};`);
+  s.push('\tinfo = SpawnStruct();');
+  s.push('\tif ( ( n % 2 ) == 1 )');
+  s.push(`\t\tinfo.org = ( ${SP_X + 336}, ${SP_Y - 256}, b + 40 );`);
+  s.push('\telse');
+  s.push(`\t\tinfo.org = ( ${SP_X - 336}, ${SP_Y + 256}, b + 40 );`);
+  s.push('\tinfo.off = ( 0, 60, 0 );');
+  s.push(`\tinfo.cost = ${SP_DOOR_COST};`);
+  s.push('\tinfo.flag = "enter_spire" + n;');
+  s.push('\tinfo.target = "tod_spire_door" + n;');
+  s.push('\tinfo.dest = "the Spire - Floor " + n;');
+  s.push('\treturn info;');
+  s.push('}');
+  s.push(`function spire_door_z( n ) { return ( n - 1 ) * ${LAP_RISE}; }`);
+  s.push('');
+  s.push('// Crate shelf per floor (floors 5+; hub floors use the hub crate; the');
+  s.push('// arena crate covers 1-4). undefined = no shelf on that floor.');
+  s.push('function shelf_crate_org( n )');
+  s.push('{');
+  s.push(`\tif ( n < 5 || ( n % ${SP_HUB_EVERY} ) == 0 )`);
+  s.push('\t\treturn undefined;');
+  s.push(`\tmid = ( n - 1 ) * ${LAP_RISE} + ${FLIGHT_RISE};`);
+  s.push('\tif ( ( n % 2 ) == 1 )');
+  s.push(`\t\treturn ( ${SP_X + SP_CRATE_LX}, ${SP_Y + SP_CRATE_LY}, mid );`);
+  s.push(`\treturn ( ${SP_X - SP_CRATE_LX}, ${SP_Y - SP_CRATE_LY}, mid );`);
+  s.push('}');
+  s.push('function shelf_crate_yaw( n ) { return ( ( ( n % 2 ) == 1 ) ? 270 : 90 ); }');
+  s.push(`function arena_crate_org() { return ( ${SP_X + SP_ARENA_CRATE[0]}, ${SP_Y + SP_ARENA_CRATE[1]}, 0 ); }`);
+  s.push('function arena_crate_yaw() { return 180; }   // backs the S wall, front toward +y (into the arena)');
+  s.push('');
+  s.push('// vendor hubs (every 10th floor, mirrored/even frame — BR_FURN anchors)');
+  s.push(`function hub_laps() { return array( ${SP_HUBS.join(', ')} ); }`);
+  s.push(`function hub_z( lap ) { return ( lap - 1 ) * ${LAP_RISE} + ${FLIGHT_RISE}; }`);
+  s.push(`function hub_pap_org( z )  { return ( ${SP_X + BR_FURN.pap.org[0]}, ${SP_Y + BR_FURN.pap.org[1]}, z ); }`);
+  s.push(`function hub_pap_trig( z ) { return ( ${SP_X + BR_FURN.pap.trig[0]}, ${SP_Y + BR_FURN.pap.trig[1]}, z ); }`);
+  s.push(`function hub_pap_yaw()     { return ${BR_FURN.pap.yaw}; }`);
+  s.push(`function hub_crate_org( z ){ return ( ${SP_X + BR_FURN.crate.org[0]}, ${SP_Y + BR_FURN.crate.org[1]}, z ); }`);
+  s.push(`function hub_crate_yaw()   { return ${BR_FURN.crate.yaw}; }`);
+  s.push('function hub_perk_pads( z )');
+  s.push('{');
+  s.push('\ta = [];');
+  s.push(`\ta[ 0 ] = ( ${SP_X + BR_FURN.perk_e.trig[0]}, ${SP_Y + BR_FURN.perk_e.trig[1]}, z );`);
+  s.push(`\ta[ 1 ] = ( ${SP_X + BR_FURN.perk_w.trig[0]}, ${SP_Y + BR_FURN.perk_w.trig[1]}, z );`);
+  s.push('\treturn a;');
+  s.push('}');
+  s.push('');
+  s.push('// arrival + arena perk pads + summit');
+  s.push(`function arrival_org()     { return ( ${SP_X - 400}, ${SP_Y}, 0 ); }   // west-band centre — NEVER inside |x|<256 (the core column)`);
+  s.push('function arena_perk_pads()');
+  s.push('{');
+  s.push('\ta = [];');
+  s.push(`\ta[ 0 ] = ( ${SP_X - 130}, ${SP_Y + PERK_PARK_Y}, 0 );`);
+  s.push(`\ta[ 1 ] = ( ${SP_X + 130}, ${SP_Y + PERK_PARK_Y}, 0 );`);
+  s.push('\treturn a;');
+  s.push('}');
+  s.push(`function summit_exfil_org(){ return ( ${SP_X}, ${SP_Y - 150}, ${SP_TOP2 + SLAB + 8} ); }`);
+  s.push(`function beacon_org()      { return ( ${SP_X}, ${SP_Y}, ${SP_TOP2 + SP_BEACON_H + 24} ); }`);
+  s.push('');
+  s.push('// THE ASCENSION PAD — on the crown hall DAIS (the focal point the uplink');
+  s.push('// left behind in v10). Crown-frame coordinates, pre-mirrored like every');
+  s.push('// _tod_crown_data anchor.');
+  s.push(`function ascension_pad_org() { return ${(() => { const p = cpt(0, HYC, TOP2 + DAIS_H); return `( ${p[0]}, ${p[1]}, ${p[2]} )`; })()}; }`);
+  s.push(`function ascension_pad_yaw() { return ${cyaw(180)}; }`);
+  s.push('');
+  s.push('// zone bookkeeping for the wiring (zonemgr adjacency, spawn filter)');
+  s.push(`function zone_chunk() { return ${SP_ZONE_CHUNK}; }`);
+  s.push('function spire_zone_of( n ) { return "spire_c" + ( int( ( n - 1 ) / ' + SP_ZONE_CHUNK + ' ) + 1 ) + "_zone"; }');
+  s.push('function spire_zone_names()');
+  s.push('{');
+  s.push('\ta = [];');
+  s.push('\ta[ 0 ] = "spire_base_zone";');
+  for (let k = 1; k <= SP_LAPS / SP_ZONE_CHUNK; k++) s.push(`\ta[ ${k} ] = "spire_c${k}_zone";`);
+  s.push(`\ta[ ${SP_LAPS / SP_ZONE_CHUNK + 1} ] = "spire_summit_zone";`);
+  s.push('\treturn a;');
+  s.push('}');
+  s.push('');
+  fs.mkdirSync(path.dirname(SPIRE_GSC_OUT), { recursive: true });   // the parity harness runs this file from a temp dir (door-data convention)
+  fs.writeFileSync(SPIRE_GSC_OUT, s.join('\n'), 'utf8');
+  console.log(`wrote ${SPIRE_GSC_OUT}`);
+  console.log(`  spire: ${worldBrushes.length - sb0} brushes, ${entities.length - se0} entities, ${SP_LAPS} laps at x=${SP_X}, ` +
+    `${SPIRE_DOORS.length} doors @${SP_DOOR_COST}, hubs ${SP_HUBS.join('/')}, top z=${SP_TOP2}, beacon ${SP_TOP2 + SP_BEACON_H}`);
+}
 
 // ---------------------------------------------------------------------------
 // Output: the .map
@@ -3898,8 +5232,38 @@ c.push(`function exfil_radius()    { return ${EXFIL_HALF + 16}; }`);
 c.push(`function hall_center()     { return ${vec(cpt(0, HYC, TOP2))}; }`);
 c.push(`function gate_org()        { return ${vec(cpt(0, HS + HWALL / 2, TOP2))}; }`);
 c.push(`function mast_tip_org()    { return ( 0, 0, ${MAST_TOP} ); }`);
-c.push(`function station_org()     { return ${vec(cpt(-HW + HWALL + 33, HYC - 300, TOP2))}; }`);
-c.push(`function station_trig_org(){ return ${vec(cpt(-HW + HWALL + 73, HYC - 300, TOP2))}; }`);
+// THE CROWN UPGRADE STATION — STANDOFF 33 -> 64 (user live report 2026-08-28:
+// "final boss room. Pap is inside the wall"). The machine is the
+// `chaos_pack_a_punch` mesh (it is the UPGRADE STATION, not a Pack-a-Punch —
+// the map has no PaP prefab at all), and it was the tightest-placed of the
+// six stations by a wide margin:
+//     base station      64u off the core's south face   (model 0,-320 vs CORE 256)
+//     breather lounges  44u off the lounge's N wall     (BR_FURN, v13)
+//     crown hall        33u off the hall's W wall       <<< the reported one
+// The hall's west wall inner face is x = -HW + HWALL = -728, so 33 put the
+// origin at -695. 64 matches the BASE station, which is the longest-shipped
+// placement of this exact model and has never been reported.
+//
+// WHY 64 AND NOT A MEASURED NUMBER, STATED HONESTLY: the width profile of this
+// mesh is measured (see the long note in _tod_upgrades::station_place — 957,902
+// vertex records binned by height, +-52 at the chest-height flare), but that
+// pass recorded DEPTH only as a single "53" and never established whether the
+// origin sits at the mesh's centre or its front face. If it is centred, 33
+// should have cleared by ~6u and something else is wrong; if the body hangs
+// backward from the origin, 33 buries it and 64 fixes it. The report says it is
+// buried, and 64 is the standoff already proven on the same asset, so this
+// takes the proven number rather than a derived one. If it is STILL in the wall
+// after this, the origin is not the issue and the next step is to actually
+// measure the depth axis off chaos_pack_a_punch.xmodel_bin (LZ4-wrapped; the
+// width pass is the recipe) rather than nudging it again.
+//
+// CLEARANCES RE-CHECKED at the new x (the trigger keeps its 40u face offset):
+//   trigger (-624, 8308) r64 -> nearest hall pillar solid (-504, 8216) = 151u
+//   3 collision clips spread +-32 along AnglesToForward (= +-y at yaw 90),
+//     so they move with the model and stay clear of the same pillar
+//   ammo crate on the east wall is untouched at +676 (52u off its own face)
+c.push(`function station_org()     { return ${vec(cpt(-HW + HWALL + 64, HYC - 300, TOP2))}; }`);
+c.push(`function station_trig_org(){ return ${vec(cpt(-HW + HWALL + 104, HYC - 300, TOP2))}; }`);
 c.push(`function station_yaw()     { return ${cyaw(90)}; }`);
 c.push('');
 c.push('// THE HALL AMMO CRATE (v12) — spawned by _tod_ammo_crate.gsc, which reads');
@@ -3941,5 +5305,170 @@ SCONCES.forEach((s, i) => c.push(`\ta[ ${i} ] = ${s.yaw};`));
 c.push('\treturn a;');
 c.push('}');
 c.push('');
+// ---------------------------------------------------------------------------
+// THE FINALE BEAT SYSTEM (v12.13, docs/41: A1 tide + A2 boss beats + A4
+// arrival + riders + B1 lane lottery). Every anchor below is derived from the
+// same cwY/lane tables that cut the road, so script and geometry cannot drift.
+// ---------------------------------------------------------------------------
+c.push('// --- THE FINALE BEAT SYSTEM (v12.13, docs/41) — road-derived anchors -----');
+c.push('// road_y: the mirrored y — compare against tide/beat y thresholds with THIS,');
+c.push('// never with raw org[1] (the crown lap parity flips the whole road).');
+c.push(`function road_y( org )     { return org[ 1 ] * ${CM}; }`);
+c.push('// (tide_start_y/tide_end_y/road_north_yaw/tide_curtain_orgs were emitted');
+c.push('// here for exactly one day — THE DEREZ TIDE, added and removed 2026-08-27;');
+c.push('// post-mortem at the top of _tod_finale.gsc\'s beat table.)');
+c.push('// BOSS BEATS (A2): the Panzer lands at the NARROWS north lip (80 past the');
+c.push('// pinch exit, on full-width throat deck — fightable from the 320 throat);');
+c.push('// two protectors land on the gate APPROACH as the leader crosses J4.');
+c.push(`function beat_narrows_org()        { return ${vec(cpt(0, cwY[4] + 560, TOP2))}; }`);
+c.push(`function beat_narrows_trigger_y()  { return ${cwY[4]}; }   // leader entering the throat`);
+c.push('function beat_flare_orgs()');
+c.push('{');
+c.push('\ta = [];');
+// ±60 on the 160-wide approach and 140 short of the mouth (review FIX 3,
+// 2026-08-27): the first cut sat at ±100/y7600 — INSIDE the derived rail
+// column over the void, where SpawnActor eats half the boss roof for nothing.
+c.push(`\ta[ 0 ] = ${vec(cpt(-60, cwY[9] - 140, TOP2))};`);
+c.push(`\ta[ 1 ] = ${vec(cpt(60, cwY[9] - 140, TOP2))};`);
+c.push('\treturn a;');
+c.push('}');
+c.push(`function beat_flare_trigger_y()    { return ${cwY[7]}; }   // leader crossing J4`);
+c.push('// A4: the hold-out opener Panzer crashes into the hall here — clear of the');
+c.push('// 160 gather ring, the dais, the pillars, the crate and the station.');
+c.push(`function siege_panzer_org()        { return ${vec(cpt(280, HYC + 242, TOP2))}; }`);
+c.push('// THE CROWN\'S HEARTBEAT rider: the girandole — same coordinate as its');
+c.push('// baked light (the ruby drop-pendant under the vortex bell).');
+c.push(`function girandole_org()           { return ${vec(cpt(0, CR_CY - CS(480), TOP2 + CR_SKIRT_BOT - CS(480)))}; }`);
+c.push('// THE COUNTDOWN AVENUE (A1): glow hosts on the 8 avenue pylon PIPS (pip');
+c.push('// body spans +496..+576 over the deck; host at its centre) — ignited blue');
+c.push('// at the buy, strobed green on the win (the tide-era red flip is gone).');
+c.push('function avenue_pylon_orgs()');
+c.push('{');
+c.push('\ta = [];');
+(() => {
+  let k = 0;
+  for (const py of [640, 960, 3792, 4208])
+    for (const sx of [-1, 1])
+      c.push(`\ta[ ${k++} ] = ${vec(cpt(sx * 360, py, TOP2 + 536))};`);
+})();
+c.push('\treturn a;');
+c.push('}');
+c.push('// A4 pillar count-in hosts: above each hall pillar cap (cap tops at +176;');
+c.push('// the baked quarter lights sit at +260 — the host at +200 splits the gap).');
+c.push('function hall_pillar_orgs()');
+c.push('{');
+c.push('\ta = [];');
+(() => {
+  const PYL_OFF = 448;
+  [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sy], i) => {
+    c.push(`\ta[ ${i} ] = ${vec(cpt(sx * PYL_OFF, HYC + sy * PYL_OFF, TOP2 + 200))};`);
+  });
+})();
+c.push('\treturn a;');
+c.push('}');
+c.push('// THE LANE LOTTERY (B1). Parallel arrays, index = tod_lane_seal_<i>:');
+c.push('//   0 f1 W ridge | 1 f1 E broken stair | 2 f2 W undercroft | 3 f2 C plank | 4 f2 E weave');
+c.push('// seal_orgs: slab centres (FX anchors). slab/band mins+maxs: WORLD-space');
+c.push('// AABBs (pre-mirrored — test raw org x/y against them, no road_y). The');
+c.push('// BAND is the whole lane footprint fork->merge, for the riser filter.');
+(() => {
+  const mb = (x1, x2, y1, y2) => (CM === 1 ? [x1, x2, y1, y2] : [-x2, -x1, -y2, -y1]);
+  const seals = [
+    [LX[0], LX[1], cwY[2]], [EX[0], EX[1], cwY[2]],
+    [LX[0], LX[1], cwY[6]], [PX_[0], PX_[1], cwY[6]], [EX[0], EX[1], cwY[6]],
+  ];
+  const bands = [
+    // bstair is EX-only (review FIX 6 — the EW copy-paste came from the weave
+    // row; the ridge legitimately spans LW..LX and the weave EX..EW)
+    [LW[0], LX[1], cwY[2], cwY[3]], [EX[0], EX[1], cwY[2], cwY[3]],
+    [LW[0], LX[1], cwY[6], cwY[7]], [PX_[0], PX_[1], cwY[6], cwY[7]], [EX[0], EW[1], cwY[6], cwY[7]],
+  ];
+  c.push('function lane_seal_orgs()');
+  c.push('{');
+  c.push('\ta = [];');
+  seals.forEach(([x1, x2, y], i) =>
+    c.push(`\ta[ ${i} ] = ${vec(cpt((x1 + x2) / 2, y + 12, TOP2 + 128))};`));
+  c.push('\treturn a;');
+  c.push('}');
+  const emitMM = (name, rows, lo) => {
+    c.push(`function ${name}()`);
+    c.push('{');
+    c.push('\ta = [];');
+    rows.forEach((r, i) => {
+      const m = mb(r[0], r[1], r[2], r[3]);
+      c.push(`\ta[ ${i} ] = ( ${lo ? m[0] : m[1]}, ${lo ? m[2] : m[3]}, 0 );`);
+    });
+    c.push('\treturn a;');
+    c.push('}');
+  };
+  const slabs = seals.map(([x1, x2, y]) => [x1, x2, y, y + 24]);
+  emitMM('lane_seal_slab_mins', slabs, true);
+  emitMM('lane_seal_slab_maxs', slabs, false);
+  emitMM('lane_band_mins', bands, true);
+  emitMM('lane_band_maxs', bands, false);
+})();
+c.push('');
 fs.writeFileSync(CROWN_GSC_OUT, c.join('\n'), 'utf8');
 console.log(`wrote ${CROWN_GSC_OUT}  (crown lap ${CROWN_LAP}, CM=${CM}, TOP2=${TOP2}, mast top=${MAST_TOP})`);
+
+// ---------------------------------------------------------------------------
+// Output: _tod_breather_data.gsc — the lounge furniture anchors (v13)
+// ---------------------------------------------------------------------------
+// _tod_powerups (PaP), _tod_upgrades (station), _tod_ammo_crate (crate) and
+// _tod_teleport (spur pad + up-ride arrival) read these instead of hardcoding,
+// so the room, the crate's generator-emitted collision clip and the four
+// scripts can never drift — the same contract as _tod_door_data /
+// _tod_crown_data. All values are in the EVEN (mirrored) frame every breather
+// sits in (asserted at BREATHER_THEME). _tod_perk_scatter deliberately keeps
+// its own pad table (its machines relocate at runtime); the S-wall pads are
+// mirrored into BR_FURN for the spacing assert only.
+{
+  const bd = [];
+  bd.push('// GENERATED by tools/gen_tower_map.js — DO NOT HAND-EDIT (regen instead).');
+  bd.push('// v13 breather-lounge furniture anchors. Source of truth: the BR_FURN table');
+  bd.push('// in the generator, which asserts every pair of use-triggers clears by');
+  bd.push(`// radius_a + radius_b + ${MIN_TRIG_GAP} at generation time — the mechanical form of the`);
+  bd.push('// v10.4 rule, added after the shipped PaP/crate pair sat 174u apart with a');
+  bd.push('// 38u rim gap and players bought the wrong 5000-point thing.');
+  bd.push('// Frame: EVEN/mirrored (all four breathers). z = the lounge mid-slab top.');
+  bd.push('');
+  bd.push('#namespace tod_breather_data;');
+  bd.push('');
+  bd.push('// mid-slab z of each breather lounge, ascending (laps 10/20/30/40)');
+  const BRZS = [...BREATHER_LAPS].sort((a, b2) => a - b2).map(l => (l - 1) * LAP_RISE + FLIGHT_RISE);
+  bd.push(`function breather_zs() { return array( ${BRZS.join(', ')} ); }`);
+  const bfun = (name, [x, y]) => bd.push(`function ${name}( z ) { return ( ${x}, ${y}, z ); }`);
+  bd.push('');
+  bd.push('// PACK-A-PUNCH — W wall, facing east into the room');
+  bfun('pap_org', BR_FURN.pap.org);
+  bfun('pap_trig', BR_FURN.pap.trig);
+  bd.push(`function pap_yaw() { return ${BR_FURN.pap.yaw}; }`);
+  bd.push('');
+  bd.push('// UPGRADE STATION — N wall (entrance side), facing south into the room');
+  bfun('station_org', BR_FURN.station.org);
+  bfun('station_trig', BR_FURN.station.trig);
+  bd.push(`function station_yaw() { return ${BR_FURN.station.yaw}; }`);
+  bd.push('');
+  bd.push('// AMMO CRATE — E wall, facing west (its collision clip in the .map is cut');
+  bd.push('// from this same origin: label "ammo crate body", lint MODEL_CLIP_COLUMNS)');
+  bfun('crate_org', BR_FURN.crate.org);
+  bd.push(`function crate_yaw() { return ${BR_FURN.crate.yaw}; }`);
+  bd.push('');
+  bd.push('// BASE AMMO CRATE — core WEST face at the base arena, ABSOLUTE coords (no');
+  bd.push('// mirror frame; the base is authored absolute). v14.3: origin lives in the');
+  bd.push('// generator (BASE_CRATE), which also cuts its "base ammo crate body" clip');
+  bd.push('// brush and asserts it clear of the lap-1 E flight — the Workshop navmesh');
+  bd.push('// report (Pinkbrotha4310 2026-08-30) is the reason this rides the no-drift');
+  bd.push('// contract instead of a hand-typed GSC literal.');
+  bd.push(`function base_crate_org() { return ( ${BASE_CRATE.org[0]}, ${BASE_CRATE.org[1]}, 0 ); }`);
+  bd.push(`function base_crate_yaw() { return ${BASE_CRATE.yaw}; }`);
+  bd.push('');
+  bd.push('// TELEPORTER — the pad out on the spur platform, and where up-riders land');
+  bd.push(`// (${TP_ARRIVE_OFF}u up the gantry toward the room: outside the pad's ${TP_GATHER}u gather,`);
+  bd.push('// so an arrival is never swept along by the next departure — v10.4 rule)');
+  bfun('tp_pad_org', BR_FURN.tp.trig);
+  bfun('tp_arrival_org', [BR_FURN.tp.trig[0], BR_FURN.tp.trig[1] + TP_ARRIVE_OFF]);
+  bd.push('');
+  fs.writeFileSync(BREATHER_GSC_OUT, bd.join('\n'), 'utf8');
+  console.log(`wrote ${BREATHER_GSC_OUT}  (${BRZS.length} lounges, themes ${[...BREATHER_LAPS].sort((a, b2) => a - b2).map(l => `${l}:${BREATHER_THEME[l].key}`).join(' ')})`);
+}

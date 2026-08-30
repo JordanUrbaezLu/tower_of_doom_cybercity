@@ -4,6 +4,21 @@
 // Aetherium HUD kit (zone_source/aetherium_hud.zpkg — lua rawfiles, kit
 // gsc/csc, images, fonts, localize; assets installed in the shared tools root)
 include,aetherium_hud
+// v13.6 — ALXS CW/BO6 Pack-a-Punch (crown machine): models+anims+fx+scripts
+// ride this zpkg (installed at share\zone_source\alxs_cwpap.zpkg); sounds via
+// the szc ALIAS entry. Credits: Madgaz, Owen C137, RiDD_Alexis31 et al —
+// CREDITS.md carries the full list before publish.
+include,alxs_cwpap
+// v13.9 KNUCKLE-CRACK POSTMORTEM (user: "never got the knuckles animation"):
+// the ALXS script calls GetWeapon("zombie_knuckle_crack") — a WaW/BO1-era
+// weapon name that T7'S MOD TOOLS DO NOT SHIP, and no pack on this machine
+// declares it either (searched: raw weapons, all GDT scan roots, stock
+// zones). A `weapon,` line for it was tried and REVERTED — the linker says
+// "Unable to load weapon" because there is nothing to load; the pack's
+// feature silently depends on some OTHER install's knuckle port (likely
+// HarryBo21's perks, which ship one). USE_HAND_KNUCKLE is false in
+// zm_cwpap.gsc until a real knuckle weapon is sourced — flip both back
+// together when it lands.
 
 // Logical's Powerups — timewarp + infinite ammo (vendored 2026-08-20:
 // scripts in repo scripts/zm/logical/powerups, GDT in repo source_data,
@@ -142,9 +157,15 @@ scriptparsetree,scripts/zm/zm_tower_of_doom.csc
 // [tod] modules
 scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_main.gsc
 scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_corpse_cleanup.gsc
+// SILENT STRAY RELOCATION (2026-08-30, user: "I dont want to kill them off but
+// have them spawn near the player if they are too far. It just stalls the game
+// so much"). Teleports stranded trash zombies onto an UNSEEN active-zone riser
+// near the nearest upright player. Never kills, never touches level.zombie_total.
+scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_stray.gsc
 scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_endless_rounds.gsc
 scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_doors.gsc
 scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_door_data.gsc
+scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_breather_data.gsc
 scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_zombie_speed.gsc
 scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_atmosphere.gsc
 // Class system + the upgrade tower (every-round two-card choice)
@@ -162,6 +183,8 @@ scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_upgrade_ui.csc
 scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_class_select.gsc
 // Perk scatter (random layout + post-Panzer reshuffle) + the luck bar
 scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_perk_scatter.gsc
+// [tod] PERK DRINK sfx — cap pop + gulp on a perk buy (docs/43 item 1, 2026-08-29)
+scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_perk_drink.gsc
 scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_luck.gsc
 // Tower gauge — the HUD floor indicator feed (int-only LuiNotifyEvent lane)
 scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_gauge.gsc
@@ -179,11 +202,27 @@ xmodel,p7_zm_der_teleporter
 xmodel,p7_zm_der_teleporter_pad_wires_blue
 xmodel,p7_zm_der_teleporter_pad_wires_red
 xmodel,p7_zm_der_teleporter_pad_glass
+// THE ARMORED SPRINTER (2026-08-29; briefly authored as "Reaver v2" the same
+// night before the user re-scoped it to a NEW enemy): the BOTD chain-armor
+// body script-SetModel'd onto promoted horde zombies
+// (_tod_sprinter::promote_to_sprinter) — force-pack line required for exactly
+// the reason the teleporter block above states. Same asset map 1 zones for
+// its Shielded elite; the character pack GDT is install-side/shared, so no
+// GDT work on our side. Heads deliberately NOT zoned — v1 keeps the stock
+// head (see the module header before adding them).
+// Smoke fx = dlc1/castle/fx_mech_dmg_steam, ALREADY zoned above (Panzer).
+xmodel,c_t8_zmb_mob_zombie_body3
 fx,dlc0/factory/fx_teleporter_beam_factory
 fx,dlc4/genesis/fx_sophia_elec_charge_teleporter
 fx,dlc1/castle/fx_elec_teleport_flash_lg
 fx,dlc5/theater/fx_teleport_flashback_kino
 scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_crown_data.gsc
+// THE ENDLESS SPIRE (v14, docs/44): the post-victory endless mode. Anchors are
+// GENERATED (_tod_spire_data.gsc, from gen_tower_map.js SECTION 6 — regen,
+// never hand-edit). Its models/FX are all already force-packed above (the
+// teleporter assembly + FX, the crate, the pad lights, zm_collision_perks1).
+scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_spire.gsc
+scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_spire_data.gsc
 // Finale props: carved T7 stock props already in the Mod Tools GDT DB
 // (source_data/acc_t7_props_*.gdt; binaries verified on disk 2026-08-21).
 // Script-spawned via SetModel, so each needs its explicit force-pack line —
@@ -271,6 +310,19 @@ image,i_tod_win_banner
 image,i_tod_win_emblem
 material,tod_win_banner
 material,tod_win_emblem
+// THE ENDLESS SPIRE's five screens (v14, docs/44): the EXTRACT-or-ASCEND
+// choice plate, the arrival banner, both spire endings, and the emblem. Same
+// dual asset rule as the win screen above — server hudelems draw MATERIALS.
+image,i_tod_choice_banner
+image,i_tod_spire_banner
+image,i_tod_spire_over_banner
+image,i_tod_spire_win_banner
+image,i_tod_spire_emblem
+material,tod_choice_banner
+material,tod_spire_banner
+material,tod_spire_over_banner
+material,tod_spire_win_banner
+material,tod_spire_emblem
 // (i_tod_banner_panzer / i_tod_banner_protectors dropped 2026-08-22 with the
 // enemy spawn banners — user: "unnecessary". Nothing references them any more;
 // the PNG sources + GDT entries stay in the repo (source_data/tod_ui_images/
@@ -348,9 +400,26 @@ image,i_tod_card_reserve_ultimate
 image,i_tod_card_sprint_regular
 image,i_tod_card_sprint_super
 image,i_tod_card_sprint_ultimate
-// Luck bar frame art (user drop 2026-08-20; LUI-drawn top-left, the hudelem
-// fill shows through its transparent window)
-image,i_tod_luck_frame
+// Luck bar: 11 BAKED fill states (user art drop 2026-08-29, files (65).zip),
+// swapped whole per todUpgLuck level — replaced the v2 frame-window +
+// LUI-quad fill (i_tod_luck_frame, retired but kept in source_data)
+image,i_tod_luck_00
+image,i_tod_luck_01
+image,i_tod_luck_02
+image,i_tod_luck_03
+image,i_tod_luck_04
+image,i_tod_luck_05
+image,i_tod_luck_06
+image,i_tod_luck_07
+image,i_tod_luck_08
+image,i_tod_luck_09
+image,i_tod_luck_10
+// OVERCHARGE zap frames (v14.9): cycled by todUpgLuck 11..14 at the secret
+// 150% luck ceiling (_tod_luck::overcharge_driver / tod_upgrade.lua LuckBar)
+image,i_tod_luck_max_01
+image,i_tod_luck_max_02
+image,i_tod_luck_max_03
+image,i_tod_luck_max_04
 // Class + upgrade-domain glyph icons (art8 sheet slice, source_data/tod_ui_images.gdt)
 image,i_tod_class_skirmisher
 image,i_tod_class_assault
@@ -379,6 +448,8 @@ image,i_tod_up_knifespeed
 // i_tod_pause_pip_empty was added — the unspent-level pip. Before it, empty
 // levels were the FILLED pip drawn at alpha 0.22, which read as a ghost
 // rather than an empty slot.
+image,i_tod_pause_legend_reset
+image,i_tod_pause_reset_mark
 image,i_tod_pause_hdr
 image,i_tod_pause_pip
 image,i_tod_pause_pip_empty
@@ -402,10 +473,16 @@ image,i_tod_pause_r17
 image,i_tod_pause_r18
 // [tod] Electric Cherry perk icon — no stock T7 cherry shader exists;
 // this replaces the Borderlands placeholder in AetheriumPerks.lua.
-image,i_tod_perk_cherry
+// v13.5: i_tod_perk_cherry RETIRED with the perk (Elemental Pop replaced
+// Electric Cherry) — the PNG and GDT entry stay for history, but unzoned +
+// unreferenced means it no longer packs. The new icon is the pack's official
+// BO6/7 Elemental Pop art, vendored into tod_ui_images like every kit icon.
+image,i_tod_perk_deathperception
 image,i_tod_perk_phd
 image,i_tod_perk_widows
-image,i_tod_perk_deadshot
+image,i_tod_perk_wisptea
+// (i_tod_perk_deadshot stays zoned-out with its machine, v14.16 — the GDT
+// block + PNG remain for a future re-add; un-zoned = unpacked.)
 image,i_tod_perk_staminup
 image,i_tod_perk_doubletap
 image,i_tod_perk_speed
@@ -514,6 +591,14 @@ image,i_tod_card_march_regular
 image,i_tod_card_march_super
 image,i_tod_card_march_ultimate
 image,i_tod_pause_r37
+image,i_tod_card_vitality_regular
+image,i_tod_card_vitality_super
+image,i_tod_card_vitality_ultimate
+image,i_tod_card_recovery_regular
+image,i_tod_card_recovery_super
+image,i_tod_card_recovery_ultimate
+image,i_tod_pause_r38
+image,i_tod_pause_r39
 // AMMO CRATE model — [West] Ammo Crates pack (Westchief596 / ZeRoY S4 crate).
 // GDT is install-side: <modtools>source_dataacc_west_ammo_crate.gdt, SHARED
 // with map 1 — referenced, never edited.
@@ -646,6 +731,10 @@ character,c_zom_dlc4_apothicon_fury_dissolve
 aitype,spawner_zm_factory_zombie_dog
 aitype,archetype_zm_factory_zombie_dog
 scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_hellhounds.gsc
+// THE ARMORED SPRINTER (v13.7, 2026-08-29 ladder re-deal): lap-30 slot (the
+// hounds moved to lap 40). Conversion-based — no .csc, no clientfields; its
+// armor body xmodel line rides with the teleporter block further up.
+scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_sprinter.gsc
 
 // --- the tod boss driver + FX pulse module ---
 scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_bosses.gsc
@@ -675,6 +764,22 @@ fx,acc/light/fx_perk_glow_teal
 // specialty_combat_efficiency (stock cherry pipeline #using'd for its FX).
 // =============================================================================
 scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_perk_electric_cherry.gsc
+scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_perk_electric_cherry.csc
+
+// v14.16 — WISP TEA (BO7 perk, vendored WetEgg SATPerksCode module; replaces
+// Deadshot). Machine xmodel pair rides the t10 machine block above; sounds
+// ride sound/aliases/tod_wisp_tea.csv (szc ALIAS entry tod_wisp_tea). The
+// wisp companion model + fx are module-precached runtime assets, so every
+// name needs its force-pack line (same doctrine as the machine block). The
+// tea-can bottle weapon's GDT (sat_zmb_perk_cans.gdt) has been installed
+// since v13.3; the `weapon,` line is what actually packs it.
+scriptparsetree,scripts/zm/_zm_perk_wisp_tea.gsc
+scriptparsetree,scripts/zm/_zm_perk_wisp_tea.csc
+xmodel,vfx_sat_fxp_zm_ai_wisp_tea_mask_airflow_01
+fx,_wetegg/sat/perks/fx_wisp_tea_light
+fx,_wetegg/sat/perks/fx_wisp_tea_wisp
+fx,_wetegg/sat/perks/fx_wisp_tea_wisp_trail
+weapon,sat_perk_can_wisp_tea_zm
 scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_perk_phd.gsc
 // The real cherry vending machine ([West] Community Perk Collection v2.7,
 // installed in the Mod Tools root; source GDT source_data/acc_west_electric_cherry.gdt).
@@ -683,3 +788,37 @@ scriptparsetree,scripts/zm/zm_tower_of_doom/_tod_perk_phd.gsc
 xmodel,electric_cherry_model
 // Cherry burst FX (module-precached on-disk one-shot spark burst — map 1 zoned it)
 fx,electric/fx_elec_sparks_burst_xlg_os
+// v13.3 — BO7/BO6 perk machines (wetegg/sat port; payload install-side at
+// <root>\_custom\_wetegg\models\sat\, per-machine GDTs in the shared
+// source_data). Referenced ONLY via .map script_structs (PERK_PARK) and a
+// runtime SetModel at power-on (_tod_perk_lights::bo7_on_model), so every
+// name needs a force-pack line exactly like electric_cherry_model above.
+// Credits owed before publish (no readme in pack): wetegg, sat, Treyarch.
+xmodel,t10_zm_machine_juggernog
+xmodel,t10_zm_machine_juggernog_on
+xmodel,t10_zm_machine_speed_cola_lava_all_fxanim
+xmodel,t10_zm_machine_speed_cola_lava_all_fxanim_on
+xmodel,t10_zm_machine_quick_revive
+xmodel,t10_zm_machine_quick_revive_on
+xmodel,t10_zm_machine_staminup
+xmodel,t10_zm_machine_staminup_on
+// v14.16 — Deadshot pair RETIRED (machine replaced by Wisp Tea; the deadshot
+// payload stays install-side, un-zoned = unpacked, like elemental_pop below).
+// WISP TEA (BO7, SAT custom): one mesh, off = skin-override twin of _on.
+// Machine payload installed 2026-08-30 at <root>\_custom\_wetegg\models\sat\
+// sat_zm_machine_w_mod (GDT rides inside — bin\converter_gdt_dirs_0.txt's
+// `_custom` line is what feeds it to gdtdb). The wisp companion model +
+// module fx/weapon lines live with the module block further down.
+xmodel,sat_zm_machine_w_mod_fxanim
+xmodel,sat_zm_machine_w_mod_fxanim_on
+xmodel,t10_zm_machine_phd_flopper
+xmodel,t10_zm_machine_phd_flopper_on
+// v13.19 — DEATH PERCEPTION replaced Elemental Pop (same slot; payload at
+// _custom\_wetegg\models\sat\ like the rest. EP's payload stays install-side,
+// un-zoned = unpacked).
+xmodel,t10_zm_machine_death_perception
+xmodel,t10_zm_machine_death_perception_on
+xmodel,t10_zm_machine_d_mod_cowboy_fxanim
+xmodel,t10_zm_machine_d_mod_cowboy_fxanim_on
+xmodel,sat_zm_machine_y_mod
+xmodel,sat_zm_machine_y_mod_on

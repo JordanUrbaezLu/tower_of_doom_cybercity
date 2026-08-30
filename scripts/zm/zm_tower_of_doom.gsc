@@ -37,9 +37,19 @@
 //Perks
 #using scripts\zm\_zm_pack_a_punch;
 #using scripts\zm\_zm_pack_a_punch_util;
+// v13.6 — ALXS CW/BO6 Pack-a-Punch (the crown machine; replaces the stock
+// vending_weapon_upgrade prefab there). Models/anims Madgaz + Owen C137,
+// script RiDD_Alexis31 et al — full credits in CREDITS.md. Its assets ride
+// zone include `alxs_cwpap`; its sounds ride the szc ALIAS entry.
+#using scripts\zm\zm_cwpap;
 #using scripts\zm\_zm_perk_additionalprimaryweapon;
 #using scripts\zm\_zm_perk_doubletap2;
-#using scripts\zm\_zm_perk_deadshot;
+// [tod] v14.16 — WISP TEA (BO7, vendored WetEgg module) replaces Deadshot in
+// the scatter roster. It occupies Deadshot's old #using slot in BOTH entry
+// scripts so the clientuimodel registration order stays matched (its 2-bit
+// hudItems field lands where Deadshot's freed 2 bits were). Matching #using
+// in the entry .csc REQUIRED (clientfield lockstep).
+#using scripts\zm\_zm_perk_wisp_tea;
 // [tod] Stock cherry pipeline — REQUIRED by _tod_perk_electric_cherry (it calls
 // the stock tesla-FX functions, which only render because this init registers
 // the pipeline + its clientfields; map 1 had it via PhD's hijack). Matching
@@ -105,6 +115,12 @@
 // Adding a #using on this side only would BREAK it. level.dog_rounds_allowed
 // stays 0 — this is a pack elite, never a dog round.
 #using scripts\zm\zm_tower_of_doom\_tod_hellhounds;
+#using scripts\zm\zm_tower_of_doom\_tod_stray;
+// THE ARMORED SPRINTER — elite #3 since the 2026-08-29 ladder re-deal (lap-30
+// door; hounds moved to lap 40). Conversion-based: promotes horde spawns, so
+// it has NO entry-.csc counterpart and no clientfields of its own — the smoke
+// is server PlayFxOnTag on an already-zoned fx, the clank a stock alias.
+#using scripts\zm\zm_tower_of_doom\_tod_sprinter;
 // Game-start class draft (each player picks a class before round 1; 30s cap)
 #using scripts\zm\zm_tower_of_doom\_tod_class_select;
 // [tod] Electric Cherry — the map-1 FINISHED custom perk on the unused
@@ -126,9 +142,42 @@
 #using scripts\zm\zm_tower_of_doom\_tod_finale;
 #using scripts\zm\zm_tower_of_doom\_tod_gameover;
 #using scripts\zm\zm_tower_of_doom\_tod_teleport;
+// [tod] THE ENDLESS SPIRE (v14, docs/44): the post-victory endless mode — the
+// win offers EXTRACT (the old ending) or a one-way ascension to a second
+// 100-floor tower with the full grant (all perks, maxed class). Talks to
+// _tod_finale by level notifies only; no-ops if the spire geometry is absent.
+#using scripts\zm\zm_tower_of_doom\_tod_spire;
 
 // Perk machine hint strings (cost substitution variants — the string+cost pair
 // must be precached or the buy hint shows blank; map 1 pattern).
+//
+// THE OTHER SIX WERE MISSING (found 2026-08-27 while retuning perk costs).
+// Precaching a localized hint is PER MAP — nothing in zm_usermap, _zm_perks or
+// any stock perk module precaches these, and stock maps carry their own list
+// (see zm_giant.gsc:104-109). Map 1 precaches all eleven of its pairs; this map
+// carried exactly one, so every perk whose hint is a LOCALIZED string was
+// rendering its buy prompt with a blank cost.
+//
+// Electric Cherry and PhD are NOT in this list and do not need to be: both are
+// custom perks registered with a LITERAL hint string ("... [Cost: &&1]"), and a
+// literal takes its substitution at runtime rather than from a precached pair.
+// That is also why they were never affected by the omission.
+//
+// EACH COST NEEDS ITS OWN LINE — the pair is the key, not the string. Change a
+// perk's cost and you must add the new pair here or the hint blanks again, which
+// is exactly how this stayed invisible: the values below MUST match
+// tod_set_perk_costs() and the stock defaults it leaves alone.
+#precache("triggerstring", "ZOMBIE_PERK_QUICKREVIVE", "500");    // solo
+#precache("triggerstring", "ZOMBIE_PERK_QUICKREVIVE", "1500");   // co-op
+#precache("triggerstring", "ZOMBIE_PERK_MARATHON", "2000");      // Stamin-Up (stock)
+#precache("triggerstring", "ZOMBIE_PERK_JUGGERNAUT", "2500");    // Juggernog (stock)
+#precache("triggerstring", "ZOMBIE_PERK_FASTRELOAD", "3000");    // Speed Cola (stock)
+#precache("triggerstring", "ZOMBIE_PERK_DOUBLETAP", "3000");     // NOT stock's 2000 — this map overrides it
+// ZOMBIE_PERK_DEADSHOT pair REMOVED v14.16 — Deadshot retired for Wisp Tea,
+// and a precached pair for a perk no machine sells is a permanent BG-cache
+// slot spent on a dead string. Wisp Tea needs NO line here: like EC/PhD above
+// it registers a LITERAL hint ("... [Cost: &&1]"), which substitutes at
+// runtime rather than from a precached pair.
 #precache("triggerstring", "ZOMBIE_PERK_WIDOWSWINE", "4000");
 
 //*****************************************************************************
@@ -162,15 +211,43 @@ function main()
 	// 0 makes the tracker never start. Proven on map 1.)
 	level.dog_rounds_allowed = 0;
 
+	// THE 41 DOOR TRIGGERSTRINGS ARE HANDLED IN THE GENERATOR NOW, NOT HERE.
+	//
+	// Stock _zm_blockers::door_init ends in
+	// set_hint_string(self,"default_buy_door",cost) ->
+	// SetHintString(&"ZOMBIE_BUTTON_BUY_OPEN_DOOR_COST", cost), which mints ONE
+	// PERMANENT BG-cache 'triggerstring' slot per DISTINCT cost. Per-lap pricing
+	// put 41 distinct zombie_cost values in the .map, so stock burned 41 of the
+	// match's 250 on prompts nobody ever sees (_tod_doors.gsc TriggerEnable(false)s
+	// all 53 a second later). tools/gen_tower_map.js now emits a CONSTANT
+	// zombie_cost of 1000, so the .map carries one value and stock mints one slot.
+	//
+	// A RUNTIME FLATTEN USED TO LIVE HERE AND IT WAS A SILENT NO-OP (found
+	// 2026-08-30). Its comment claimed it "MUST run BEFORE zm_usermap::main()
+	// — that is where stock's __init__ pass fires init_blockers". That premise
+	// was FALSE. _zm_blockers.gsc registers &__init__ through REGISTER_SYSTEM_EX,
+	// and shared.gsh names that parameter __func_init_preload; preloads run in
+	// system::run_pre_systems(), whose only caller is
+	// callbacks_shared.gsc::CodeCallback_PreInitialization — documented in stock
+	// as "Called by code before level main but after autoexecs". So door_init had
+	// already minted all 41 slots before main() executed its first line, and
+	// nothing assigned after that could take one back.
+	//
+	// WHAT MADE IT INVISIBLE: GetEntArray returns the ents FINE that early, so the
+	// loop ran, the dev print reported "flattened zombie_cost on 53 doors", and
+	// the fix read as verified while saving exactly zero. If you ever need to
+	// prove a triggerstring fix again, count DISTINCT STRINGS — never trust a
+	// print that only proves a loop executed.
 	zm_usermap::main();
 
 	// NO PERK LIMIT (playtest 2026-08-23: "There should be no perk limit").
 	// Stock _zm_perks::init hardcodes 4; it has run by this point (the system
-	// inits fire inside zm_usermap::main), so setting it here wins. 9 = every
-	// perk this map sells (the 8 scattered machines + roof Mule Kick), i.e.
-	// effectively unlimited without disturbing whatever stock arithmetic
-	// reads the field.
-	level.perk_purchase_limit = 9;
+	// inits fire inside zm_usermap::main), so setting it here wins.
+	// 9 -> 10 (v14): the roster has been TEN since PhD Flopper joined the
+	// scatter (9 machines + roof Mule Kick) — 9 was a stale count that quietly
+	// blocked holding the full set, and the spire's ascension grant hands out
+	// all ten.
+	level.perk_purchase_limit = 10;
 
 	// [tod 2026-08-22] STOCK ANTI-CHEAT CONFISCATION — OFF. THIS MAP OWNS THE
 	// PLAYER'S INVENTORY.
@@ -194,6 +271,29 @@ function main()
 	// the teddy bear" = level.zmb_laugh_alias, played twice by the takeaway.
 	level.player_too_many_weapons_monitor = false;
 
+	// [tod] MELEE KILL MONEY: 130 -> 120 (user 2026-08-26: "knife kills go down
+	// from 130 to 120"). Stock pays a melee kill as
+	// get_zombie_death_player_points() 50 + zombie_vars["zombie_score_bonus_melee"],
+	// and that bonus ships at 80 (_zm.gsc:1243) = the 130 being nerfed. 70 lands
+	// the total on 120.
+	//
+	// DIRECT ASSIGNMENT, NOT zombie_utility::set_zombie_var: with its default
+	// args that function IS this one line, and calling it would cost a #using
+	// for nothing (this file's #using/#precache ordering is a known compile
+	// trap). The var is NOT team-dimensioned — _zm_score.gsc reads it as
+	// level.zombie_vars["zombie_score_bonus_melee"] at both of its sites (the
+	// kill-bonus switch and the ballistic-knife case), unlike zombie_point_scalar
+	// which is per-team. level.zombie_vars is fully populated by now:
+	// zm_usermap::main() ran ~30 lines above, and nothing re-seeds these
+	// afterwards (stock writes the score vars exactly once).
+	//
+	// TWO MIRRORS MUST MOVE WITH IT or the HUD lies about what it paid:
+	//   _tod_upgrades::bounty_kill_value()  — BOUNTY's % base + its popup preview
+	//   AetheriumPlayerInfo.lua death_melee — the "+120" that pops on screen
+	// This hits the SLASHER hardest by design: its class primary IS the blade,
+	// so every one of its kills takes the -7.7%.
+	level.zombie_vars[ "zombie_score_bonus_melee" ] = 70;
+
 	// [tod] Custom per-perk costs — runs AFTER zm_usermap::main() populated
 	// level._custom_perks (stock widows registered in the bootstrap; the cherry
 	// registered via its REGISTER_SYSTEM autoexec), BEFORE the first tick /
@@ -213,6 +313,23 @@ function main()
 	level thread zm_zonemgr::manage_zones( init_zones );
 
 	level.pathdist_type = PATHDIST_ORIGINAL;
+
+	// [tod] TARGETING FIX (2026-08-30, 3-player live report: "zombies wouldn't
+	// target the closest player — they got stuck targeting one player only",
+	// plus stair spawns idling until approached). Stock zm_usermap_ai installs
+	// factory_closest_player as level.closest_player_override: a per-zombie
+	// STICKY target (kept as long as that player stays valid) refreshed at most
+	// one zombie per server frame, with the "closest" measured by a live
+	// PathDistance() probe — and when that probe returns undefined for every
+	// candidate, the fallback is the FIRST valid entry of the players array,
+	// i.e. THE HOST, for every zombie that asks (zm_usermap_ai.gsc:143-162).
+	// On a 19,000-unit spiral the probe is exactly what fails at range, so the
+	// whole horde converges on one player and stays there. Replacing the policy
+	// with a stateless straight-line pick (stock's own default when no override
+	// is installed — _zm_utility.gsc:1482) kills the sticky cache, the host
+	// fallback AND the per-frame path generation in one move. Assigned here in
+	// main(), which runs after zm_usermap_ai's autoexec, so ours wins.
+	level.closest_player_override = &tod_closest_player;
 
 	// Starting loadout / economy
 	level.start_weapon = GetWeapon( "pistol_standard" );
@@ -249,11 +366,29 @@ function main()
 	// 2nd). Concurrency roof 3.
 	level thread tod_reaver::init();
 
-	// HELLHOUNDS: dormant until the LAP 30 breather door is bought, then a PACK
-	// on that round and every 3rd after (dev: every 2nd). Roof 4, and they only
-	// ever fill SPARE elite capacity (combined roof 9) so a pack can never be
-	// the thing that starves the horde at stock's 31-actor gate.
+	// THE ARMORED SPRINTER (v13.7): dormant until the LAP 30 breather door is
+	// bought, then every 3rd round 1+players/2 of the round's OWN spawns are
+	// promoted — chain-armor skin, smoke tell, +15-round sprint, bullets x1/4.
+	// Converted horde, not spawned elites: they count toward the round and
+	// take no finale boss slot.
+	level thread tod_sprinter::init();
+
+	// HELLHOUNDS: dormant until the LAP 40 breather door is bought (moved from
+	// lap 30 in the 2026-08-29 ladder re-deal — the sprinter has that slot),
+	// then a PACK on that round and every 3rd after (dev: every 2nd). Roof 4,
+	// and they only ever fill SPARE elite capacity (combined roof 9) so a pack
+	// can never be the thing that starves the horde at stock's 31-actor gate.
 	level thread tod_hellhounds::init();
+	// STRAY RELOCATION (user 2026-08-30: "when you go all the way down the tower
+	// with teleporter the zombies try to run down ... I dont want to kill them off
+	// but have them spawn near the player if they are too far"). Zombies stranded
+	// laps away from every player — after a teleporter ride, a long descent, or a
+	// co-op split — are silently ForceTeleported onto a riser near the nearest
+	// upright player, and ONLY onto a spot nobody can currently see. It NEVER
+	// kills and never writes level.zombie_total, which is what the endless-round
+	// twist reads (_tod_endless_rounds::tod_round_wait) — so the round contract
+	// is untouched by construction.
+	level thread tod_stray::init();
 
 	// Class draft: world holds after the blackscreen until every player has
 	// picked (or 30s -> random). Round 1 spawning waits on the pause flag.
@@ -284,6 +419,11 @@ function main()
 	// one-way back to the base's west ring, 60s per-pad cooldown, riders =
 	// whoever is on the pad when it fires.
 	level thread tod_teleport::init();
+
+	// THE ENDLESS SPIRE (v14, docs/44): seals the 100 spire door slabs, inits
+	// the enter_spireN flags, and waits for the finale's choice phase. Returns
+	// immediately if the spire geometry is not in the .map.
+	level thread tod_spire::init();
 }
 
 function usermap_test_zone_init()
@@ -307,6 +447,45 @@ function usermap_test_zone_init()
 	// flag is the same one the bay door sets and the same one both directions of
 	// the teleport network check (_tod_teleport TOD_TP_BAY_FLAG).
 	zm_zonemgr::add_adjacent_zone( "base_zone", "tpbay_zone", "enter_tpbay" );
+
+	// THE POWER HALL (v13.1) — the map's third gated annex, and a zone for
+	// exactly the reason the teleport bay is one. The user asked for a riser in
+	// the hallway to break the dead-end camp there (2026-08-28); the hallway is
+	// sealed behind the enter_power door, so on base_zone's ticket that riser
+	// would have been live from round 1 and spawned zombies into a corridor
+	// whose navmesh is cut. gen_tower_map.js moved the hall's volume out of
+	// base_zone and into power_zone in the same pass — the two MUST move
+	// together, or the hall is either double-covered or covered by nothing.
+	zm_zonemgr::add_adjacent_zone( "base_zone", "power_zone", "enter_power" );
+
+	// THE ENDLESS SPIRE (v14, docs/44): the ascension itself is the chain's
+	// root flag (set by _tod_spire when the party teleports), then one chunk
+	// zone per 5 floors, each chained on its FIRST floor's door; the summit
+	// rides the last door's flag. MUST match the generator's SP_LAPS /
+	// SP_ZONE_CHUNK (tools/gen_tower_map.js SECTION 6 — the zone names come
+	// from generated _tod_spire_data.gsc::spire_zone_names()).
+	zm_zonemgr::add_adjacent_zone( "roof_zone", "spire_base_zone", "tod_ascension" );
+	zm_zonemgr::add_adjacent_zone( "spire_base_zone", "spire_c1_zone", "enter_spire1" );
+	for ( i = 1; i < 20; i++ )
+	{
+		zm_zonemgr::add_adjacent_zone( "spire_c" + i + "_zone", "spire_c" + ( i + 1 ) + "_zone", "enter_spire" + ( i * 5 + 1 ) );
+	}
+	zm_zonemgr::add_adjacent_zone( "spire_c20_zone", "spire_summit_zone", "enter_spire100" );
+}
+
+// [tod] The closest-player policy for trash-zombie targeting (see the long
+// note at the assignment in main()). Called by zm_utility::get_closest_valid_
+// player with self = the asking AI and `players` already filtered down to
+// valid, non-ignored candidates — this function ONLY picks among them.
+// The zombie_poi carve-out is kept from the stock factory version: a live
+// point of interest (Widow's Wine web, monkey-style attractors) owns the
+// zombie, and returning undefined here hands zombieFindFlesh to its POI
+// branch instead of a player chase (_zm_behavior.gsc:269-286).
+function tod_closest_player( origin, players )
+{
+	if ( isdefined( self.zombie_poi ) )
+		return undefined;
+	return ArrayGetClosest( origin, players );
 }
 
 function custom_add_weapons()
@@ -325,10 +504,18 @@ function tod_set_perk_costs()
 
 	costs = [];
 	costs[ "specialty_widowswine" ]        = 4000; // Widow's Wine (matches the ZOMBIE_PERK_WIDOWSWINE "4000" precache)
-	costs[ "specialty_combat_efficiency" ] = 3000; // Electric Cherry (_tod_perk_electric_cherry; also set in its register_perk_basic_info)
-	costs[ "specialty_electriccherry" ]     = 4000; // PhD Flopper — registered OVER the stock cherry specialty (_tod_perk_phd); keep in lockstep with TOD_PHD_COST and the Aetherium perk card
+	// specialty_combat_efficiency ROW DELETED (v13.20, publish-sweep find):
+	// this table runs AFTER the module's autoexec registration, so the stale
+	// Electric-Cherry-era 2000 here silently DEFEATED Death Perception's
+	// EC_COST 1500 — the exact multi-site trap the domain-retune checklist
+	// documents. The module's EC_COST is the single source of truth now;
+	// never re-add a row for this specialty.
+	costs[ "specialty_electriccherry" ]     = 2000; // PhD Flopper — registered OVER the stock cherry specialty (_tod_perk_phd); keep in lockstep with TOD_PHD_COST and the Aetherium perk card
 	costs[ "specialty_doubletap2" ]        = 3000; // Double Tap 2 (v6 scatter pool)
-	costs[ "specialty_deadshot" ]          = 3500; // Deadshot Daiquiri (v6 scatter pool)
+	// specialty_deadshot ROW DELETED (v14.16 — Deadshot retired for Wisp Tea).
+	// Wisp Tea's cost is WISP_TEA_PERK_COST in _zm_perk_wisp_tea.gsh — the
+	// module registers it itself; a row here would re-create the v13.20
+	// stale-price trap this comment block already documents.
 
 	keys = GetArrayKeys( costs );
 	for ( i = 0; i < keys.size; i++ )
@@ -338,6 +525,10 @@ function tod_set_perk_costs()
 			level._custom_perks[ perk ].cost = costs[ perk ];
 	}
 }
+
+// (tod_doors_flatten_map_cost() was deleted 2026-08-30 — it ran too late to do
+// anything. The constant zombie_cost is emitted by tools/gen_tower_map.js now;
+// see the note above zm_usermap::main() in main().)
 
 function tod_resolve_dev_flags()
 {
@@ -439,6 +630,87 @@ function tod_resolve_dev_flags()
 	// dev_crown_test() and dev_warp_to_terrace() are gone from _tod_main.gsc,
 	// along with the thread line in init(). Nothing in this build warps, forces
 	// power, or opens the causeway gate.
+	// SHIP STATE — BOTH OFF. Re-disarmed 2026-08-27 after the terrace test run
+	// (armed earlier that day for the extraction/teleporter/pause-menu pass), and
+	// dev_crown_test()/dev_warp_to_terrace() were DELETED from _tod_main.gsc again
+	// with them. That harness has now been written and removed three times; the
+	// recipe lives in the comment beside the dev block in _tod_main::init() so the
+	// fourth time is cheap. Nothing in this build warps, forces power, or opens
+	// the causeway gate.
+	// SHIP STATE — BOTH OFF. Re-disarmed 2026-08-27 evening for the v12.15
+	// publish, together with harness #4 (dev_crown_test/dev_warp_to_terrace
+	// DELETED from _tod_main.gsc for the fourth time — the recipe comment
+	// there survives, the code never does). Nothing in this build warps,
+	// forces power, or opens the causeway gate.
+	// TEST SESSION (user 2026-08-28: "Can you hardcode enabke dev and god
+	// mode") — armed for the v13 breather-lounge walk-through. No harness
+	// this time: the lounges are on the normal climb, dev money + god cover
+	// the doors and the risk. *** BOTH MUST GO BACK TO false BEFORE
+	// PUBLISHING. ***
+	// SHIP STATE — BOTH OFF (user 2026-08-29: "turn of the falgs and do a full
+	// rebuidl for publish"). The 2026-08-28/29 test marathon that armed them is
+	// over. This is a PUBLISH-CANDIDATE build: real economy, real downs, ship
+	// cadences — every delta is in the ship-deltas block at the top of this
+	// function.
+	//
+	// TEST SESSION (user 2026-08-29, sprinter round-1 flood verification) —
+	// ARMED, then DISARMED the same night (user: "remove the dev changes and
+	// everything for this new enemy... im done testing"). The flood harness
+	// itself is REMOVED from _tod_sprinter (recipe comment survives there).
+	//
+	// DISARMED for the PUBLISH CANDIDATE (user 2026-08-29: "you can remove dev
+	// and god mode flags and do a full rebuild and ill test oen last time to
+	// publish"). Both false = ship state.
+	//
+	// Verified at the disarm, not assumed — the whole point of this flip is that
+	// nothing dev-only survives it:
+	//   * the warp harness (dev_crown_test / dev_crown_warp) is GONE from
+	//     _tod_main.gsc; only the historical "removed again" comments remain.
+	//   * all five on-screen debug prints are behind tod_dev and go inert here:
+	//     _tod_hellhounds.gsc:144, _tod_perk_scatter.gsc:816 and :835,
+	//     _tod_upgrade_ui.gsc:736, zm_cwpap.gsc:159.
+	//   * every other tod_dev use is a VALUE GATE (Panzer/Reaver/hound/sprinter
+	//     intervals, tier-card odds, station uses, dev money) and resolves to its
+	//     ship value with the flag false — those are supposed to stay.
+	//   * the sprinter DEV_R1 round-1 flood is comment-only recipe
+	//     (_tod_sprinter.gsc:104-105), not live code.
+	// DISARMED for the v14.1 PUBLISH (user 2026-08-29 night: "Revert all the
+	// hardcode changes so we can publish"). Harness #6 DELETED from _tod_main
+	// (sixth write, sixth removal), the v13.26 DP breadcrumbs removed from
+	// _tod_perk_electric_cherry.gsc+.csc (the .csc pair was UNGATED — it would
+	// have printed for every player), and the crown-altar diagnosis
+	// instruments (floating marker / heartbeat / stations-placed print)
+	// removed from _tod_upgrades. The altar hardening itself (manager-first
+	// station_place + guarded spawns) and the dev-gated lane diagnostics
+	// (altar spawn-fail/press/deny prints, spire target probe, cwpap:159)
+	// ship dormant, per the v13.17 doctrine. Both false = ship state.
+	// TEST SESSION (user 2026-08-30: "Can you enable hard code dev and god mode?
+	// And rebuild") — ARMED for the v14.16 test pass (Wisp Tea replacing
+	// Deadshot, and the v14.14 triggerstring fix's first real run).
+	// *** BOTH MUST GO BACK TO false BEFORE PUBLISHING. ***
+	//
+	// This build is NOT a publish candidate. Everything the armed state changes
+	// is in the ship-deltas block at the top of this function: upgrades every
+	// round, Panzer from r3, Reaver /2, TIER card on every deal, unlimited
+	// station uses, dev money, and on-screen diagnostic text (scatter dump per
+	// machine at load and on every reshuffle, hellhound prints, the upgrade-card
+	// input probe once a second while a card is open). Do not judge the map's
+	// look from this build and do not screenshot the HUD from it.
+	//
+	// The 2026-08-24 "arming tod_dev breaks the load" scare is DEAD — it was a
+	// dying game install, fixed by a redownload. See the paragraph above and the
+	// memory note `dev-mode-breaks-map-load`. Arm freely.
+	//
+	// NO WARP HARNESS in this build (that would be #7). Nothing warps, forces
+	// power, or opens the causeway gate — the recipe is in the comment beside
+	// the dev block in _tod_main::init() if the ending needs retesting.
+	// SHIP STATE — BOTH OFF. Disarmed 2026-08-30 after the user's v14.16 test
+	// pass ("Okay looks good. Prep for publish"). This is the PUBLISH CANDIDATE
+	// build: real economy, real downs, ship cadences, no on-screen diagnostics.
+	// Every delta back to ship is in the block at the top of this function.
+	//
+	// No harness to remove this time — none was written for the v14.16 pass
+	// (the lounges and the perk scatter are both on the normal climb).
 	level.tod_dev = false;
 	level.tod_god = false;
 }

@@ -301,3 +301,35 @@ function apply_fog()
 	SetVolFog( TOD_FOG_START_DIST, TOD_FOG_HALFWAY_DIST, TOD_FOG_HALFWAY_HEIGHT,
 		TOD_FOG_BASE_HEIGHT, TOD_FOG_R, TOD_FOG_G, TOD_FOG_B, TOD_FOG_OPACITY );
 }
+
+// PUBLIC — THE WEATHER TURN (v12.13, docs/41 Tier-A rider). The extraction buy
+// turns the sky: over 15 seconds the cold purple-blue smog warms toward EMBER
+// and its altitude falloff rises toward the crown, so the void under the
+// causeway fills with a dim red sea for the whole run. Owned by THIS file
+// because fog is (apply_fog above proves mid-game re-assert works; the
+// visionset traps on the memory record are why this is fog, not a visionset).
+// Deliberately modest: opacity and start distance UNCHANGED, halfway-height
+// capped 5,000 under the crown deck — docs/34's legibility doctrine outranks
+// the weather, so the crown must still read through it. No revert path needed:
+// the game ends while the ember sky is still the right sky.
+function finale_weather_turn()
+{
+	level thread finale_weather_lerp();
+}
+
+function finale_weather_lerp()
+{
+	level endon( "end_game" );
+	steps = 15;
+	for ( i = 1; i <= steps; i++ )
+	{
+		f = i / 15.0;
+		r  = TOD_FOG_R + ( 0.52 - TOD_FOG_R ) * f;
+		g  = TOD_FOG_G + ( 0.15 - TOD_FOG_G ) * f;
+		b  = TOD_FOG_B + ( 0.10 - TOD_FOG_B ) * f;
+		hh = TOD_FOG_HALFWAY_HEIGHT + ( 14300 - TOD_FOG_HALFWAY_HEIGHT ) * f;
+		SetVolFog( TOD_FOG_START_DIST, TOD_FOG_HALFWAY_DIST, hh,
+			TOD_FOG_BASE_HEIGHT, r, g, b, TOD_FOG_OPACITY );
+		wait 1;
+	}
+}

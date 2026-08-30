@@ -40,6 +40,8 @@
 #using scripts\shared\flag_shared;
 #using scripts\shared\util_shared;
 #using scripts\zm\_zm_utility;
+#using scripts\zm\zm_tower_of_doom\_tod_breather_data;  // GENERATED — spur pad + arrival anchors (v13)
+#using scripts\zm\zm_tower_of_doom\_tod_doors;          // v13.9: a down-ride opens the bay from the inside (force_open_by_flag)
 #using scripts\zm\zm_tower_of_doom\_tod_perk_scatter;   // derez_burst / play_sound_at_origin (host-based, proven)
 
 #insert scripts\shared\shared.gsh;
@@ -61,7 +63,7 @@
 // v10.3 (playtest 2026-08-23: "teleporters take way too long to activate"):
 // charge 2.2 -> 0.8s and cooldown 60 -> 30s. The 2.2s Kino wind-up was pure
 // theatre inherited from map 1; at 0.8 the flash/derez still read.
-#define TOD_TP_COOLDOWN_SEC   30
+#define TOD_TP_COOLDOWN_SEC   60   // 30 -> 45 -> 60, both 2026-08-29 (final: "Make the recharge on teleporters 1 minute")
 #define TOD_TP_CHARGE_SEC     0.8
 #define TOD_TP_TRIG_RADIUS    110     // the assembled pad is ~167 wide — stand in the ring
 #define TOD_TP_TRIG_HEIGHT    96
@@ -109,14 +111,16 @@
 // the stock no-purchase sound and the pad's beam stays off, and walking down
 // was always available.
 #define TOD_TP_BAY_FLAG       "enter_tpbay"
-// SOURCE pads: one per breather. Laps 10/20/30/40 are all even = every
-// balcony is the mirrored SW one: floor x[-800,-256] y[-992,-416] after the
-// v9.37 expansion. The SE quarter is free — perks back the S wall at y -959
-// (x -360/-536), the station backs the W wall at x -760 (y -600), the PaP sits
-// on the N edge at (-320,-470). Ring x[-723,-557] y[-883,-717] clears every
-// wall by 77u+ and every other trigger by 190u+. Mid z = (lap-1)*384 + 192.
-#define TOD_TP_PAD_X          -640
-#define TOD_TP_PAD_Y          -800
+// SOURCE pads: one per breather — and since v13 the pad is OFF the room floor
+// entirely, out on the SPUR: through the doorway in the lounge's outer (S)
+// wall, down a 320-long open-air gantry, onto a 288x288 platform floating in
+// the void, porter at its centre. Coordinates come from GENERATED
+// _tod_breather_data.gsc (tp_pad_org / tp_arrival_org — the door-data
+// no-drift contract; the generator asserts the pad's 110u trigger against
+// every other lounge trigger and against the platform rails). Up-riders land
+// on the GANTRY, 160u toward the room: outside the pad's 120u gather, so an
+// arrival is never swept along by the next departure (the v10.4 rule — the
+// offset now rides in the generated data, not in a define here).
 
 function init()
 {
@@ -144,14 +148,19 @@ function init()
 	// trigger-less decoration that read as a broken pad. Riders now land in
 	// front of the bay, which is its own landmark.)
 
-	zs = array( 3648, 7488, 11328, 15168 );
+	zs = tod_breather_data::breather_zs();
 	for ( i = 0; i < zs.size; i++ )
-		level thread spawn_pad( ( TOD_TP_PAD_X, TOD_TP_PAD_Y, zs[ i ] ), 0, TOD_TP_BASE_ORG, TOD_TP_BASE_YAW,
+		level thread spawn_pad( tod_breather_data::tp_pad_org( zs[ i ] ), 0, TOD_TP_BASE_ORG, TOD_TP_BASE_YAW,
 			// LEADS WITH THE NOUN. PromptDefault strips "Hold [{+activate}]" before
 			// drawing, so the old line reached the screen as the fragment
 			// "to teleport to the base" — the same dangling-preposition bug the
 			// altar copy was rewritten to fix in v10.x (audit 2026-08-25).
-			"Hold ^3[{+activate}]^7 ^5TELEPORTER^7 - down to the BASE", TOD_TP_BAY_FLAG );
+			// v13.6: bay-door gate REMOVED (user: "The teleporters are blocked if
+			// the main door on floor one is not opened. Lets remove that check.")
+			// — undefined lock flag = power is the only gate on the DOWN ride.
+			// CONSEQUENCE, accepted by the user: porting down pre-bay-door lands
+			// you inside the sealed bay; the door buys from both sides (750).
+			"Hold ^3[{+activate}]^7 ^5TELEPORTER^7 - down to the BASE", undefined );
 
 	// THE TELEPORTER BAY (v10.25) — four up-pads in a 2x2 block, read like a
 	// keypad: front row floors 10 / 20, back row 30 / 40, left to right.
@@ -163,31 +172,39 @@ function init()
 	// a square it is 388 x 388, and the room came down from 960x640 to 480x560.
 	//
 	// Clearances, all measured against the room (tools/gen_tower_map.js TPB_*):
-	//   room interior      x[-240,240]  y[-1120,-560]
+	//   room interior      x[-240,240]  y[-1280,-560]   (deepened 2026-08-27)
 	//   pad half-extent    84 (the assembly is ~167 across)
 	//   pads x -+110       -> 26..194, so 46u of floor to each side wall
 	//   trigger rim x -+220 -> 20u short of the wall
 	//   the two rows       52u apart at the pad edges — still walkable between
-	//   back row to the south wall  56u
-	//   arrival (0,-620) to the nearest pad (-+110,-760) = 178u, comfortably past
-	//     the 120u gather (the arena bay managed 164u, and its first cut shipped
-	//     at 116u — INSIDE the gather — which was a live bug)
-	//   risers (-+205,-600) to the nearest pad = 186u, past the ~165u at which a
-	//     zombie climbs out on top of somebody mid-teleport
+	//   back row to the south wall  132u   (was 56u)
+	//   arrival (0,-620) to the nearest pad (-+110,-840) = 246u (was 178u),
+	//     comfortably past the 120u gather (the arena bay managed 164u, and its
+	//     first cut shipped at 116u — INSIDE the gather — which was a live bug)
+	//   risers (-+205,-600) to the nearest pad = 258u (was 186u), past the ~165u
+	//     at which a zombie climbs out on top of somebody mid-teleport
+	//
+	// ROWS MOVED 80 SOUTH 2026-08-27 to stop the ARRIVAL DECAL from drawing
+	// through the front-row pad decals — they overlapped by 66 x 36 units. Purely
+	// visual: the centres were already 178u apart, so nothing ever malfunctioned.
+	// THESE FOUR COORDINATES ARE HARDCODED AND MIRROR gen_tower_map.js
+	// TPB_PAD_YN / TPB_PAD_YS. There is no generated bridge — change one without
+	// the other and the trigger stops sitting on the pad you can see.
 	// The risers are in the ZONE, not here — tpbay_zone in the generator. They
 	// exist because the user asked for spawns in the room, and they are safe to
 	// have (unlike in the power hallway) precisely because this room is its own
 	// zone: nothing spawns here until the door is bought.
 	up_orgs = [];
-	up_orgs[ 0 ] = ( -110, -760, 0 );   // FLOOR 10  front-left
-	up_orgs[ 1 ] = (  110, -760, 0 );   // FLOOR 20  front-right
-	up_orgs[ 2 ] = ( -110, -980, 0 );   // FLOOR 30  back-left
-	up_orgs[ 3 ] = (  110, -980, 0 );   // FLOOR 40  back-right
+	up_orgs[ 0 ] = ( -110, -840, 0 );   // FLOOR 10  front-left
+	up_orgs[ 1 ] = (  110, -840, 0 );   // FLOOR 20  front-right
+	up_orgs[ 2 ] = ( -110, -1060, 0 );  // FLOOR 30  back-left
+	up_orgs[ 3 ] = (  110, -1060, 0 );  // FLOOR 40  back-right
 	// v10.4 (audit find): up-riders used to land ring-fanned around the
 	// breather DOWN pad's own centre — inside its gather, so if that pad was
-	// mid-charge the arrivals were instantly warped straight back down. Land
-	// them OFFSET toward the balcony interior instead (y +140 clears the new
-	// 120u gather).
+	// mid-charge the arrivals were instantly warped straight back down. They
+	// land OFFSET instead — since v13 on the spur GANTRY, 160u toward the room
+	// (tod_breather_data::tp_arrival_org; the generator asserts the offset
+	// clears the 120u gather).
 	up_flags = array( "enter_lap10", "enter_lap20", "enter_lap30", "enter_lap40" );
 	up_hints = [];
 	// LEAD WITH THE NOUN — PromptDefault strips "Hold [{+activate}]", so these
@@ -203,13 +220,20 @@ function init()
 	// No trig_r argument any more — spawn_pad's default TOD_TP_TRIG_RADIUS (110)
 	// is what the room was sized for.
 	for ( i = 0; i < 4; i++ )
-		level thread spawn_pad( up_orgs[ i ], 90, ( TOD_TP_PAD_X, TOD_TP_PAD_Y + 140, zs[ i ] ), 90,
+		level thread spawn_pad( up_orgs[ i ], 90, tod_breather_data::tp_arrival_org( zs[ i ] ), 90,
 			up_hints[ i ], up_flags[ i ] );
 }
 
 // -> true while a lock flag exists and is still unset (the door unbought).
 function pad_locked( lock_flag )
 {
+	// v13.6 (user 2026-08-29: "Teleporters are only blocked by floor level and
+	// power now" / "they can always go down if power is on"): POWER gates every
+	// pad — there was NO power check here before, only door flags. The four
+	// DOWN pads now pass lock_flag undefined (power is their whole gate); the
+	// four UP pads keep their enter_lapN flags ("floor level").
+	if ( !( level flag::exists( "power_on" ) && level flag::get( "power_on" ) ) )
+		return true;
 	if ( !isdefined( lock_flag ) )
 		return false;
 	if ( !( level flag::exists( lock_flag ) ) )
@@ -382,12 +406,24 @@ function refresh( t )
 		state = "recharge";
 	if ( isdefined( t.tod_tp_state ) && t.tod_tp_state == state )
 		return;
+	prev = t.tod_tp_state;   // undefined on the very first call (spawn_pad init)
 	t.tod_tp_state = state;
 	if ( state == "ready" )
 	{
 		if ( !isdefined( t.tod_tp_beam ) )
 			t.tod_tp_beam = spawn_beam( t.tod_tp_src );
 		t SetHintString( t.tod_tp_hint_ready );
+		// RECHARGE-COMPLETE cue (2026-08-29, docs/43) — the beam snapping back on
+		// was the map's one state change with a visual and no sound at all.
+		//
+		// GATED ON prev == "recharge" AND NOTHING ELSE, which is the whole trick:
+		// refresh() also runs once per pad from spawn_pad (:320) with prev
+		// undefined, so an ungated call here would fire every teleporter in the
+		// map simultaneously at level start. The locked -> ready edge is excluded
+		// too: that is a breather door being bought, which already has its own
+		// purchase feedback, and it would double up on it.
+		if ( isdefined( prev ) && prev == "recharge" )
+			tod_perk_scatter::play_sound_at_origin( t.tod_tp_src, "tod_teleport_ready", 4 );
 	}
 	else
 	{
@@ -447,7 +483,17 @@ function discharge( origin )
 function do_teleport( src, dst, dst_yaw )
 {
 	level thread fx_burst( "tod_tp_charge", src + ( 0, 0, 40 ), TOD_TP_CHARGE_SEC + 0.5 );
-	tod_perk_scatter::play_sound_at_origin( src, "tod_teleport_charge", 4 );
+	// tod_teleport_fire (2026-08-29, docs/43): the map's own 2.2s time-distortion
+	// warp, replacing the ported acc hum. Emitted at SRC, so what each side hears
+	// differs and that is correct:
+	//   * the RIDER hears its first TOD_TP_CHARGE_SEC (0.8s) — the wind-up — and
+	//     then leaves, so it is cut off mid-sweep by the arrival discharge at dst.
+	//     The cut IS the translocation; do not "fix" it by re-playing the full
+	//     asset at dst, which would read as two teleports.
+	//   * anyone LEFT BEHIND near the pad hears the whole 2.2s.
+	// Side effect worth keeping: tod_warp now only marks the two DISCHARGES, so
+	// departure and arrival no longer open with the identical cue.
+	tod_perk_scatter::play_sound_at_origin( src, "tod_teleport_fire", 4 );
 	wait TOD_TP_CHARGE_SEC;
 
 	discharge( src );   // departure flash + boom
@@ -474,6 +520,35 @@ function do_teleport( src, dst, dst_yaw )
 		off = ( cos( ang ) * TOD_TP_RING, sin( ang ) * TOD_TP_RING, 0 );   // ring so capsules don't stack
 		riders[ i ] SetOrigin( dst + off );
 		riders[ i ] SetPlayerAngles( ( 0, dst_yaw, 0 ) );
+	}
+
+	// v13.9 (user live report: ported down pre-door, "went to 1 health and
+	// hear the teddy bear like I was out of bounds" — exactly what it was:
+	// the sealed bay's zone was INACTIVE, and stock's playable-area monitor
+	// punished them for standing in it). A DOWN ride now opens the bay door
+	// from the inside, free: zone live, monitor satisfied, risers wake,
+	// zombies path in through the open doorway — no invulnerable camp room,
+	// no stranded actors, and the user's "power is the only gate going down"
+	// rule carried to its conclusion. dst z < 100 discriminates the base bay
+	// (z 0) from the breather gantry arrivals (z 3648+); empty rides skip.
+	if ( riders.size > 0 && dst[ 2 ] < 100 )
+		tod_doors::force_open_by_flag( "enter_tpbay" );
+
+	// A ride moves players thousands of units in ONE FRAME, which every
+	// distance-watching system reads as "the thing I am watching just stalled".
+	// tod_bosses::tod_boss_stuck_watch resets its no-progress accumulator on this
+	// counter — without it, a breather ride makes `best` unbeatable and the
+	// watchdog relocates a boss that was never stuck, which is exactly the
+	// "elites randomly spawn at you when you are too far away" report.
+	if ( riders.size > 0 )
+	{
+		level.tod_tp_stamp = ( ( isdefined( level.tod_tp_stamp ) ) ? level.tod_tp_stamp + 1 : 1 );
+		// The ride is the ONE moment we know for certain a party just abandoned a
+		// floor. _tod_stray waits out the zone manager's riser rebuild, then runs
+		// hot for 6s so the horde arrives instead of walking forty floors down.
+		// NOTIFY ONLY — no import in either direction, so _tod_stray can be
+		// deleted without touching this file and this line becomes a no-op.
+		level notify( "tod_stray_pump" );
 	}
 
 	// ARRIVAL: materialize beam + flash + boom at the base pad (fires even

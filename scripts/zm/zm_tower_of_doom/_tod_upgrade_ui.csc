@@ -34,7 +34,9 @@ function __init__()
 	clientfield::register( "clientuimodel", "todUpgFocus", VERSION_SHIP, 3, "int", undefined, !CF_HOST_ONLY, !CF_CALLBACK_ZERO_ON_NEW_ENT );
 	clientfield::register( "clientuimodel", "todUpgTime",  VERSION_SHIP, 4, "int", undefined, !CF_HOST_ONLY, !CF_CALLBACK_ZERO_ON_NEW_ENT );
 	clientfield::register( "clientuimodel", "todMagBonus", VERSION_SHIP, 1, "int", undefined, !CF_HOST_ONLY, !CF_CALLBACK_ZERO_ON_NEW_ENT );   // dead field, 7 -> 1 (2026-08-22)
-	clientfield::register( "clientuimodel", "todDmgNum",  VERSION_SHIP, 13, "int", undefined, !CF_HOST_ONLY, !CF_CALLBACK_ZERO_ON_NEW_ENT );
+	// 13 -> 14 bits in LOCKSTEP with the .gsc register (v13.9 reduced/red bit —
+	// mismatched widths here are the boot-fatal clientfield desync).
+	clientfield::register( "clientuimodel", "todDmgNum",  VERSION_SHIP, 14, "int", undefined, !CF_HOST_ONLY, !CF_CALLBACK_ZERO_ON_NEW_ENT );
 	// THE FINALE ROAD BANNER (v10.26) — mirrors the server registration in
 	// _tod_upgrade_ui.gsc bit for bit. A mismatch here is a silent desync, not
 	// an error: the field simply never arrives.

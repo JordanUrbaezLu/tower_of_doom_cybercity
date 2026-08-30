@@ -77,6 +77,7 @@
 // live in source_data/tod_ui_images.gdt beside the images they point at.
 #precache( "material", "tod_win_banner" );
 #precache( "material", "tod_win_emblem" );   // the uplink console
+#precache( "material", "tod_choice_banner" );   // v14: the EXTRACT-or-ASCEND plate (docs/44)
 #precache( "model", "p7_out_mech_spawn_pad_light_red" );          // extraction pad, locked
 #precache( "model", "p7_out_mech_spawn_pad_light_green" );        // extraction pad, live
 #precache( "model", "p7_zm_asc_light_cage_warning_red" );         // mast beacon + the crown's 4 quarter beacons
@@ -147,6 +148,41 @@
 // Banner blink period. See warn_banner.
 #define TOD_FINALE_WARN_BLINK     0.4
 
+// ---------------------------------------------------------------------------
+// THE BEAT TABLE (v12.13, docs/41: A1 THE DEREZ TIDE + A2 AUTHORED BOSS BEATS
+// + A4 THE ARRIVAL + riders + B1 THE LANE LOTTERY). ONE table, ONE tuning
+// surface — every timed thread below keys off level.tod_finale_song_start, so
+// the road can never show two disagreeing clocks. The song timestamps are
+// MEASURED off tod_music_finale.wav (ffmpeg ebur128, 2026-08-27): the track
+// opens hot, dips into a breakdown at 23-25s with its first big hit at ~25s,
+// and enters its sustained climax section at ~60s (the big drop proper is
+// ~114s, usually inside the hold-out).
+// ---------------------------------------------------------------------------
+// A1 THE DEREZ TIDE — REMOVED 2026-08-27, the same day it shipped, after two
+// verdicts from the user: invisible it read as nothing ("Red wave?"), and with
+// the full visible body (v12.14: three red-aura riders + 88 deck-point derez
+// eruptions walking the road) it still did not land ("Okay im not a big fan").
+// DELETED, not dormant (the TIRELESS doctrine): tide_run/curtain_advance/
+// tide_players/tide_forward_warp/avenue_flip, the TOD_TIDE_* defines, the
+// endless-rounds front filter + heel relax, and the generator's tide emits
+// (tide_start_y/tide_end_y/road_north_yaw/tide_curtain_orgs) are all gone.
+// KNOWN CONSEQUENCE, accepted: the loiter exploit returns — hold = song_end -
+// now still rewards waiting out the road phase (docs/41 §1.2). If a counter is
+// ever wanted again, the full recipe is docs/41 §A1; the sign-off history
+// (lethal + forward warp) is in this file's git-era... in CHANGELOG v12.13-15.
+// A2 — the Panzer drops astride the Narrows lip on the song's first hit, gated
+// on the leader actually reaching the throat; fired regardless by the cap so a
+// slow party still meets him as a mid-road wall.
+#define TOD_BEAT_PANZER_SECS      20
+#define TOD_BEAT_PANZER_CAP       40
+// A2 — the phased spawn floor (read by _tod_endless_rounds::tod_spawn_delay):
+// 0.4 overture until the first hit, 0.2 through the build, 0.1 from the
+// sustained section on (and the pressure tick tightens 6 -> 4 with it).
+#define TOD_PHASE2_SECS           25
+#define TOD_PHASE3_SECS           60
+// aura colour indices used by the beat system (perk_color_index table)
+#define TOD_GLOW_BLUE             6
+
 // ARRIVAL RADIUS — how close to the extraction pad counts as "inside the Crown".
 // 1536 is the hall's own dimension, measured from the pad: it reaches every
 // corner of the 1536-sq interior (the far south corners are ~1486 away) and the
@@ -179,7 +215,7 @@ function init()
 	spawn_props();
 	gate_init();
 	crown_door_init();
-
+	lane_seals_init();
 
 	level thread uplink_power_glow();
 	level thread uplink_station();
@@ -204,6 +240,17 @@ function spawn_props()
 {
 	// the uplink console on the dais
 	level.tod_finale_uplink = prop( "p7_zm_sta_dragon_network_data_terminal", tod_crown_data::uplink_org(), tod_crown_data::uplink_yaw() );
+
+	// DO NOT REPLACE THIS WITH A WORLD BRUSH. Tried and REVERTED 2026-08-27: an
+	// "extraction obelisk" built from cboxes on uplink_org()'s own coordinates
+	// looked right and linted clean, and it KILLED THE BUY — a solid brush
+	// sitting on a trigger_radius_use origin swallows the trigger, so extraction
+	// could not be bought at all. This map had already paid for that lesson once:
+	// see the ammo crate note in lint_tod_geometry.js (MODEL_CLIP_COLUMNS), where
+	// a solid brush "swallowed the crate's trigger_radius_use origin so the crate
+	// could not be bought". The prop is VISUAL and the clip below is a script
+	// entity precisely because both leave the trigger's origin in open space.
+	// If this model is ever replaced, replace it with another MODEL.
 
 	// COLLISION (user 2026-08-25: "Add a clip to the extraction station. Its walk
 	// through currently"). A script_model is VISUAL ONLY — the xmodel carries no
@@ -266,11 +313,18 @@ function spawn_props()
 		tod_perk_lights::set_glow( beacon, TOD_GLOW_RED );
 	}
 
-	// wall sconces down both long walls
+	// wall sconces down both long walls. HANDLES ARE KEPT now (v12.13): A4's
+	// acceptance sequence lights them in order as the first survivor crosses
+	// the gold portal — before that they are exactly the props they always were.
+	level.tod_finale_sconces = [];
 	so = tod_crown_data::sconce_orgs();
 	sy = tod_crown_data::sconce_yaws();
 	for ( i = 0; i < so.size; i++ )
-		prop( "p7_zm_moo_light_panel_01_long", so[ i ], sy[ i ] );
+	{
+		s = prop( "p7_zm_moo_light_panel_01_long", so[ i ], sy[ i ] );
+		if ( isdefined( s ) )
+			level.tod_finale_sconces[ level.tod_finale_sconces.size ] = s;
+	}
 }
 
 // ---------------------------------------------------------------------------
@@ -466,10 +520,19 @@ function uplink_hint_loop()
 		}
 		else
 			key = s;
-		// The buy line carries a party-scaled number now, so a party-size change
-		// has to re-stamp it even though the STATE has not moved. One trigger, at
-		// most four distinct strings — nothing like the 52-door case that made
-		// _tod_doors::door_price_watch need a proximity gate.
+		// The buy line carries a party-scaled number, so a party-size change has
+		// to re-stamp it even though the STATE has not moved. That is affordable
+		// HERE and only here: this is ONE trigger with at most four distinct
+		// strings (one per party size), against the engine's 250-entry
+		// triggerstring cache.
+		//
+		// The 53 TOWER doors had the same shape and it was NOT affordable — 53
+		// destinations x every multiplier a lobby walks through, which is what
+		// overflowed the cache in co-op. Their re-stamp watcher was deleted
+		// outright on 2026-08-30 (see the block above buy_trigger_wait in
+		// _tod_doors.gsc); their hints are now minted once at load and never
+		// again. Do not generalise this loop back onto anything that has more
+		// than a handful of instances.
 		cost = finale_cost();
 		if ( key == shown && ( key != "buy" || cost == shown_cost ) )
 			continue;
@@ -503,8 +566,18 @@ function uplink_use_loop()
 		// v10.4 (audit find): never start the run during an upgrade-event world
 		// pause — the song clock would run while every picker stands frozen in
 		// a menu.
+		// v13.3b: made AUDIBLE (map-wide trigger audit). This branch is not the
+		// holding-USE case the silent branches below are: the uplink's hint loop
+		// keeps advertising "CALL EXTRACTION [Cost: 12000]" throughout, so a
+		// totally silent refusal on the map's most expensive and most important
+		// buy is indistinguishable from a broken trigger — and it is the last
+		// thing a player wants to doubt before committing to the ending. One
+		// deny sound, matching every other refusal lane on the map.
 		if ( IS_TRUE( level.tod_upgrade_pause ) )
+		{
+			player PlaySound( "zmb_no_purchase" );
 			continue;
+		}
 		if ( player laststand::player_is_in_laststand() )
 			continue;
 		// A revive press is not a purchase (_zm_blockers.gsc:307). This is the
@@ -548,6 +621,12 @@ function finale_run( buyer )
 	level.tod_finale_buyer = buyer;
 	level notify( "tod_finale_start" );
 
+	// THE LANE LOTTERY (v12.13, docs/41 §B1) rolls BEFORE the gate opens: the
+	// party is still behind the solid causeway gate, so no player can be inside
+	// a slab when it solidifies (the dev harness opens the gate early, so the
+	// roll also occupancy-checks each slab and re-rolls around anyone found).
+	lane_lottery();
+
 	// THE ROAD OPENS. First thing, before the music and before the ambush: the
 	// gate is what the player just paid for, and the ambush spawns onto the very
 	// deck it was sealing.
@@ -559,6 +638,7 @@ function finale_run( buyer )
 	// interrupt it. (The "boss music always overrides" rule from v9.46 governs
 	// the BAND tracks, not this one.)
 	tod_atmosphere::finale_track_start();
+	tod_atmosphere::finale_weather_turn();   // rider: the sky turns ember over 15s
 	tod_perk_scatter::derez_burst( tod_crown_data::uplink_org() );
 
 	// UPGRADE EVENTS ARE SUPPRESSED FOR THE WHOLE RUN. A freeze stops the world
@@ -598,6 +678,19 @@ function finale_run( buyer )
 	level.tod_finale_song_start = GetTime();
 	level.tod_finale_song_end   = GetTime() + int( song_secs() * 1000 );
 
+	// THE BEAT SYSTEM (v12.13, docs/41). All of these key off the song fields
+	// just published, all die on "tod_finale_sealed" or "end_game", and every
+	// one degrades to "the run as it was before v12.13" if its data or its
+	// request is refused. See the beat table at the top of the file.
+	level thread avenue_ignite();            // the avenue lights the road blue (green on the win)
+	// (tide_run() was threaded here for one day — see the post-mortem at the
+	// top of the beat table for what it was and why it is GONE.)
+	level thread spawn_floor_phases();       // A2: pressure escalates with the score
+	level thread beat_panzer_narrows();      // A2: the Narrows finally chokes
+	level thread beat_protectors_flare();    // A2: the approach gets its fight
+	level thread arrival_watch();            // A4: the citadel accepts you
+	level thread heartbeat_run();            // rider: the crown's heartbeat
+
 	t_end = GetTime() + int( road_secs() * 1000 );
 	while ( GetTime() < t_end )
 	{
@@ -619,6 +712,22 @@ function finale_run( buyer )
 	warn_banner( false );
 	gather_to_centre();
 	crown_door_close();
+	// A4 (v12.13): the seal is a scored DOWNBEAT, not a click — the quake sells
+	// the slam. Decoration only: the gather -> close -> stragglers order above
+	// is byte-identical and stays that way (see the load-bearing note above).
+	Earthquake( 0.6, 1.5, tod_crown_data::crown_door_org(), 1600 );
+	// The road is gone: the phased floor hands the siege back to full pressure
+	// on stock cadence — and every UNCONSUMED beat dies with the road (review
+	// FIX 2/4): a surviving rp force-org would land a protector on the sealed
+	// causeway behind the shut door, where in_hall filters starve it and the
+	// stuck-watch reads d<=1500 as "engaging" — a stranded actor holding a
+	// TOD_FINALE_BOSS_ROOF slot for the whole siege.
+	level.tod_finale_spawn_floor = 0.1;
+	level.tod_finale_pressure_tick = undefined;
+	level.tod_rp_force_orgs = undefined;
+	level.tod_boss_force_org = undefined;
+	level.tod_beat_panzer_armed = undefined;
+	level.tod_beat_prot_armed = undefined;
 	kill_stragglers();
 	wipe_the_map();
 
@@ -652,6 +761,13 @@ function finale_run( buyer )
 	else
 	{
 		tod_bosses::finale_holdout_start();
+		// A4 (v12.13): the hold-out OPENS with the Panzer crashing through the
+		// open crown top onto the hall floor — holdout_start just banked his
+		// debt; the force-org seam makes the director land him on the authored
+		// mark (clear of the gather ring/dais/pillars/crate) with the full
+		// drop-in theater. wipe_the_map above cleared every slot, so the roof
+		// cannot refuse him.
+		level.tod_boss_force_org = tod_crown_data::siege_panzer_org();
 		// Whatever is left of the song, not a constant — see the deadline above.
 		// Floored so an absurdly late seal still gives the siege a real beat
 		// rather than a negative wait.
@@ -693,7 +809,128 @@ function finale_run( buyer )
 	// uplink, walk back down the tower, and `while(!survivor_at_crown())` never
 	// returned - the song looped forever, upgrades stayed suppressed forever and
 	// the ambush ran forever with nothing able to end it.
+	//
+	// v14 — THE ENDLESS SPIRE (docs/44): when the spire module is armed the win
+	// no longer auto-departs. THE CHOICE takes over: two stations glow —
+	// EXTRACT (this pad, the ending above) or ASCEND (the dais teleporter,
+	// owned by _tod_spire via the notify contract; no #using either way, so
+	// either module degrades to a no-op without the other).
+	if ( IS_TRUE( level.tod_spire_ready ) )
+		level thread choice_phase();
+	else
+		level thread depart();
+}
+
+// ---------------------------------------------------------------------------
+// THE CHOICE (v14, docs/44). The hall is quiet — zombies wiped, spawns starved
+// (tod_choice_pending, read by _tod_endless_rounds), the song over and the
+// channel stopped — while the party decides. FIRST COMMITTED HOLD WINS for the
+// whole party (approved design): the extract loop below, or the spire's own
+// ascend loop, whichever lands first; each retires the other by notify.
+// ---------------------------------------------------------------------------
+
+function choice_phase()
+{
+	level endon( "end_game" );
+	level endon( "tod_ascend" );
+
+	level.tod_finale_state = "choice";
+	level.tod_choice_pending = true;
+	// A COMPLETELY QUIET DECISION (user 2026-08-29: "when you are picking
+	// between ascending and [extracting] can we not have any enemies spawn
+	// in"). BOTH pause lanes, because they gate different spawners:
+	//   world_is_paused    — stock round_spawning waits on it (_zm.gsc:3747):
+	//                        ZOMBIES halt this frame. (Not a spawn-delay trick:
+	//                        the live test proved a 999s resolver return is
+	//                        consumed per-round and deadlocked the spire.)
+	//   tod_upgrade_pause  — the boss DIRECTOR and the finale pressure loop
+	//                        both check it: PANZERS/PROTECTORS/etc. stop too.
+	// Both cleared on either exit (extract below; ascend in _tod_spire).
+	if ( !( level flag::exists( "world_is_paused" ) ) )
+		level flag::init( "world_is_paused" );
+	level flag::set( "world_is_paused" );
+	level.tod_upgrade_pause = true;
+	wipe_the_map();
+	tod_atmosphere::channel_stop();
+	level thread choice_banners();
+	level notify( "tod_choice_begin" );
+	level thread extract_use_loop();
+
+	level waittill( "tod_extract" );
+	level.tod_choice_pending = undefined;
+	level.tod_upgrade_pause = false;
+	if ( level flag::exists( "world_is_paused" ) )
+		level flag::clear( "world_is_paused" );
 	level thread depart();
+}
+
+// Re-arming a use path on the exfil pad is safe NOW and only now: the deleted
+// v10 exfil_use_loop raced the song timer's automatic depart — with the
+// auto-depart gone (choice_phase above), this is once again the only road in.
+function extract_use_loop()
+{
+	level endon( "end_game" );
+	level endon( "tod_ascend" );
+
+	t = level.tod_finale_pad_trig;
+	if ( !isdefined( t ) )
+		return;
+	t SetHintString( "Hold ^3[{+activate}]^7 ^2EXTRACT^7 - leave the tower" );
+	for ( ;; )
+	{
+		t waittill( "trigger", player );
+		if ( !isdefined( player ) || !isplayer( player ) )
+			continue;
+		if ( !( zm_utility::is_player_valid( player ) ) )
+			continue;
+		if ( player zm_utility::in_revive_trigger() )
+			continue;
+		level notify( "tod_extract" );
+		return;
+	}
+}
+
+// One banner per player for the whole decision window — a server hudelem with
+// baked art (the images-over-LUI rule; zero clientuimodel bits).
+function choice_banners()
+{
+	level endon( "end_game" );
+
+	elems = [];
+	players = GetPlayers();
+	for ( i = 0; i < players.size; i++ )
+	{
+		p = players[ i ];
+		if ( !isdefined( p ) || !isplayer( p ) )
+			continue;
+		e = NewClientHudElem( p );
+		if ( !isdefined( e ) )
+			continue;
+		e.alignX = "center";
+		e.alignY = "middle";
+		e.horzAlign = "center";
+		e.vertAlign = "middle";
+		// 600x150 at y-130 (live report 2026-08-29: "too big and off the
+		// screen on the top. Just a bit is cut off") — 720x180 at y-170 put
+		// the top edge at -260 vs the 480-unit virtual screen's -240 edge;
+		// this tops out at -205 with margin.
+		e.y -= 130;
+		e.foreground = true;
+		e.color = ( 1, 1, 1 );
+		e.hidewheninmenu = true;
+		e.alpha = 0;
+		e SetShader( "tod_choice_banner", 600, 150 );
+		e FadeOverTime( 1 );
+		e.alpha = 1;
+		elems[ elems.size ] = e;
+	}
+
+	level util::waittill_any( "tod_extract", "tod_ascend" );
+	for ( i = 0; i < elems.size; i++ )
+	{
+		if ( isdefined( elems[ i ] ) )
+			elems[ i ] Destroy();
+	}
 }
 
 // (wait_unpaused removed with the old hold-out: the run suppresses upgrade
@@ -1018,6 +1255,414 @@ function ignite_pylon( i )
 	level notify( "tod_finale_pylon", i );
 }
 
+// ===========================================================================
+// THE BEAT SYSTEM (v12.13, docs/41 — A1/A2/A4/riders/B1). Everything below is
+// authored theater over EXISTING contracts: the aura clientfield, the derez
+// pair, the door slab contract, the boss debt/roof system, the spawn filters.
+// Nothing here raises a limit, adds a HUD element, or introduces a new death
+// path except the tide's (which reuses the seal's own, by design).
+// ===========================================================================
+
+// Seconds into the closing song. 0 before the run starts.
+function song_t()
+{
+	if ( !isdefined( level.tod_finale_song_start ) )
+		return 0;
+	return ( ( GetTime() - level.tod_finale_song_start ) / 1000.0 );
+}
+
+// The furthest UPRIGHT player's road_y, or undefined if nobody is past the
+// gate. Hall players count (their road_y is past every road threshold), which
+// is exactly right for beats keyed on "the leader has passed X".
+function leader_road_y()
+{
+	best = undefined;
+	players = GetPlayers();
+	for ( i = 0; i < players.size; i++ )
+	{
+		p = players[ i ];
+		if ( !isdefined( p ) || !isplayer( p ) || !isalive( p ) )
+			continue;
+		if ( p laststand::player_is_in_laststand() )
+			continue;
+		if ( !( tod_crown_data::beyond_gate( p.origin ) ) )
+			continue;
+		ry = tod_crown_data::road_y( p.origin );
+		if ( !isdefined( best ) || ry > best )
+			best = ry;
+	}
+	return best;
+}
+
+// --- THE AVENUE ------------------------------------------------------------
+// Glow hosts on the three portal frames and the eight avenue pylon pips, all
+// ignited BLUE at the buy — the road lights the way to the citadel — and
+// strobed GREEN by depart_show on the win. (Their tide-era red flipping went
+// with the tide; see the post-mortem at the beat table.)
+function avenue_ignite()
+{
+	level endon( "end_game" );
+
+	level.tod_avenue_hosts = [];
+	po = tod_crown_data::portal_orgs();
+	for ( i = 0; i < po.size; i++ )
+		avenue_host( po[ i ] + ( 0, 0, 120 ) );
+	ao = tod_crown_data::avenue_pylon_orgs();
+	for ( i = 0; i < ao.size; i++ )
+		avenue_host( ao[ i ] );
+}
+
+function avenue_host( org )
+{
+	h = prop( "tag_origin", org, 0 );
+	if ( !isdefined( h ) )
+		return;
+	tod_perk_lights::set_glow( h, TOD_GLOW_BLUE );
+	level.tod_avenue_hosts[ level.tod_avenue_hosts.size ] = h;
+}
+
+// --- A2: THE PHASED PRESSURE ------------------------------------------------
+function spawn_floor_phases()
+{
+	level endon( "end_game" );
+	level endon( "tod_finale_sealed" );
+
+	level.tod_finale_spawn_floor = 0.4;   // the overture — the one moment you get to LOOK at it
+	while ( song_t() < TOD_PHASE2_SECS )
+		wait 0.25;
+	level.tod_finale_spawn_floor = 0.2;   // the build
+	while ( song_t() < TOD_PHASE3_SECS )
+		wait 0.25;
+	level.tod_finale_spawn_floor = 0.1;   // the sustained section: full pressure
+	level.tod_finale_pressure_tick = 4;   // and tighter boss top-ups with it
+}
+
+// --- A2: THE NARROWS DROP ---------------------------------------------------
+function beat_panzer_narrows()
+{
+	level endon( "end_game" );
+	level endon( "tod_finale_sealed" );
+
+	// THE ARMED FLAG (review FIX 4 — this IS the "replace, don't add"
+	// interlock the spec demanded): while armed, the pressure loop's panzer
+	// rotation turn is SKIPPED, so no roving Panzer can occupy the 1-alive
+	// roof before the beat fires — without it the loop's first tick (~t=6s)
+	// landed one and the flagship drop silently no-op'd every run.
+	level.tod_beat_panzer_armed = true;
+
+	for ( ;; )
+	{
+		wait 0.25;
+		t = song_t();
+		if ( t >= TOD_BEAT_PANZER_CAP )
+			break;
+		if ( t >= TOD_BEAT_PANZER_SECS )
+		{
+			ly = leader_road_y();
+			if ( isdefined( ly ) && ly >= tod_crown_data::beat_narrows_trigger_y() )
+				break;
+		}
+	}
+	// the roof arithmetic answers in _tod_bosses; retry a few ticks if it is
+	// momentarily full, then let the beat go — the road is already loud
+	for ( k = 0; k < 4; k++ )
+	{
+		if ( tod_bosses::finale_beat_panzer( tod_crown_data::beat_narrows_org() ) )
+			break;
+		wait 3;
+	}
+	level.tod_beat_panzer_armed = undefined;
+}
+
+// --- A2: THE FLARE DROP -----------------------------------------------------
+function beat_protectors_flare()
+{
+	level endon( "end_game" );
+	level endon( "tod_finale_sealed" );
+
+	// same interlock as the panzer beat — the loop's protector turn holds off
+	// so the flare drop is the wave that was scheduled, not one on top of it
+	level.tod_beat_prot_armed = true;
+
+	for ( ;; )
+	{
+		wait 0.25;
+		ly = leader_road_y();
+		if ( isdefined( ly ) && ly >= tod_crown_data::beat_flare_trigger_y() )
+			break;
+	}
+	for ( k = 0; k < 4; k++ )
+	{
+		if ( tod_bosses::finale_beat_protectors( tod_crown_data::beat_flare_orgs() ) )
+			break;
+		wait 3;
+	}
+	level.tod_beat_prot_armed = undefined;
+}
+
+// --- A4: THE ARRIVAL --------------------------------------------------------
+// Portal 3 stands inside the crown's throat and is gold precisely because "the
+// colour change IS the arrival" — until now you ran through it and nothing
+// happened. The first survivor across it trips THE ACCEPTANCE: the hall lights
+// itself for you, front to back, and the pillars count your people in.
+function arrival_watch()
+{
+	level endon( "end_game" );
+	level endon( "tod_finale_sealed" );
+
+	po = tod_crown_data::portal_orgs();
+	p3y = tod_crown_data::road_y( po[ po.size - 1 ] );
+	for ( ;; )
+	{
+		wait 0.25;
+		ly = leader_road_y();
+		if ( isdefined( ly ) && ly >= p3y )
+			break;
+	}
+	level thread acceptance_show();
+	level thread pillar_countin();
+}
+
+function acceptance_show()
+{
+	level endon( "end_game" );
+
+	// a ground ripple walking gate -> dais, five 0.3s steps, world-safe by
+	// construction (interpolated between two generated anchors)
+	a = tod_crown_data::crown_door_org();
+	b = tod_crown_data::hall_center();
+	for ( i = 0; i <= 4; i++ )
+	{
+		f = i / 4.0;
+		pt = ( a[ 0 ] + ( b[ 0 ] - a[ 0 ] ) * f, a[ 1 ] + ( b[ 1 ] - a[ 1 ] ) * f, b[ 2 ] + 8 );
+		tod_perk_scatter::derez_burst( pt );
+		wait 0.3;
+	}
+	// the sconces ignite in sequence toward the pad — the room lighting itself
+	if ( isdefined( level.tod_finale_sconces ) )
+	{
+		for ( i = 0; i < level.tod_finale_sconces.size; i++ )
+		{
+			s = level.tod_finale_sconces[ i ];
+			if ( isdefined( s ) )
+				tod_perk_lights::set_glow( s, TOD_GLOW_TEAL );
+			if ( ( i % 2 ) == 1 )
+				wait 0.15;
+		}
+	}
+	tod_perk_scatter::play_sound_at_origin( tod_crown_data::hall_center(), "zmb_cha_ching", 4 );
+}
+
+// The four hall pillars count the party in: one burns red per living player,
+// each snaps green as that many teammates make it inside. Ends at the seal
+// with whatever it last showed — green for everyone who made it.
+function pillar_countin()
+{
+	level endon( "end_game" );
+	level endon( "tod_finale_sealed" );
+
+	orgs = tod_crown_data::hall_pillar_orgs();
+	hosts = [];
+	for ( i = 0; i < orgs.size; i++ )
+	{
+		h = prop( "tag_origin", orgs[ i ], 0 );
+		if ( isdefined( h ) )
+			hosts[ hosts.size ] = h;
+	}
+	if ( hosts.size == 0 )
+		return;
+
+	shown = [];
+	for ( i = 0; i < hosts.size; i++ )
+		shown[ i ] = -1;
+	for ( ;; )
+	{
+		n_live = 0;
+		n_in = 0;
+		players = GetPlayers();
+		for ( i = 0; i < players.size; i++ )
+		{
+			p = players[ i ];
+			if ( !isdefined( p ) || !isplayer( p ) || !isalive( p ) )
+				continue;
+			n_live++;
+			if ( tod_crown_data::in_hall( p.origin ) )
+				n_in++;
+		}
+		if ( n_live > hosts.size )
+			n_live = hosts.size;
+		if ( n_in > n_live )
+			n_in = n_live;
+		for ( i = 0; i < hosts.size; i++ )
+		{
+			want = 0;
+			if ( i < n_in )
+				want = TOD_GLOW_GREEN;
+			else if ( i < n_live )
+				want = TOD_GLOW_RED;
+			if ( want == shown[ i ] )
+				continue;
+			shown[ i ] = want;
+			tod_perk_lights::set_glow( hosts[ i ], want );
+			if ( want == TOD_GLOW_GREEN )
+				tod_perk_scatter::play_sound_at_origin( hosts[ i ].origin, "zmb_cha_ching", 3 );
+		}
+		wait 0.25;
+	}
+}
+
+// --- rider: THE CROWN'S HEARTBEAT -------------------------------------------
+// A red pulse at the girandole — the ruby pendant under the vortex bell — on
+// an 8s beat that halves at each portal the leader crosses, and STOPS when the
+// door slams: the crown's heart stops because you are inside it now.
+function heartbeat_run()
+{
+	level endon( "end_game" );
+
+	h = prop( "tag_origin", tod_crown_data::girandole_org(), 0 );
+	if ( !isdefined( h ) )
+		return;
+	portals = tod_crown_data::portal_orgs();
+
+	for ( ;; )
+	{
+		if ( IS_TRUE( level.tod_crown_sealed ) || level.tod_finale_state == "departing" || level.tod_finale_state == "done" )
+		{
+			tod_perk_lights::set_glow( h, 0 );
+			return;
+		}
+		crossed = 0;
+		ly = leader_road_y();
+		if ( isdefined( ly ) )
+		{
+			for ( i = 0; i < portals.size; i++ )
+			{
+				if ( ly >= tod_crown_data::road_y( portals[ i ] ) )
+					crossed++;
+			}
+		}
+		period = 8.0;
+		if ( crossed == 1 )
+			period = 4.0;
+		else if ( crossed == 2 )
+			period = 2.0;
+		else if ( crossed >= 3 )
+			period = 1.0;
+		tod_perk_lights::set_glow( h, TOD_GLOW_RED );
+		wait 0.4;
+		tod_perk_lights::set_glow( h, 0 );
+		rest = period - 0.4;
+		if ( rest < 0.2 )
+			rest = 0.2;
+		wait rest;
+	}
+}
+
+// --- B1: THE LANE LOTTERY ---------------------------------------------------
+// The road you paid for is never the same road twice: one lane per fork is
+// rolled dead each run, sealed at its SOUTH mouth in the causeway gate's own
+// visual grammar. South-mouth-only keeps every lane path-connected via its
+// merge (nothing strands, player or zombie); the riser filter in
+// _tod_endless_rounds keeps spawns out of the dead band.
+function lane_seals_init()
+{
+	level.tod_lane_seals = [];
+	for ( i = 0; i < 5; i++ )
+	{
+		e = GetEnt( "tod_lane_seal_" + i, "targetname" );
+		if ( !isdefined( e ) )
+		{
+			// generator drift — a road with every lane open is survivable,
+			// a script error is not (the causeway gate's own rule)
+			level.tod_lane_seals = undefined;
+			return;
+		}
+		e Hide();
+		e NotSolid();
+		e ConnectPaths();
+		level.tod_lane_seals[ i ] = e;
+	}
+}
+
+function lane_lottery()
+{
+	if ( !isdefined( level.tod_lane_seals ) )
+		return;
+
+	picks = [];
+	f1 = lottery_pick( 0, 2 );
+	if ( isdefined( f1 ) )
+		picks[ picks.size ] = f1;
+	f2 = lottery_pick( 2, 5 );
+	if ( isdefined( f2 ) )
+		picks[ picks.size ] = f2;
+	if ( picks.size == 0 )
+		return;
+
+	bm = tod_crown_data::lane_band_mins();
+	bx = tod_crown_data::lane_band_maxs();
+	so = tod_crown_data::lane_seal_orgs();
+	mins = [];
+	maxs = [];
+	for ( i = 0; i < picks.size; i++ )
+	{
+		idx = picks[ i ];
+		e = level.tod_lane_seals[ idx ];
+		if ( !isdefined( e ) )
+			continue;
+		e Show();
+		e Solid();
+		e DisconnectPaths();
+		tod_perk_scatter::derez_burst( so[ idx ] );
+		tod_perk_scatter::play_sound_at_origin( so[ idx ], "zmb_cha_ching", 4 );
+		h = prop( "tag_origin", so[ idx ], 0 );
+		if ( isdefined( h ) )
+			tod_perk_lights::set_glow( h, TOD_GLOW_RED );
+		mins[ mins.size ] = bm[ idx ];
+		maxs[ maxs.size ] = bx[ idx ];
+	}
+	if ( mins.size > 0 )
+	{
+		// read by _tod_endless_rounds::finale_spawn_selection
+		level.tod_lane_seal_mins = mins;
+		level.tod_lane_seal_maxs = maxs;
+	}
+}
+
+// A random un-occupied lane index in [lo, hi), or undefined if every candidate
+// has a player standing in its slab (dev-harness case — the gate opens early
+// there, so someone can genuinely be at a mouth when extraction is bought).
+function lottery_pick( lo, hi )
+{
+	n = hi - lo;
+	start = lo + RandomInt( n );
+	for ( k = 0; k < n; k++ )
+	{
+		idx = lo + ( ( ( start - lo ) + k ) % n );
+		if ( !seal_occupied( idx ) )
+			return idx;
+	}
+	return undefined;
+}
+
+function seal_occupied( idx )
+{
+	mn = tod_crown_data::lane_seal_slab_mins();
+	mx = tod_crown_data::lane_seal_slab_maxs();
+	players = GetPlayers();
+	for ( i = 0; i < players.size; i++ )
+	{
+		p = players[ i ];
+		if ( !isdefined( p ) || !isplayer( p ) || !isalive( p ) )
+			continue;
+		if ( p.origin[ 0 ] >= ( mn[ idx ][ 0 ] - 48 ) && p.origin[ 0 ] <= ( mx[ idx ][ 0 ] + 48 )
+		  && p.origin[ 1 ] >= ( mn[ idx ][ 1 ] - 48 ) && p.origin[ 1 ] <= ( mx[ idx ][ 1 ] + 48 )
+		  && p.origin[ 2 ] > 19300 && p.origin[ 2 ] < 19800 )
+			return true;
+	}
+	return false;
+}
+
 // ---------------------------------------------------------------------------
 // THE EXTRACTION PAD — a DESTINATION now, not a control (v10)
 // ---------------------------------------------------------------------------
@@ -1065,6 +1710,10 @@ function exfil_hint_loop()
 			// review 2026-08-25).
 			case "holdout":
 			case "charging":   self SetHintString( "^3HOLD THE CROWN^7" ); break;
+			// v14: extract_use_loop stamps this trigger's hint itself the moment
+			// the choice opens — the case exists so the default's "back at the
+			// TERRACE" line can never overwrite it.
+			case "choice":     break;
 			case "ready":      self SetHintString( "^2EXTRACTION INBOUND^7" ); break;
 			case "departing":  self SetHintString( "^2EXTRACTING...^7" ); break;
 			case "done":       self SetHintString( "" ); break;
@@ -1124,6 +1773,17 @@ function depart_show()
 			p = level.tod_finale_pylons[ i ];
 			if ( isdefined( p ) )
 				tod_perk_lights::set_glow( p, ( on ? TOD_GLOW_GREEN : 0 ) );
+		}
+		// v12.13: the countdown avenue joins the send-off — every light the
+		// tide turned red strobes green down the length of the dead road.
+		if ( isdefined( level.tod_avenue_hosts ) )
+		{
+			for ( i = 0; i < level.tod_avenue_hosts.size; i++ )
+			{
+				a = level.tod_avenue_hosts[ i ];
+				if ( isdefined( a ) )
+					tod_perk_lights::set_glow( a, ( on ? TOD_GLOW_GREEN : 0 ) );
+			}
 		}
 		if ( ( k % 3 ) == 0 )
 			tod_perk_scatter::derez_burst( org );

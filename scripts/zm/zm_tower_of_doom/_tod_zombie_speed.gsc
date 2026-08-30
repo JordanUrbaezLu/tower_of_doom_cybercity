@@ -43,13 +43,16 @@
 // (user 2026-08-23, same day, having confirmed the live value was 12: "lets
 // change sprint speed to round 15").
 //
-// 15 IS THE END OF THIS LEVER. The ramp is (FULL_ROUND - round) steps from the
-// 0.8 floor, so pushing it further makes the per-round increment so small the
-// early game stops escalating at all — rounds 1-8 would read as one flat
-// speed. If it STILL reads fast after a live run, the next lever is lowering
-// TOD_ZSPEED_START_RATE (but not below ~0.7 — 0.5 read as "practically frozen"
-// in the 2026-08-18 test) or flattening TOD_ZSPEED_STEP, NOT this number.
-#define TOD_ZSPEED_FULL_ROUND   15
+// 18 IS THE END OF THIS LEVER (was 15; user 2026-08-29 "sprint speed at
+// round 18", part of the same-day aggression tone-down). The ramp is
+// (FULL_ROUND - round) steps from the 0.8 floor: at 18 the per-round
+// increment is ~1.2% — still legible round to round. Pushing further makes
+// it so small the early game stops escalating at all (rounds 1-8 read as
+// one flat speed), so if it STILL reads fast after a live run, the next
+// lever is lowering TOD_ZSPEED_START_RATE (but not below ~0.7 — 0.5 read as
+// "practically frozen" in the 2026-08-18 test) or flattening
+// TOD_ZSPEED_STEP, NOT this number.
+#define TOD_ZSPEED_FULL_ROUND   18
 // 0.003 -> 0.0035 (user 2026-08-24: "Make the speed curve 0.35% instead of
 // 0.3%"). UNBOUNDED and compounding on the animation RATE, so the gap widens
 // with depth rather than staying flat: round 30 goes 1.045x -> 1.053x full
@@ -61,8 +64,11 @@
 // ZOMBIE HEALTH SCALE (user 2026-08-22: "scale the zombies health a bit
 // more"). A FLAT multiplier applied per-spawn on top of the STOCK health
 // curve — the curve's shape is untouched, every round just lands harder.
-// This is the single knob: 1.0 = stock, 1.25 = +25%.
-#define TOD_ZHEALTH_MULT        1.25
+// This is the single knob: 1.0 = stock, 1.15 = +15%.
+// 1.25 -> 1.15 (user 2026-08-29: "Move zombie health down by 0.10", the
+// balance pass that landed with the armored-sprinter ladder). The co-op
+// +0.15/player below is UNTOUCHED — the ask named the base.
+#define TOD_ZHEALTH_MULT        1.15
 // CO-OP DIFFICULTY (user 2026-08-23: "Should get harder more players").
 //
 // The audit found the map scaled its BOSSES with party size (HP 1.0/1.7/2.3/2.6,
@@ -259,7 +265,18 @@ function apply_speed_for_round( round )
 		self zombie_utility::set_zombie_run_cycle_override_value( "sprint" );
 	}
 
-	self ASMSetAnimationRate( rate_for_round( round ) * self slow_mult() );
+	// PER-ZOMBIE ROUND OFFSET (v13.7, the ARMORED SPRINTER — _tod_sprinter sets
+	// tod_zspeed_round_add=15; user 2026-08-29 "run at +15 round speed. So if on
+	// round 20 the[y] run ... as if it was round 35"). A round OFFSET, not a
+	// rate multiplier, ON PURPOSE: the curve is piecewise (linear ramp to
+	// TOD_ZSPEED_FULL_ROUND, then +STEP/round), so
+	// "+15 rounds" and "x1.something" are different claims — the user asked
+	// for the former. Riding through rate_for_round also keeps this inside the
+	// one-writer rule and composes with slow_mult()/SUPPRESSING FIRE for free.
+	add = 0;
+	if ( isdefined( self.tod_zspeed_round_add ) )
+		add = self.tod_zspeed_round_add;
+	self ASMSetAnimationRate( rate_for_round( round + add ) * self slow_mult() );
 	self.tod_zspeed_round = round;
 }
 

@@ -11,9 +11,16 @@
 // 25 the reserve curve goes negative and there is nothing to spend points on
 // mid-climb. A flat 5k refill at the four rest stops is the sink.
 //
-// PORTED from map 1's _acc_ammo_crate.gsc, SIMPLIFIED per the user's spec:
-// map 1 priced by PaP state (base / PaP'd / wonder tiers); this is a FLAT 5000
-// for any weapon that has ammo. Same asset, same script-spawn recipe.
+// PORTED from map 1's _acc_ammo_crate.gsc. v13.23 (user 2026-08-29): pricing
+// is BY PAP STATE again — 2500 for a base gun, 5000 for a PaP'd one (map 1's
+// own scheme, minus the wonder tier), applying to EVERY crate. The original
+// tower spec was a flat 5000; that lasted 2026-08-24 -> 08-29. Same asset,
+// same script-spawn recipe. A SIXTH crate sits at the BASE (core WEST face
+// since v14.2 — the v13.23 east-face spot sat under lap 1's east flight and
+// its script-clip carves severed the stair navmesh; see the long note in
+// spawn_all). Since v14.3 ALL SIX static crates share one contract: origin
+// from generated data, collision a generator-cut clip brush in the .map.
+// crate_clips() below survives ONLY for the spire's dynamic crates.
 //
 // ASSET: the [West] Ammo Crates pack (Westchief596; ZeRoY's S4 ammo-crate model
 // + textures). The GDT lives INSTALL-SIDE at
@@ -36,15 +43,14 @@
 // standing on a walkable balcony, which is precisely what
 // lint_tod_geometry CHECK 1 exists to catch.
 //
-// So tools/gen_tower_map.js emits a SOLID brush tucked inside the crate mesh
-// (search "ammo crate body"), inset 4 units on every face so the model hides
-// it. Bounds there are measured off the decompressed xmodel and depend on
-// TOD_CRATE_X / TOD_CRATE_Y / TOD_CRATE_SCALE / TOD_CRATE_YAW below —
-// **MOVE THE CRATE HERE AND YOU MUST MOVE THE BRUSH THERE**, or the collision
-// stays behind and the lint will not catch it (a solid brush on a floor is a
-// legal thing to build; it only knows invisible ones are wrong).
+// So tools/gen_tower_map.js emits a clip brush tucked inside the crate mesh
+// (search "ammo crate body"). v13 closed the old drift trap: the breather
+// crate origin now lives ONCE, in the generator's BR_FURN table, which cuts
+// that clip AND emits _tod_breather_data.gsc::crate_org() — this file reads
+// the same value the brush was cut from, so clip and model cannot separate.
 //
-// NO LONGER GSC-ONLY: changing crate placement is now a full build + LED bake.
+// STILL NOT GSC-ONLY: moving the crate means editing BR_FURN in the
+// generator, and that is a regen + full build + LED bake.
 // =============================================================================
 
 #using scripts\shared\flag_shared;
@@ -53,7 +59,9 @@
 
 #using scripts\zm\_zm_score;      // can_player_purchase / minus_to_player_score
 #using scripts\zm\_zm_utility;    // is_player_valid
+#using scripts\zm\_zm_weapons;    // is_weapon_upgraded (v13.23 two-tier pricing)
 
+#using scripts\zm\zm_tower_of_doom\_tod_breather_data;   // crate_org/yaw + breather_zs (GENERATED, v13)
 #using scripts\zm\zm_tower_of_doom\_tod_crown_data;   // crown_crate_org/yaw (GENERATED)
 
 #insert scripts\shared\shared.gsh;
@@ -62,34 +70,21 @@
 // data" compile trap (CLAUDE.md GSC dialect).
 #precache( "model", "west_ammo_crate_model" );
 
-#define TOD_CRATE_COST     5000   // flat, any weapon that has ammo (user 2026-08-24)
+#define TOD_CRATE_COST_BASE 2500  // non-PaP'd weapon (user 2026-08-29: "2500 for non pap")
+#define TOD_CRATE_COST_PAP  5000  // PaP'd weapon (was the flat price for everything, 2026-08-24 -> 08-29)
 #define TOD_CRATE_SCALE    2.5    // map 1's tuned visual scale for this model
 #define TOD_CRATE_TRIG_R   72     // grown with the model (64 is flush at 1x)
 #define TOD_CRATE_TRIG_H   80
 
 #namespace tod_ammo_crate;
 
-// PLACEMENT — one per breather balcony, EAST edge, backed against the east
-// parapet and facing west into the balcony.
-//
-// The four breather laps (10/20/30/40) are all EVEN, so every balcony sits in
-// the MIRRORED frame: floor x[-800,-256] y[-992,-416]. This spot was chosen by
-// measuring against everything already on that balcony — it is 230u from the
-// nearest neighbour and 54u off the east parapet (the crate's half-extent is
-// ~36u, so it clears):
-//   perk pads (S rail)      x -360 / -536, y -959   (_tod_perk_scatter)
-//   upgrade station (W)     x -760,        y -600   (_tod_upgrades)
-//   teleport pad            x -640,        y -800   (_tod_teleport)
-//   breather PaP (N edge)   x -320,        y -470   (_tod_powerups)
-//   >> AMMO CRATE (E edge)  x -310,        y -700   <<
-// KEEP THAT LIST IN LOCKSTEP: the generator's BR_DEPTH/BR_EAST comment names
-// the scripted furniture that does NOT follow a balcony resize automatically.
-// If the balcony is ever resized again, this crate is a fifth item to re-place.
-#define TOD_CRATE_X      -310
-#define TOD_CRATE_Y      -700
-#define TOD_CRATE_YAW     270    // facing WEST (-x), into the balcony. This map's
-                                 // vending convention is yaw 0 = facing -y, so
-                                 // 90 = +x (the W-wall station), 270 = -x.
+// PLACEMENT — one per breather lounge, EAST wall, facing west into the room
+// (unchanged by v13: the crate was fine where it was — it was the PaP that
+// crowded it, and the PaP moved to the W wall). The origin comes from
+// GENERATED _tod_breather_data.gsc, cut from the generator's BR_FURN table,
+// which also cuts the collision clip and asserts this trigger clears every
+// other lounge trigger by both radii + 64. Vending yaw convention: 0 = front
+// toward -y, 90 = +x, 270 = -x.
 
 function init()
 {
@@ -105,13 +100,35 @@ function spawn_all()
 	// pre-blackscreen races the stock world init.
 	level flag::wait_till( "initial_blackscreen_passed" );
 
-	// Breather mid-slab heights — the SAME four z values used by the perk
-	// scatter pads, the teleporter source pads and the upgrade stations.
-	// (lap-1)*LAP_RISE + 192, laps 10/20/30/40 at LAP_RISE 384.
-	zs = array( 3648, 7488, 11328, 15168 );
+	// THE BASE CRATE (v13.23, user 2026-08-29: "add an ammo crate at spawn").
+	//
+	// v14.3 — PERFECTED: origin/yaw now ride GENERATED _tod_breather_data.gsc
+	// (base_crate_org/base_crate_yaw) and the collision is a generator-cut
+	// "base ammo crate body" clip brush in the .map, exactly like the other
+	// five crates — NO script clips, NO DisconnectPaths, nothing here the
+	// geometry lint can't see. The generator (gen_tower_map.js BASE_CRATE)
+	// also ASSERTS the box clear of the lap-1 E flight and the west walkway
+	// >= 128u, so the v13.23 mistake is now mechanically impossible.
+	//
+	// THE HISTORY THAT FORCED THIS (keep it — it is the whole design): v13.23
+	// hand-placed the crate at (320,0,0), "the emptiest documented base wall"
+	// — empty because LAP 1'S EAST FLIGHT RUNS OVER IT (x[256,416]; the same
+	// strip the teleport bay was moved out of in v10.25). Its three
+	// script-clip DisconnectPaths carves severed the stair navmesh BOTH ways
+	// (Workshop report Pinkbrotha4310 2026-08-30: zombies below wouldn't
+	// climb, zombies above wouldn't come down). v14.2 moved it to the core
+	// WEST face (-320,0,0), yaw 270, still with script clips; v14.3 moved the
+	// truth into the generator. The west face is clear by construction: W
+	// flights belong to EVEN laps, so the first stair over this strip is lap
+	// 2's at z=384.
+	place( tod_breather_data::base_crate_org(), tod_breather_data::base_crate_yaw() );
+
+	// Lounge mid-slab heights — the same generated list every other piece of
+	// breather furniture reads ((lap-1)*LAP_RISE + 192, laps 10/20/30/40).
+	zs = tod_breather_data::breather_zs();
 
 	for ( i = 0; i < zs.size; i++ )
-		place( ( TOD_CRATE_X, TOD_CRATE_Y, zs[ i ] ), TOD_CRATE_YAW );
+		place( tod_breather_data::crate_org( zs[ i ] ), tod_breather_data::crate_yaw() );
 
 	// THE CROWN HALL CRATE (v12, user 2026-08-26: "we need an ammo crate in
 	// that room"). The hold-out room's own restock — a fifth crate on the
@@ -140,8 +157,43 @@ function place( org, yaw )
 	// NOUN — here "AMMO CRATE - ...". A price bracket is safe on a
 	// HINT_NOICON trigger (the wallbuy router needs [cost:] AND an icon), and
 	// there is no "for" + perk-name, so the perk-card router cannot claim it.
-	t SetHintString( "Hold ^3[{+activate}]^7 ^5AMMO CRATE ^2[Cost: " + TOD_CRATE_COST + "]" );
+	// v13.23: two-tier price — the hint is static per trigger, so it names
+	// BOTH prices; the charge reads the held weapon's PaP state at use time.
+	t SetHintString( "Hold ^3[{+activate}]^7 ^5AMMO CRATE ^2[Cost: " + TOD_CRATE_COST_BASE + " / PaP'd " + TOD_CRATE_COST_PAP + "]" );
 	t thread use_loop();
+	return m;
+}
+
+// Script collision for DYNAMICALLY-PLACED crates — since v14.3 that means
+// ONLY the spire's arena/shelf crates (_tod_spire::spawn_crate; they
+// materialize and de-rez at runtime, so a baked clip brush cannot serve
+// them). Every STATIC crate — the four breathers, the crown hall AND the
+// base crate — gets a generator-cut "ammo crate body" clip brush instead.
+// Recipe: the v13.9 PaP machine pattern, three zm_collision_perks1 spread
+// ±48 along AnglesToRight, each DisconnectPaths'd per the navmesh rule.
+// KNOWN SLOP, accepted for the spire only ("robust rather than exact", the
+// upgrade-station doctrine): at vending yaws AnglesToRight points out the
+// FRONT, so the row runs front-to-back — a ~25u invisible lip beyond the
+// mesh face and a thin uncovered sliver on the +y flank (the mesh sits
+// offset +13y from its origin, measured in the generator's crate box).
+// NEVER call this for a crate that stands anywhere near a stair flight —
+// these carves are invisible to the geometry lint, which is exactly how the
+// v13.23 base crate severed the lap-1 stair (see spawn_all's history note).
+function crate_clips( m )
+{
+	right = AnglesToRight( m.angles );
+	offs = array( -48, 0, 48 );
+	clips = [];
+	for ( ci = 0; ci < offs.size; ci++ )
+	{
+		c = Spawn( "script_model", m.origin + VectorScale( right, offs[ ci ] ), 1 );
+		c.angles = m.angles;
+		c SetModel( "zm_collision_perks1" );
+		c.script_noteworthy = "clip";
+		c DisconnectPaths();
+		clips[ clips.size ] = c;
+	}
+	m.tod_clips = clips;
 }
 
 // self = the trigger
@@ -203,13 +255,34 @@ function use_loop()
 			continue;
 		}
 
-		if ( !( player zm_score::can_player_purchase( TOD_CRATE_COST ) ) )
+		// v13.23 two-tier: the held weapon's PaP state picks the price.
+		//
+		// TWO CHECKS, NOT ONE (2026-08-30, live report: a PaP'd gun bought
+		// crown-crate ammo at the 2500 base price). The old comment claimed
+		// "the class-gun _up twins ARE upgraded forms, so is_weapon_upgraded
+		// covers them natively" — WRONG for part of the roster.
+		// is_weapon_upgraded answers from level.zombie_weapons_upgraded, which
+		// is loaded from zm_levelcommon_weapons.csv — and that CSV's rows for
+		// the _zm-SUFFIXED twin families (the Enfield ladder, the knives,
+		// leviathan) name the forms WITHOUT the _zm suffix the shipped assets
+		// carry, so the table rows point at weapons that don't exist and a
+		// held t5_enfield_up_*_zm reads as not-upgraded. The name check covers
+		// every generated PaP form ("_up" / "_up_*"), the stock "_upgraded"
+		// forms (MR6), and can't drift when the generator grows a new family;
+		// the stock check stays for anything named differently. (The ~1s
+		// pre-reconcile window after a tier card remains the one edge, and it
+		// under-charges rather than over-charges.)
+		cost = TOD_CRATE_COST_BASE;
+		if ( zm_weapons::is_weapon_upgraded( weapon ) || IsSubStr( weapon.name, "_up" ) )
+			cost = TOD_CRATE_COST_PAP;
+
+		if ( !( player zm_score::can_player_purchase( cost ) ) )
 		{
 			player PlaySound( "zmb_no_purchase" );
 			continue;
 		}
 
-		player zm_score::minus_to_player_score( TOD_CRATE_COST );
+		player zm_score::minus_to_player_score( cost );
 		player PlaySound( "zmb_cha_ching" );
 		// Fills the shared RESERVE; the magazine tops off on the next reload,
 		// exactly like the stock Max Ammo powerup.

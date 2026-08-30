@@ -506,8 +506,46 @@ LUI.createMenu.StartMenu_Main = function(controller)
 	--
 	local USE_PAUSE_ART = true
 
+	-- [tod] WHAT A CLASS TIER-UP TAKES FROM YOU (user 2026-08-27: "players dont
+	-- know about is that upgrading class tiers will reset after an upgrade ...
+	-- maybe in pause menu we can mark that upgrades that will get lost").
+	--
+	-- [tod v14.13] THE BADGE IS SERVER-COMPUTED NOW. v14.13 made persistence a
+	-- property of the PLAYER, not just the domain (SCAVENGER survives a tier
+	-- card for the ASSAULT ALONE — set_scope's scope_class lane), so a static
+	-- client table can no longer answer "will a promotion take this row?".
+	-- GSC's sync_max() packs the answer into every tod_upg_sync row (+100 on
+	-- the max arg; tod_upgrade.lua strips it into row.safe), computed by the
+	-- same domain_survives_tier() that tier_up's reset actually uses — the
+	-- badge and the reset can never disagree, and class SWITCHING at stations
+	-- re-syncs it for free. This table is the FALLBACK ONLY (row.safe == nil:
+	-- an event older than the pack, which no live build sends). It lists the
+	-- class-UNconditional survivors; 8 SCAVENGER is deliberately absent — in
+	-- fallback its badge shows "resets", right for two of the three classes
+	-- that roll it. 24 is the CLASS TIER row itself, never badged.
+	--   2 DR   4 LUCK   5 SPRINT   6 HEADSHOT   21 SPRINT FIRE
+	--  32 SPRINT ARMOR  36 BACK ARMOR  38 VITALITY  24 TIER
+	local TIER_SAFE = { [2] = true, [4] = true, [32] = true, [36] = true, [24] = true,
+	                    [5] = true, [21] = true, [38] = true, [6] = true }
+
 	local todOwned = CoD.TodOwned or {}
 	local todInfo = CoD.TodDomainInfo or {}
+
+	-- AT THE TOP TIER THERE IS NOTHING LEFT TO LOSE (user 2026-08-27: "if you are
+	-- in last tier in class the pause menu shouldnt show the reset icon assets
+	-- anymore"). A player on their class's final gun can never be dealt another
+	-- CLASS TIER card, so no upgrade they hold is at risk and every badge would be
+	-- a warning about an event that cannot happen.
+	--
+	-- Row 24 is the CLASS TIER row: refresh_upgrade_list sends lvl = the current
+	-- tier and max = tier_max(). Compared as lvl >= max rather than against a
+	-- hardcoded 3, so raising tier_max never silently strands this.
+	-- ABSENT MEANS TIER 1, not "unknown": that row is only sent from tier 2 on
+	-- (tier 1 is the baseline, not an upgrade). Tier 1 is the furthest thing from
+	-- the top, so the badges must show — which is what the nil path here does.
+	local tierRow = todOwned[ 24 ]
+	local atTopTier = tierRow ~= nil and tierRow.lvl ~= nil and tierRow.max ~= nil
+	                  and tierRow.lvl >= tierRow.max
 	local todRows = {}
 	for id = 1, 63 do   -- the domain-id field is 6 bits (2026-08-22); ids above PAUSE_PLATE_MAX (below) render as TEXT rows; the body is nil-guarded so unused ids cost nothing
 		local o = todOwned[ id ]
@@ -532,6 +570,13 @@ LUI.createMenu.StartMenu_Main = function(controller)
 				name = ( todInfo[ id ] and todInfo[ id ].name ) or ( "UPGRADE " .. id ),
 				eff = eff,
 				act = act or "",
+				-- Marked with the warning badge below. Will-be-taken AND a
+				-- promotion still possible — at the top tier nothing can be
+				-- taken, so the whole column of badges disappears. The
+				-- authority is the row's server-computed safe bit (v14.13);
+				-- TIER_SAFE is only the nil fallback.
+				resets = ( not ( ( o.safe ~= nil and o.safe ) or ( o.safe == nil and TIER_SAFE[ id ] ) ) )
+				         and ( not atTopTier ),
 			}
 		end
 	end
@@ -541,9 +586,30 @@ LUI.createMenu.StartMenu_Main = function(controller)
 		-- 2026-08-23) -> 700x49, aspect 14.286 held EXACTLY. The old art was
 		-- 500x70 at 232x32 (aspect 7.14) and looked undersized once the panel
 		-- grew to two columns. Right edge 802 stays clear of BGBlood at 814.
+		-- PANEL SCALED UP ~10% (user 2026-08-27: "everything in the pause menu can
+		-- you increase by 10% ... Assets and text ... I see we have a bit of space
+		-- so we can have it fill out the menu a bit more").
+		--
+		-- IT COULD NOT BE A UNIFORM 10%, AND THAT IS WORTH KNOWING BEFORE ANYONE
+		-- "finishes the job": the panel was already against its right wall. Column
+		-- B ended at x=810 and the BGBlood art starts at x=814 — four pixels, i.e.
+		-- 0.6% of width. A naive 10% scale about the panel origin overflowed the
+		-- blood art by 67px.
+		--
+		-- The space the user could see is on the LEFT and BELOW, so that is where
+		-- this takes it. x 0..102 is empty in the panel's own y band (the logo and
+		-- mode icon stop at y=102, the signatures start at y=637), so the panel now
+		-- STARTS at x=60 and keeps its right edge pinned at 810. That buys +6.0% of
+		-- column width; the rest of the 10% goes into row pitch, plate size and
+		-- text, all of which fit vertically inside the 49px that were spare.
+		--
+		-- The three bounds that decide everything here, all verified:
+		--   right   810 < 814 BGBlood
+		--   bottom  legend ends 630 < 637 signatures
+		--   column  plate + a full 10-pip run = 365 <= 369
 		self.TodUpgHeader = LUI.UIImage.new()
-		self.TodUpgHeader:setLeftRight( true, false, 102, 802 )
-		self.TodUpgHeader:setTopBottom( true, false, 119, 168 )
+		self.TodUpgHeader:setLeftRight( true, false, 60, 810 )
+		self.TodUpgHeader:setTopBottom( true, false, 119, 171 )
 		self.TodUpgHeader:setImage( RegisterImage( "i_tod_pause_hdr" ) )
 		self:addElement( self.TodUpgHeader )
 
@@ -568,17 +634,17 @@ LUI.createMenu.StartMenu_Main = function(controller)
 		-- Highest domain id with a baked row plate. Domains ABOVE this render
 		-- as text until their art lands — RegisterImage on a missing image is
 		-- undefined behavior, so never reach for a plate that does not exist.
-		local PAUSE_PLATE_MAX = 37   -- r24 CLASS TIER + r25..r31 gun-unique plates landed 2026-08-22 (files (31).zip); r32 SPRINT ARMOR 2026-08-23 (files (32).zip); r33 SECOND WIND + r34 MOMENTUM 2026-08-23 (files (35).zip); r35 GIANT SLAYER + r36 BACK ARMOR 2026-08-23 (files (38).zip); r37 FORCED MARCH 2026-08-24 (files (39).zip); 38+ would be text rows
+		local PAUSE_PLATE_MAX = 39   -- r24 CLASS TIER + r25..r31 gun-unique plates landed 2026-08-22 (files (31).zip); r32 SPRINT ARMOR 2026-08-23 (files (32).zip); r33 SECOND WIND + r34 MOMENTUM 2026-08-23 (files (35).zip); r35 GIANT SLAYER + r36 BACK ARMOR 2026-08-23 (files (38).zip); r37 FORCED MARCH 2026-08-24 (files (39).zip); r38 VITALITY + r39 RECOVERY 2026-08-30 (files (69).zip, docs/46 — the v14.11 pair)
 
-		local COL_X    = { 102, 462 }   -- column left edges; col B ends at 810 (< BGBlood 814)
-		local COL_W    = 348
-		local ROW_Y0   = 176            -- 8px under the re-cut header (bottom 168)
-		local ROW_H    = 54
+		local COL_X    = { 60, 441 }    -- column left edges; col B still ends at 810 (< BGBlood 814)
+		local COL_W    = 369            -- +6.0%: all the width the BGBlood bound allows
+		local ROW_Y0   = 180            -- 9px under the re-cut header (bottom 171)
+		local ROW_H    = 59             -- +9.3% pitch; 7 rows end at 593, legend at 630 < 637
 		local ROWS_MAX = 7              -- per column; 2 x 7 = 14 = the real ceiling
-		local PLATE_W  = 191            -- 300x44 art -> 191x28, aspect 6.82 held
-		local PLATE_H  = 28
-		local PIP_D    = 12
-		local PIP_PITCH = 14
+		local PLATE_W  = 210            -- 300x44 art -> 210x31, aspect 6.77 (art 6.82) held
+		local PLATE_H  = 31
+		local PIP_D    = 13
+		local PIP_PITCH = 15            -- plate + a full 10-pip run = 365 <= COL_W 369
 
 		-- Balance the columns: <=7 rows stay in one column (a short list reads
 		-- worse split), 8..14 split evenly.
@@ -613,7 +679,7 @@ LUI.createMenu.StartMenu_Main = function(controller)
 			else
 				local label = LUI.UIText.new()
 				label:setLeftRight( true, false, cx + 4, cx + PLATE_W )
-				label:setTopBottom( true, false, y + 4, y + 24 )
+				label:setTopBottom( true, false, y + 4, y + 26 )
 				label:setText( Engine.Localize( r.name ) )
 				label:setTTF( "fonts/orbitron.ttf" )
 				label:setRGB( 0.86, 0.9, 0.95 )
@@ -635,7 +701,7 @@ LUI.createMenu.StartMenu_Main = function(controller)
 				local px = cx + PLATE_W + 7 + ( p - 1 ) * PIP_PITCH
 				local pip = LUI.UIImage.new()
 				pip:setLeftRight( true, false, px, px + PIP_D )
-				pip:setTopBottom( true, false, y + 8, y + 8 + PIP_D )
+				pip:setTopBottom( true, false, y + 9, y + 9 + PIP_D )
 				if p > r.lvl then
 					pip:setImage( RegisterImage( "i_tod_pause_pip_empty" ) )
 				else
@@ -644,14 +710,30 @@ LUI.createMenu.StartMenu_Main = function(controller)
 				self:addElement( pip )
 			end
 
+			-- TIER-UP WARNING BADGE. Sits at the head of the effect line, so the
+			-- mark reads as belonging to the row without needing width the row
+			-- does not have: the name plate plus a full 10-pip run already reaches
+			-- cx+338 of a 348-wide column, and the right edge is hard-bounded by
+			-- BGBlood at x=814. The effect line's left margin is the one piece of
+			-- guaranteed empty space in the row.
+			local effX = cx + 2
+			if r.resets then
+				local mark = LUI.UIImage.new()
+				mark:setLeftRight( true, false, cx + 2, cx + 14 )
+				mark:setTopBottom( true, false, y + 33, y + 45 )
+				mark:setImage( RegisterImage( "i_tod_pause_reset_mark" ) )
+				self:addElement( mark )
+				effX = cx + 19   -- indent the text clear of the badge
+			end
+
 			-- WHAT IT DOES, at this player's current level.
 			local effLine = LUI.UIText.new()
-			effLine:setLeftRight( true, false, cx + 2, cx + COL_W - 4 )
-			effLine:setTopBottom( true, false, y + 29, y + 42 )
+			effLine:setLeftRight( true, false, effX, cx + COL_W - 4 )
+			effLine:setTopBottom( true, false, y + 32, y + 46 )
 			effLine:setText( r.eff )
 			effLine:setTTF( "fonts/orbitron.ttf" )
 			effLine:setRGB( 0.42, 0.92, 1 )
-			effLine:setScale( 0.82 )
+			effLine:setScale( 0.90 )
 			effLine:setAlignment( Enum.LUIAlignment.LUI_ALIGNMENT_LEFT )
 			self:addElement( effLine )
 
@@ -659,14 +741,35 @@ LUI.createMenu.StartMenu_Main = function(controller)
 			if r.act ~= "" then
 				local actLine = LUI.UIText.new()
 				actLine:setLeftRight( true, false, cx + 2, cx + COL_W - 4 )
-				actLine:setTopBottom( true, false, y + 41, y + 54 )
+				actLine:setTopBottom( true, false, y + 45, y + 59 )
 				actLine:setText( r.act )
 				actLine:setTTF( "fonts/orbitron.ttf" )
 				actLine:setRGB( 0.6, 0.66, 0.74 )
-				actLine:setScale( 0.72 )
+				actLine:setScale( 0.79 )
 				actLine:setAlignment( Enum.LUIAlignment.LUI_ALIGNMENT_LEFT )
 				self:addElement( actLine )
 			end
+		end
+
+		-- THE LEGEND, drawn once and only when at least one row carries the badge.
+		-- Placed off the LAST ROW ACTUALLY USED rather than a constant, so it
+		-- follows a short list up the panel instead of floating below empty space,
+		-- and it drops clear of the "+N MORE" line when that renders. 380x28 holds
+		-- the art's exact 13.571 aspect (760x56) — the v6.6 stretched-plate lesson.
+		-- Bottom bound is y=637, where the four signature images paint over
+		-- everything: worst case here is 580+28 = 608.
+		local anyReset = false
+		for i = 1, shown do
+			if todRows[ i ].resets then anyReset = true break end
+		end
+		if anyReset then
+			local legendY = ROW_Y0 + perCol * ROW_H + 6
+			if overflow > 0 then legendY = legendY + 20 end
+			local legend = LUI.UIImage.new()
+			legend:setLeftRight( true, false, COL_X[ 1 ], COL_X[ 1 ] + 418 )
+			legend:setTopBottom( true, false, legendY, legendY + 31 )
+			legend:setImage( RegisterImage( "i_tod_pause_legend_reset" ) )
+			self:addElement( legend )
 		end
 
 		-- Can only fire if a future GSC change pushes past 14 concurrent

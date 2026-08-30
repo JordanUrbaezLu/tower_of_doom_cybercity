@@ -46,8 +46,8 @@ function exfil_radius()    { return 96; }
 function hall_center()     { return ( 0, 8608, 19392 ); }
 function gate_org()        { return ( 0, 7860, 19392 ); }
 function mast_tip_org()    { return ( 0, 0, 21312 ); }
-function station_org()     { return ( -695, 8308, 19392 ); }
-function station_trig_org(){ return ( -655, 8308, 19392 ); }
+function station_org()     { return ( -664, 8308, 19392 ); }
+function station_trig_org(){ return ( -624, 8308, 19392 ); }
 function station_yaw()     { return 90; }
 
 // THE HALL AMMO CRATE (v12) — spawned by _tod_ammo_crate.gsc, which reads
@@ -109,5 +109,114 @@ function sconce_yaws()
 	a[ 9 ] = 180;
 	a[ 10 ] = 0;
 	a[ 11 ] = 180;
+	return a;
+}
+
+// --- THE FINALE BEAT SYSTEM (v12.13, docs/41) — road-derived anchors -----
+// road_y: the mirrored y — compare against tide/beat y thresholds with THIS,
+// never with raw org[1] (the crown lap parity flips the whole road).
+function road_y( org )     { return org[ 1 ] * 1; }
+// (tide_start_y/tide_end_y/road_north_yaw/tide_curtain_orgs were emitted
+// here for exactly one day — THE DEREZ TIDE, added and removed 2026-08-27;
+// post-mortem at the top of _tod_finale.gsc's beat table.)
+// BOSS BEATS (A2): the Panzer lands at the NARROWS north lip (80 past the
+// pinch exit, on full-width throat deck — fightable from the 320 throat);
+// two protectors land on the gate APPROACH as the leader crosses J4.
+function beat_narrows_org()        { return ( 0, 4240, 19392 ); }
+function beat_narrows_trigger_y()  { return 3680; }   // leader entering the throat
+function beat_flare_orgs()
+{
+	a = [];
+	a[ 0 ] = ( -60, 7700, 19392 );
+	a[ 1 ] = ( 60, 7700, 19392 );
+	return a;
+}
+function beat_flare_trigger_y()    { return 6720; }   // leader crossing J4
+// A4: the hold-out opener Panzer crashes into the hall here — clear of the
+// 160 gather ring, the dais, the pillars, the crate and the station.
+function siege_panzer_org()        { return ( 280, 8850, 19392 ); }
+// THE CROWN'S HEARTBEAT rider: the girandole — same coordinate as its
+// baked light (the ruby drop-pendant under the vortex bell).
+function girandole_org()           { return ( 0, 8624, 14336 ); }
+// THE COUNTDOWN AVENUE (A1): glow hosts on the 8 avenue pylon PIPS (pip
+// body spans +496..+576 over the deck; host at its centre) — ignited blue
+// at the buy, strobed green on the win (the tide-era red flip is gone).
+function avenue_pylon_orgs()
+{
+	a = [];
+	a[ 0 ] = ( -360, 640, 19928 );
+	a[ 1 ] = ( 360, 640, 19928 );
+	a[ 2 ] = ( -360, 960, 19928 );
+	a[ 3 ] = ( 360, 960, 19928 );
+	a[ 4 ] = ( -360, 3792, 19928 );
+	a[ 5 ] = ( 360, 3792, 19928 );
+	a[ 6 ] = ( -360, 4208, 19928 );
+	a[ 7 ] = ( 360, 4208, 19928 );
+	return a;
+}
+// A4 pillar count-in hosts: above each hall pillar cap (cap tops at +176;
+// the baked quarter lights sit at +260 — the host at +200 splits the gap).
+function hall_pillar_orgs()
+{
+	a = [];
+	a[ 0 ] = ( -448, 8160, 19592 );
+	a[ 1 ] = ( 448, 8160, 19592 );
+	a[ 2 ] = ( -448, 9056, 19592 );
+	a[ 3 ] = ( 448, 9056, 19592 );
+	return a;
+}
+// THE LANE LOTTERY (B1). Parallel arrays, index = tod_lane_seal_<i>:
+//   0 f1 W ridge | 1 f1 E broken stair | 2 f2 W undercroft | 3 f2 C plank | 4 f2 E weave
+// seal_orgs: slab centres (FX anchors). slab/band mins+maxs: WORLD-space
+// AABBs (pre-mirrored — test raw org x/y against them, no road_y). The
+// BAND is the whole lane footprint fork->merge, for the riser filter.
+function lane_seal_orgs()
+{
+	a = [];
+	a[ 0 ] = ( -400, 1292, 19520 );
+	a[ 1 ] = ( 400, 1292, 19520 );
+	a[ 2 ] = ( -400, 4492, 19520 );
+	a[ 3 ] = ( 0, 4492, 19520 );
+	a[ 4 ] = ( 400, 4492, 19520 );
+	return a;
+}
+function lane_seal_slab_mins()
+{
+	a = [];
+	a[ 0 ] = ( -480, 1280, 0 );
+	a[ 1 ] = ( 320, 1280, 0 );
+	a[ 2 ] = ( -480, 4480, 0 );
+	a[ 3 ] = ( -60, 4480, 0 );
+	a[ 4 ] = ( 320, 4480, 0 );
+	return a;
+}
+function lane_seal_slab_maxs()
+{
+	a = [];
+	a[ 0 ] = ( -320, 1304, 0 );
+	a[ 1 ] = ( 480, 1304, 0 );
+	a[ 2 ] = ( -320, 4504, 0 );
+	a[ 3 ] = ( 60, 4504, 0 );
+	a[ 4 ] = ( 480, 4504, 0 );
+	return a;
+}
+function lane_band_mins()
+{
+	a = [];
+	a[ 0 ] = ( -800, 1280, 0 );
+	a[ 1 ] = ( 320, 1280, 0 );
+	a[ 2 ] = ( -800, 4480, 0 );
+	a[ 3 ] = ( -60, 4480, 0 );
+	a[ 4 ] = ( 320, 4480, 0 );
+	return a;
+}
+function lane_band_maxs()
+{
+	a = [];
+	a[ 0 ] = ( -320, 3520, 0 );
+	a[ 1 ] = ( 480, 3520, 0 );
+	a[ 2 ] = ( -320, 6720, 0 );
+	a[ 3 ] = ( 60, 6720, 0 );
+	a[ 4 ] = ( 800, 6720, 0 );
 	return a;
 }

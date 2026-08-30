@@ -1,5 +1,12 @@
 # The Class & Upgrade System — definitive reference (v4.2 BALLISTIC SLASHER, 2026-08-19)
 
+> **SUPERSEDED — HISTORICAL RECORD ONLY (2026-08-30).** This is the v4-era
+> design (M60/Ballistic Knife roster, ECHO ROUNDS live, CLEAVE 5, +3%/Lv
+> mobility — all long gone). The LIVING references are `register_domains()` in
+> `_tod_upgrades.gsc` (the truth), CHANGELOG.md (the deltas — v14.11 is the
+> latest rebalance), and the Tower of Doom Armory artifact (the readable map).
+> Do not update this file; it is kept as the record of the original design.
+
 Endless rounds; upgrade events at round 1 (dealt by the class draft) then
 every 4th round (dev mode: every round from 2): the world freezes, each
 player picks 1 of 2 cards (D-pad/stick to switch, hold JUMP to lock, 15s).

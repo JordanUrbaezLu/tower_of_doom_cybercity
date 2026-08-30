@@ -58,6 +58,7 @@
 // =============================================================================
 
 #using scripts\shared\ai_shared;
+#using scripts\shared\clientfield_shared;         // dog_fx — the stock ACTOR field
 #using scripts\shared\flag_shared;
 #using scripts\shared\util_shared;
 
@@ -75,7 +76,7 @@
 // must get the same fight relative to their own unlock. ------------------------
 #define TOD_HOUND_INTERVAL       3
 #define TOD_HOUND_INTERVAL_DEV   2     // dev: repeats faster for testing
-#define TOD_HOUND_MAX_ALIVE      4     // concurrency roof for hounds alone
+#define TOD_HOUND_MAX_ALIVE      4     // SOLO base since v13.22 — live roof is hound_max_alive() (4 + players/2: 4/5/5/6, so the quad pack of 5 is no longer clamped)
 
 // COMBINED ELITE ROOF. The existing per-type roofs already permit 8 Protectors
 // + 1 Panzer + 3 Reavers = 12 live elites, and the v10.4 audit established that
@@ -84,7 +85,18 @@
 // nothing trims zombie_ai_limit. Hounds therefore only ever fill SPARE capacity:
 // they may not spawn while 9+ elites already stand. Legal one-directionally —
 // this module imports _tod_bosses, never the reverse (the cycle the KB forbids).
-#define TOD_HOUND_ELITE_ROOF     9
+// v13.22 (co-op elite scale-up): both roofs are per-player now — the defines
+// stay as the SOLO bases. hound_max_alive() = 4+np/2 (4/5/5/6, the quad pack
+// of 5 no longer clamps); hound_elite_roof() = 8+np (9/10/11/12). WHY THE
+// ELITE ROOF HAD TO MOVE WITH THE OTHERS: elites_alive() counts
+// protectors+panzer+reavers+hounds (sprinters deliberately absent — horde
+// CONVERSIONS, zero extra actors), and the v13.22 quad worst case is
+// 8+1+3 = 12 non-hound elites, which would sit permanently above a flat 9
+// and STARVE hounds out of every quad confluence round. 12 is the historical
+// reachable line the v10.4 audit measured (the pre-tankiness roofs permitted
+// exactly 12); at quad it is brief, elite-kill throughput is four guns, and
+// the horde-choke cost is one the map already carried at that line.
+#define TOD_HOUND_ELITE_ROOF     9     // SOLO base — see hound_elite_roof() (defined below #namespace — the v13.25 boot lesson)
 
 // --- HP: the same anchored curve every other elite uses, so coop_hp_mult()
 // rides in automatically inside boss_hp.
@@ -95,17 +107,23 @@
 // compounding horde that is 0.91x a TRASH ZOMBIE at round 30 and 0.35x at round
 // 40. The literal number would ship an "elite" softer than the horde it spawns
 // with, and the LAP 30 door would feel like it unlocked less than LAP 20 did.
-// 16,000 on the standard curve keeps the user's actual intent — a real threat —
-// and lands the hound as the LIGHTEST elite, which is correct for the only one
-// that arrives four at a time and outruns a sprinting player:
-//   solo r30  hound 16,000  vs  Reaver 43,178 / Protector 43,497 / Panzer 129,346
-//   solo r30  trash zombie 8,788  ->  the hound is just under 2x a zombie
-// THE DIAL: drop BASE to 8000 for the literal 5x reading. One define, -GscOnly.
+// 16,000 on the standard curve kept the user's actual intent — a real threat —
+// and landed the hound as the LIGHTEST elite, which is correct for the only one
+// that arrives four at a time and outruns a sprinting player.
+//
+// -30% (user 2026-08-27: "nerf the dogs hellhounds health by 30%"), 16000 ->
+// 11200. The curve multiplies off BASE from the anchor, so scaling the base is
+// exactly -30% at EVERY round, not just at 30. Post-nerf reads:
+//   solo r30  hound 11,200  vs  Reaver 43,178 / Protector 43,497 / Panzer 129,346
+//   solo r30  trash zombie 8,788  ->  the hound is ~1.27x a zombie
+// Still the lightest elite by far; its threat is the pack + the speed, not the
+// pool. THE DIAL: this define alone, -GscOnly.
 #define TOD_HOUND_HP_ANCHOR      30
-#define TOD_HOUND_HP_BASE        16000
+#define TOD_HOUND_HP_BASE        11200
 #define TOD_HOUND_HP_EXP         1.09
 
-#define TOD_HOUND_PTS            150   // team-wide on death (luck goes to the last hit only)
+// (TOD_HOUND_PTS 150 team-wide: RETIRED v14.5 — elite payouts are the shared
+// killer-only TOD_ELITE_PTS in _tod_bosses::grant_elite_reward; tune it THERE)
 
 #namespace tod_hellhounds;
 
@@ -192,8 +210,9 @@ function round_watch()
 		// most; the punishment for not clearing one is the hounds still
 		// standing, not a queue behind them. Clamping n BEFORE the compare is
 		// what keeps the debt itself under the roof.
-		if ( n > TOD_HOUND_MAX_ALIVE )
-			n = TOD_HOUND_MAX_ALIVE;
+		roof = hound_max_alive();
+		if ( n > roof )
+			n = roof;
 		if ( n > 0 && n > level.tod_hound_debt )
 			level.tod_hound_debt = n;
 	}
@@ -219,6 +238,33 @@ function hounds_alive()
 // Every live elite of every type — the combined-budget guard. Reads the Reaver's
 // count through its published LEVEL FIELD, never by importing the module (that
 // direction would be the cycle).
+// v13.25 BOOT FIX (the "hound_max_alive unresolved external" fatal, caught
+// by the user on the PUBLISHED build): in v13.22 these two functions were
+// inserted ABOVE the #namespace directive. The LINKER accepts that silently,
+// but the GAME's loader does not — calls made after `#namespace
+// tod_hellhounds;` resolve inside that namespace, and a pre-namespace
+// definition never joins it, so every call site was an unresolved external
+// and the map fataled at load. It shipped in builds #12 through the publish
+// because NO build in that window was ever booted (each battery checked
+// deploy-state, not bootability), and lint_tod_arity does not model
+// namespace boundaries. RULES: functions go BELOW #namespace, always; and a
+// battery is not a boot.
+function hound_max_alive()
+{
+	np = GetPlayers().size;
+	if ( np < 1 )
+		np = 1;
+	return 4 + int( np / 2 );
+}
+
+function hound_elite_roof()
+{
+	np = GetPlayers().size;
+	if ( np < 1 )
+		np = 1;
+	return 8 + np;
+}
+
 function elites_alive()
 {
 	n = hounds_alive();
@@ -246,8 +292,8 @@ function director()
 			continue;
 
 		if ( level.tod_hound_debt > 0
-		  && level.tod_hound_alive_n < TOD_HOUND_MAX_ALIVE
-		  && elites_alive() < TOD_HOUND_ELITE_ROOF )
+		  && level.tod_hound_alive_n < hound_max_alive()
+		  && elites_alive() < hound_elite_roof() )
 		{
 			e = spawn_hound();
 			// Only ever decrement on a LIVE actor — a failed spawn must keep the
@@ -312,10 +358,55 @@ function spawn_hound()
 
 	dog thread hound_tune( hp );
 	dog thread hound_death_watch();
+	dog thread hound_target_watch();
 	dog thread tod_bosses::tod_boss_stuck_watch();
 
 	dbg( "spawned hp=" + hp + " round=" + rn + " alive=" + hounds_alive() );
 	return dog;
+}
+
+// self = the hound. RE-ACQUIRE THE TARGET — the frozen-hound bug (player report
+// "dog rounds bugged", 2026-08-30).
+//
+// favoriteenemy was set ONCE at spawn above and nothing ever refreshed it. The
+// dog behaviour tree deliberately does not re-acquire in zombies mode:
+// behavior_zombie_dog.gsc:404 guards its own retarget with
+// (!SessionModeIsZombiesGame() || team == "allies"), which is always false for
+// an axis dog here, and its comment says "zombie mode does this in another
+// script". That other script is _zm_ai_dogs::dog_run_think — and IT NEVER RUNS
+// ON THIS MAP: it is threaded only from dog_init, which is registered solely at
+// _zm_ai_dogs.gsc:147 onto level.dog_spawners, and dog_spawner_init returns
+// early because this map has ZERO zombie_dog_spawner ents (we SpawnActor
+// directly). So a hound gets the blackboard and nothing else.
+//
+// The failure: the moment the anchored player stops being valid — last stand
+// (stock set_ignoreme), death/spectate, or the ignoreme powerup —
+// zombieDogTargetService (behavior_zombie_dog.gsc:378-392) clears favoriteenemy
+// and calls SetGoal(self.origin), "stay at the spot". Nothing reassigns it, so
+// that hound stands still FOR THE REST OF THE MATCH, even after a revive. In
+// solo one down freezes the pack. Worse, frozen hounds are alive, so
+// hounds_alive() keeps counting them and once hound_max_alive() are stuck the
+// director never spawns another hound again.
+//
+// This is stock dog_run_think's only load-bearing behaviour, restored. The Rogue
+// Protector has had exactly this loop all along (tod_bosses::hunt_players) — the
+// hound was the only elite in the map without one.
+function hound_target_watch()
+{
+	self endon( "death" );
+	level endon( "end_game" );
+
+	for ( ;; )
+	{
+		wait 0.5;
+		if ( !isdefined( self ) || !isalive( self ) )
+			return;
+		if ( isdefined( self.favoriteenemy ) && zm_utility::is_player_valid( self.favoriteenemy ) )
+			continue;
+		t = tod_bosses::pick_target_player();
+		if ( isdefined( t ) )
+			self.favoriteenemy = t;
+	}
 }
 
 // self = the hound. The pack threads its own health init, so our set has to land
@@ -326,7 +417,37 @@ function hound_tune( hp )
 	self endon( "death" );
 	level endon( "end_game" );
 
-	wait 2.5;
+	// THE EYES AND THE FIRE TRAIL (user 2026-08-30: "lets fix the hell hounds
+	// visual issue"). Stock drives BOTH off one 1-bit ACTOR clientfield,
+	// "dog_fx", which is ALREADY registered on both VMs and needs nothing from
+	// us: server _zm_ai_dogs.gsc:44, client _zm_ai_dogs.csc. Both halves ride in
+	// via zm_usermap on their own side, so this adds ZERO new clientfield bits,
+	// no .csc change and no .zone line. The client callback does the whole job —
+	// eye glow on the eyeball tag, PlayFxOnTag of the fire trail on the spine —
+	// and both fx are client-precached in stock and ship in zm_levelcommon.
+	//
+	// WHY OUR HOUNDS RENDER PLAIN: the ONLY place stock sets this field is
+	// _zm_ai_dogs.gsc:937, inside dog_run_think, threaded from dog_init, which is
+	// registered ONLY onto level.dog_spawners — and dog_spawner_init returns
+	// early because this map has ZERO zombie_dog_spawner ents. Exactly the same
+	// root cause as the frozen-hound bug fixed by hound_target_watch().
+	//
+	// DO NOT "just call dog_init" instead: it Ghosts the actor, gives it a magic
+	// bullet shield and sets ignoreme, and the ONLY code that undoes all three is
+	// the tail of dog_spawn_fx (_zm_ai_dogs.gsc:346-353), which we never run.
+	// dog_init alone = an invisible, invulnerable, non-aggro hound, plus a second
+	// death handler fighting hound_death_watch().
+	//
+	// The 0.5s is courtesy, not a guarantee — stock's own set lands ~1.6s in
+	// (it waits on "visible"). If the trail is missing in game, RAISING THIS
+	// NUMBER WILL NOT FIX IT; suspect the model tags instead.
+	wait 0.5;
+	if ( !isdefined( self ) || !isalive( self ) )
+		return;
+	self clientfield::set( "dog_fx", 1 );
+	dbg( "dog_fx set" );
+
+	wait 2.0;
 	if ( !isdefined( self ) || !isalive( self ) )
 		return;
 
@@ -345,7 +466,8 @@ function hound_death_watch()
 	if ( isdefined( attacker ) && isplayer( attacker ) )
 		tod_luck::boss_kill( attacker, "hellhound" );
 
-	// Quiet, team-wide, per-unit — hounds die in packs, so a full boss reward
-	// per head would be a points fountain.
-	tod_bosses::grant_boss_reward( "HELLHOUND", TOD_HOUND_PTS, true );
+	// v14.5: killer-only 500 (×2x ×BOUNTY) like every elite. The old "points
+	// fountain" worry inverts under killer-only: hounds die in packs, but each
+	// head now pays ONE player, so the team-wide multiplication is gone.
+	tod_bosses::grant_elite_reward( "HELLHOUND", attacker );
 }

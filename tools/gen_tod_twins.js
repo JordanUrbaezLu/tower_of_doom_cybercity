@@ -131,6 +131,48 @@ const MELEE_NO_LUNGE = { meleeLungeRange: '0', meleeChargeRange: '0' };
 const RESERVE_MULT = 1.0;
 const RESERVE_KEYS = new Set(['maxAmmo', 'startAmmo']);
 
+// +1 MAGAZINE ON EVERY GUN (user 2026-08-26: "all guns need to have 1 extra mag.
+// Ammo is scarce even when we have an ammo crate. Many people are complaining").
+//
+// ADDITIVE, AND THAT IS THE WHOLE POINT. RESERVE_MULT is a ratio, and the
+// 2026-08-23 pass above already recorded why a ratio is the wrong tool for this
+// job: "a small gun may not move at all while a large one gains a whole
+// magazine". Reserves here run from 2 magazines (Death Machine) to 24 (RPG), so
+// any x-factor big enough to help the Death Machine hands the RPG a fistful of
+// rockets. One flat magazine lands identically on both — which is exactly what
+// "all guns need 1 extra mag" asks for.
+//
+// APPLIED AFTER the multiplicative pass — final = round(src x mults) + 1 — so it
+// composes with CLASS_RESERVE_MULT and gun.reserveMult rather than being scaled
+// by them. The skirmisher still gets its x1.3 AND the magazine.
+//
+// FOUR THINGS CHECKED BEFORE ADDING IT:
+//  1. MELEE IS SAFE. Every blade form carries maxAmmo/startAmmo 0, and addSets
+//     keeps 0 the same way scaleSets does. A knife must never be handed a
+//     magazine, and the 0-guard is the only thing standing between it and one.
+//  2. THE PaP FORM INHERITS IT FOR FREE, so do NOT add it again in the isUp
+//     branch. computePapSet reads the TUNED base and maxAmmo/startAmmo are
+//     PAP_COPY_KEYS (factor 1), so every _up form copies the already-bumped
+//     value. A second add there would silently give PaP guns two magazines.
+//  3. papKeepSource IS THE ONE EXCEPTION AND IT IS HANDLED IN baseTune. That
+//     branch bypasses papApply outright, so the Magnum's _up form would have
+//     been the only asset in the map to miss the magazine. The 2026-08-25 note
+//     there deliberately keeps RESERVE_MULT and the class knob out of that
+//     branch because they were silent balance changes to a gun nobody asked to
+//     retune — this one is a roster-wide change the user asked for by name, so
+//     it goes in, and the note now says so.
+//  4. THE AMMO CRATE GAINS WITH IT. The crate refills to maxAmmo, so raising
+//     maxAmmo raises what 5,000 points actually buys. That is the second half of
+//     the complaint ("even when we have an ammo crate") and it is why this knob
+//     answers it and a crate price cut would not have.
+//
+// NOT COVERED — the two secondaries that are not generated here: `pistol_standard`
+// (heavy T1) and `t9_amp63` (slasher T1). Their GDTs are install-side and SHARED
+// WITH MAP 1, so editing them would silently change that map's guns too — the
+// same call the v9.36 and v10.x reserve passes made. Both are T1 SIDEARMS, never
+// a class primary, so no player's main gun misses the magazine.
+const RESERVE_ADD = 1;
+
 // ---- PER-CLASS TUNING (user 2026-08-23, after the full playthrough) ---------
 // "We need a buff on the skrimisher class. Mostly all around ammo pgrade by 30%
 // on reserve for all skirmisher guns ... Damage on all skirmisher can get buffed
@@ -187,7 +229,7 @@ const CLASS_RESERVE_MULT = { skirmisher: 1.3 };
 //
 // The PaP forms need nothing either: papApply derives them as tuned-base x1.25,
 // so +15% on the base is +15% on the PaP by construction.
-const CLASS_DAMAGE_MULT  = { skirmisher: 1.3225, heavy: 0.81 };
+const CLASS_DAMAGE_MULT  = { skirmisher: 1.3225, heavy: 0.81, assault: 1.10 };   // assault 1.10 = the 2026-08-29 "+10% damage buff" (user order); T1-only, tiers normalize from it
 
 // SECONDARIES ARE 25% WEAKER THAN THEY SHIPPED (user 2026-08-24: "the current
 // secondaries need an all around 25% nerf ... make sure they are all pretty
@@ -820,7 +862,20 @@ const LADDER = {
       // total. explosionRadius 250 is also untouched — the user was shown the
       // self-damage risk on a narrow spiral staircase and said to proceed
       // (2026-08-24), so this is a known, accepted sharp edge, not an oversight.
-      tier: 9, stem: 't6_rpg', enabled: true, secondary: true, secTier: 2, reserveMult: 1.2,
+      // DAMAGE x2 (user 2026-08-28: "The RPG needs a 100% damage buff. Base and
+      // pap."). Applied AFTER the SEC_CAP_REL ceiling in computeSecondaryOverrides
+      // — the cap is what was holding this gun at 563 against a port that ships
+      // 7000, and a buff placed before it would have been clamped straight back
+      // to 563 and read as "the knob did nothing".
+      // BOTH HALVES MOVE: direct `damage` 563 -> 1126 base / 704 -> 1408 PaP, AND
+      // the two explosion-damage keys x2, because on a launcher the splash is
+      // what actually kills and the direct hit is the number almost nobody lands
+      // (the reasoning already written at EXPLOSION_KEYS). explosionRadius is NOT
+      // in that key set, so the blast hits twice as hard over the SAME 250 units.
+      // SELF-DAMAGE SCALES WITH IT — the 2026-08-24 note below records that the
+      // user was shown the self-damage risk on a narrow spiral staircase and said
+      // to proceed; that risk is now doubled at the same radius.
+      tier: 9, stem: 't6_rpg', enabled: true, secondary: true, secTier: 2, reserveMult: 1.2, dmgMult: 2.0,
       src: T9('skye_t6_rpg.gdt'), gdf: 'projectileweapon.gdf', encoding: 'utf8',
       forms: [{ srcAsset: 't6_rpg',    name: s => 't6_rpg' + s,    up: false },
               { srcAsset: 't6_rpg_up', name: s => 't6_rpg_up' + s, up: true }],
@@ -898,6 +953,19 @@ const LADDER = {
       // with the p-axis it emits 3 forms x 2 = 6 registrations, exactly the 6
       // the HK21 gave up, so the ledger does not move.
       axes: ['p'],
+      // BUFF (user 2026-08-28: "give the death machine one extra mag and 5% more
+      // damage. Base and pap version."). Both knobs land on the BASE form and
+      // the PaP form inherits each exactly once — damage through papApply
+      // reading the tuned base, magazines through PAP_COPY_KEYS (factor 1) — so
+      // neither is re-applied in baseTune's isUp branch. Re-applying either
+      // there is the double-count trap RESERVE_ADD's note 2 documents.
+      //   damage   350 -> 368 base, 438 -> 460 PaP
+      //   reserve    3 -> 4 magazines on both forms
+      // This gun was already the roster's thinnest on ammo (3 magazines against
+      // the RPG's 25), which is why the magazine is additive and per-gun rather
+      // than a reserveMult.
+      dmgMult: 1.05,
+      reserveAdd: 1,
       tune: { recoil: RECOIL_BUMP, ads: ADS_BUMP },
       csv: { cost: 5000, vo: 'lmg', cls: 'lmg' },
     },
@@ -1037,6 +1105,28 @@ function scaleSets(line, sets) {
   return line;
 }
 
+// scaleSets' additive twin — same line contract, same first-match-wins rule,
+// same 0-guard. The 0-guard is load-bearing here in a way it is not for a
+// multiplier: x1.3 leaves a blade's 0 magazines at 0 all by itself, but +1 would
+// hand every knife in the map a magazine of ammunition it has no weapon to fire.
+// Values are whole magazines already, so the INT_KEYS rounding scaleSets needs
+// has nothing to do — Math.round is kept only so a fractional source value
+// (none today) could never emit a float into an INT-typed field.
+function addSets(line, sets) {
+  const m = line.match(/^(\s*)"([A-Za-z0-9_]+)"\s+"(-?\d+(?:\.\d+)?)"\s*$/);
+  if (!m) return line;
+  const [, indent, key, valStr] = m;
+  for (const [keys, delta] of sets) {
+    if (delta !== 0 && keys.has(key)) {
+      const v = parseFloat(valStr);
+      if (v === 0) return line;   // 0 stays 0 — melee forms carry no reserve
+      const added = INT_KEYS.has(key) ? Math.round(v + delta) : v + delta;
+      return `${indent}"${key}" "${fmt(added)}"`;
+    }
+  }
+  return line;
+}
+
 function extractBlock(text, asset, gdf) {
   const decl = `"${asset}" ( "${gdf}" )`;
   const start = text.indexOf(decl);
@@ -1131,8 +1221,16 @@ function baseTune(gun, line, isUp) {
     // the scaling applies exactly once, which is what it did before and still
     // does. (Note this also means PaP grants no splash increase; that follows
     // the existing PAP_UP_KEYS design and is not changed here.)
-    if (gun.secondary && SECONDARY_DMG_MULT !== 1)
-      l = scaleSets(l, [[EXPLOSION_KEYS, SECONDARY_DMG_MULT]]);
+    // (per-gun dmgMult folded into the SAME factor for the same first-match-wins
+    // reason as the base branch — and it must be here too, because explosion
+    // keys are in no papFactor set, so without this line the _up form keeps the
+    // raw PORT splash and a buffed base would ship a WEAKER Pack-a-Punched
+    // launcher than its own base form. That exact inversion is the 2026-08-24
+    // bug recorded above; this is the same hazard from the other direction.)
+    {
+      const explUp = (gun.secondary ? SECONDARY_DMG_MULT : 1) * (gun.dmgMult || 1);
+      if (explUp !== 1) l = scaleSets(l, [[EXPLOSION_KEYS, explUp]]);
+    }
 
     // RESERVE ON A papKeepSource GUN — the Magnum, and only the Magnum today.
     //
@@ -1148,6 +1246,21 @@ function baseTune(gun, line, isUp) {
     // change to a gun nobody asked to retune beyond the 25%.
     if (gun.papKeepSource && gun.reserveMult && gun.reserveMult !== 1)
       l = scaleSets(l, [[RESERVE_KEYS, gun.reserveMult]]);
+    // ...and the +1 MAGAZINE, for the same reason and with the opposite verdict
+    // to the paragraph above. RESERVE_MULT stays out of this branch because it
+    // was a map-wide economy default that had never reached a papKeepSource _up
+    // form; RESERVE_ADD goes IN because the user asked for one extra magazine on
+    // ALL guns by name (2026-08-26), and without this line the Magnum's PaP form
+    // is the single asset in the map that does not get it. Every other _up form
+    // inherits the magazine through papApply/PAP_COPY_KEYS, which this branch
+    // bypasses — so this is not a second application, it is the only one.
+    // gun.reserveAdd rides along for the same reason and by the same rule (one
+    // summed delta — addSets is first-match-wins). No papKeepSource gun sets it
+    // today; carrying it here is what stops the next one silently missing its
+    // per-gun magazine on the PaP form, which is the exact bug this branch
+    // exists to fix for RESERVE_ADD.
+    if (gun.papKeepSource && (RESERVE_ADD + (gun.reserveAdd || 0)) !== 0)
+      l = addSets(l, [[RESERVE_KEYS, RESERVE_ADD + (gun.reserveAdd || 0)]]);
     if (gun.tune.str) l = strSet(l, gun.tune.str);
     // v10.23: was `if (gun.melee)`, which left meleeChargeRange 120 on all 136
     // non-melee emitted assets — every bullet weapon still LUNGED on a gun bash,
@@ -1194,9 +1307,30 @@ function baseTune(gun, line, isUp) {
     sets.push([DAMAGE_KEYS, cdm]);
   // Splash always takes the secondary nerf, override or not — a normalized
   // `damage` says nothing about explosionInnerDamage.
-  if (gun.secondary && SECONDARY_DMG_MULT !== 1)
-    sets.push([EXPLOSION_KEYS, SECONDARY_DMG_MULT]);
+  // ...AND the per-gun dmgMult rides the SAME factor, never a second push:
+  // scaleSets is first-match-wins, so a separate [EXPLOSION_KEYS, x] entry
+  // would be silently dropped (the identical trap reserveAdd documents).
+  // The guard is no longer secondary-only — a PRIMARY with splash and a
+  // dmgMult would otherwise get its direct hit buffed and its splash left
+  // behind. EXPLOSION_KEYS holds only explosionInner/OuterDamage;
+  // explosionRadius is deliberately NOT in it, so this scales how hard the
+  // blast hits and never how far it reaches.
+  const secExpl = gun.secondary ? SECONDARY_DMG_MULT : 1;
+  const explMult = secExpl * (gun.dmgMult || 1);
+  if (explMult !== 1)
+    sets.push([EXPLOSION_KEYS, explMult]);
   if (sets.length) l = scaleSets(l, sets);
+  // +1 MAGAZINE, AFTER every reserve multiplier (RESERVE_ADD's header). Order is
+  // the contract: round(src x mults) + 1, never (src + 1) x mults, or the class
+  // knob would quietly turn one magazine into 1.3 of one.
+  // gun.reserveAdd is the PER-GUN extra magazine (the Death Machine's +1), and
+  // it is SUMMED INTO THE SAME DELTA rather than pushed as a second entry:
+  // addSets is first-match-wins exactly like scaleSets, so a second
+  // [RESERVE_KEYS, x] would be silently dropped. Additive, not multiplicative,
+  // for the reason in RESERVE_ADD's header — reserves here run 2 to 24
+  // magazines, so a factor that helps the 2 hands the 24 a fistful.
+  const radd = RESERVE_ADD + (gun.reserveAdd || 0);
+  if (radd !== 0) l = addSets(l, [[RESERVE_KEYS, radd]]);
   if (gun.tune.str) l = strSet(l, gun.tune.str);
   l = strSet(l, MELEE_NO_LUNGE);   // v10.23: every gun, not just melee — see the PaP path
   l = nameSet(gun, l, false);
@@ -1363,6 +1497,28 @@ function computeTierOverrides() {
       // clamped back up. prevClip below takes the NERFED value, so the next
       // tier's floor derives from what this gun actually ships with.
       if (gun.clipMult) gun.override.clipSize = Math.round(gun.override.clipSize * gun.clipMult);
+      // PER-GUN DAMAGE BUMP, applied AFTER the DPS normalization for the same
+      // reason clipMult is applied after the clip floor: normalization SETS
+      // override.damage outright, so a tune.set or a scaleSets factor upstream
+      // would simply be overwritten by the line above. This is the only hook on
+      // a T2/T3 primary that survives.
+      //
+      // DELIBERATELY BREAKS THE TIER_DPS RELATIONSHIP for this one gun — that is
+      // what a per-gun bump IS. Everything else on the ladder is unaffected:
+      // each tier normalizes from `t1`, never from the previous tier, so unlike
+      // clipMult (which feeds prevClip) this cannot propagate. If a whole class
+      // needs moving, use CLASS_DAMAGE_MULT on its T1 instead and let
+      // normalization carry it up — that keeps 1 / 1.5625 / 2.4414 intact.
+      //
+      // THE PaP FORM INHERITS IT EXACTLY ONCE, so never re-apply it in the isUp
+      // branch: papApply reads the TUNED base (which carries override.damage)
+      // and multiplies by PAP_UP. Same contract as RESERVE_ADD's note 2.
+      if (gun.dmgMult && gun.dmgMult !== 1) {
+        gun.override.damage = Math.round(gun.override.damage * gun.dmgMult);
+        if (gun.override.minDamage !== undefined)
+          gun.override.minDamage = Math.round(gun.override.minDamage * gun.dmgMult);
+        console.log(`  tier ${gun.tier} ${gun.stem}: per-gun dmgMult x${gun.dmgMult} -> damage ${gun.override.damage}`);
+      }
       console.log(`  tier ${gun.tier} ${gun.stem}: damage ${damage} -> ${dmg} (T1 ${t1.damage}@${t1.fireTime}s x${TIER_DPS[gun.tier]} at ${fireTime}s), clip ${clip} -> ${gun.override.clipSize} (floor ${floor})`);
       prevClip = gun.override.clipSize;
     }
@@ -1459,6 +1615,27 @@ function computeSecondaryOverrides() {
         if (!SEC_CAP_ONLY || dmg > capDmg) dmg = capDmg;
       }
       const capped = capDmg !== undefined && dmg === capDmg && capDmg < ladder;
+
+      // PER-GUN DAMAGE BUMP ON A SECONDARY — APPLIED AFTER THE CEILING, and the
+      // order is the whole point. SEC_CAP_REL exists to stop a sidearm out-DPSing
+      // the primary line, but an explicit per-gun instruction has to be able to
+      // WIN over it or the knob is a silent no-op: clamp first, buff second.
+      // Exactly the same argument as clipMult-after-the-clip-floor above.
+      //
+      // `dmg` itself is scaled, not just gun.override.damage, because the PaP
+      // pin a few lines down derives from this local (Math.round(dmg * PAP_UP))
+      // and minDamage derives from it too. Scaling only the override would leave
+      // the Bulldog/Magnum pins on the pre-buff number.
+      //
+      // SPLASH IS SCALED SEPARATELY, IN baseTune — see the EXPLOSION_KEYS push
+      // there. It has to be, because explosion damage never passes through this
+      // normalization at all (EXPLOSION_KEYS is deliberately not in DAMAGE_KEYS),
+      // and on a launcher the splash IS the damage. A dmgMult that moved only
+      // `damage` would be a rounding error on the RPG.
+      if (gun.dmgMult && gun.dmgMult !== 1) {
+        dmg = Math.round(dmg * gun.dmgMult);
+        console.log(`  sec ${gun.stem}: per-gun dmgMult x${gun.dmgMult} (after cap) -> damage ${dmg}`);
+      }
 
       gun.override.damage = dmg;
       if (minDamage !== undefined && minDamage !== 0 && damage)

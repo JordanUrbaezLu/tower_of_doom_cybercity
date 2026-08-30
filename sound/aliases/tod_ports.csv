@@ -97,3 +97,4 @@ wpn_s1_bulldog_hit,,,skye_ports\s1_bulldog\foley\wpn_s1_bulldog_hit.wav,,,UIN_MO
 wpn_s1_bulldog_mag_in,,,skye_ports\s1_bulldog\foley\wpn_s1_bulldog_mag_in.wav,,,UIN_MOD,,,,,BUS_FX,,,,,,,,,,,,,,,,,,,,,,,,,,2d,,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 wpn_s1_bulldog_mag_out,,,skye_ports\s1_bulldog\foley\wpn_s1_bulldog_mag_out.wav,,,UIN_MOD,,,,,BUS_FX,,,,,,,,,,,,,,,,,,,,,,,,,,2d,,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 wpn_s1_bulldog_start,,,skye_ports\s1_bulldog\foley\wpn_s1_bulldog_start.wav,,,UIN_MOD,,,,,BUS_FX,,,,,,,,,,,,,,,,,,,,,,,,,,2d,,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+tod_elemental_pop_proc,,,sat_ports\perks\evt_elemental_pop_activate.wav,,,UIN_MOD,,,,,BUS_FX,,,,,,85,85,,,,,,,,,,,,,,,,,,,2d,,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

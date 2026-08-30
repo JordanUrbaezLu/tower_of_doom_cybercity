@@ -73,13 +73,18 @@
 // --- HP: anchored to a FIXED round constant, exactly like the Protector
 // (spawn_protector passes TOD_PROTECTOR_FIRST, not the unlock round) —
 // the elite is scaled to the round you are ON, not to how late you unlocked it.
-// Solo: r20 20k / r30 43k / r40 93k / r50 201k. Panzer r40 is 511k, an RP 71k:
-// the Reaver sits between them. Co-op rides coop_hp_mult() inside boss_hp. ----
+// 20000 -> 15000 (user 2026-08-29: "Make Reaver 15k @r20 instead of 20k", the
+// balance pass that landed with the armored-sprinter ladder). New solo curve:
+// r20 15k / r30 32.4k / r40 69.9k / r50 150.9k — still above the armored
+// sprinter's effective-vs-bullets ceiling at every round (x3 regular HP after
+// its same-day 1/3 retune), so the elite stays the bigger threat.
+// Co-op rides coop_hp_mult() inside boss_hp. ---------------------------------
 #define TOD_REAVER_HP_ANCHOR     20
-#define TOD_REAVER_HP_BASE       20000
+#define TOD_REAVER_HP_BASE       15000
 #define TOD_REAVER_HP_EXP        1.08
 
-#define TOD_REAVER_PTS           400   // team-wide on death (luck goes to the last hit only)
+// (TOD_REAVER_PTS 400 team-wide: RETIRED v14.5 — elite payouts are the shared
+// killer-only TOD_ELITE_PTS in _tod_bosses::grant_elite_reward; tune it THERE)
 // (No spawn banner — the whole banner lane was removed 2026-08-22, user:
 // "unnecessary". The Reaver's tell is its meteor entrance and the floor
 // gauge's boss pip. See the note above _tod_bosses::director.)
@@ -118,13 +123,15 @@ function reaver_due( round )
 	if ( ( ( round - start ) % interval ) != 0 )
 		return 0;
 
-	// 1 + players/2 -> solo 1, duo 2, quad 3. Solo must stay fair (the Protector
-	// wave was already nerfed once for it).
+	// v13.22 (user 2026-08-29 co-op scale-up, incremental): one per player —
+	// 1/2/3/4 (was 1 + players/2 = 1/2/2/3). SOLO UNCHANGED — solo must stay
+	// fair (the Protector wave was already nerfed once for it). The
+	// concurrency roof is untouched; a quad wave trickles in as slots free.
 	players = GetPlayers();
 	np = players.size;
 	if ( np < 1 )
 		np = 1;
-	n = 1 + int( np / 2 );
+	n = np;
 	return n;
 }
 
@@ -296,5 +303,5 @@ function death_watch()
 	// COOP CRASH GUARD (map 1): the corpse can be reaped the same frame the
 	// death notify fires — any self deref then throws and ends the match.
 	tod_luck::boss_kill( attacker, "reaver" );   // LAST HIT takes the luck
-	tod_bosses::grant_boss_reward( "REAVER", TOD_REAVER_PTS, true );
+	tod_bosses::grant_elite_reward( "REAVER", attacker );   // v14.5: killer-only 500 (×2x ×BOUNTY)
 }

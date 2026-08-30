@@ -75,7 +75,7 @@
 // unbuyable and strips itself. Same invariant _tod_perk_electric_cherry keeps
 // with EC_RADIANT_MACHINE.
 #define TOD_PHD_RADIANT_MACHINE "tod_vending_phd"
-#define TOD_PHD_COST            4000
+#define TOD_PHD_COST            2000   // 4000 -> 2000 (user 2026-08-27)
 #define TOD_PHD_EXPLODE_RADIUS  220
 #define TOD_PHD_EXPLODE_DAMAGE  1000
 

@@ -90,7 +90,7 @@ function parseMap(text) {
 // and the ladder — the only real design tool on this map — becomes invisible in
 // the very renders being used to judge it.
 const COLORS = [
-  [/clip$/i, null],                       // invisible: never drawn
+  [/clip(_player)?$/i, null],             // invisible: never drawn (v13: breather window guards are clip_player)
   [/^sky$/i, null],
   [/(volume|sun_volume|umbra|fpstool)/i, null],
   [/_off$/i, '#0c0e13'],                  // 0.0 — the pack's only true black

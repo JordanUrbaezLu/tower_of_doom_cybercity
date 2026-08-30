@@ -18,9 +18,12 @@
 
 //Perks
 #using scripts\zm\_zm_pack_a_punch;
+#using scripts\zm\zm_cwpap;   // v13.6 — ALXS CW/BO6 PaP client half (crown machine)
 #using scripts\zm\_zm_perk_additionalprimaryweapon;
 #using scripts\zm\_zm_perk_doubletap2;
-#using scripts\zm\_zm_perk_deadshot;
+// [tod] v14.16 — Wisp Tea client half, in Deadshot's old slot — MUST match
+// the entry .gsc #using (clientfield lockstep).
+#using scripts\zm\_zm_perk_wisp_tea;
 // [tod] Client half of the stock cherry pipeline (_tod_perk_electric_cherry
 // rides its tesla FX) — MUST match the entry .gsc #using or the clientfield
 // registration mismatches at load (map 1 pattern).
@@ -59,6 +62,7 @@
 
 // [tod] client modules (clientfield lockstep with the .gsc twins)
 #using scripts\zm\zm_tower_of_doom\_tod_perk_lights;
+#using scripts\zm\zm_tower_of_doom\_tod_perk_electric_cherry;   // v13.19 — DEATH PERCEPTION outline callbacks (lineage name, see its header)
 #using scripts\zm\zm_tower_of_doom\_tod_upgrade_ui;
 // Boss packs (REGISTER_SYSTEM self-init — the #using alone wires them; MUST
 // be present whenever the .gsc halves are in the fastfile: clientfield

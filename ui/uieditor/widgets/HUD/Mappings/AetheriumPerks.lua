@@ -33,19 +33,24 @@ CoD.AetheriumPerks = {
 		-- clientFieldName follows the specialty, not the name: it must be the
 		-- cherry pipeline's field, since that is the one the perk actually sets.
 		name = "PhD FLOPPER",
-		cost = 4000,
+		cost = 2000,
 		description = "No fall or self-explosive damage; explode when downed",
 		image = "i_tod_perk_phd",
 		specialty = "specialty_electriccherry",
 		clientFieldName = "electric_cherry"
 	},
 	{
-		name = "DEADSHOT DAIQUIRI",
-		cost = 3500,
-		description = "Aim down sights snaps to zombie heads",
-		image = "i_tod_perk_deadshot",
-		specialty = "specialty_deadshot",
-		clientFieldName = "dead_shot"
+		-- WISP TEA — replaced DEADSHOT, v14.16 (2026-08-30). BO7 perk from the
+		-- same SATPerks pack as the machines + this crest set; rides the free
+		-- engine specialty_nomotionsensor (the DP-on-combat_efficiency
+		-- pattern). clientFieldName matches WISP_TEA_CLIENTFIELD
+		-- ("hudItems.perks.wisp_tea") in scripts/zm/_zm_perk_wisp_tea.gsh.
+		name = "WISP TEA",
+		cost = 300,   -- user 2026-08-30; LOCKSTEP with WISP_TEA_PERK_COST in _zm_perk_wisp_tea.gsh
+		description = "Chance on hitting zombies to summon a lethal wisp",
+		image = "i_tod_perk_wisptea",
+		specialty = "specialty_nomotionsensor",
+		clientFieldName = "wisp_tea"
 	},
 	{
 		name = "DOUBLE TAP",
@@ -99,9 +104,15 @@ CoD.AetheriumPerks = {
 		clientFieldName = "widows_wine"
 	},
 	{
-		name = "ELECTRIC CHERRY",
-		cost = 3000,
-		description = "Emit an electric shock when reloading",
+		-- v13.19: ELEMENTAL POP became DEATH PERCEPTION (user 2026-08-29) —
+		-- the see-the-horde-through-walls awareness perk (hellbound's proven
+		-- keyline module, ported). Same specialty, same clientfield; cost
+		-- 2000 -> 1500; machine/effect/name/icon all swapped
+		-- (_tod_perk_electric_cherry.gsc/.csc carry the implementation).
+		-- (v13.4 history: Electric Cherry had become Elemental Pop.)
+		name = "DEATH PERCEPTION",
+		cost = 1500,
+		description = "Sense the horde through walls",
 		-- FIXED 2026-08-25 (user: "electric cherry icon doesnt show up in HUD when
 		-- you get it"). This row was inert for two reasons and both are gone:
 		--
@@ -125,7 +136,7 @@ CoD.AetheriumPerks = {
 		-- matched, free, and written by nothing else. Zero new bits.
 		-- IT MUST STAY IN LOCKSTEP WITH EC_HUD_CLIENTFIELD in
 		-- _tod_perk_electric_cherry.gsc. Change one, change the other.
-		image = "i_tod_perk_cherry",
+		image = "i_tod_perk_deathperception",   -- v13.19: the pack's official Death Perception icon (same set as the rest)
 		specialty = "specialty_combat_efficiency",
 		clientFieldName = "additional_primary_weapon"
 	}

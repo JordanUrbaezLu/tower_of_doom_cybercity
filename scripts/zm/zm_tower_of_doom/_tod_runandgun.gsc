@@ -4,10 +4,20 @@
 //
 // HOW IT PLAYS
 //   While you are ON THE MOVE (running at speed or sprinting — not standing,
-//   not creeping in ADS) every shot from your CLASS GUN has a chance to cost
-//   no ammo: the round is put straight back in the mag the instant it fires.
+//   not creeping in ADS) every shot has a chance to cost no ammo: the round
+//   is put straight back in the mag the instant it fires.
 //   Lv1 20% / Lv2 35% / Lv3 50%. Standing still pays full price. Pairs with
 //   SPRINT FIRE (domain 21) — sprint-firing is the purest form of "run".
+//
+// THE DAMAGE HALF LIVES ELSEWHERE (v14.11, user 2026-08-30: "Run and gun
+// should increase damage while running too. At the same rates"): moving shots
+// also hit +20/35/50% harder, applied in _tod_upgrades::unique_damage_mult.
+// It CANNOT live here (that module never imports us — the KB cycle rule), so
+// the numbers and the movement test are LOCKSTEP DUPLICATES: this file's
+// TOD_RNG_PCT_BASE/PER_LV/MIN_SPEED and is_running() must always agree with
+// _tod_upgrades' TOD_UPG_RNG_DMG_BASE/PER_LV/MIN_SPEED and its inline moving
+// check, or the card's two halves trigger on different definitions of
+// "moving". Change one file, change the other.
 //
 // ENGINE LEVERS
 //   * `self waittill( "weapon_fired", weapon )` — the engine notifies the

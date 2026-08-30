@@ -2,9 +2,1785 @@
 
 Newest first.
 
+## 2026-08-30 (v14.16) — WISP TEA replaces Deadshot (BO7 perk, vendored module)
+
+User: "I also want to remove deadshot and add a new perk. Either wisp tea or
+vultures aid... Its in that same pack." Both machines ARE in the pack —
+identified by CONTENT, not codename (`sat_zm_machine_w_mod` ships a
+`vfx_..._zm_ai_wisp_tea_mask_airflow` model; `t10_zm_machine_a_mod` carries
+`mtl_wpn_t10_zmb_perk_vulture_aid_*` materials) — and the SATPerksCode
+download turned out to ship COMPLETE tested modules for both, so "how much
+code" collapsed to a vendor-and-graft. Wisp Tea won on graft size: 309-line
+module vs 687, no outline-shader install (Vulture's keyline needs the pack's
+techsetdef/hlsl lane we have never exercised), no drops economy landing on
+the tuned crate/SCAVENGER systems, one short-lived wisp vs 20 concurrent
+pouch entities (spire gentity budget). Both stock-lane facts verified in
+vanilla source before choosing: `machine_assets[].power_on_callback` IS
+invoked by vanilla _zm_perks (:149-151), and ignoreme filtering happens
+UPSTREAM of tod_closest_player, so neither perk needed the pack's rewritten
+_zm_perks/_zm stock files.
+
+THE PERK: hitting zombies rolls 1-in-20 to summon a wisp companion (a
+script_model, NOT an AI actor — no behaviour-tree ceiling cost) that chases
+and third-health-chunks zombies near the owner for 30s; 2-min cooldown; 300
+points (user retune same day; pack default 4000) on the free engine specialty_nomotionsensor (the
+DP-on-combat_efficiency pattern). Machine = SAT's custom BUILD of the BO7
+machine (sat_ prefix = recreation, t10_ = BO6 rips; its texture sheet carries
+the real stone-shrine look + teacup-shield emblem — shown to the user, who
+approved). One mesh, off = skin-override twin, so it CANNOT repeat
+Deadshot's off-mesh rotation exception; it takes the uniform -90 pad yaw
+(facing = first-armed-run verify item, the v13.3c precedent).
+
+VENDOR DELTAS (all documented in the module header): literal EC-style hint
+(+1 static triggerstring; the pack's localized ref needed a .str install);
+machine anims STRIPPED (every machine here poses static — kills the
+.atr/xanim lane); THREE pack bugs fixed — wispFXModel never Deleted (one
+orphaned tag_origin per summon, forever), disconnect/bled_out exits stranded
+the wisp entity (now a wisp-side owner-watch + re-entry-guarded removeWisp,
+since a disconnected owner's threads die with them), and a
+"stopWispLookAt"/"stopWispLookat" notify case mismatch stacked an
+angles-writer thread per follow tick. sprintf() (not a BO3 builtin) →
+concat.
+
+THE SWAP, everywhere Deadshot lived: entry #using both VMs (same slot —
+clientuimodel order preserved; COUNTED, not assumed: stock dead_shot 2-bit
+out, wisp_tea 2-bit in, net zero, plus a freed 1-bit toplayer and a spent
+1-bit scriptmover in OTHER pools); its ZOMBIE_PERK_DEADSHOT precached pair
+REMOVED (a dead perk's pair is a permanent BG-cache slot); costs-table row
+deleted (WISP_TEA_PERK_COST in the gsh is the single truth — the v13.20
+stale-price trap); PERK_PARK row swapped in the generator (+ the deadshot
+yaw-359.999 special case retired, and _tod_perk_scatter/_tod_perk_lights
+handbacks deleted); bo7_off_models row deleted (the module writes its own
+machine_assets pair — the pass skips unknown keys by design); perk-glow
+colour 7 (blacklight) passes from Deadshot to Wisp Tea; Aetherium Lua row +
+crest icon i_tod_perk_wisptea (pack art, 256x256 like the set; deadshot's
+PNG/GDT block stay, un-zoned = unpacked). Scatter + spire full-grant needed
+NOTHING — both read live vending/machine truth.
+
+NEW ASSET LANES: machine dir installed root-side (converter_gdt_dirs_0.txt's
+`_custom` line feeds its GDT to gdtdb); wisp vfx model + 3 fx force-packed;
+`weapon,sat_perk_can_wisp_tea_zm` (the BO7 tea can — its cans GDT + payload
+have been installed since v13.3); sounds = sound/aliases/tod_wisp_tea.csv
+(jingle/stinger/powerloop, 48k/s16 verified) + szc ALIAS entry + 3 wavs
+under sound_assets/_wetegg/sat/perks/.
+
+RIDE-ALONGS: PERK_PARK's combat_efficiency struct model caught up with
+v13.19 (still said elemental_pop — un-zoned since the DP swap, so the .map's
+pre-registration window pointed at an unpacked xmodel); CREDITS.md gained
+the SATPerksCode instructions.txt credit list (it IS the readme the assets
+pack "lacked" — closes that standing gap). Regen verified against v14.14's
+zombie_cost constant (53 rows, ONE distinct value). FULL build (GDT + models
++ regen).
+
+IN-GAME VERIFY LIST: machine facing at pads (uniform yaw, no exception —
+v13.3c precedent says look first), wisp summon on sustained fire + its FX
+(the CSC plays them on a tag the fx-model may not have — pack-faithful,
+works for pack users), HUD crest icon on buy, jingle/powerloop audible,
+4000 hint cost renders, bled-out owner's wisp despawns clean.
+
+## 2026-08-30 (v14.15) — RECOVERY's hidden cost: the red vignette outlives the heal
+
+Found by CROSS-CHECKING MAP 1 at the user's direction ('mega quick revive
+shortens the regen delay — thats what im telling you'). Map 1's Savior Mega
+Quick Revive shortens the SAME stock delay RECOVERY does, hit this in play on
+2026-07-25 ('the screen keeps flashing red for seconds at 100% HP'), and
+already carries the fix. I had wrongly told the user map 1 had no equivalent —
+that was a bad grep (searched maxhealth in the perks file, not the regen
+mechanism), and the user was right to push back.
+
+THE MECHANISM (read in the stock tree, not assumed): the red vignette
+(_zm_playerhealth.gsc::redFlashingOverlay) is TIME-based and NEVER re-reads
+self.health — under healthOverlayCutoff it pulses until hurtTime +
+longRegenTime plus a fade tail. Stock is safe only because its own veryHurt
+regen ALSO waits exactly longRegenTime, so overlay-end and heal-complete land
+together BY CONSTRUCTION. We break that alignment twice: RECOVERY Lv3 starts
+healing at 3.5s and tops off ~0.4s later, and VITALITY's purchase heal can top
+a critical player off instantly — either way, seconds of red screen at full HP.
+
+FIX: health_overlay_sync(), an edge-triggered notify on not-full -> full using
+STOCK'S OWN kill switch 'clear_red_flashing_overlay' (watchHideRedFlashingOverlay
+waits on it :396, redFlashingOverlay endons it :414, _zm_laststand fires it on
+revive :1370 — a blessed lane, not a hack). Deliberately NOT gated on the
+player_has_red_flashing_overlay flag: stock clears that flag at full health
+WITHOUT stopping the visual, which is the broken state itself. Runs for every
+player, since VITALITY needs it without RECOVERY.
+
+Also from the same read: recovery_damage_watch now filters FRIENDLY FIRE
+before stamping, matching stock's playerHurtcheck (:101) and map 1's watcher.
+
+THREAD LIFETIME — a deliberate divergence from map 1, documented in code: they
+re-thread per life and need a custom kill notify because a BO3 ZM player never
+notifies 'death' during play (their 2026-06-27 leak: one setnormalhealth loop
+per respawn). Ours latch on tod_body_systems_on and start ONCE per player
+(latch set, never cleared — grep-verified), so they survive respawn and cannot
+leak. Do not 'fix' that by re-threading on spawn. -GscOnly.
+
+## 2026-08-30 (v14.14) — the 250-triggerstring crash, actually fixed
+
+Shipped players reported `BG_Cache_GetIndexInternal - Exceeded '250' items for
+type 'triggerstring'` — one right after buying a door in the Endless Spire,
+another unable to finish the map with 4 players. v14.3/v14.4 helped but did not
+close it: two accumulators were still live, and one of those earlier fixes turned
+out to be doing nothing at all.
+
+The engine caps that cache at **250 unique strings for the whole match**, never
+freed, and the overflow blames whoever registers NEXT — so the door in the report
+was never the cause. Audited ledger before this change (4 players, finale won,
+20 spire floors): **180 of 250**. A stable lobby never crashed; **two party-size
+changes reached 252 and crossed mid-climb, around floor 45.**
+
+* **`tod_doors_flatten_map_cost()` WAS A SILENT NO-OP — DELETED.** It ran from
+  `main()` on the premise that stock's `init_blockers` fires inside
+  `zm_usermap::main()`. False: `_zm_blockers` registers `&__init__` through
+  `REGISTER_SYSTEM_EX`, `shared.gsh` names that parameter
+  `__func_init_preload`, and `system::run_pre_systems()` runs from
+  `CodeCallback_PreInitialization` — stock's own comment, *"Called by code
+  before level main but after autoexecs."* All 41 slots were burned before
+  `main()` executed a line. It hid for a day because `GetEntArray` returns the
+  ents **fine** that early, so the loop ran and the dev print said "flattened
+  zombie_cost on 53 doors". **The instrument proved the loop executed, not that
+  a slot was saved.**
+* **THE FIX MOVED INTO THE GENERATOR.** `tools/gen_tower_map.js` emits a
+  constant `zombie_cost` of `1000`; **41 distinct → 1**. Safe because the entity
+  value is dead data — `_tod_doors.gsc` overrides it from the generated
+  `_tod_door_data.gsc`, all 53 rows define `info.cost`, and a door with no data
+  row returns before it gets a trigger. No price a player pays changed.
+* **`door_price_watch()` DELETED — the only unbounded term.** It re-stamped a
+  door's hint when `door_cost_mult()` moved, gated on a player within 512u. It
+  bounded re-stamping but not to zero: `shown` only advanced when the re-stamp
+  actually FIRED, so after one party-size change every door the party had not
+  yet reached still held its load-time price and minted a SECOND string on
+  approach. One change ≈ 46 slots; ceiling for this lane alone 53 × 4.
+* **THE DOOR PROMPT KEEPS ITS DESTINATION *AND* ITS PRICE.** Removing the price
+  would have saved exactly zero, and an adversarial review caught this after the
+  change was already planned: `init()` threads all 53 `door_buy_setup` calls in
+  one waitless loop and each runs straight through to `spawn_buy_trigger`, so
+  every hint mints in a SINGLE FRAME off ONE `GetPlayers()` snapshot — and the
+  53 destinations are already distinct, so the set is a fixed 53 either way.
+  Stripping the price would have made every door a blind purchase for no
+  benefit. **A fixed 53 is survivable; a term that grows is not.**
+* **Accepted trade**: a hint can go stale if the party size changes mid-match —
+  the sign shows the load-time price while the charge re-reads the live one. A
+  shrinking party is charged less than shown, a growing party more. Close it
+  with `IPrintLnBold` or a clientfield → LUI lookup if it ever matters, never
+  with another `SetHintString`.
+* `_tod_finale::uplink_hint_loop` **keeps** its watcher: one trigger with at
+  most four distinct strings is affordable; 53 doors were not. The pattern is
+  fine by instance count, not in principle. The spire and finale extraction
+  prompts still show their prices (≤7 slots, against 110 of new headroom).
+
+**Result: 180 → 140 slots, structurally incapable of growing.** Proven
+statically rather than argued — regenerating the `.map` changed 106 lines, every
+one a `zombie_cost`, with `_tod_door_data.gsc` byte-identical.
+
+## 2026-08-30 (v14.13) — SCAVENGER persists for the ASSAULT ALONE; the reset badge goes server-computed
+
+User: 'Scavenger should only stay for assault' — correcting v14.12's
+spillover (scope was per-domain, so skirmisher/heavy rode along). Two pieces:
+
+* **THE scope_class LANE**: set_scope() takes an optional third arg limiting
+  a "class" scope to one class; domain_survives_tier(player,d) is the single
+  authority and tier_up's reset loop now asks it. SCAVENGER =
+  set_scope("reserve","class","assault") — a skirmisher or heavy taking a
+  tier card loses it again, exactly as before v14.12. HEADSHOT needs no
+  qualifier (assault-only by class_keys).
+* **SERVER-COMPUTED PAUSE BADGE**: persistence is now a property of the
+  PLAYER (their class, which can even change at stations), so the static
+  client TIER_SAFE table can no longer answer 'will a promotion take this
+  row?'. sync_max() packs a survives bit into every tod_upg_sync row (+100
+  on the max arg — packed INSIDE the proven 3-arg event because no 4-arg
+  LuiNotifyEvent exists anywhere in the tree; zero new fields, zero
+  clientuimodel bits, so the 61-bit ceiling doctrine is untouched); the
+  receiver strips it into row.safe; the badge reads row.safe with TIER_SAFE
+  demoted to nil-fallback (SCAVENGER deliberately absent there). Badge and
+  reset share one function and can never disagree. All four send sites
+  converted (refresh, tier row +flag, tier_up resets, the spire grant).
+  DETAIL[8] act: 'primary kills; assault keeps on promotion'. -GscOnly.
+
+## 2026-08-30 (v14.12) — HEADSHOT + SCAVENGER survive tier promotions
+
+User: 'Lets make headshot upgrade and scavenger upgrade for assault stay even
+between class tier upgrades.' Both re-scoped to "class" — the assault's two
+staple grinds no longer wipe on a promotion (its whole kit is conditional aim
+value, so a tier card was deleting most of what an assault had built).
+
+SCOPE IS PER-DOMAIN: SCAVENGER's persistence spills to the skirmisher and
+heavy, accepted deliberately (the SPRINT/slasher precedent, 2026-08-27).
+HEADSHOT is assault-only, so that half lands exactly where aimed. The
+persistent set is now TEN rows: DR, LUCK, SPRINT, SPRINT FIRE, SPRINT ARMOR,
+BACK ARMOR, VITALITY, HEADSHOT, SCAVENGER + the tier row itself.
+
+Pause/copy sweep with it (user: 'pause menu copy and alert icon'): TIER_SAFE
++= ids 6, 8 (the reset badge no longer marks them); DETAIL[6]/[8] act lines
+say 'survives promotion'; and the TIER card's no-art fallback desc no longer
+ENUMERATES the kept list ('DMG REDUCTION + LUCK kept' was two passes stale) —
+it now says 'class-wide upgrades kept' and defers to the pause badges, which
+read TIER_SAFE and cannot drift. The BAKED tier-card art was opened and
+checked: it says only 'GUN UPGRADES RESET', still true — no re-bake. -GscOnly.
+
+## 2026-08-30 (v14.11b) — v14.11 art installed: VITALITY, RECOVERY, RUN AND GUN re-bake
+
+User drop files (69).zip — all 14 files from the docs/46 prompts, proofread
+before install (sizes exact: 9 cards 768x1152, 2 plates 300x44; text verbatim;
+RUN AND GUN illustration pixel-faithful with the new two-row line). Wiring:
+8 image.gdf blocks cloned from the march precedent in tod_ui_images.gdt,
+8 zone lines, CARD_SLUG[38]/[39] set, PAUSE_PLATE_MAX 37 -> 39 — the two
+v14.11 domains leave the text fallback and render as full card art + pause
+plates. FULL build (GDT change).
+
+One style-contract correction, learned from the drop: the baked set's SUPER
+trim is PURPLE with a gold coin — docs/46 said blue (inferred from the LUI
+accent instead of opening a super PNG; the doc now records the correction).
+The delivered supers match the installed set exactly.
+
+## 2026-08-30 (v14.11) — the ten-point class rebalance: heavy becomes the tank, slasher and assault trimmed
+
+User's ten orders, verbatim numbers, all shipped in one pass:
+
+1. **RUN AND GUN gains a DAMAGE half** — moving shots hit +20/35/50% harder,
+   the exact rates of the ammo half. Applied in `unique_damage_mult` (the
+   module itself cannot be imported from there — cycle rule), so the numbers
+   and the `is_running()` movement test are LOCKSTEP DUPLICATES across
+   `_tod_upgrades.gsc` / `_tod_runandgun.gsc`, commented on both sides.
+   Sits before the fire-streak gate (speed, not streak — MOMENTUM's old rule).
+2. **MOMENTUM REMOVED** (echo/grinder/lunge pattern: add_domain + set_guns +
+   hook gone; id 34 stays mapped; defines stay as DEAD tuning record).
+   **SECOND WIND moves MP7 → MP5** — each skirmisher rung carries ONE unique
+   again (MP5 SECOND WIND, MP7 ADRENALINE). Card art bakes no gun name
+   (verified by opening the PNG), so no re-bake for the move.
+3. **NEW: VITALITY (id 38)** — heavy, S tier, 5 levels, +10 max HP/Lv
+   (+50 at cap on the 150 base), scope **class** ("player keeps it for whole
+   game" — the first non-defensive persistent domain; TIER_SAFE[38] set).
+   Applied ADDITIVELY at grant (jugg-compatible — stock jugg is additive with
+   a preMaxHealth snapshot) + healed in, with the body-loop want-floor
+   (150 + 10×Lv) re-landing it after stock's spawn/jugg-loss clobbers.
+4. **NEW: RECOVERY (id 39)** — heavy, A tier, 3 levels, health regen starts
+   10%/Lv sooner (30% at cap). Stock regen is script-side and its 2400ms
+   delay is LEVEL-GLOBAL (`_zm_playerhealth.gsc`), so `recovery_loop()`
+   EMULATES the stock outcome at the reduced delay: snap-to-full above the
+   20% cutoff, the slow climb below it (5000ms longRegenTime band, same %
+   cut), stock numbers read LIVE with stock-init fallbacks. Damage stamps ride
+   the engine's own `"damage"` notify + a health-drop poll as belt.
+5. **BACK ARMOR: assault REMOVED** — heavy-only now. Assault's mitigation is
+   DR alone.
+6. **REGEN REMOVED** (heavy) — same removal pattern; id 12 stays mapped.
+   VITALITY + RECOVERY are the sustain story now.
+7. **MOBILITY max 10 → 5** — heavy speed ceiling 1.125 → 0.9375, now the
+   slowest ceiling in the map (below assault's FORCED-MARCH 1.125). Intended:
+   the heavy tanks, it does not run. Linear card text — no re-bake.
+8. **SPRINT ARMOR: slasher REMOVED** — skirmisher-only now.
+9. **DMG REDUCTION: slasher caps at 5** (everyone else 10) — the
+   bonus_class/bonus_max pair re-purposed as a per-class OVERRIDE (downward
+   works; domain_max never required upward; every consumer audited to read
+   through domain_max(player,d)). Slasher max mitigation ×0.375 → ×0.75.
+10. **CLEAVE max 6 → 3** ("too OP") — one banked extra at Lv3, the +2 block
+    unreachable. Card art is level-agnostic ("33% CHANCE PER LEVEL") — no
+    re-bake; desc now says "(max +1)".
+
+**Net registry: still 33 live domains** (−2 +2), ids run to 39, retired
+11/12/22/30/34. New ids fit the 6-bit todUpgAD/BD fields (≤63; march at 37
+proved the width). VITALITY/RECOVERY ship on the no-art TEXT fallbacks
+(PaintCard's nil-slug branch + pause text rows above PAUSE_PLATE_MAX 37) —
+CARD_SLUG/PAUSE_PLATE_MAX untouched until the art lands (RegisterImage of a
+missing image is undefined behavior). Art needed: VITALITY ×3 + r38 plate,
+RECOVERY ×3 + r39 plate, RUN AND GUN re-bake ×3 (its "FREE SHOTS ON THE
+MOVE" line is now half the story) — prompts in docs/46. Spire ascension
+grant, luck-guarantee redeal, station re-present and tier-up resets are all
+registry-driven and were audited, not assumed. -GscOnly build.
+
+## 2026-08-30 (v14.9b) — overcharge: real zap art installed, SFX retuned to a spaced deep zap
+
+User (after testing v14.9): "I want more zzz to it. I tested the elevn audio
+and doesnt really sounds pleasing. Like a semi deep zzz and plays every few
+seconds." Plus the art drop landed ("Images are downloaded tho").
+(Letter-suffix stamp on the v14.9 feature — v14.10 below shipped in between,
+same drift precedent as v14.4/v14.8b.)
+
+* **REAL FRAMES INSTALLED** (files (68).zip): the four i_tod_luck_max_01..04
+  in the electric-blue crackle style, arcs at four distinct layouts per the
+  build-out prompt. Alignment machine-verified before install: 90–92% of
+  sampled pixels byte-identical to i_tod_luck_10 per frame — a true composite
+  on the original bar, no base drift, no HUD jitter.
+* **ZAP SFX SPACED + DEEPENED**: TOD_LUCK_OVER_ZAP_TICKS 7 → 20 (fires every
+  3.0s, was a 1.05s continuous bed). The placeholder wav is re-synthesized as
+  a single ~1.3s semi-deep buzz (110 Hz saw + 55 Hz tremolo + band-limited
+  crackle) so in-game feel matches the intent until the real ElevenLabs take
+  lands. New hard rule: the wav must stay shorter than the 3.0s interval.
+  The ElevenLabs prompt in docs/45 is REWRITTEN for this direction (single
+  discrete "bzzzzt", low-mid register, buzz-dominant) — the v14.9 crackle-bed
+  prompt is retired as user-rejected.
+
+## 2026-08-30 (v14.10) — STRAY RELOCATION: the teleporter stall, and a module that had never executed
+
+User: *"when you go all the way down the tower with teleporter the zombies try to run
+down and we have no system to kill them off silently and spawn them back down... I dont
+want to kill them off but have them spawn near the player if they are too far. It just
+stalls the game so much."*
+
+**THE MODULE ALREADY EXISTED AND WAS COMPLETELY INERT.**
+`scripts/zm/zm_tower_of_doom/_tod_stray.gsc` — 18,324 bytes, written by a peer session
+earlier the same night, untracked, with **no `scriptparsetree` line in the zone, no
+`#using`, and `init()` never called**. The linker had never seen it; the VM had never
+executed one instruction of it. It shipped as cargo inside the 2:30 and 2:33 artifacts
+(the sync mirrors `scripts/` wholesale) while doing nothing at all — a live instance of
+the **"deployed" ≠ "packed" ≠ "wired"** trap. Wired here rather than writing a second
+system.
+
+**FIVE REPAIRS FIRST — each a defect confirmed by reading the file, each of which would
+have shipped:**
+* **`pick_destination` was a pure argmin with no memory** — every zombie in one sweep got
+  the SAME lowest-cost spot, up to ten `ForceTeleport`s onto one tile across ten frames.
+  A zombie pile, and the same materialise-in-your-face ugliness v14.7 had just removed.
+  Now collects `unseen`/`seen` and `array::random`s, the way stock's own spawner does.
+* **`self IsTraversing()` removed.** Exactly ONE stock call site exists in the whole tree
+  (`challenges_shared.gsc:1675`) and `self.is_traversing` is never SET by stock. A throw
+  there kills `eligible()`, kills `stray_sweep` with it, and the feature ships doing
+  nothing **with no tell** — unacceptable on a lane that has never executed.
+* **Restored stock's third AND term** (`script_string !== "find_flesh"`). On this map every
+  riser is a find_flesh riser, so without it a freshly-risen zombie waits on a 1 Hz
+  `IsTouching` poll instead of clearing at once.
+* **`pump_watch` dropped a second teleport ride** inside its 1.5 s hold — with five porters
+  at spawn, two rides within 1.5 s is ordinary co-op, not an edge case. Re-arms on the
+  same frame via a threaded `pump_arm()`.
+* **Desperation branch DISARMED.** It returned an FOV-*failing* spot after 30 s, and with
+  only ~8 risers below z=200 "everything is inside someone's cone" is routine in the base
+  arena — that branch would have manufactured exactly the pop the boss work just closed.
+  Failure mode is now "nothing happens", which is today's behaviour anyway.
+Plus a **guarded** gait re-assert after the teleport: `apply_speed_for_round` has no
+`under_anim_slow` check of its own (that guard lives in the sweep), so calling it bare
+would wipe a live Widow's Wine cocoon or Time Warp slow.
+
+**THE CONTRACT:** it never kills and never writes `level.zombie_total`, so the
+endless-round twist is untouched *by construction*. Bosses and elites are excluded (they
+have `tod_boss_stuck_watch`). `_tod_stray` ↔ `_tod_teleport` talk by **notify only**, no
+import either way, so the module can be deleted without touching the teleporter.
+
+⚠️ **BOOT-VERIFIED ONLY — BOTH LANES UNPROVEN.** The build proves it parses and inits. The
+SWEEP lane needs a long climb or a co-op vertical split; the PUMP lane needs an actual
+teleporter ride. Revert is the one `.zone` line. Wiring proof (deployed `.zone` line,
+`init()` call, notify all present) plus a **~137 KB `.ff` growth** — a merely-synced file
+does not move the fastfile size; a compiled scriptparsetree does.
+
+## 2026-08-30 (v14.7) — HELLHOUND FX, and elites stop teleporting into your face
+
+Two user reports, one build.
+
+* **HELLHOUNDS HAD NO EYES AND NO FIRE TRAIL** (user: *"lets fix the hell hounds visual
+  issue"*). Stock drives both off ONE 1-bit **actor** clientfield, `dog_fx`, already
+  registered on both VMs via `zm_usermap` — so the fix is a single
+  `self clientfield::set( "dog_fx", 1 )` folded into the existing `hound_tune()`, plus a
+  `#using clientfield_shared`. **Zero new clientfield bits, no `.csc` change, no `.zone`
+  line.** Why they rendered plain: the only place stock sets it is inside `dog_run_think`,
+  threaded from `dog_init`, registered ONLY onto `level.dog_spawners` — and
+  `dog_spawner_init` returns early because this map has zero `zombie_dog_spawner` ents.
+  **The same root cause as the frozen-hound bug** (v14.3). **Did NOT call `dog_init`**: it
+  Ghosts the actor, gives it a magic bullet shield and sets `ignoreme`, and the only code
+  undoing all three is the tail of `dog_spawn_fx`, which never runs here — invisible,
+  invulnerable, non-aggro hounds.
+* **ELITES "RANDOMLY SPAWN AT YOU WHEN YOU ARE TOO FAR AWAY" — root-caused, not papered
+  over.** In `tod_boss_stuck_watch`, `best` (the closest-approach record) **only ever
+  ratchets DOWN**. The instant a player takes a breather ride, `d` jumps by thousands and
+  can never beat the stale record again, so the accumulator runs out ~18 s later and
+  relocates a boss **that was never stuck**. That is the whole report. Fixed twice over:
+  `_tod_teleport::do_teleport` now bumps `level.tod_tp_stamp` and the watcher resets on the
+  change; and a relocation that IS warranted now **arrives** instead of appearing —
+  `drop_in` gained a 5th `b_relocate` param (omitted args are undefined, so the shipped
+  spawn path is byte-identical), routed via `pick_reloc_point` →
+  `relocate_entrance` (Panzer/Protector, the real sky drop) or `relocate_tell`
+  (hound/Reaver, ground tell + move — a dog falling out of the ceiling reads as a bug, and
+  the hound's ASM is contractually untouchable).
+* **`landing_kill_splash` GATED OFF on relocations** — the catch that justified the whole
+  review. It `DoDamage`s every non-boss axis AI within 350 u for `health+10000` with **NO
+  attacker** — no points, no luck. Correct as a spawn shockwave; on an un-stranding it
+  would have been a silent AoE nuke beside the player, deleting the horde for zero reward
+  under the new killer-only elite payout (v14.5).
+* **Four `self.tod_dropping` guards** (`goal_driver`, `boss_pause_watch`, `fire_loop`,
+  `hunt_players`). `boss_pause_watch` also closes a **latent bug on the SPAWN path**: an
+  unpause edge landing inside the 2 s fall cleared `ignoreall` and restored the anim rate
+  on a Ghosted, undamageable boss. `relocate_entrance` runs as its own thread with **no**
+  `self endon("death")` — deliberate: `tod_boss_stuck_watch` carries one, so calling
+  `drop_in` from inside it would strand a proxy model and a sky-trail tag_origin forever
+  every time a boss died mid-arrival.
+
+**Still open, deliberately:** hounds **leak actor slots** (exempt from
+`_tod_corpse_cleanup` by the `is_boss` guard, and nothing in `_tod_hellhounds.gsc` ever
+`Delete()`s one, unlike every other elite) — a live bug predating all three requests,
+deserving its own change and its own test. And four comment blocks in `_tod_hellhounds.gsc`
+describe behaviour that does not run here, including the one whose half-truth hid the FX
+bug.
+
+## 2026-08-30 (v14.9) — LUCK OVERCHARGE: the secret 150% band
+
+User: "I want it to secretly go up to 150% ... When you are at 150% the luck
+bar will go into an animation. Will have zaps moving around it and player will
+hear a luck zap constant sound when they are maxed out. ... And when a player
+has 150% luck when they pull upgrade cards both options are guaranteed to be
+ultimates rarity."
+
+(Version stamp note: this session authored as v14.7 before learning v14.7/
+v14.8/v14.8b had been claimed by parallel sessions the same evening — same
+drift as the v14.4 entry records. All in-code comments say v14.9.)
+
+* **The secret band.** `set_bar` now clamps at TOD_LUCK_OVERMAX **150**, not
+  100. Everything VISIBLE still keys off TOD_LUCK_MAX: the HUD bar caps at the
+  full image, and the segment-pip crossings are clamped to segment 10 on BOTH
+  sides so 110/120/130/140/150 make no sound — the band is invisible until the
+  ceiling. `roll_rarity` keeps reading the raw bar, so 101..149 quietly
+  improves the dice (150 would be 20/60/20 if the guarantee didn't override).
+* **The overcharge state at exactly 150** (`overcharge_driver`, _tod_luck):
+  swaps the bar art between four baked zap frames at the proven ~7 Hz
+  server-driven cadence, random order, never repeating a frame (the LUI model
+  only notifies on CHANGE). Zero new clientuimodel bits: frames ride the
+  existing 4-bit todUpgLuck as spare values **11..14** (0..10 = the bar,
+  sentinel 11 = base zap frame from set_luck_pct). The zap SFX
+  (`tod_luck_overmax_zap`, 85/85, 2d) is a ~1.1s crackle RETRIGGERED every 7
+  frame ticks by the same thread via PlayLocalSound — deliberately NOT a
+  looping alias, so there is no stop ritual to miss (the stuck-loop scar
+  tissue). Exit is by poll: any drop below 150 (down −25, event spend, spire
+  reset — including the direct writers that bypass set_bar) ends animation and
+  sound within one 0.15s tick.
+* **Both cards ULTIMATE at 150** (`guarantee_both_ultimate`, _tod_upgrades,
+  TOD_UPG_GUAR_BOTH_BAR 150 — LOCKSTEP with TOD_LUCK_OVERMAX and
+  TOD_UPG_LUCK_OVERMAX_PCT): every non-tier slot is promoted to ULTIMATE,
+  composing with the v14.6 redeal PER SLOT (a slot without +3 headroom is
+  redealt from the pool domains that can absorb it, excluding the other
+  slot's current domain). The tier card keeps its exemption; the band-honesty
+  clamp still applies to the no-headroom-anywhere fallback.
+* **Assets are PLACEHOLDERS this build** (i_tod_luck_max_01..04 = the full
+  bar + drawn bolts so the cycling is verifiable; the wav = synthesized
+  crackle). Real art comes from the user's asset LLM + ElevenLabs — prompts
+  and install steps in docs/45_luck_overcharge.md. Zone lines + GDT entries
+  are already in, so both are drop-in file replacements (image/GDT = FULL
+  build).
+
+## 2026-08-30 (v14.8b) — Gift of Death +30% vs bosses/elites, and the two missing elite lanes
+
+User: "lets buff the death machine by 30% for bosses and elites" ("Its the
+Gift of Death").
+
+* **+30% at all four boss/elite lanes** via TOD_XMAS_ELITE_BUFF /
+  XMAS_ELITE_BUFF 1.3 (lockstep pair, _tod_bosses + _tod_powerups). Effective
+  shots-to-kill: Panzer 20→16, Protector 6→5, Reaver 5, hellhound 3.
+* **The Reaver and hellhound HAD NO GIFT LANE AT ALL** — both postdate the
+  2/10/30 design, and the blanket boss-skip in xmas_fixed_shots_cb left the
+  Gift doing raw GDT damage (negligible) against them. New fixed-shot lanes
+  in xmas_fixed_shots_cb keyed on tod_boss_kind (baselines: Reaver 6 = the
+  Protector's HP class, hound 3), placed there because neither has a
+  post-chain rescaling wrap (unlike Panzer/Protector, whose lanes stay in
+  _tod_bosses). No dmult on boss lanes, matching the existing sites.
+* Also rides this build: the sprinter's explicit luck branch
+  (TOD_LUCK_SPRINTER 4 — was the catch-all's value by accident since v13.7).
+
+## 2026-08-30 (v14.8) — duplicate drops pay LUCK (PaP +20% / perk bottle +10%)
+
+User: "if a player already has a pap gun but gets a pap drop they will get
+20% luck. And if they get a perk bottle with max perks they will get 10%
+luck."
+
+* PaP drop grabbed with every packable gun already packed (grab_pap FALLBACK
+  3) → +20 luck; perk bottle grabbed with every sellable perk owned
+  (grab_free_pap's undefined branch) → +10 luck. Both KEEP the existing
+  consolation Max Ammo — the luck is additive, not a replacement. Values
+  live in _tod_luck (TOD_LUCK_PAP_DUPE / TOD_LUCK_PERK_DUPE), paid through
+  `dupe_award` via new `level.tod_luck_dupe_fn` (a #using from powerups
+  would close the powerups→luck→upgrades→powerups cycle). Routed through
+  add(), so the LUCK domain's gain rate applies and the segment pips sound,
+  same as every other luck source.
+* Also confirmed for the user (no code change): the v14.6 guarantee REDEAL
+  happens inside roll_options, before present_choice renders anything — the
+  player only ever sees the final deal; no visible card swap exists.
+
+(v14.7 — hellhound dog_fx, boss relocation entrance, teleport stall-watchdog
+stamp — shipped by the parallel session in the 2:30 build; see its entry
+in that session's notes. This entry stacks on top of that artifact.)
+
+## 2026-08-30 (v14.6) — the luck guarantee can REDEAL (max-luck deals with no ULTIMATE)
+
+User report: "had max luck and didnt get an ultimate card... if you have max
+luck you should get an ultimate at least 1 of the cards 100% of the time. And
+at 50% luck at least 1 super 100% of the time."
+
+* **Root cause, not a roll bug:** the guarantee only promoted WITHIN the two
+  dealt cards. A deal made of low-cap domains (PENETRATION/RECOIL cap 2,
+  SPRINT FIRE cap 1) or near-cap domains had no card that could hold +3, so
+  the promotion clamped and the band-honesty pass (correctly) relabeled it
+  down — a full bar could pay out "SUPER" or worse. Reachable even by a
+  fresh player.
+* **Fix (`guarantee_rarity` + `roll_options`):** the domain pool now rides
+  into the guarantee; when no dealt card can absorb the owed rarity, the
+  weakest dealt card is REDEALT in place (weighted draw from pool domains
+  with enough headroom, never duplicating the kept card, never touching the
+  tier slot) and then promoted. Outcome ladder at a full bar: dice ultimate >
+  promoted ultimate > redealt ultimate > (only when NO available domain has
+  +3 headroom — deep late-game) the honest clamped label. Same mechanism
+  covers the 50%-SUPER floor and strengthens the opening-hand SUPER.
+* Verified reachable-bar math while here: full HUD bar ⟺ bar exactly 100
+  (set_bar clamps; set_luck_pct int(pct/10)) — thresholds and display stay
+  aligned, no change needed there.
+
+## 2026-08-30 (v14.5) — elites pay 500 to the KILLER (×double points ×BOUNTY)
+
+User: "elites give 500 on kill? Only the person who kills gets the money. The
+payout is still effected by double points and bounty upgrade."
+
+* **`_tod_bosses::grant_elite_reward`** — all four ELITES (Rogue Protector,
+  Reaver, Hellhound, Armored Sprinter) now pay a shared flat
+  `TOD_ELITE_PTS 500` to the killing player ALONE, replacing the quiet
+  team-wide per-unit payouts (RP 250 / Reaver 400 / Hound 150 / Sprinter 400
+  — per-module defines retired with tombstone comments). Scaling: the stock
+  double-points scalar (`level.zombie_vars[team]["zombie_point_scalar"]` —
+  the exact multiplier normal kill money gets) and the BOUNTY domain's
+  +5%/Lv via new `level.tod_bounty_mult_fn` (`_tod_upgrades::bounty_mult`,
+  the tod_bounty_preview_fn pointer pattern — no import, no cycle). No
+  killer (cleanup/trap/boss-on-boss death) = no money, by the user's rule.
+  LUCK untouched (last hit takes it). **The PANZER is the BOSS, not an
+  elite: keeps his loud 1000 team-wide jackpot** (grant_boss_reward survives
+  for him alone).
+
+## 2026-08-30 (v14.4) — base crate collision perfected into .map geometry; THE publish build
+
+(Code comments in gen_tower_map.js / _tod_ammo_crate.gsc / the emitted
+_tod_breather_data.gsc stamp this work "v14.3" — the number was claimed
+concurrently by the triggerstring entry below; those stamps refer HERE.)
+
+User: "Perfect it carefully and rebuild. Then ill publish." Full build
+(regen + cod2map + LED bake + linker), .ff 1:42:42 — supersedes the 1:33
+build as the publish artifact and carries v14.2 + v14.3 + this:
+
+* **THE BASE AMMO CRATE IS NOW A FIRST-CLASS GENERATOR FIXTURE.** Origin/yaw
+  live ONCE in `gen_tower_map.js::BASE_CRATE`, which (a) cuts the exact
+  measured `base ammo crate body` clip brush in the .map — same contract as
+  the other five crates, (b) emits `base_crate_org/base_crate_yaw` into
+  generated `_tod_breather_data.gsc` for `_tod_ammo_crate.gsc` to read
+  (no-drift), and (c) ASSERTS the box clear of the lap-1 E-flight footprint
+  (+24u margin) and ≥128u of west walkway — the v13.23 navmesh break is now
+  mechanically impossible, and the geometry lint can SEE this collision
+  (walkability proofs pass with it in place).
+* **Script clips + their DisconnectPaths are GONE for all six static
+  crates** — `crate_clips()` survives only for the spire's dynamic crates.
+  Side benefit (credit e9's observation): six fewer runtime G_Spawns at
+  init, reducing the init entity pressure behind the v14.1 crown-altar
+  incident.
+* Verified: generator asserts pass (12133 brushes / 1089 entities printed),
+  arity + geometry lints green, BSP+navmesh regenerated 1:39:13, LED bake
+  passed, freshness diff (scripts + zone_source vs deployed) EMPTY with all
+  four v14.3 fixes confirmed in the consumed source.
+
+## 2026-08-30 (v14.3) — THE 250-TRIGGERSTRING CRASH: the hint budget goes STATIC; frozen hellhounds; PUBLISH BUILD
+
+Two Workshop reports — "250 limit asset crash" and, from a second player,
+`BG_Cache_GetIndexInternal - Exceeded '250' items for type 'triggerstring'`
+hit "when getting far" (+ "dog rounds bugged also"). Audited whole-map
+(16 agents, every finding adversarially re-derived), fixed, full build.
+
+**THE RULE, which this repo had NO record of.** The engine caps `triggerstring`
+at **250 UNIQUE strings for the whole match**. Every distinct string ever passed
+to `SetHintString` permanently burns one slot — never freed, not on trigger
+`Delete()`, not between rounds — shared with stock and with `#precache`. It counts
+**DISTINCT STRINGS, NOT CALLS** (proven by map 1's own A/B: the 2026-07-12 AW-box
+fix at `_zm_aw_mysterybox.gsc:503` changed only the string content to a constant,
+same call frequency, ~50 distinct → 1, crash stopped). **The overflow BLAMES
+WHOEVER REGISTERS NEXT**, not the accumulator — map 1's surfaced on an innocent
+Thundergun hint, so the site named in a crash report is actively misleading.
+`grep -i triggerstring` over this repo's docs/CHANGELOG/CLAUDE.md returned ZERO
+hits for a crash the author has now paid for three times across two maps.
+
+**THE LEDGER (long co-op run, no spire): ~242 of 250.** 51 stock `#precache` +
+8 ours + 41 stock `door_init` + 53 our door hints = **153 gone before the player
+moves**, identical in solo; then ~12 door re-stamps + 30-50 altar rungs + 13
+finale + 7 teleporter + constants. **Why it only started now:** v8 doubled
+`LAPS` 25 → 50 (2026-08-21), which doubled the door hints AND widened the price
+ladder stock caches — ~46 slots from one config line that reads as a geometry
+change; plus 7 perk precaches correctly added 2026-08-27. Baseline went ~99 → 153.
+
+* **THE ALTAR IS FLAT 3000** (user: "Make the alter 3000 then all the time") —
+  `_tod_upgrades::station_cost` was `2000 + 250 * n` with `n` a GLOBAL per-player
+  lifetime buy count and no clamp, interpolated straight into the prompt at :4050,
+  so **every purchase minted a permanent string no previous purchase had produced**.
+  Structurally identical to map 1's 2026-06-25 soul-box crash. The crown altar's
+  5-use cap coming off 2026-08-29 removed the last thing bounding it. **This was
+  the last unbounded accumulator in the map: the hint budget is now STATIC, so run
+  length no longer moves it — which is what fixes the crash rather than deferring
+  it.** Unlimited buys untouched; a straight economic buff past buy #5.
+* **STOCK WAS BURNING 41 SLOTS ON DOORS NOBODY EVER READS** — the finding no
+  scripts-only grep can see. `_zm_blockers::init_blockers` threads `door_init` on
+  all 53 `zombie_door` ents unconditionally; :202 → `SetHintString(&"ZOMBIE_BUTTON_
+  BUY_OPEN_DOOR_COST", cost)`, one slot per DISTINCT cost, and our doors carry **41
+  distinct `zombie_cost` values** — while `_tod_doors.gsc:81` disables all 53
+  triggers 1s later, so not one of those prompts is ever displayed. New
+  `tod_doors_flatten_map_cost()` in `zm_tower_of_doom::main()` before
+  `zm_usermap::main()` flattens the key: 41 → 1. Safe because the map key is DEAD
+  DATA — `_tod_doors.gsc:70-73` overrides the price from generated
+  `_tod_door_data.gsc`, and a door with no data row returns at :63 before it gets a
+  trigger, so the fallback is UNREACHABLE. ⚠️ **UNVERIFIED**: if the ents do not
+  exist that early `GetEntArray` returns empty and this is a SILENT no-op worth 0.
+  Dev-gated print reports the count. The generator emitting one constant
+  `zombie_cost` has no ordering assumption and is the better permanent form.
+* **THE ENDLESS SPIRE WAS BROKEN ON ARRIVAL** — `_tod_spire.gsc:742` minted one
+  permanent string per floor from `info.dest` ("the Spire - Floor 1".."100"). It
+  mints NOTHING before ascension (`door_manager()` at :311 is inside `ascend_run()`,
+  threaded at :201 after the `tod_ascend` notify), so it is **not** what the
+  reporters hit — but the cache already sits near 242 when the finale is won, so the
+  spire needed about **EIGHT** doors to hard-error, not 100. CLAUDE.md records the
+  post-win ladder has never had a real run, which is exactly why nobody reported it.
+  Destination now constant, flat 3000 price kept: 100 → 1.
+* **HELLHOUNDS FROZE PERMANENTLY** (the "dog rounds bugged" report — and there are
+  NO dog rounds on this map; `dog_rounds_allowed = 0`). `_tod_hellhounds.gsc:355`
+  set `favoriteenemy` once at spawn and nothing refreshed it. Stock's refresh
+  (`_zm_ai_dogs::dog_run_think`) is threaded only from `dog_init`, registered solely
+  onto `level.dog_spawners` — and this map has ZERO `zombie_dog_spawner` ents
+  (we `SpawnActor` directly), so it never runs; `behavior_zombie_dog.gsc:404` skips
+  retargeting in zombies mode BY DESIGN, deferring to that script. So the first time
+  a hound's anchor downed, spectated or took ignoreme, `zombieDogTargetService`
+  cleared the target and `SetGoal(self.origin)`'d it — **standing still for the rest
+  of the match, even after a revive**. Frozen hounds still count in `hounds_alive()`,
+  so once `hound_max_alive()` were stuck the director never spawned another. New
+  `hound_target_watch()` re-acquires via `tod_bosses::pick_target_player` — the loop
+  the Rogue Protector has always had. **STILL OPEN, same root cause:** no `dog_fx`
+  clientfield means hounds have no glowing eyes and no fire trail.
+
+**Still open (~50 slots, both with UX tradeoffs, neither needed now the budget is
+static):** the per-door destination in `_tod_doors.gsc:177` (53 strings; dropping
+`dest` ALONE only saves 12 — the price is the expensive part, 41 distinct values —
+so it is worth doing only alongside a coarser price ladder), and moving any live
+price to a clientfield. **NOT a fix: relocating a number behind a localized `&"REF"`
+with a substituted arg** — `zm_tower_of_doom.gsc:160` says "the pair is the key, not
+the string" (written after the 2026-08-27 blank-cost regression), so it relocates
+strings rather than collapsing them. Stock's client-filled `{{weapon_cost}}` token
+lane IS free (argless `SetHintString`, client resolves) but the vocabulary is
+engine-fixed and weapon-only — no door or altar equivalent. Memory:
+`triggerstring-250-cap`.
+
+Full build, BUILD OK: `.ff` 110.90 MB @ 01:33:47, BSP 19.4 MB regenerated, geometry
+lint clean (0 misplaced walls / 0 unguarded edges / 0 detached, all three walkability
+proofs green), `diff -rq` scripts + zone_source both EMPTY, no unexpected linker
+errors. **NOTE:** `gdtdb /update` exits 1 on every build here — one pack GDT
+(`acc_alxs_pap.gdt`, md5 a8556ce8) sits in two scan roots, byte-identical, owned by
+NO repo (checked all, including map 1, which the `acc_` prefix points at). It
+timestamps to 2025-04-30 so it predates this map and every prior publish shipped
+under identical conditions — not a blocker, but `build_map.ps1:235` downgrades it to
+a yellow Warn, which masks REAL gdtdb failures.
+
+## 2026-08-30 (v14.2) — 3-player bug batch: targeting, Death Perception, crate pricing, base-crate nav fix, true insta-kill
+
+Live reports from the user's 3-player run + a Workshop comment, all -GscOnly:
+
+* **BASE AMMO CRATE MOVED OFF THE LAP-1 STAIR** (`_tod_ammo_crate::spawn_all`,
+  Workshop report Pinkbrotha4310: "the ammo box you put under the stairs broke
+  the nav mesh... zombies spawned in the first room wont climb stairs and the
+  zombies spawned up the stairs wont go down"). The v13.23 base crate at
+  (320,0,0) sat at the exact midpoint of lap 1's east flight (x[256,416],
+  y -256..+256 — the strip gen_tower_map.js:88-90 already warned about when
+  the teleport bay was moved out of it), and its three script-clip
+  `DisconnectPaths` carves severed the stair navmesh both directions — the
+  root of the standing-on-stairs half of the targeting report. Moved to the
+  mirrored core WEST face (-320,0,0), yaw 270: first stair over that strip is
+  lap 2's at z=384, nearest ground fixture 452u away, carve bites ~90u of a
+  284-wide open strip. Rule recorded at the site: never DisconnectPaths
+  inside a stair flight's footprint — the geometry lint cannot see
+  script-spawned collision.
+* **INSTA-KILL IS A REAL ONE-HIT ON TRASH** (user: "make instakill a one hit
+  on normal zombies but keep the 3x for everything else";
+  `_tod_upgrades::upgrade_damage_cb`): while the window is live, any player
+  hit on a non-boss actor returns lethal damage (bypassing sprinter armor —
+  their design accepted "insta-kill treats them as the zombies they are");
+  the boss triad (Panzer, Rogue Protector, Reaver, hellhounds — all carry the
+  flags) falls through to the normal math where the 3x dmult still applies.
+  Gift of Death lane already one-hit trash under the window (1.5x maxhealth).
+
+* **ZOMBIE TARGETING** (`zm_tower_of_doom.gsc::tod_closest_player`): "zombies
+  wouldn't target the closest player — stuck on one player only", plus stair
+  spawns idling until approached. Stock `zm_usermap_ai::factory_closest_player`
+  keeps a per-zombie STICKY target (held while that player stays valid,
+  refreshed at most one zombie per server frame) and measures "closest" with a
+  live `PathDistance()` probe — and when the probe returns undefined for every
+  candidate, it falls back to the FIRST valid entry of the players array (the
+  host) for every zombie (zm_usermap_ai.gsc:143-162). On a 19,000-unit spiral
+  the probe is what fails at range. Replaced the policy via
+  `level.closest_player_override` with a stateless straight-line pick
+  (stock's own no-override default), keeping the zombie_poi carve-out.
+* **FREE PERK DROP GAVE UNSELLABLE PERKS** (`_tod_powerups::
+  tod_give_random_map_perk`): the bottle used stock `give_random_perk`, which
+  draws from ALL of `level._custom_perks` — including MULE KICK and stock
+  ELECTRIC CHERRY, #using'd for their clientfield/FX pipelines but sold by no
+  machine. A Mule Kick roll lit `hudItems.perks.additional_primary_weapon` —
+  the exact field the DEATH PERCEPTION icon borrows — so the player saw the DP
+  icon, got no outlines, and the DP machine still sold the perk. The drop now
+  draws only from specialties with a live `zombie_vending` trigger in the .map
+  (the scatter's own query), giving through the same `give_perk` path.
+* **DEATH PERCEPTION LEAKED TO EVERYONE** (`_tod_perk_electric_cherry.csc::
+  dp_owner_cb`): the ownership-gate callback accepted ANY player's toplayer
+  delivery (host VM sees every playerstate; spectate hands over the viewed
+  player's) and latched the local gate true with nothing ever clearing it.
+  Stock's own pattern applied (`self != GetLocalPlayer(localClientNum) →
+  return`, _gadget_armor.csc:37). Hellbound's shipped source module has the
+  same hole — flagged to its live session.
+* **AMMO CRATE UNDERCHARGED PaP'D GUNS** (`_tod_ammo_crate::use_loop`): a
+  PaP'd gun bought crown-crate ammo at the 2500 base price. Root cause:
+  `is_weapon_upgraded` answers from the weapons-CSV tables, and the CSV rows
+  for the _zm-SUFFIXED twin families (Enfield ladder, knives, leviathan) name
+  forms WITHOUT the `_zm` suffix the shipped assets carry — the table points
+  at weapons that don't exist. Price pick now also name-checks (`IsSubStr
+  (weapon.name, "_up")`), covering every generated PaP form + stock
+  `_upgraded`. CSV name cleanup deferred (documented at the fix site). Prices
+  stay 2500 base / 5000 PaP'd; the user's message said "500 for pap" — read
+  as a typo for 5000 (matches their own v13.23 spec + map 1's scheme);
+  flagged back to them in case 500 was meant.
+
+## 2026-08-29 (v14.1) — crown-altar hardening + full disarm; PUBLISH BUILD
+
+The evening's crown-altar hunt (user: "the alter in the crown is untriggerable",
+three rounds), worked across three sessions, ships two REAL fixes and closes
+with the publish disarm:
+
+* **SPIRE DOOR SLABS 100 → 2** (session -ee, generator §6e): v14.0's 100
+  resident spire slabs pushed init entity pressure to where late G_Spawn calls
+  failed — the crown altar, LAST station placed, lost its trigger manager.
+  The climb is sequential, so only the next door of each parity needs a
+  physical slab; door_manager slides each +768z per buy.
+* **STATION TRIGGER MANAGER LAUNCHES FIRST** (`_tod_upgrades::station_place`):
+  the manager used to start LAST, downstream of four unguarded Spawns (mesh +
+  3 clips) — any undefined return killed the thread before the manager ran:
+  visible altar, no trigger, no self-heal. Now the trigger depends only on the
+  manager's own guarded 1s-retry loop; mesh/clip spawns are guarded cosmetics.
+* **Diagnosis round retracted a wrong theory**: the subscribed Workshop copy
+  of v14.0 (same map name) was proposed as shadowing the dev builds; the
+  user's up-top spawn (dev-harness warp, impossible on the ship-state publish)
+  refuted it — recorded in memory (workshop-copy-shadows-usermaps) with the
+  diagnose-to-a-verdict rule. NOTE: the altar fix pair above is boot-verified
+  logic but the user's confirming readout was never received — the crown altar
+  is NOT live-verified as fixed in this build.
+* **DISARM (publish state)**: `tod_dev`/`tod_god` false; HARNESS #6 deleted
+  from `_tod_main` (sixth write, sixth removal; recipe comment updated);
+  v13.26 DP breadcrumbs removed from `_tod_perk_electric_cherry.gsc` AND
+  `.csc` (the .csc pair was UNGATED — it printed for every player); the
+  altar diagnosis instruments (floating anchor marker, bold heartbeat,
+  stations-placed print) removed, recipe kept at the call site. Dormant
+  dev-gated lane diagnostics stay per v13.17 doctrine (altar spawn-fail /
+  press / deny prints, spire target probe, cwpap crown-not-found).
+
+## 2026-08-29 (v14.0) — THE ENDLESS SPIRE (post-victory endless mode; docs/44)
+
+User: "The fans would like an endless mode ... once you beat the game you will
+get all perks and all power ups for your class maxed out. And you can continue
+playing" + the teleporter/100-floor/one-way/3000-doors design messages, all
+approved same-day. The finale's win no longer auto-departs: THE CHOICE — the
+exfil pad extracts (the old ending), or the dais teleporter ASCENDS the whole
+party (first committed hold wins) one-way to THE ENDLESS SPIRE, a second
+100-lap tower far east in the void (visible from the whole climb; generator
+SECTION 6, x=+10240, monochrome red, gold vendor hubs every 10th floor, railed
+crate shelves on floors 5+, gold summit, red beacon at z=39104). On ascension:
+the full GRANT (tiers to T3 via the real tier_up path + free-PaP latch, every
+eligible domain to its per-class cap, all TEN perks, full ammo/health), the
+tower's script entities torn down (the ~1024-gentity budget, docs/44 §4),
+perk machines MIGRATE onto spire pads (the scatter's own reshuffle continues),
+PaP vendor + crate at every hub, a crate on every shelf via a ±3-floor lazy
+window, doors sequential (one live buy at a time, flat 3000 through
+door_price), spawn pacing HOT (0.18 floor — the spire is the map's hard mode
+now, by the user's own rationale for v13.24's base tone-down), new Suno loop
+track "Neon Static" (−8.0 LUFS, 247.2s), five new baked screens (choice /
+arrival / death / summit win / emblem). Wipe = "THE CLIMB ENDS HERE"; summit
+extraction @7500 = "YOU CONQUERED THE SPIRE". Also: perk_purchase_limit 9→10
+(stale count since PhD joined the scatter). Geometry lint grew spire-island
+proofs (arena→summit walkable, own detachment bucket; selftest 10/10 incl.
+parity). Full design + build record: docs/44 + tools/spire_wip/.
+
+## 2026-08-29 (v13.19) — DEATH PERCEPTION replaces Elemental Pop (hellbound port)
+
+User: "replace elemental pop with depth perception... I dont want to reinvent
+the wheel." The wheel existed: the sibling map's shipped
+`_tod_perk_death_perception` module (tower_of_doom_II_hellbound) — holders see
+the horde THROUGH WALLS as green keylines via T7's stock duplicate_render
+"player_keyline" filter, driven by a private clientfield pair (toplayer
+ownership gate + 2s actor counter pulse; late buys/loss/fresh spawns all
+self-heal within one pulse; boss triad excluded). Ported into the EP slot:
+`_tod_perk_electric_cherry.gsc` reworked + NEW `.csc` (lineage names kept per
+the module's own doctrine). Machine = SATPerks
+`t10_zm_machine_death_perception(_on)` (payload installed beside the other
+nine; both models zoned + in bo7_off_models). COST 1500 (was 2000). UI: HUD
+row renamed with the pack's own crest icon (`i_tod_perk_deathperception`,
+same set), "Sense the horde through walls", hint updated; HUD field stays the
+borrowed Mule Kick slot (zero new clientuimodel bits). EP's random-elemental
+effect, tuning block, burst FX and its five effect-only #usings retired.
+Machine glow stays amber (suits the red/amber cabinet). Also this pass:
+dev+god re-armed by user order for the quick verify (flip back before the
+final candidate); f3's luck-pip + headshot-ding audio rides the same build.
+
+Between-candidates note: -31's #4 (PaP full-refill fix for the live "Yikes"
+Workshop report) and f3's teleport/luck/headshot audio all ride the tree; no
+numbered candidates until the user calls the upload (protocol 2026-08-29).
+
+## 2026-08-29 (v13.17) — THE PAP ROOT CAUSE (csc singular FX anchor); AAT off; disarm; PUBLISH CANDIDATE #3
+
+The night-long "vendor PaP has no glow / still nothing" mystery is CLOSED,
+and it was never the server: `zm_cwpap.csc`'s three FX handlers spawned their
+host at `level.papstruct` — the CROWN's prefab struct — so every machine's
+glow (idle, in-use, AAT alike) rendered AT THE CROWN. Four correct
+server-side fixes in a row (v13.6b graft, v13.10 rekick, v13.12/14 de-sing +
+precache/two-arg repairs) were invisible because the client drew their
+results 19k units away. v13.16 anchors the host at `self` (the prefab proves
+FX struct and model are co-located, with `self.angles+270` ≡ the original
+`struct.angles+90`) — the crown is pixel-identical and every vendor wears its
+own glow. User-confirmed ("Okay its good"). Doctrine takeaway recorded in
+memory: de-singularizing a ported pack means BOTH VMs — grep the .csc for
+level-global anchors.
+
+Also this candidate: v13.15 moved the crown's registration to the proven
+late retry lane (the __init__ GetEnt guard could skip silently); the whole
+five-machine network is user-verified — prompts (incl. the class-gun 5000
+lane), purchase show, shared network cooldown. v13.17 DISABLES the pack's
+AAT elemental re-pack (user: "its allowing me to double pack... disable"):
+the aats using was the map's only AAT registrar so `level.aat_in_use` never
+arms — no machine offers the 2500 elemental lane (roof stock PaP included)
+and packed guns show a blank hint. Perk-drink cues locked at 0.55/0.90 (the
+user's ears); new teleport fire/ready cues (session f3).
+
+DISARM (user: "remove all the hardcoded things... prep this for
+publishing"): flags FALSE, harness #5 warp removed (`_tod_main`, write #5 /
+removal #5), the [PAP] breadcrumb ladder removed (`zm_cwpap`), the sprinter
+smoke seed removed (`_tod_sprinter`). `crown_register_late`'s dev-only
+failure print stays — lane diagnostics, dormant in ship state like
+`dev_money_loop`.
+
+## 2026-08-29 (v13.14) — SPRINTER CONFIRMED LIVE; harness removed; PUBLISH CANDIDATE #2
+
+The user's dev flood run confirmed the whole sprinter stack in one look:
+five round-1 converts — chain-armor body, smoke, +12 sprint, 1/3 bullets with
+RED damage numbers, per-hit random ricochets (3 user wavs), x20 HP ("It all
+looks good, im done testing the armored sprinter").
+
+Close-out, per the remove-don't-disarm doctrine: the round-1 flood harness +
+dev diagnostics are REMOVED from `_tod_sprinter.gsc` (recipe comment survives
+— it caught the dead on_ai_spawned lane and named the working one, so the
+rebuild instructions are worth their lines); `max_alive_cap()` collapsed back
+to the plain roof; `tod_dev`/`tod_god` back to `false` (ship state, dated).
+
+Also in this candidate vs the superseded 02:14 one: the sweep-based sprinter
+conversion (v13.9's on_ai_spawned ordering fix), the zm_cwpap BOOT FIX (the
+crown's __init__-lane power watch waited on flags before any existed — AND on
+`all_players_spawned`, which no code in this map registers; the 03:22 build
+died at boot on it), the unified five-machine PaP network, red damage numbers
+(todDmgNum 13 -> 14 bits, pool 59/61), the ricochet + perk-drink SFX, and the
+luck-bar art.
+
 > OPEN-ITEMS FREEZE 2026-08-23: docs/32_pending_fixes_backlog.md records every
 > known-open thread at the beta push (leak hunt in flight, perk-icon art path,
 > live-verify list, deferred minors). Read it before starting new work.
+
+## 2026-08-29 (v13.8) — balance pass off the first enemy table
+
+Three user knobs, turned minutes after the v13.7 table was presented (all
+-GscOnly, riding the same build as v13.7):
+
+* **ZOMBIE HEALTH −0.10**: `TOD_ZHEALTH_MULT` 1.25 → 1.15. The co-op
+  +0.15/player is untouched — the ask named the base. New solo approx:
+  ~3.1k @r20 / ~8.1k @r30 / ~21k @r40.
+* **ARMORED SPRINTER softened both ways**: bullet armor 1/4 → **1/3**
+  (`TOD_SPRINT_BULLET_FRAC` 0.3333; the `_tod_upgrades` fallback moved in
+  lockstep) and speed offset +15 → **+12** rounds. The user chose the smaller
+  offset with the "+15 is only ~+4% past round 15" fact in front of them —
+  do not "fix" it upward without a fresh ask. Effective bullet-HP is now ×3 a
+  regular zombie, which restores separation below the Reaver at every round.
+* **REAVER HP 20k → 15k @r20** (`TOD_REAVER_HP_BASE`): new solo curve r20 15k /
+  r30 32.4k / r40 69.9k / r50 150.9k, still the bigger threat over the
+  sprinter's bullet ceiling (~63k @r40).
+
+## 2026-08-29 (v13.7) — THE ARMORED SPRINTER (new elite #3) + the ladder completed
+
+Three user messages inside one hour, and the entry records the arc because the
+intermediate state SHIPPED in a peer build (see the incident note at the end):
+
+1. (after "What is a reaver. I never see them") "a lot of smoke coming from
+   him ... run at +15 round speed ... every 3 rounds and regular health of a
+   regular zombie ... but bullets do 1/4 damage ... armored zombie skin [map
+   1's] ... bullets bouncing off" — implemented first as a REAVER REPLACEMENT.
+2. "Protector on Round 10 / Reaver Floor 20 / Armored Sprinters Floor 30 /
+   Hellhounds floor 40" — the ladder re-dealt.
+3. "i actually wanted to add an enemy rather than replace" — final scope.
+
+**FINAL STATE:** the Fury Reaver is RESTORED VERBATIM (git checkout of the
+committed `_tod_reaver.gsc` — lap 20, every 4, elite HP, meteor entrance, all
+untouched), and the armored sprinter is a NEW enemy, `_tod_sprinter.gsc`, on
+the LAP-30 door; the HELLHOUNDS move to the LAP-40 slot that had been
+reserved-empty since the ladder was built (`_tod_doors::breather_unlock`
+lap30->"sprinter", lap40->"hellhound"). Ladder complete: 10 protector /
+20 reaver / 30 sprinter / 40 hellhound. ASSUMPTION, stated: "Protector on
+Round 10" read as the existing lap-10 DOOR gate (three of four lines said
+"Floor"; the whole ladder has been door-gated since 2026-08-21 by the user's
+own spec) — if ROUND-gating the protector was meant, it is a one-line change
+in `_tod_bosses::protector_due`. GSC + two zone lines — **-GscOnly**, no map
+change, no GDT change.
+
+**WHY THE FURY WAS INVISIBLE** (diagnosed from source; the ladder answer keeps
+it AND adds the visible enemy rather than fixing it in place): its bamf needs
+mutual FOV + a straight navmesh line, which the spiral denies by construction,
+so its one distinctive move almost never fired; it had zero client-side tell
+(no banner / nameplate / music); and at every-4-rounds x (1+players/2), solo
+met ONE, unannounced, inside a 45-zombie horde.
+
+**THE SPRINTER** (`_tod_sprinter.gsc`): every 3rd round from the lap-30 door,
+N = 1+players/2 (cap 3 alive) of the round's OWN freshly-spawned zombies are
+PROMOTED — chain-armor BOTD body (`c_t8_zmb_mob_zombie_body3`, map
+1's Shielded skin; new zone xmodel line; `no_gib` so it never comes off), TWO
+steam jets (spine + head; `dlc1/castle/fx_mech_dmg_steam`, already zoned),
+sprint curve read at **round + 15** (new per-zombie `tod_zspeed_round_add`
+field in `_tod_zombie_speed::apply_speed_for_round` — a round offset, not a
+rate multiplier, because the curve is piecewise and the user asked in rounds),
+**regular round health by construction** (conversion, not spawning — zero HP
+code), and **bullets do 1/4** with the `zmb_rocketshield_imp` clank (200ms
+debounce), melee/explosives full — map 1's Shielded counter-play contract.
+
+**THREE TRAPS THIS TRIPPED OVER, recorded because each was invisible in the
+obvious implementation:**
+1. `register_actor_damage_callback` is FIRST-NON-(-1)-WINS (`_zm.gsc:5822`),
+   NOT a chain — `upgrade_damage_cb` returns a final for every player hit, so
+   a second registered callback NEVER RUNS. The x0.25 lives inside
+   `upgrade_damage_cb` at the `melee_boss_mult` integration point (before
+   `push_dmg_num`, so the crosshair shows what the reaver took). Field lane
+   (`tod_is_sprinter` + `level.tod_sprinter_bullet_frac`), no import.
+2. `callback::on_ai_spawned` fires BEFORE stock spawn_funcs, whose
+   `zombie_spawn_init` then writes model+health with no wait
+   (`_tod_zombie_speed:169` records the health half) — a SetModel on the
+   callback frame is silently clobbered. Promotion claims the debt
+   synchronously, then waits 0.25s before touching the actor.
+3. `MOD_HEAD_SHOT` does not contain "BULLET" — matching "BULLET" alone hands
+   headshot builds a full armor bypass. Matched explicitly.
+
+**DELIBERATE CONSEQUENCES** (module header carries the full list): sprinters
+COUNT toward the round; no boss triad, so no gauge pip (the smoke is the
+tell), GIANT SLAYER does not apply to them, nuke/insta treat them as zombies;
+head NOT swapped in v1 (map 1's detach list is tuned to ITS character set —
+double-head risk; port it with this map's head names if the stock head reads
+wrong). Death luck (last hit) + quiet 400-pt team reward. **NO FINALE ROLE**:
+nothing raises sprinter debt during THE LAST MILE and they never cost a
+FINALE_BOSS_ROOF slot — the road's pressure stays all real elites (the Fury's
+own finale lane is restored with it, untouched).
+
+**INCIDENT, recorded (the freeze-must-freeze-repo-writes lesson):** the
+intermediate replace-version WAS PACKED into the peer session's 1:09 .ff —
+"parked on disk, rides the next slot" is not parking, because build_map.ps1
+syncs the repo at build start and a repo edit IS a build input. That .ff was
+coherent and playable (the full v2 set landed pre-sync), just not the final
+scope: it plays sprinter mechanics in the Reaver's lap-20/every-3 slot with no
+Fury. Superseded by the first build carrying this entry. THE RULE: an unbuilt
+edit in a synced tree does not exist — there are only edits the next build
+ships. Park by keeping changes out of the repo, or by telling the next builder
+exactly what must not ship.
+
+## 2026-08-29 (v13.6) — six live-test items: QR rework, ALXS PaP, shells/roofs off, teleporter rules
+
+All from the user's first walk-through of v13.5, plus their two new packs.
+
+**1. SOLO QR GATE + PRICE, REWORKED — the v13.5 version FAILED IN GAME**, both
+halves the same way: written before stock's one-shot stamps, which then
+overwrote/ignored them. Power: stock stamps t.power_on TRUE at ~+3.0s
+(_zm_perk_quick_revive.gsc:202) — my false at +0.5s lost. Price: stock
+evaluates the QR cost FUNC at think start (players.size==0 → "not solo" →
+1500) and LATCHES it onto the trigger as t.cost (_zm_perks.gsc:496-500) — my
+table write was never re-read. Fix: wait for the stamps (t.power_on becoming
+true, 10s cap), THEN override t.cost=500 + t.power_on=false. The same latch
+lesson as machine_assets, now paid twice.
+
+**2. ELEMENTAL POP ICON remade as a set-matching badge** (user: "The rest are
+circles"). The SAT pack has no circle-style icon; the badge was composited
+from the pack's own purchase-menu art (background crushed dark, white glyph
+kept, circle crop, pink ring) — same weathered-circle language as the other
+ten. Same asset name, so GDT/zone/Lua wiring unchanged.
+
+**3. TOWER SHELL REMOVED after one build** (user: "ugly and you didnt vene
+implement them correctly"). TOWER_SHELL=false; geometry kept behind the flag
+with a sell-the-look-first note. Steam description lines it falsified are
+true again.
+
+**4. ALXS CW/BO6 PACK-A-PUNCH** ("replace all pap machines ... keep the FX and
+animations"). Installed per its INSTRUCTIONS.txt: payload root-side
+(prefab/model_export/share/sound_assets), zm_cwpap.gsc+.csc in repo,
+#using in both entry scripts, `include,alxs_cwpap`, szc ALIAS entry. The
+CROWN machine is now the full animated system (its script is singular by
+design — GetEnt'd model + one trigger struct — so it lives where the one
+stock machine did; the stock vending_weapon_upgrade prefab is GONE, which
+also finally moots the pack_a_punch-noteworthy no-op loops). The FOUR
+BREATHER vendors keep our proven tod_pap_owned lane wearing the pack's mesh:
+_off at spawn, animated-on at the power flip (swap added to
+breather_pap_power_hint, machine ref carried on the trigger). prefab()
+helper learned non-zm_core paths. CREDITS.md: Madgaz, Owen C137,
+RiDD_Alexis31 et al. VERIFY LIVE: crown machine facing (yaw kept — one
+number if wrong), tier_card_eligible recognising an ALXS-pap'd class gun.
+
+**5. BREATHER ROOFS REMOVED** ("You cant look up and see the tower so it kinda
+makes it worse"). Lounges are OPEN-TOP: roof slab, trim ring and v13.1
+ceiling halo gone (−20 brushes); walls/sills/windows/lintels stay; corner
+pier stays (doorway jamb first); a glowing top-edge cap band on the wall
+heads keeps the theme-colour outline at night.
+
+**6. TELEPORTER RULES** ("only blocked by floor level and power now" /
+"always go down if power is on" / "recharge time +50%"). Bay-door gate
+REMOVED from the four down-pads; pad_locked() gained the POWER gate it never
+had (nothing gated porters on power before); up-pads keep their lap-door
+flags; cooldown 30→45s. Accepted consequence, told to the user: porting down
+pre-bay-door lands inside the sealed bay — the 750 door buys from both sides.
+
+Also: Panzer 4-player coop mult 2.6→2.8 (shared boss table, protectors ride).
+Regen 5109/615 (−11 shell, −20 roofs vs v13.5's 5140).
+
+## 2026-08-28 (v13.4) — ELEMENTAL POP replaces Electric Cherry + duplicate-GDT fix
+
+**ELEMENTAL POP** (user: "Can we take out electric cherry and just add
+elemental pop?"). The custom perk on `specialty_combat_efficiency` keeps its
+machine/trigger/cost wiring (the file and namespace keep the cherry lineage —
+zone line, radiant names) and gets the BO6/BO7 effect: bullet hits have a 6%
+chance (1.5s per-player floor) to proc a RANDOM element on the struck
+non-boss zombie — SHOCK (chain zap, up to 4 targets in 140u, the old nova's
+genuine stock-cherry FX/stun with its boss guards, 35% of round health),
+FIRE (4 burn ticks, MOD_BURNED), FROST (0.45x slow 3s via
+`tod_zombie_speed::slow` — the sweep-integrated lane, so the keep-alive
+re-asserts it instead of fighting it). Hook = the level zombie-damage
+callback, stock Widow's Wine's own on-hit lane; effects are THREADED off the
+callback frame (damage-in-damage-callback recursion guard). Proc sting =
+the pack's `evt_elemental_pop_activate.wav` (48k/16, new alias
+`tod_elemental_pop_proc` in tod_ports.csv, buyer-local 2d). Reload-nova is
+GONE. HUD row renamed + re-described; the ELEMENTAL POP cabinet finally
+sells what its sign says (closes the audit's naming-mismatch finding).
+
+**DUPLICATE-GDT FIX** (found by hellbound-26's build: gdtdb exit 1). `_custom`
+is a GDT SCAN ROOT (bin\converter_gdt_dirs_0.txt line 1), so the pack's own
+in-payload GDTs already register and my 10 source_data copies were exact
+duplicates — every machine asset registered twice, gdtdb refused the whole
+update, and per the build doctrine everything after a gdtdb Warn is
+meaningless for asset adds. All 10 source_data copies deleted; the pack's
+native in-payload GDTs are now the single source. Verified: bare gdtdb
+/update exit 0, no duplicates. RULE: a pack that carries GDTs inside its
+`_custom` payload needs NO source_data copy — check the scan roots before
+copying anything there.
+
+**Also:** machine facing −90 confirmed by the measurement workflow after
+shipping (stock-PaP control validated the method; Deadshot's unpowered mesh
+is the lone 90°-off exception, accepted as pre-power cosmetic). Animations
+scoped: only Double Tap (true purchase intro/loop/outro cycle) and Speed
+Cola (power-state anims) have rigs at all; wiring them is a follow-up with
+an unresolved asset-compile risk (a notetrack references a pack .efx absent
+from the tools root) — deliberately NOT bundled into this build.
+
+## 2026-08-28 (v13.3) — boss spawn fixes + BO7 PERK MACHINES + crown-PaP truth (again)
+
+One FULL build. Regen predictions, agreed with the parallel session before
+running: **5129 brushes / 615 printed entities** (a 6-prefab-for-6-struct swap
+is invisible to both counters, so the tripwire is the classname histogram:
+misc_prefab 8 → 2, script_struct 242 → 248), crown PaP origin y 7913 → 7944
+the only change from their side.
+
+**1. PROTECTOR-IN-THE-FLOOR + PANZER INSTA-DIE-RESPAWN, both fixed**
+(user live reports). Two distinct causes behind one shared symptom pattern:
+
+* *Ground snap* (`_tod_bosses::ground_snap`): the navmesh over the spiral's
+  flights is a smoothed RAMP through the treads, so `pick_spawn_point`'s
+  query points sit up to a tread-height BELOW the step top mid-flight — and
+  both spawners placed the actor there verbatim, burying his feet ("sometimes"
+  because landings and the road are flat). A knee-height-down BulletTrace now
+  stands every boss ON the first solid under the point. Applied in both
+  spawners, covers force orgs harmlessly.
+* *Pre-entrance shield* (spawn_panzer): between `SpawnActor` and `drop_in`'s
+  Ghost (0.1s + 0.25s waits + setup) the Panzer stood VISIBLE, DAMAGEABLE, at
+  ARCHETYPE-DEFAULT health (the real HP lands in `acc_setup_mechz`), with NO
+  boss identity flags — so mid-fight players could shred him before setup ran,
+  and a concurrent protector's `landing_kill_splash` (350u, filters on the
+  very flags he didn't have yet) could kill him outright. Solo makes that
+  overlap routine: the Panzer anchors the HIGHEST player and the wave the
+  LOWEST — the same person. Either death returned undefined from
+  spawn_panzer, the debt was never decremented, and the director's next 3s
+  tick spawned the "respawn" the user watched. He is now Ghosted,
+  undamageable, and fully boss-flagged on the SPAWN FRAME; drop_in re-applies
+  and its reveal restores, so the entrance state simply extends backward over
+  the init window. (The protector's flags were already same-frame; it only
+  needed the snap.)
+
+**2. BO7/BO6 PERK MACHINES — the whole roster** (user: "I have downloaded the
+Bo7 perk machines. Can we miggrate to those machines?"; pack =
+`SATPerksAssets`, wetegg/sat port, no readme — CREDITS OWED before publish,
+user to supply the source post). All nine PERK_PARK entries are now the
+proven inline-struct lane (stock `perk_machine_spawn_init` builds machine +
+trigger from the struct — the widow's/cherry/nuke entries shipped that way
+since v6): Jugg/Speed/QR/Stamin-Up/Deadshot/PhD as their named `t10_zm_machine_*`,
+Double Tap = `t10_zm_machine_d_mod_cowboy_fxanim` (noteworthy is
+`specialty_doubletap2` — copied verbatim from the stock prefab, not guessed),
+Electric Cherry = `t10_zm_machine_elemental_pop` (user pick — no modern
+Cherry mesh exists), Widow's Wine = `sat_zm_machine_y_mod` (identified by the
+literal "WIDOW'S WINE" emissive text plate; the pack's codenames say
+nothing). The nuke-model PhD stand-in retires. Every machine has an `_on`
+twin with lit emissive maps; `_tod_perk_lights::glow_all_machines` SetModels
+them at power-on where the machine pointer is already blessed (the header's
+"stock off/on swap shows no delta" refutation was about STOCK meshes and
+stands). Assets installed TOOLS-ROOT-ONLY (`_custom\_wetegg\models\sat\` +
+nine per-machine GDTs in shared source_data — the sync copies, never
+mirrors, so they survive builds; unique filenames, no Hellbound collision);
+18 `xmodel,` force-pack lines in the zone (script_struct model fields do NOT
+auto-pack — the electric_cherry_model precedent). Retired with the prefabs:
+six park-row-only clientside lights + attack spots nobody ever saw lit
+(machines scatter at load). BUILD 1 → 2: the first full build flagged FOUR
+unexpected material errors (mtl_wpn_t10_zmb_perk_double_tap_cover/can,
+mtl_wpn_sat_zmb_perk_y_mod_cover, mtl_wpn_t10_zmb_perk_can) — the machine
+meshes packed while their can/cover MATERIAL slots resolved to nothing,
+exactly the visible-but-wrong class the UDM lens was (and predicted for this
+batch by the parallel session an hour before it fired). All four declare in
+ONE pack library I had skipped as weapons-only: `sat_zmb_perk_cans.gdt` —
+now ALSO installed in the shared source_data (+49 payload files under
+`_custom\_wetegg\weapons\sat\eqp\perk_cans\`). NOTE FOR TREE-DIFFERS: that
+GDT is an install-side ADDITION visible to map 1's tree too — deliberate,
+tower-referenced, not drift. Rebuild bar: ZERO unexpected (a new name set =
+a dependency chain, hunt the next library, don't patch names) and the four
+materials present in the same-run ASSETLIST (the subscriber-safe fact; the
+errorlog going quiet only proves the linker stopped complaining).
+IN-GAME VERIFY LIST: all nine facing outward
+(ports usually keep the stock -Y front; if not, one yaw fixes all), footprint
+vs the 130u park pitch + pad clearances, base seam at z=0, the cowboy/fxanim
+machines posing sensibly as static structs, ERRORLOG clean of `is missing`.
+
+**3. THE CROWN PaP EXISTS — tonight's "zero PaP prefabs" was a grep-term
+artifact** (both sessions, corrected within the hour). The stock prefab is
+`vending_weapon_upgrade_spawnable.map` (gen :4109, hall west of the gate at
+(-480,7913,19392)) — its filename contains neither "packapunch" nor
+"zm_pack_a_punch", so the searches that "verified" its absence were
+structurally blind to it. **A PREFAB'S FILENAME IS NOT ITS SUBJECT — verify
+existence at the emission site, never by grepping output for the concept's
+name.** The hall therefore holds TWO machines (real PaP + upgrade station in
+the chaos PaP mesh — the user's "what does that pap do?" confusion is fully
+explained), my v13.2 `_tod_powerups` comment rewrites are re-corrected, and
+the parallel session moved the real PaP to the same 64u standoff as the
+station (33 was a copied constant; both hall machines were the two tightest
+placements in the map — rides this build's regen).
+
+**4. Reflex linker errors: CLOSED — fixed, never waived** (see the closure
+addendum on the v9.14-era OPEN item below; the user's "sight you cant even
+see through" was the exit condition firing negative).
+
+## 2026-08-28 (v13.2) — spur riser + crown-station standoff + PaP-comment truth
+
+Combined regen (this session), shipped across two builds: the parallel
+cybercity session's `-GscOnly` at 19:52 delivered the crown-station move (it is
+script-spawned — genuinely a data-file change), and this session's FULL build
+delivers the risers (they are .map entities). Regen prints **5129 world
+brushes / 615 entities** (611 + the 4 new risers; brush count unchanged —
+risers are spawn structs, the LED atlas is untouched).
+
+**1. TELEPORTER SPUR RISER, one per breather** (user: "add one zombie spawn in
+the path from breather and telepoter for each zone" — the exact retune docs/42
+§Move-3 predicted as its WATCH ITEM). Even-frame (-704,-1120) at each lounge's
+deck z (3648/7488/11328/15168), added as a third entry in the breather branch
+of the lap-zone riser table. The y is DERIVED (`SPUR_PAD_Y - TP_ARRIVE_OFF -
+176`), so the v10.22 rule — no riser within ~165u of a point players
+materialize on — holds by construction: 176u to the up-teleport arrival, 336u
+to the pad centre (216u past the gather ring), 60u outside the gate posts so
+zombies surface ON the open gantry cutting pad off from room, ~176u from the
+lounge's south deck riser (no stacked spawn events), centred 80u from each
+rail. Retires v13's "the spur emits NO risers" stance — with only door-side
+pressure the annex was still a one-entrance pocket. Zone gating is inherited:
+the risers ride lapN_zone, which wakes on the lap door like everything else in
+the lounge. Lint: 0/0, walkability green, no baseline motion.
+
+**2. CROWN UPGRADE-STATION STANDOFF 33 → 64** (parallel session; user: "final
+boss room. Pap is inside the wall"). `gen_tower_map.js` crown emission,
+station_org -695 → -664 / trigger -655 → -624 — matched to the base station's
+long-shipped 64u standoff rather than re-measured; if it is STILL buried the
+next step is measuring chaos_pack_a_punch's depth axis properly, not nudging
+(their analysis, recorded in their announce).
+
+**3. THE "CROWN PaP" COMMENTS WERE DESCRIBING A REMOVED MACHINE**
+(`_tod_powerups.gsc:194`, `:891`). Verified while fixing: the .map contains
+ZERO stock PaP zbarriers/prefabs — one of the v9/v11/v12 crown passes removed
+the crown machine, and what the user saw ("what does that pap do?") is the
+UPGRADE STATION wearing the chaos_pack_a_punch mesh. The four breather vendors
+plus the tod_pap drop are the map's entire Pack-a-Punch. Comments rewritten to
+say so; the `script_noteworthy "pack_a_punch"` cursor-hint loop is now a
+documented no-op kept for plural-safety. No functional change.
+
+> **CORRECTION (v13.3, same night): item 3's central claim is FALSE.** The
+> crown PaP exists — `vending_weapon_upgrade_spawnable.map`, whose filename
+> matches neither grep term the "verification" used. The comment rewrites
+> this item describes were themselves re-corrected in v13.3; see that entry.
+> Kept unedited above because the CHANGELOG records what was believed when.
+
+**Ledger note (multi-session):** after any `-GscOnly`, deployed .map == repo
+.map while the .ff geometry is a regen behind — a map_source diff is NOT
+evidence about the .ff. The sanctioned freshness check (scripts/ +
+zone_source/) is sanctioned precisely because it does not have this hole.
+Also: the sound-bank first-attempt drop + successful retry has now happened on
+two consecutive builds with the lingering-game-handle theory ruled out
+(BlackOps3 exited >1h prior on the second) — reproducible, unexplained,
+mitigated by the retry lane; watch whether it becomes three.
+
+## 2026-08-28 (v13.1) — DEATH MACHINE BUFF + power-hall riser + lounge corner fix & polish
+
+Combined entry, two sessions, one regen + one FULL build (the weapon half edits
+a `.gdt` — never `-GscOnly`, see CLAUDE.md — and both map halves move world
+geometry/entities). Parts 1–2 authored by the parallel cybercity session;
+part 3 by this one. Both edit sets verified complete before the shared regen;
+the combined map prints **5129 world brushes / 611 entities**.
+
+**1. DEATH MACHINE: +1 MAGAZINE AND +5% DAMAGE, BASE AND PaP** (user: "give the
+death machine one extra mag and 5% more damage. Base and pap version").
+
+Two NEW per-gun knobs in `gen_tod_twins.js`, because neither ask had a hook that
+survives the existing pipeline:
+
+* `dmgMult` — applied in `computeTierOverrides` AFTER the DPS normalization, for
+  the same reason `clipMult` is applied after the never-shrink clip floor.
+  Normalization *sets* `override.damage` outright, so a `tune.set` or a
+  `scaleSets` factor upstream is simply overwritten. This is the only hook on a
+  T2/T3 primary that survives. It deliberately breaks the TIER_DPS relationship
+  for this one gun — that is what a per-gun bump is — and it cannot propagate,
+  because every tier normalizes from `t1` and never from the previous tier.
+  (Contrast `clipMult`, which feeds `prevClip`.) If a whole CLASS needs moving,
+  use `CLASS_DAMAGE_MULT` on its T1 and let normalization carry it.
+* `reserveAdd` — the per-gun magazine, SUMMED INTO `RESERVE_ADD`'s single delta
+  rather than pushed as a second `[RESERVE_KEYS, x]` entry, because `addSets` is
+  first-match-wins exactly like `scaleSets` and the second entry would have been
+  silently dropped. Additive not multiplicative for the reason in RESERVE_ADD's
+  header: reserves run 2 to 24 magazines, so any factor that helps the Death
+  Machine hands the RPG a fistful. Carried into the `papKeepSource` branch too —
+  no gun sets both today, but that branch bypasses `papApply`, and it is the
+  exact place RESERVE_ADD had to be repeated to stop the Magnum's PaP form being
+  the one asset in the map that missed its magazine.
+
+**BOTH KNOBS LAND ON THE BASE FORM AND THE PaP FORM INHERITS EXACTLY ONCE** —
+damage through `papApply` reading the tuned base, magazines through
+`PAP_COPY_KEYS` (factor 1). Neither is re-applied in the `isUp` branch; doing so
+is the double-count trap RESERVE_ADD's note 2 documents.
+
+Result, verified by an A/B regen (knobs commented out, regenerate, diff, restore
+— generator confirmed byte-identical afterwards): **exactly 48 changed lines
+across exactly the 6 Death Machine assets**, nothing else in the roster moved.
+
+| | base (`_p0/_p1/_p2`) | PaP (`_up_p0/_p1/_p2`) |
+|---|---|---|
+| damage | 350 -> **368** | 438 -> **460** |
+| minDamage | 295 -> **310** | 369 -> **388** |
+| maxAmmo / startAmmo | 3 -> **4** magazines | 3 -> **4** magazines |
+
+PaP ratio preserved exactly (460/368 = 1.25). Ledger unmoved at 213/220.
+
+> NOTE ON READING `git diff` IN THIS REPO: it is NOT a useful baseline for a
+> generated file. The tree has one initial commit and everything since is
+> uncommitted, so `git diff` on `tod_weapon_twins.gdt` reports ~322 lines that
+> are mostly the v12.9 +1-magazine pass, not your change. A/B the generator
+> instead — back the output up, disable the knob, regenerate, diff, restore.
+
+**2. ONE RISER IN THE POWER HALL** (user: "add one zombie spawn in the power
+switch hallway towards the switch in the back. The issue is players will camp in
+here so adding a spawn might help that").
+
+The hall is a 1,060-long dead end with ONE mouth, so a player at the east cap
+covers the only approach and never turns around. The riser goes BEHIND that
+firing line at **(1400, -480, 0)** — west of it and the camp is untouched.
+Measured, not eyeballed: 189u clear of the power switch's USE trigger
+(x[1589,1608]) so a zombie can never rise standing inside it and block the buy,
+and 220u off the east cap, i.e. inside the last fifth of the hall.
+
+**IT NEEDED A NEW ZONE, AND THAT IS THE WHOLE STORY OF THIS CHANGE.** The hall
+sits behind the `enter_power` door (slab `Solid` + `DisconnectPaths` at x=280)
+but its volume was carried by `base_zone`, which is live from round 1. A riser
+there on the base's ticket would have spawned zombies into a corridor with a
+severed navmesh from the first round — pathing nowhere, killable by nobody,
+holding actor slots against the 45 cap for the entire run.
+
+So the hall's exterior leg MOVED OUT of `base_zone` into a new `power_zone`
+(`gen_tower_map.js`), gated on `enter_power` via
+`zm_zonemgr::add_adjacent_zone( "base_zone", "power_zone", "enter_power" )`
+(`zm_tower_of_doom.gsc`). This is the teleport bay's pattern verbatim — v10.25
+made `tpbay_zone` its own zone for exactly this reason and its comment says so.
+**The two edits must move together** or the hall is double-covered or covered by
+nothing. Coverage is deferred, not lost: nothing can drop in there before the
+door opens because nothing can die in there. The 20u threshold strip x[540,560]
+(the gap cut through the arena's east wall) stays `base_zone` — it holds no
+riser, and carving it out of the arena box would cost a brush to buy nothing.
+
+`power_zone` also carries the required `dog` point, mid-corridor at (1100,-480)
+rather than on the riser — a hound needs run-up, and stacking two spawn events
+on one 120-wide strip is asking for it.
+
+Gates: `lint_tod_geometry` 0 misplaced walls / 0 unguarded edges / both walks
+still reachable, no regression against baseline; `lint_tod_arity` OK across 57
+files. Map regen printed 5089 world brushes / 611 entities (that regen predated
+part 3; the combined regen prints 5129 / 611 — and the 5089-vs-5129 delta is
+what settled a live coherence race between the two sessions: counts, never
+mtimes).
+
+**3. LOUNGE CORNER FIX + POLISH** (this session; user: "the roof panels dont
+connect on one corner for all breather zones. If you check you will probably
+find it"). Found exactly as predicted — the one corner is the DOORWAY corner,
+identical on all four lounges by mirroring: the W wall starts at y=436
+odd-frame (the y[416,436] band belongs to the lap's N-flight parapet) and the
+S lintel starts at x=256, leaving the corner column x[236,256] y[396,436]
+EMPTY from rail height to the roof at +288. The roof corner floated over an
+L-shaped hole beside the entrance; the flight's rail cap made it
+collision-tight, so it was purely visible. Fix: a two-piece CORNER PIER
+(`corner pier base` standing on the flight's first tread, `corner pier`
+sitting flush on both the base and the parapet top at mid+80, carrying the
+roof) — it doubles as the doorway's east jamb, matching the spur gate's post
+language. Plus two theme touches, zero models: a CEILING HALO (256-square
+glowing ring hanging 8 proud under each roof — the interior echo of the trim
+ring, visible through the windows from the stairs) and a PAD RING (1-proud
+glow ring inlaid in the teleporter platform, the base-inlay construct, so the
+pad reads as a landing pad from the tower). +10 brushes per lounge, all four
+mirrored. Preview verified; docs/42 updated.
+
+## 2026-08-28 — v13 THE BREATHER LOUNGES (roof + walls + themes + teleporter spur)
+
+User: "redesign the breather areas so they are nicer and more atmospheric ...
+space things out a bit better ... pap and ammo box are so close ... maybe each
+one can have its own color theme ... Teleporter can be off in its own pathway
+... maybe the idea of putting a roof and walls in these breathers. I dont
+really want to add furniture." Full record: docs/42_breather_lounges.md.
+ZERO new models — brushwork only.
+
+- **ROOF + WALLS**: each open balcony is now an enclosed lounge — the old
+  parapets grew into full walls (56 sill / 136 open window band with glowing
+  mullions / 96 lintel / dark 72-thick roof with a glowing trim ring). Window
+  voids are `clip_player`: players stay in, bullets pass (you can shoot the
+  gantry and the stairs through the windows). lint_tod_geometry taught about
+  axial `clip_player` (BLOCK); preview_crown.js hides it like `clip`.
+- **ONE COLOUR PER FLOOR** (`BREATHER_THEME`): 10 blue, 20 green, 30 orange,
+  40 gold (the crown's colour). Replaces four accidentally-identical yellow
+  floors with four mismatched rail colours. Room lights (now 2 interior + 1
+  pad, the room is roofed) follow the theme.
+- **TELEPORTER SPUR**: porter moved off the room floor — gated doorway in the
+  outer wall → 320-long open-air gantry → 288×288 floating pad platform.
+  Up-riders land on the gantry, 160u outside the pad's gather (asserted).
+- **THE WRONG-BUY FIX**: PaP was IN the entrance path, its trigger 174u from
+  the crate's (38u rim gap), both 5000 — the reported mis-purchase. Furniture
+  now one-per-wall (station N, PaP W, crate E, perks S); worst pair 249u.
+  NEW GENERATED `_tod_breather_data.gsc` (BR_FURN table) feeds _tod_powerups /
+  _tod_upgrades / _tod_ammo_crate / _tod_teleport AND the crate's collision
+  clip, with a generation-time assert: every trigger pair ≥ r_a+r_b+64.
+- Zone volumes extended over the spur; VOL_R covers it; risers/respawns/
+  perk pads unchanged (the S riser now guards the spur mouth by design).
+- **PaP vendor honesty fix** (peer-session triage of a live report): the
+  non-class lane now verifies `get_upgrade_weapon` returned a DIFFERENT
+  weapon before charging, and refunds the 5000 if the give fails.
+
+## 2026-08-27 — PERK PRICE RETUNE + the altar goes per-player (rides v12.12)
+
+Two user asks, landing in different .ffs:
+
+**1. PERK COSTS** (user: "Electric cherry should be 2000, Deadshot should be
+1500, phd should be 2000") — built and verified in the 15:19:04 -GscOnly pass.
+Full price table now: QR 500/1500, Stamin-Up 2000, EC 2000, PhD 2000, Jugg 2500,
+Speed Cola 3000, Double Tap 3000, Deadshot 1500, Widow's 4000. FIVE code sites
+moved in lockstep (the tod_set_perk_costs rows, EC_COST, TOD_PHD_COST) plus the
+Aetherium HUD perk cards (AetheriumPerks.lua carries its own cost mirror — CRLF
+file, line-based edit). All four layers verified consistent by script: GSC /
+module constant / HUD card / hint precache.
+
+**FOUND WHILE IN THERE — SIX MISSING HINT PRECACHES, a latent shipped bug.**
+A localized perk hint renders its cost ONLY if the exact (string, cost) pair is
+precached, precaching is PER MAP (nothing in zm_usermap/_zm_perks does it;
+stock maps carry their own list, zm_giant.gsc:104-109), and this map precached
+exactly ONE pair (Widow's Wine) where map 1 precaches eleven. So Jugg, Speed
+Cola, QR, Stamin-Up, Double Tap and Deadshot have very likely been showing a
+BLANK cost in their buy prompts since the map first shipped. All six added at
+the map's REAL prices — the pair is the key, so map 1's DOUBLETAP "2000" line
+would not have worked against our 3000.
+
+**2. THE ALTAR SHOWS EVERY PLAYER THEIR OWN PRICE** (user report: "It just says
+something like heavenly alter. No price or anything") — rides the v12.12 build
+below. What they saw was not a malfunction: the shared trigger's hint was
+global, prices are per-player, so with two players in range owing different
+amounts the code deliberately fell back to a priceless "- per player" generic
+rather than lie to one of them (the 2026-08-20 co-op honesty rule). Honest, and
+still a bad experience.
+
+Replaced with MAP 1'S MEGA-BOTTLES PATTERN (_acc_mega_bottles.gsc:687): one
+trigger PER PLAYER at the same origin, each SetInvisibleToPlayer-hidden from
+everyone but its owner, visibility RE-ASSERTED every 0.25s (per-(trigger,player)
+state the engine can lose on roster changes). Each player now always sees
+exactly one prompt — theirs — with THEIR price / THEIR spent state / THEIR
+maxed state. A per-station manager spawns triggers for late joiners within a
+second and deletes a leaver's. The use loop gained an explicit owner filter so
+a buy can never land on the wrong player's price ladder even if engine
+invisibility slipped. The mixed-party -1 state and its generic line are DELETED,
+not kept dormant. The altar is the map's only per-player-priced buyable, which
+is why nothing else needs the pattern. UNTESTED in co-op as of writing — the
+check is: two players at one altar must each see their own number.
+
+## 2026-08-27 (v12.15 SHIP) — disarm + publish build
+
+All three test arms removed for publish: tod_dev/tod_god false
+(zm_tower_of_doom.gsc:501-502), harness #4
+(dev_crown_test/dev_warp_to_terrace) DELETED from _tod_main.gsc — fourth
+write, fourth removal, recipe comment survives. FULL rebuild. Ships the day's
+work: stair+road ramps (v12.11-12), the finale beat system minus the tide
+(v12.13-15), plus the peer session's altar/perk/card/hound work.
+
+## 2026-08-27 (v12.15) — THE DEREZ TIDE IS DEAD (removed same day it shipped)
+
+The tide got two fair verdicts from the user in one evening: invisible (v12.13)
+it read as nothing ("Red wave?"), and with the full visible body (v12.14: three
+red-aura riders + 88 deck-point derez eruptions sliding up the road, path
+emitted per-cell so it climbed the stairs and split across lanes) it still
+did not land ("Okay im not a big fan. You can remove that"). DELETED per the
+TIRELESS doctrine, not left dormant: tide_run/curtain_advance/tide_players/
+tide_forward_warp/avenue_flip, the TOD_TIDE_* defines, the endless-rounds
+dead-road filter + heel relax (selector restored to its pre-tide shape
+byte-for-byte), and the generator's four tide emits. Post-mortem lives at the
+top of _tod_finale's beat table; full recipe stays in docs/41 §A1 if a road
+clock is ever wanted again. KNOWN CONSEQUENCE, accepted: the loiter exploit
+(docs/41 §1.2) returns. KEPT from A1: the avenue lights — blue at the buy,
+green strobe on the win, no red phase. Everything else in v12.13 stands (boss
+beats, phased pressure, arrival, heartbeat, weather, lane lottery).
+(v12.14, same evening: the curtain build — shipped 17:59, superseded by this.)
+
+## 2026-08-27 (v12.13) — THE FINALE BEAT SYSTEM (docs/41 full package)
+
+User: "some paths just go straight to the finish line ... running straight the
+whole time is kinda ehh" → full-package pick from docs/41 (A1+A2+A4+riders+B1),
+with two signed-off rules: tide respawners get a FORWARD WARP (amends the
+"respawn at the start of the road" doctrine for the tide window only) and the
+tide's overtake-death ships LETHAL with a mandatory rumble/chime telegraph.
+The measured diagnosis this answers: the 90s road clock never bit (23-55s of
+slack for every class), hold = song_end - now actively REWARDED loitering, and
+the run had zero interactions between the buy and the seal.
+
+**A1 THE DEREZ TIDE** — from 12s into the song a front advances terrace-mouth →
+citadel-mouth, reaching it exactly at the 90s hard seal (94.4 u/s = 66% of
+HEAVY's walk — nobody moving forward is ever caught). Behind it: risers die,
+heel-spawns relax the facing test, a rumble/tick warning tier, and — sustained
+4s deeper than 300u — the seal's own death. THE COUNTDOWN AVENUE: 11 glow hosts
+(3 portals + 8 pylon pips) ignite blue at the buy and flip red as the front
+swallows each — the remaining blue lights ARE the clock (no timer, standing
+rule). Terrace respawners forward-warp to the rearmost living teammate.
+**A2 AUTHORED BOSS BEATS** — phased spawn floor 0.4→0.2→0.1 at 25s/60s
+(timestamps MEASURED off the wav: first hit ~25s, sustained section ~60s) with
+the boss tick tightening 6→4; the Panzer drops astride the Narrows lip on the
+first hit gated on the leader reaching the throat (cap 40s); two protectors
+drop on the gate approach as the leader crosses J4. Roof 4 / panzer-max 1
+untouched — beats REPLACE rotation pressure via an armed-flag interlock +
+consume-once force-org seams in _tod_bosses.
+**A4 THE ARRIVAL** — first survivor through the gold portal trips THE
+ACCEPTANCE (ground ripple gate→dais, sconces light the hall front-to-back);
+four pillar hosts count the party in red→green; the seal slam gets its
+earthquake; the hold-out OPENS with a forced Panzer drop-in at an authored
+hall mark. Seal ORDER (gather→close→stragglers) byte-identical.
+**Riders** — the crown's HEARTBEAT (red pulse at the girandole, 8s halving per
+portal crossed, stops dead at the slam) and the WEATHER TURN (fog lerps to
+ember + rises over 15s at the buy; opacity/legibility budget untouched).
+**B1 THE LANE LOTTERY** — 5 new script_brushmodel seals (one per branch-lane
+south mouth, causeway-gate contract + material); at the buy one lane per fork
+is rolled dead — sealed, red-lit, risers filtered out — BEFORE the causeway
+gate opens (no crush by construction; occupancy-checked for the dev-harness
+case). South-mouth-only = nothing strands. The memorized speedline dies.
+
+All anchors ride in GENERATED _tod_crown_data.gsc (road_y/tide/beat/seal
+tables, derived from the cwY lane tables). Adversarially reviewed pre-build
+(5 agents): 8 confirmed findings fixed, including flare drop orgs that sat in
+a rail column, the rotation starving both flagship beats, and an un-cleared
+protector force-queue that could strand an actor behind the sealed door.
+Geometry: 600 entities (+5), brushes unchanged; bake BAKED 40s; all lints
+green. NOTE: build is ARMED (dev/god/terrace harness) — test state, not ship.
+
+## 2026-08-27 (v12.12, PENDING BUILD) — the CAUSEWAY stairs get the ramps too
+
+User: "lets make sure this road gets the same treatment." The wedge emission
+moved INTO `roadStair()` itself, so all 9 road stair spans (ridge climb/descent,
+broken-stair drops + hollow climb, undercroft V, plank climb/drop) — and any
+future roadStair — are ramped by construction. Road scale differs (CW_RISE 16 /
+CW_TREAD 40, and RISE == SLAB up there), so the emitters take rise/tread params
+now; a FALLING span's plane is (yA,zA)->(yB,zB) flush at both ends with no
+feather, a RISING span's is the same line one tread back (through the riser
+tops, feathering over the approach flat — all four rising approaches verified
+to be wider flats at the same z). Wedges are not road CELLS: rails, risers and
+every roadEmit assert see the exact pre-change geometry. 4940 → 4949 brushes;
+verifier v2 machine-checks all 110 ramps against the map's own emitted treads
+(structure, winding, nosing-touch, never-below-tread); lint/parity/lit-area all
+unchanged. Also in flight: finale-run design exploration (user: "running
+straight the whole time is kinda ehh") — proposals land in docs/41, nothing
+ships without the user picking.
+
+## 2026-08-27 (v12.11) — STAIR RAMP CLIP + parapet ankle gap
+
+Built + deployed 14:02:40 (bake BAKED 38.9s, freshness diff clean). Research
+behind it: docs/39_stair_smoothness_research.md. User verdict on the ramps:
+"It feels amazing now."
+
+**1. THE STAIR FEEL FIX — invisible clip ramps over every flight** (user: stairs
+"slippery going down / stuck going up ... not smooth enough"). This map was the
+only known BO3 staircase players walked on STEPPED collision — every shipped
+Treyarch stair carries a sloped clip wedge over its treads (verified in the mod
+tools' own zm_giant prefab source, including a helical one). Now 101 wedges
+(100 flights + crown stair), generated behind `STAIR_RAMP_CLIP` in
+gen_tower_map.js: top plane through every tread's nosing corner (touches each
+tread front, ≤ +12 above its back), both ends weld flush into the landings, the
+low end feathers 0→12 over the approach floor's last 32 units (Treyarch's own
+arrangement). Underside is the same plane 16 lower — buried inside the tread
+slabs the whole way, so no invisible face is exposed under the open-air stairs.
+Material `clip_player` (playerClip 1, aiClip 0, bulletClip 0, in navmesh.json's
+exclusion list): players walk the smooth plane; zombies, bullets, grenades and
+the navmesh are BYTE-IDENTICAL. Zero visual change. REVERT: `STAIR_RAMP_CLIP =
+false` + regen + FULL rebuild.
+Validated: all 101 wedges machine-checked (winding, nosing welds, end welds,
+exact); geometry lint output identical to control (wedges are non-axial, dropped
+before the material check — no lint edit needed); parity lint OK at both CM;
+brush count 4839 → 4940; lit area +0 from the ramps (^clip excluded).
+
+**2. THE 800 ANKLE GAPS ARE CLOSED** (docs/39 §4#7). Each stepped parapet box
+spans PARA_EVERY(=2) treads but started at the HIGHER tread's top — a 12-tall ×
+20 × 32 see-through slot to the void under the rail over every lower tread,
+~800 map-wide, invisible to the lint (outer column always contains the parapet).
+Parapet/crown-rail z1 dropped by `RISE*(PARA_EVERY-1)`; top faces unchanged so
+RAIL_CAP_H anti-vault still holds. Lit area +1.6M u² (+0.14%), zero new brushes.
+
+**3. Tooling hardened while in there:** `STEPS*TREAD === 2*CORE` is now asserted
+in the generator (docs/39 proved TREAD 48 silently severs the climb);
+`measure_lit_area.js` tests UNLIT before its box-template read (a clip wedge
+used to decode as a garbage box and vanish from BOTH totals) and reports any
+LIT sloped brush it cannot measure instead of silently dropping it.
+
+## 2026-08-27 (v12.10) — OPENING HAND, SCAVENGER capstone + primaries-only, copy audit
+
+Follow-on to v12.9, same night, all from live play.
+
+**1. THE OPENING HAND IS FLOORED AT SUPER** (user: "the first upgrade in the game
+for the player that comes after picking a class should always have at least one
+super card"). That deal is handed out by the class draft the moment everyone locks
+(`_tod_class_select.gsc:106`), when the luck bar is necessarily 0 — so it rolled
+the base 80/15/5 and came up REGULAR+REGULAR **64%** of the time. The one hand
+that sets the tone for a run was the worst hand in the game. Now floored at SUPER
+via the same `guarantee_rarity()` path, latched per player
+(`tod_first_deal_done`) so a co-op late joiner still gets one and nobody gets two.
+The latch is read AND set in `roll_options`, not inside the guarantee, so it is
+spent even on the paths where the guarantee returns early. Measured over 300k
+deals: first deal SUPER+ 36% -> **100%**, REG+REG 64% -> **0%**, natural ULTIMATE
+unchanged at 9.7%; later deals bit-for-bit unchanged.
+
+**2. SCAVENGER, SECOND BUFF + A CAPSTONE** (user: "buff again by one kill. The
+final stage should be 3 bullet every 2 kills"). Shrinking the kill count one more
+step ran out of road — Lv5 reaches 1 kill and Lv6 would need 0 — so the last rung
+stops shrinking kills and starts growing the PAYOUT:
+
+    Lv1 1/5   Lv2 1/4   Lv3 1/3   Lv4 1/2   Lv5 1/1   Lv6 3 per 2  (rate 0.2 -> 1.5)
+
+Split into `scav_kills_needed()` / `scav_rounds_paid()` so the two halves of the
+ladder stay honest. **The capstone is ASSAULT-ONLY because level 6 is** — the
+domain already ships `max 5` with `bonus_class "assault"` at 6, so the strongest
+rung lands on the class whose signature this already was; everyone else tops out
+at Lv5 = a round per kill. Added a `maxAmmo` CLAMP the flat +1 never needed.
+
+**3. SCAVENGER IS CLASS-PRIMARY ONLY** (user: "it will not apply to secondaries.
+Only primaries guns for each class"). Gated on the existing `is_primary`. Gating
+at the ENTRY matters: `w` is `self.damageweapon`, so without it a pistol kill
+topped up the PISTOL. A sidearm kill now pays nothing and does not advance the
+counter either — the upgrade rewards fighting with your class weapon.
+
+**4. DISPLAYED-COPY AUDIT** (user: "make sure we update any displayed copy
+appropriately for all these changes we made tonight"). Every user-facing surface
+swept for the night's five changes:
+- GSC `add_domain` desc for `reserve` and `sprint` — rewritten.
+- LUI `DOMAIN[8]` / `DOMAIN[5]` desc — rewritten.
+- LUI `DETAIL[8]` — `val` now returns a whole PHRASE rather than a number, because
+  the capstone changes the shape of the sentence and not just the value in it
+  (`CoD.TodDomainDesc` `tostring()`s any non-number, so this is supported). `act`
+  now states the primary-only rule. Verified GSC and LUI agree at all six levels.
+- `AetheriumPlayerInfo.lua` `death_melee` 130 -> 120 (shipped in v12.9).
+- SPRINT card art re-baked (v12.9); SCAVENGER cards carry no numbers and stay valid.
+- **Workshop description**: the luck bar paragraph now states the SUPER/ULTIMATE
+  guarantees, and a PRE-EXISTING error was corrected — it claimed "Thirty-six
+  upgrade domains" against 33 live.
+- Stale-copy sweep: zero surviving "6 kills"/"7 kills"/"tireless"/"130" in any
+  displayed string.
+
+**5. SPAWN MOVED OFF THE DOOR TRIGGERS** (user: "I do want to make sure players
+dont spawn in at a door buyable in their radius ... There is one side of the
+first floor that has no doors or perks"). Measured: `_tod_doors` spawns a
+radius-96 trigger at each door's org AND at org+off, and that put **SIX OF THE
+EIGHT** start points inside a live buy trigger — `enter_tpbay` caught four at
+71-93u, `enter_power` two at 80u. So most of the party read "Hold F to buy"
+through the whole 30-second class draft. Enumerating the base ring by side, WEST
+is the only one with no interactable at all (north is the 9 perk pads, south is
+all three door triggers plus the upgrade station, east is `enter_lap1`). The old
+4x2 grid is TRANSPOSED onto that band, same spacing, same z, so solo/duo/trio/
+quad behaviour is identical — stock reads the same eight structs, just different
+coordinates. Nearest trigger now **572u**. `info_player_start`, the respawn
+group origin and the warm spawn light moved with them; the probe did not (radius
+2048 covers the arena from anywhere).
+
+**6. BUYABLE DOORS ARE NOW GLOWING GREEN** (user: "making the doors more obvious
+to buy. They look quite similar to the walls"). The cause was not the hue: the
+wall a door sits in is `stepMatOf(lap)` = `<palette>_tinted` and **that palette
+cycles EIGHT colours including red**, so on `lap % 8 == 6` the door was
+red-on-red against its own wall — 6 of the 50 floors. And since every landing is
+`_tinted_edge`, the flat door was the only major surface in the map with no glow
+at all. A fixed hue cannot fix that (any colour matches 1 lap in 8), so the door
+now differs in KIND: `green_tinted_edge` makes it the only VERTICAL glowing-grid
+surface, on every lap. Same pack. Green because `exfilPad` already used it — the
+map already said green means "the way through". Verified: all 330 door brush
+lines byte-identical apart from the material token, zero geometry moved.
+
+**7. TELEPORTER ROOM DEEPENED** (user: "the landing pad overlaps with the
+teleporter pads and that doesnt look good"). Measured: the arrival decal spans
+y[-708,-532] and the front-row pads y[-848,-672] — **overlapping by 66 x 36
+units**. Purely visual; the centres were already 178u apart, well past the 120u
+gather, which is why it never showed up as a bug. South wall back 160
+(TPB_Y1 -1120 -> -1280), both rows 80 further south, row spacing held at exactly
+220 so the tangent-trigger property is untouched. Decal gap -66u -> **+44u**,
+arrival-to-pad 178u -> 246u, back row to wall 56u -> 132u.
+**TRAP:** `_tod_teleport.gsc` HARDCODES the four pad coordinates with no
+generated bridge — changing the generator alone separates the trigger from the
+pad you can see. Both sides moved, with a check that they agree.
+
+**8. SKIRMISHER: SPRINT AND SPRINT FIRE SURVIVE A TIER-UP** (user: "buff
+skrimisher so that sprint doesnt reset after class tier and also shooting while
+running doesnt reset"). `set_scope("sprint","class")` +
+`set_scope("sprintfire","class")`, reversing the 2026-08-22 #1 call for two of
+the four body domains it named. The argument: a promotion hands you a new GUN, so
+gun facts reset — but how fast the body runs, and whether it can fire on the
+move, are not facts about the gun. SPRINT FIRE especially, being the
+skirmisher's whole identity and a binary specialty. SPRINT is shared with the
+slasher so this buffs that class too — intended, the argument is about bodies.
+MOBILITY and FORCED MARCH still reset (FORCED MARCH is AK-47-bound so it
+genuinely belongs to the gun; MOBILITY is the obvious next candidate).
+
+**9. THE PAUSE MENU SAYS WHAT A TIER-UP WILL DESTROY** (user: "players dont know
+about is that upgrading class tiers will reset after an upgrade ... maybe in
+pause menu we can mark that upgrades that will get lost"). New baked assets —
+a warning badge and a legend strip — with the badge on every gun-scoped row.
+NO new sync field was needed: scope is a static property of the domain, not of
+the player, so the client already had enough to tell them apart, which matters
+because the `tod_upg_sync` lane is int-only and already at 18 fields against a
+proven 61-bit ceiling. **Only four of 33 upgrades survive a tier-up** — it is not
+"some", it is nearly all. The 8 TIER cards were re-baked with the warning in
+amber, bold, with a glyph; it was already there as quiet grey text, which is why
+it was being missed. At MAX TIER the badges and legend disappear entirely — no
+promotion is possible, so nothing can be lost.
+
+**10. SCALE PASS** (user: "increase by 10%"). Cards 213x320 -> **234x351**
+(+9.9%, aspect exactly 2:3 matching the 768x1152 art, so a pure scale-up with no
+new stretch). The pause panel scaled too — but NOT uniformly, and the reason is
+worth keeping: it was already against its right wall, column B ending at x=810
+against the BGBlood art at x=814, four pixels. A naive 10% overflowed it by 67px.
+The space was on the LEFT and BELOW, so the panel now starts at x=60 with the
+right edge pinned: columns 348 -> 369, row pitch 54 -> 59, plates 191x28 ->
+210x31, text +9.8%.
+FOUND BY MEASURING, not by eye: cards were drawn at **0.277 scale**, 2.3x harder
+than anything else in the UI, which put the card SUBLINE at ~10px at 1080p and
+~7px at 720p. The layout change is the smaller half of that fix; the other half
+is baking the subline larger.
+
+**11. 31 CARDS RE-BAKED** — the 27-card level-agnostic pass (see the note in
+v12.9's ART section for the rule), the SCAVENGER ultimate brought into line with
+its siblings, plus the 8 TIER cards and 2 new pause assets. All verified into the
+`.ff` by fresh content-hash `.iwi` files rather than by assuming.
+
+**REVERTED IN THE SAME PASS, recorded because the lesson cost a build:** an
+EXTRACTION OBELISK built from cboxes on `uplink_org()`'s coordinates, replacing
+the borrowed Gorod Krovi terminal. It looked right and linted clean and it
+**killed the buy** — a solid world brush sitting on a `trigger_radius_use` origin
+SWALLOWS the trigger. This map had already paid for that exact lesson: see the
+ammo-crate note in `lint_tod_geometry.js` (`MODEL_CLIP_COLUMNS`), where a solid
+brush "swallowed the crate's trigger_radius_use origin so the crate could not be
+bought". The prop is visual and the clip is a script entity precisely because
+both leave the trigger's origin in open space. If that model is ever replaced,
+replace it with another MODEL. A comment at the spawn site now says so.
+(The lint DID catch the other half of that attempt before it shipped: glowing
+courses 64 and 16 units thick registered as standable floor — `lint:233` treats a
+`_tinted`/`_tinted_edge` brush as floor at <=64 thick — and reported 43 unguarded
+edges on rings 184-496 units up a column in open air.)
+
+## 2026-08-26 (v12.9) — BALANCE PASS: ammo, luck floors, knife money, scavenger, tireless out
+
+Five user-requested balance changes on a build the user describes as running
+perfectly ("just need some balancing"). No systems added, no geometry touched.
+
+**1. +1 MAGAZINE ON EVERY GUN** (user: "all guns need to have 1 extra mag. Ammo
+is scarce even when we have an ammo crate. Many people are complaining").
+New `RESERVE_ADD = 1` in `gen_tod_twins.js`, applied ADDITIVELY after the
+multiplicative reserve pass — `round(src x mults) + 1`. Additive is the point:
+`RESERVE_MULT` is a ratio and the 2026-08-23 note already recorded why a ratio
+cannot do this job ("a small gun may not move at all while a large one gains a
+whole magazine"), with reserves running 2 magazines (Death Machine) to 24 (RPG).
+New `addSets()` mirrors `scaleSets()` including its 0-guard, which is what keeps
+all 36 melee forms at 0 magazines. PaP forms inherit it free via
+`PAP_COPY_KEYS`; the one exception, `papKeepSource` (the Magnum), is handled
+explicitly in `baseTune` or its `_up` form would have been the only asset in the
+map to miss it. Verified: every gun +1 on base AND PaP, no double-application,
+36 melee stems still 0. Not covered: `pistol_standard` and `t9_amp63`, the two
+T1 sidearms whose GDTs are install-side and SHARED WITH MAP 1 — same call as
+every prior reserve pass. The ammo crate refills to `maxAmmo`, so this raises
+what 5,000 points buys, which is the second half of the complaint.
+
+**2. LUCK BAR NOW GUARANTEES RARITY** (user: "max luck needs to guarentee at
+least one ultimate upgrade. And 50% guarentees one super"). New
+`guarantee_rarity()` runs LAST in `roll_options` — after the tier-card overwrite,
+or a guarantee could be spent on a card that no longer exists. It is a FLOOR, not
+a replacement: both cards still roll independently, and a deal that already beat
+the floor is untouched. Thresholds 100 / 50 match `set_luck_pct`'s 10-segment HUD
+exactly, so the guarantee fires precisely when the player can see a full or
+half bar. The TIER card neither satisfies nor receives the promotion (it is a gun
+promotion wearing an ULTIMATE frame). Cards with headroom for the full promotion
+are preferred, and the pick among equals is random so the floor never trains a
+fixed slot. Simulated over 200k deals: bar 100 -> 100% of deals contain an
+ULTIMATE, bar 50-99 -> 100% contain SUPER+, bar <50 unchanged (9.6% ULT / 36%
+SUPER+ at bar 0).
+
+**2a. WHICH card gets promoted (found while double-checking, same day).** The
+first cut picked at random among eligible cards, which quietly wasted the
+guarantee: promoting a card that had ALREADY rolled SUPER leaves the player
+holding ULTIMATE + REGULAR, where promoting the REGULAR instead leaves
+ULTIMATE + SUPER. Not a corner case — at a full bar 36% of deals come up one
+SUPER and one REGULAR, so the blind pick degraded ~18% of ALL max-luck deals.
+Now: HEADROOM first (a promotion clamped to +1 by the level cap defeats the
+guarantee outright), then LOWEST RARITY, then random among true ties only.
+Measured over 300k deals at bar 100: ULT+SUPER 51.8% -> 69.7%, ULT+REGULAR
+46.0% -> 28.0%, average second card +1.56 -> +1.74, ULTIMATE still present
+100.0%. Lower bars provably untouched, and the thresholds still fire exactly at
+50 and 100.
+
+**3. MELEE KILL MONEY 130 -> 120** (user: "knife kills go down from 130 to
+120"). Stock pays 50 + `zombie_vars["zombie_score_bonus_melee"]` (80); the var is
+now set to 70 in `zm_tower_of_doom.gsc::main()` — the map's first ever override of
+a stock score var. THREE places carry this number and all three moved:
+the var, `_tod_upgrades::bounty_kill_value()` (BOUNTY's percentage base AND the
+HUD's popup preview), and `AetheriumPlayerInfo.lua`'s `death_melee` (the "+120"
+that draws on screen). Hits the SLASHER hardest by design — its class primary IS
+the blade.
+
+**4. SCAVENGER: ONE KILL FEWER AT EVERY LEVEL** (user: "we need a buff on
+scavneger. Move it down by 1 kill on each level"). Lv1 7->6 ... Lv5 3->2,
+assault Lv6 2->1. BOTH constants had to move: the old `TOD_SCAV_KILLS_MIN` of 2
+was not a safety rail, it was the exact Lv6 value, so dropping `LV1` alone would
+have let the clamp eat the buff at precisely the two levels players grind for.
+Still bounded by the same two rules — one round per SHOT (the same-frame latch)
+and `maxAmmo`. GSC and the LUI `val` function verified to agree at all 6 levels.
+
+**5. TIRELESS REMOVED** (user: "for sprint we are saying skirmisher gets
+unlimited. That does work and we tried to implement multiple times. Lets just
+remove that benefit"). SPRINT is now +5% move speed per level and nothing else,
+identical for both classes that roll it. Deleted: `TOD_UPG_SPRINT_TIRELESS`,
+`TOD_UPG_TIRELESS_SECS`, `tireless_apply/clear/spawn_watch`, `stock_sprint_time`,
+the body-loop grant/clear pair and the `reset_gun_state` un-apply. Nothing in the
+map now calls `SetSprintDuration`/`SetClientPlayerSprintTime`, and nothing
+script-side grants `specialty_staminup` — the perk machine owns it again. The
+three failed attempts and, more usefully, THE EXPERIMENT NOBODY EVER RAN (read
+the client's live `player_sprintTime` back after the setter, instead of re-sending
+it from yet another callback) are recorded in the block comment where
+`TOD_UPG_TIRELESS_SECS` used to live.
+
+**ART — ONE OUTSTANDING ITEM, everything else verified clear.** Every card that
+could have gone stale was checked by OPENING THE PNG, not by reading the prompt
+docs:
+- **SPRINT ×3 — RE-BAKED AND INSTALLED** the same day (user drop `files (47).zip`),
+  so this pass shipped complete. They carried "LV 5 TIRELESS · SKIRMISHER", a
+  benefit the game no longer grants. The job was a DELETION — the
+  `+5/+10/+15% MOVE SPEED` lines were already correct — with
+  `i_tod_card_mobility_regular.png` as the exact target for the resulting
+  single-line plate, so it needed no design decision. Proofread against the
+  contact sheet, two opened at full size vs the outgoing art, and confirmed to
+  have reached the `.ff` by new content-hash `.iwi` files at build time.
+  Record: `docs/36_sprint_tireless_removal_art_prompt.md`.
+- **SCAVENGER ×3 — no re-bake.** They read "AMMO BACK ON KILLS" / "NEVER RUN DRY"
+  and carry no numbers at all, so the kills-per-round buff cannot stale them.
+- **`i_tod_pause_r05.png`** (name-only "SPRINT" strip) and **`i_tod_up_sprint.png`**
+  (boot icon) carry no text/numbers — unaffected.
+- The ammo, luck-floor and melee-money changes touch no baked art: the first is
+  a GDT value, the second changes odds and reuses the existing ULTIMATE/SUPER
+  frames, and the third's only on-screen number is drawn live by Lua.
 
 ## 2026-08-26 (v12.8) — NON-ENGLISH CLIENTS COULD NOT LOAD THE MAP (language fastfiles)
 
@@ -562,6 +2338,46 @@ every other entry in that list cites a reason and most cite an in-game
 verification, and waiving something nobody has looked at in game is how a real
 missing asset gets hidden. Expect them on every full build until someone
 confirms the optics render, then waive with that evidence.
+
+> **ADDENDUM 2026-08-28 (v13 session): root-caused and attributed, still open.**
+> (1) The cause is `skye_iw7_udm.gdt` itself — an incomplete port that
+> references the three materials while NO GDT in the shared source_data
+> declares them (all 408 checked, twice, independently). No donor GDT exists,
+> and the errors track the iw7_udm link exactly: Hellbound dropped the gun and
+> verified same-run assetlist + errorlog at 0 udm assets / 0 reflex errors.
+> (A brief "fires even with zero UDM assets" counter-claim was retracted —
+> it paired console output from before their ladder retirement with an
+> assetlist from after. Pair build symptoms only with same-run artifacts.)
+> Map 1 packs 52 UDM assets, so we keep seeing all three until the check.
+> (2) The full-build-only theory above is WRONG: Hellbound measured all three
+> on a full build AND two `-GscOnly` builds — expect them on EVERY build.
+> (3) Attribution (peer audit): `reflex_stencil_outline` is benign — a
+> skinOverride SOURCE remapped to a declared material. The other two are remap
+> TARGETS on `vm_iw7_udm_up`/`wm_iw7_udm_up` — the PACK-A-PUNCHED UDM 45's own
+> models, which we SHIP (PaP of the slasher tier-2 sidearm, `iw7_udm_up_b`).
+> So the precise exit check is: SLASHER, tier 2, PaP the sidearm, inspect
+> first-person and world model — NOT "check the HK21" (red herring; only its
+> unused reflex variant is packed). Then waive citing that check
+> (a waive-on-root-cause-alone was added and reverted this session —
+> build_map.ps1 carries the pointer).
+
+> **CLOSED 2026-08-28 evening — FIXED, NEVER WAIVED; the exit condition fired
+> NEGATIVE.** The user's play report ("the UDM has a weird sight. Like a
+> sight that you cant even see through") was the in-game check happening:
+> `reflex_reddot_lens_ads` IS the ADS lens, and missing meant an opaque
+> optic — the "structurally benign" read did not survive contact with the
+> renderer. Fix (parallel cybercity session): the port had remapped one
+> mesh's reflex slots and missed the rest — every `reflex_*` slot on all four
+> UDM meshes now remaps to materials the UDM's own GDT declares
+> (lens → `weapon_udm45_glass`, camo → `weapon_udm45_acc_camo`, stencil →
+> `weapon_udm45_stencil_outline`), edited in the TOOLS-ROOT-ONLY
+> `source_data\skye_iw7_udm.gdt` (backup `.tod-reflex-orig`; root-only GDTs
+> survive builds — the sync copies, never mirrors). Verified: the 20:22:51
+> full build logged ZERO reflex errors. The three names stay OUT of the
+> waive list forever — a reflex error reappearing now means the GDT fix was
+> lost, and the UNEXPECTED lane flagging it is the alarm working. Portable
+> discriminator for any ported gun's "material not found in gdtDB":
+> skinOverride SOURCES need not exist; TARGETS and un-remapped slots must.
 
 ## 2026-08-25 (v11.4) — the Gift of Death ring: `StopLoopSound` is TWO DIFFERENT FUNCTIONS
 

@@ -17,6 +17,7 @@
 #using scripts\zm\zm_tower_of_doom\_tod_crown_data;
 #using scripts\zm\zm_tower_of_doom\_tod_doors;
 #using scripts\zm\zm_tower_of_doom\_tod_finale;
+#using scripts\zm\zm_tower_of_doom\_tod_spire_data;   // HARNESS #6 ONLY (summit warp) — rides out with it
 
 #using scripts\zm\zm_tower_of_doom\_tod_zombie_speed;
 #using scripts\zm\zm_tower_of_doom\_tod_perk_lights;
@@ -26,6 +27,7 @@
 #using scripts\zm\zm_tower_of_doom\_tod_uniques;     // CLASS TIER uniques: fire-streak + sprint watchers (docs/25 §9)
 #using scripts\zm\zm_tower_of_doom\_tod_atmosphere;
 #using scripts\zm\zm_tower_of_doom\_tod_ammo_crate;   // buyable ammo at every breather (2026-08-24)
+#using scripts\zm\zm_tower_of_doom\_tod_perk_drink;   // PERK DRINK sfx: cap pop + gulp (docs/43 item 1)
 
 #insert scripts\shared\shared.gsh;
 
@@ -52,6 +54,8 @@ function init()
 	tod_atmosphere::init();
 	// AMMO CRATE on each breather balcony (waits for the blackscreen itself)
 	tod_ammo_crate::init();
+	// PERK DRINK: cap pop + gulp on "perk_purchased" (on_spawned; safe pre-blackscreen)
+	tod_perk_drink::init();
 
 	level flag::wait_till( "initial_blackscreen_passed" );
 
@@ -74,6 +78,21 @@ function init()
 		//   callback::on_spawned( &warp )            — respawn too, not just spawn
 		// Terrace centre is ( 0, 368, 19400 ), yaw 90, clear of the station.
 		level thread dev_money_loop();
+		// HARNESS #6 REMOVED 2026-08-29 night (the spire verify run: terrace
+		// warp on spawn/respawn until ascension + a dev summit-warp pad at the
+		// spire arena; deleted for the v14.1 publish — sixth write, sixth
+		// removal). Recipe delta vs the base recipe above: also gate the warp
+		// on tod_spire_active/tod_ascend so it stops yanking spire players
+		// back, keep the causeway gate CLOSED (the uplink buy opening it is
+		// part of what the run verifies), and put the summit pad at
+		// arrival_org + (400, 350, 0), warping to summit_exfil_org + (0, 270, 0).
+		// dev_crown_test() REMOVED AGAIN 2026-08-29 ~4:50am (harness #5, the
+		// PaP-verification warp, removed with the same night's disarm). Five
+		// writes, five removals — the recipe above stays current.
+		// dev_crown_test() REMOVED AGAIN 2026-08-27 evening (harness #4, written
+		// that afternoon for the road-ramp/finale test, deleted for the v12.15
+		// publish). Four writes, four removals — the recipe above stays current;
+		// write it fresh, never re-add it dormant.
 	}
 
 }

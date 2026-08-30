@@ -33,6 +33,11 @@
 // Hold-to-lock duration. -35% (user 2026-08-21): 0.5 -> 0.325s.
 #define TOD_UPG_HOLD_SECS   0.325
 #define TOD_UPG_BLINK_SECS  0.15
+// v14.9 OVERCHARGE: at this raw bar value set_luck_pct sends the sentinel 11
+// instead of 10 — the base zap frame; _tod_luck's overcharge_driver then
+// cycles 11..14 live. LOCKSTEP PAIR with TOD_LUCK_OVERMAX in _tod_luck.gsc
+// (defines are per-file; the modules cannot share one).
+#define TOD_UPG_LUCK_OVERMAX_PCT 150
 // Damage-number accumulation window — one server frame. See push_dmg_num.
 #define TOD_DMGNUM_WINDOW   0.05
 
@@ -60,9 +65,13 @@ function __init__()
 	clientfield::register( "clientuimodel", "todUpgFocus", VERSION_SHIP, 3, "int" );
 	clientfield::register( "clientuimodel", "todUpgTime",  VERSION_SHIP, 4, "int" );   // seconds left, 15..0
 	clientfield::register( "clientuimodel", "todMagBonus", VERSION_SHIP, 1, "int" );   // DEAD field (mag pool deleted 2026-08-20); 7 -> 1 bit 2026-08-22, always 0
-	// Crosshair damage number (map 1's encoding): min(dmg,2047)*4 +
-	// headshot*2 + parity (parity flips per push so identical numbers re-pop).
-	clientfield::register( "clientuimodel", "todDmgNum",  VERSION_SHIP, 13, "int" );
+	// Crosshair damage number: min(dmg,2047)*8 + reduced*4 + headshot*2 +
+	// parity (parity flips per push so identical numbers re-pop). WIDENED
+	// 13 -> 14 BITS (v13.9, user: sprinter hits "should be red ... to show you
+	// are doing reduced damage") — the reduced bit rides the same field.
+	// BUDGET: 58 -> 59 of the 61 PROVEN-BOOTED bits. Two left. Matching 14 in
+	// the .csc register — the pair MUST move together (clientfield lockstep).
+	clientfield::register( "clientuimodel", "todDmgNum",  VERSION_SHIP, 14, "int" );
 	// Hold-to-lock progress 0..15 (the fill bar — SHARED by the upgrade panel
 	// and the class draft; the two are never on screen together).
 	clientfield::register( "clientuimodel", "todUpgHold", VERSION_SHIP, 4, "int" );
@@ -125,7 +134,7 @@ function __init__()
 // shot do", which is the question being asked.
 // PUBLIC — accumulate a crosshair damage number. self = the attacking player.
 // The actual push happens in dmg_num_flush one frame later.
-function push_dmg_num( dmg, headshot )
+function push_dmg_num( dmg, headshot, reduced )
 {
 	if ( !isdefined( dmg ) || dmg <= 0 )
 		return;
@@ -134,6 +143,12 @@ function push_dmg_num( dmg, headshot )
 	self.tod_dmg_acc += dmg;
 	if ( IS_TRUE( headshot ) )
 		self.tod_dmg_acc_head = true;   // any pellet in the head colours the number
+	if ( IS_TRUE( reduced ) )
+		self.tod_dmg_acc_red = true;    // any armored (sprinter) hit REDDENS it —
+		                                // same any-pellet rule as the headshot bit;
+		                                // red WINS over headshot in the Lua, because
+		                                // "you are doing reduced damage" is the fact
+		                                // the user asked the colour to carry
 	if ( !IS_TRUE( self.tod_dmg_acc_on ) )
 	{
 		self.tod_dmg_acc_on = true;
@@ -152,12 +167,14 @@ function dmg_num_flush()
 
 	total = self.tod_dmg_acc;
 	head  = IS_TRUE( self.tod_dmg_acc_head );
+	red   = IS_TRUE( self.tod_dmg_acc_red );
 	self.tod_dmg_acc = 0;
 	self.tod_dmg_acc_head = false;
+	self.tod_dmg_acc_red = false;
 	self.tod_dmg_acc_on = false;
 
 	if ( isdefined( total ) && total > 0 )
-		self push_dmg_num_now( total, head );
+		self push_dmg_num_now( total, head, red );
 }
 
 // TENS ENCODING (2026-08-20 — the old raw cap of 2047 flattened insta-kill
@@ -165,11 +182,12 @@ function dmg_num_flush()
 // value now carries dmg/10, the Lua displays x10. Cap = 20,470 shown,
 // rounded to the nearest 10 (nothing meaningful is single-digit here).
 // SUMMING MAKES THAT CAP EASIER TO REACH — a PaP shotgun headshot is now one
-// number rather than eight — but it cannot be widened: todDmgNum is 13 bits and
-// 2047*4+3 is exactly 8191, and the clientuimodel pool is at 57 of the 61
-// PROVEN-BOOTED bits, so a wider field would have to be paid for by trimming
-// another one.
-function push_dmg_num_now( dmg, headshot )
+// number rather than eight. The field was widened 13 -> 14 bits in v13.9 to
+// carry the REDUCED (red) bit: v = dmg*8 + reduced*4 + headshot*2 + parity,
+// max 2047*8+7 = 16383 = 14 bits exactly. The dmg cap itself is unchanged.
+// The Lua decode (tod_upgrade.lua todDmgNum subscription) moves in LOCKSTEP —
+// /8 for the value, bit2 for red, bit1 for headshot; change one, change both.
+function push_dmg_num_now( dmg, headshot, reduced )
 {
 	dmg = int( ( dmg + 5 ) / 10 );
 	if ( dmg > 2047 )
@@ -179,9 +197,11 @@ function push_dmg_num_now( dmg, headshot )
 	if ( !isdefined( self.tod_dmg_parity ) )
 		self.tod_dmg_parity = 0;
 	self.tod_dmg_parity = 1 - self.tod_dmg_parity;
-	v = dmg * 4 + self.tod_dmg_parity;
+	v = dmg * 8 + self.tod_dmg_parity;
 	if ( IS_TRUE( headshot ) )
 		v += 2;
+	if ( IS_TRUE( reduced ) )
+		v += 4;
 	self clientfield::set_player_uimodel( "todDmgNum", v );
 }
 
@@ -352,17 +372,20 @@ function domain_id( key )
 		case "suppress":    return 29;   // HK21 (heavy T2)      — hits slow the horde
 		case "grinder":     return 30;   // Death Machine (heavy T3) — keep firing, hit harder
 		case "drawcut":     return 31;   // Katana (slasher T2)  — swings out of a sprint hit harder
-		case "sprintarmor": return 32;   // SPRINT ARMOR (2026-08-23) — skirmisher + slasher, -5%/Lv damage while sprinting
-		case "secondwind":  return 33;   // SECOND WIND (2026-08-23) — skirmisher, MP7-bound, sprint to heal 1%/Lv per second
-		case "momentum":    return 34;   // MOMENTUM (2026-08-23) — skirmisher class domain, damage scales with move speed
+		case "sprintarmor": return 32;   // SPRINT ARMOR (2026-08-23) — skirmisher-only since v14.11 (slasher dropped), -5%/Lv damage while sprinting
+		case "secondwind":  return 33;   // SECOND WIND (2026-08-23) — skirmisher, MP5-bound since v14.11 (was MP7), sprint to heal 1%/Lv per second
+		case "momentum":    return 34;   // MOMENTUM — REMOVED v14.11 (2026-08-30); stays mapped, see the note below
 		case "bossdmg":     return 35;   // GIANT SLAYER (2026-08-23, v9.45) — assault, +4%/Lv vs the boss/elite triad (4% since 2026-08-26)
-		case "backarmor":   return 36;   // BACK ARMOR (2026-08-23, v9.45) — assault + heavy, -10%/Lv from a rear arc
-		case "march":       return 37;   // FORCED MARCH (2026-08-24) — assault, AK-47-bound, +5% move speed/Lv (no card art yet: 37 > PAUSE_PLATE_MAX, renders as text)
-		// NOTE "echo" (11), "grinder" (30) and "lunge" (22) are still mapped above
-		// even though all three domains were removed (echo + grinder 2026-08-23,
-		// CHAIN LUNGE 2026-08-24). This switch is a KEY->id map, not an ordered
-		// list, so a stale case is inert and removing one would only risk
-		// disturbing ids that the Lua and the pause plates depend on.
+		case "backarmor":   return 36;   // BACK ARMOR (2026-08-23, v9.45) — heavy-only since v14.11 (assault dropped), -10%/Lv from a rear arc
+		case "march":       return 37;   // FORCED MARCH (2026-08-24) — assault, AK-47-bound, +5% move speed/Lv (card art + pause plate r37 landed 2026-08-24)
+		case "vitality":    return 38;   // VITALITY (v14.11) — heavy, +10 max HP/Lv, scope class; renders as TEXT (card + pause row) until its art lands — CARD_SLUG/PAUSE_PLATE_MAX gate on the art, not on this id
+		case "recovery":    return 39;   // RECOVERY (v14.11) — heavy, regen starts 10%/Lv sooner; TEXT until art lands, same as 38
+		// NOTE "echo" (11), "regen" (12), "lunge" (22), "grinder" (30) and
+		// "momentum" (34) are still mapped above even though all five domains
+		// were removed (echo + grinder 2026-08-23, CHAIN LUNGE 2026-08-24,
+		// regen + momentum v14.11 2026-08-30). This switch is a KEY->id map,
+		// not an ordered list, so a stale case is inert and removing one would
+		// only risk disturbing ids that the Lua and the pause plates depend on.
 	}
 	return 0;
 }
@@ -373,7 +396,8 @@ function set_field( name, v )   // self = player
 }
 
 // PUBLIC — live luck-bar push, 0..100 -> tens (self = player). The top-left
-// luck bar is all-LUI now (tod_upgrade.lua's LuckSegs watch todUpgLuck);
+// luck bar is all-LUI now (tod_upgrade.lua swaps baked i_tod_luck_NN images
+// on todUpgLuck);
 // _tod_luck calls this on every bar change. present_choice re-sets the same
 // field at event time for the card readout — same scale, no conflict.
 function set_luck_pct( pct )
@@ -383,11 +407,34 @@ function set_luck_pct( pct )
 		v = 10;
 	if ( v < 0 )
 		v = 0;
-	// The HUD menu hosts the LuckSegs — but never OpenLUIMenu pre-blackscreen
+	// v14.9 OVERCHARGE: the secret band (101..149) still clamps to the full
+	// bar above — the band is invisible by design. Only the ceiling itself
+	// encodes as the sentinel (11 = base zap frame; the driver animates 11..14
+	// on top of this, and a refresh mid-animation snapping to 11 is harmless —
+	// the next 0.15s tick re-randomizes).
+	if ( pct >= TOD_UPG_LUCK_OVERMAX_PCT )
+		v = 11;
+	// The HUD menu hosts the luck bar — but never OpenLUIMenu pre-blackscreen
 	// (the field set itself is safe anytime; the menu reads it on subscribe).
 	if ( level flag::get( "initial_blackscreen_passed" ) )
 		self ensure_menu();
 	self set_field( "todUpgLuck", v );
+}
+
+// PUBLIC — one overcharge animation frame (self = player; f = 11..14, the
+// todUpgLuck spare values). Called only by _tod_luck::overcharge_driver at
+// ~7 Hz while the bar sits at the overcharge ceiling. Same blackscreen gate
+// as set_luck_pct — the driver can outlive a menu (death -> per-life rebuild)
+// and the field set itself is safe anytime.
+function set_luck_over_frame( f )
+{
+	if ( f < 11 )
+		f = 11;
+	if ( f > 14 )
+		f = 14;
+	if ( level flag::get( "initial_blackscreen_passed" ) )
+		self ensure_menu();
+	self set_field( "todUpgLuck", f );
 }
 
 // self = player. opts = array of 1-2 option structs (see _tod_upgrades).

@@ -37,6 +37,7 @@
 // if capture ever fails, they remain buyable there (graceful degradation).
 // =============================================================================
 
+#using scripts\shared\flag_shared;   // v13.5: the Deadshot yaw exception branches on power_on
 #using scripts\shared\util_shared;
 
 #insert scripts\shared\shared.gsh;
@@ -109,19 +110,34 @@ function build_pads()
 	// are EVEN laps now, so every balcony sits on the MIRRORED (SW) side —
 	// machines back the far S rail facing north, yaw 180 / front (0,1,0).
 	// Breather mid z = (lap-1)*384 + 192.
+	// *** YAW -90 FOR THE BO7 MESHES (v13.3c, user live report "the perks are
+	// not facing the correct direction"). *** The stock p7_zm_vending_* models
+	// this table was authored against front on model-local -Y; the BO7/BO6 port
+	// meshes front on model-local +X — a +90 model-space rotation, so every
+	// entity yaw comes DOWN 90 to keep the same WORLD facing. Measured, not
+	// guessed: the .xmodel_bin meshes were decoded and rendered from +/-X and
+	// +/-Y (the LZ4 recipe at _tod_upgrades.gsc:3659), with the STOCK PaP
+	// rendered first as a control — it showed its gun slot on -Y, confirming
+	// both the parser and the map's existing "yaw 0 => front toward -y" note.
+	// All eight other ports then read front-on-+X (screens, card readers,
+	// dispenser trays), and their bboxes mirror on Y where stock mirrors on X.
+	// The `front` vectors below are WORLD directions and do NOT change.
+	// (The old KNOWN EXCEPTION here — Deadshot's off-mesh 90 — retired with
+	// Deadshot in v14.16. Wisp Tea, its replacement, is SAT's single-mesh
+	// off/on pair; verify its facing on the first armed run like v13.3c did.)
 	pads = [];
-	pads[ pads.size ] = make_pad( "base arena (N wall)",       (  -75,  500,     0 ), 359.999, ( 0, -1, 0 ), "specialty_quickrevive", false );
+	pads[ pads.size ] = make_pad( "base arena (N wall)",       (  -75,  511,     0 ), 269.999, ( 0, -1, 0 ), "specialty_quickrevive", false );
 	// v9.37: the breathers grew (gen_tower_map.js BR_DEPTH 576 / BR_EAST 384 —
 	// floor x[-800,-256] y[-992,-416]); the pads keep backing the far S rail
 	// (y = -(PX+BR_DEPTH) + 33 = -959, was -783). x unchanged.
-	pads[ pads.size ] = make_pad( "floor 10 breather (east)",  ( -360, -959,  3648 ), 180,     ( 0,  1, 0 ), undefined, false );
-	pads[ pads.size ] = make_pad( "floor 10 breather (west)",  ( -536, -959,  3648 ), 180,     ( 0,  1, 0 ), undefined, false );
-	pads[ pads.size ] = make_pad( "floor 20 breather (east)",  ( -360, -959,  7488 ), 180,     ( 0,  1, 0 ), undefined, false );
-	pads[ pads.size ] = make_pad( "floor 20 breather (west)",  ( -536, -959,  7488 ), 180,     ( 0,  1, 0 ), undefined, false );
-	pads[ pads.size ] = make_pad( "floor 30 breather (east)",  ( -360, -959, 11328 ), 180,     ( 0,  1, 0 ), undefined, false );
-	pads[ pads.size ] = make_pad( "floor 30 breather (west)",  ( -536, -959, 11328 ), 180,     ( 0,  1, 0 ), undefined, false );
-	pads[ pads.size ] = make_pad( "floor 40 breather (east)",  ( -360, -959, 15168 ), 180,     ( 0,  1, 0 ), undefined, false );
-	pads[ pads.size ] = make_pad( "floor 40 breather (west)",  ( -536, -959, 15168 ), 180,     ( 0,  1, 0 ), undefined, false );
+	pads[ pads.size ] = make_pad( "floor 10 breather (east)",  ( -360, -970,  3648 ), 90,      ( 0,  1, 0 ), undefined, false );
+	pads[ pads.size ] = make_pad( "floor 10 breather (west)",  ( -536, -970,  3648 ), 90,      ( 0,  1, 0 ), undefined, false );
+	pads[ pads.size ] = make_pad( "floor 20 breather (east)",  ( -360, -970,  7488 ), 90,      ( 0,  1, 0 ), undefined, false );
+	pads[ pads.size ] = make_pad( "floor 20 breather (west)",  ( -536, -970,  7488 ), 90,      ( 0,  1, 0 ), undefined, false );
+	pads[ pads.size ] = make_pad( "floor 30 breather (east)",  ( -360, -970, 11328 ), 90,      ( 0,  1, 0 ), undefined, false );
+	pads[ pads.size ] = make_pad( "floor 30 breather (west)",  ( -536, -970, 11328 ), 90,      ( 0,  1, 0 ), undefined, false );
+	pads[ pads.size ] = make_pad( "floor 40 breather (east)",  ( -360, -970, 15168 ), 90,      ( 0,  1, 0 ), undefined, false );
+	pads[ pads.size ] = make_pad( "floor 40 breather (west)",  ( -536, -970, 15168 ), 90,      ( 0,  1, 0 ), undefined, false );
 	return pads;
 }
 
@@ -161,6 +177,33 @@ function init()
 	level thread capture_and_open();
 	level thread qr_clip_watch();
 	level thread coherence_watch();
+
+	// THE PERK MACHINES WERE THE LAST TRIGGER FAMILY WITH NO PAUSE GUARD
+	// (map-wide trigger audit 2026-08-28). Every other interactable on this map
+	// refuses during the upgrade-choice freeze and the class draft; the vending
+	// triggers did not, so the HOLD-USE that locks an upgrade card also bought
+	// the perk you happened to be frozen beside — points gone, bottle drunk,
+	// animation played on a player who cannot move, at a moment they never
+	// chose. Stock ships the exact hook for this and we use it rather than
+	// touching the stock file: _zm_perks.gsc:560-568 calls
+	// `self [[ level.custom_perk_validation ]]( player )` on the trigger and
+	// skips the purchase when it returns false.
+	level.custom_perk_validation = &tod_perk_buy_allowed;
+}
+
+// self = the vending trigger, player = the buyer. Returning false makes stock
+// skip the purchase silently, which is what we want here: the draft and the
+// upgrade pause both hold USE for seconds, so a deny sound would machine-gun
+// (same reasoning as the door and revive-trigger guards).
+function tod_perk_buy_allowed( player )
+{
+	if ( !isdefined( player ) )
+		return false;
+	if ( IS_TRUE( level.tod_upgrade_pause ) )
+		return false;
+	if ( IS_TRUE( player.tod_menu_frozen ) )
+		return false;
+	return true;
 }
 
 // QUICK REVIVE'S SOLO EPILOGUE LEAVES AN INVISIBLE WALL (v9.31, user
@@ -338,6 +381,14 @@ function coherence_watch()
 					t.bump.origin = m.origin + ( 0, 0, TOD_SCATTER_BUMP_Z );
 				if ( isdefined( t.clip ) )
 				{
+					// REOPEN BEFORE MOVING — the module's own two-phase rule,
+					// which this repair path was breaking (audit 2026-08-28).
+					// Navmesh ignores entity collision, so a clip's block is
+					// the DisconnectPaths() call, not the brush: moving the
+					// clip without ConnectPaths() first leaves the cut at the
+					// OLD position permanently, and it accumulates on every
+					// re-align for the rest of the run.
+					t.clip ConnectPaths();
 					t.clip.origin = m.origin;
 					t.clip.angles = m.angles;
 					t.clip DisconnectPaths();
@@ -629,6 +680,10 @@ function move_machine( t, pad, spec, b_silent )
 
 	old_org = t.machine.origin;
 	yaw = pad.yaw;
+	// (v14.16: the Deadshot pre-power +90 exception died with Deadshot — its
+	// OFF mesh was the pack's one rotation outlier. Wisp Tea's off/on pair is
+	// ONE mesh with a skin override, so it cannot disagree with itself; it
+	// takes the uniform pad yaw like the other eight.)
 
 	if ( IS_TRUE( b_silent ) )
 	{

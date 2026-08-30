@@ -85,10 +85,21 @@ function CoD.PromptDefault.new( menu, controller )
 		end
 		local t = hintText
 		t = string.gsub(t, "%^%d", "")            -- ^3 / ^7 colour codes
-		t = string.gsub(t, "%[{%+[%w_]+}%]", "")  -- the [{+activate}] token
-		t = string.gsub(t, "^%s*[Hh]old%s*", "")  -- our own glyph covers "Hold"
+		-- KEEP THE INSTRUCTION (map-wide UI audit 2026-08-28). The two lines
+		-- below used to delete the button token AND the leading "Hold", on the
+		-- stated premise that this prompt draws its own glyph — IT DOES NOT.
+		-- PromptDefault has no interactButton and no footer trio (PromptDoors
+		-- has both, :113-136); this widget is only a background, an icon and
+		-- ONE line of text. So every interactable routed here — the 12,000
+		-- EXTRACTION, the ammo crates, the upgrade stations, the class-swap
+		-- stations, the teleporters — rendered its action and price with
+		-- nothing telling the player to hold USE at all.
+		-- Render the token as the key instead of deleting it, matching the
+		-- kit's own hardcoded "F" (PromptDoors:126).
+		t = string.gsub(t, "%[{%+[%w_]+}%]", "[F]")
 		t = string.gsub(t, "^%s+", "")
 		t = string.gsub(t, "%s+$", "")
+		t = string.gsub(t, "%s%s+", " ")          -- collapse doubled spaces
 		if t ~= "" then
 			self.hintText:setText(t)
 		end

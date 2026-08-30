@@ -489,7 +489,11 @@ CoD.AetheriumPlayerInfo.new = function ( menu, controller )
 				local scoreTypes = {
 					damage = 10,
 					death_normal = 50,
-					death_melee = 130,
+					-- [tod] 130 -> 120 (2026-08-26). Mirrors the nerfed
+					-- zombie_score_bonus_melee (70) set in zm_tower_of_doom.gsc
+					-- ::main(); this table is what the popup DRAWS, so it lies
+					-- the moment the two disagree.
+					death_melee = 120,
 					death_torso = 60,
 					death_neck = 100,
 					death_head = 100,

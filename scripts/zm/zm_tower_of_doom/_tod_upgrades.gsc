@@ -53,6 +53,7 @@
 #using scripts\zm\zm_tower_of_doom\_tod_powerups;
 #using scripts\zm\zm_tower_of_doom\_tod_upgrade_ui;
 // crown terminal anchor (GENERATED leaf module — no #usings of its own, no cycle)
+#using scripts\zm\zm_tower_of_doom\_tod_breather_data;   // GENERATED — lounge station anchors (v13)
 #using scripts\zm\zm_tower_of_doom\_tod_crown_data;
 #using scripts\zm\zm_tower_of_doom\_tod_zombie_speed; // SUPPRESSING FIRE's slow (it imports no tod module — no cycle)
 
@@ -81,6 +82,65 @@
 #define TOD_TIER_W_S 20
 #define TOD_TIER_R_A 0.75  // SUPER/ULTIMATE slice multiplier
 #define TOD_TIER_R_S 0.50
+
+// ---------------------------------------------------------------------------
+// LUCK GUARANTEES (user 2026-08-26: "max luck needs to guarentee at least one
+// ultimate upgrade. And 50% guarentees one super").
+//
+// A FLOOR ON THE DEAL, NOT A REPLACEMENT FOR THE ROLL. Both cards still roll
+// independently through roll_rarity exactly as before; guarantee_rarity() then
+// looks at what came out and, if the bar earned better than the dice gave,
+// promotes ONE card up to the floor. A deal that already beat the floor is left
+// completely alone — this can only ever raise a card, never lower one.
+//
+// v14.6 — AND THE FLOOR CAN REDEAL (user 2026-08-30, after a max-luck game
+// with no ULTIMATE): when neither dealt card has the HEADROOM to absorb the
+// owed rarity (low-cap domains — PENETRATION/RECOIL max 2, SPRINT FIRE max 1
+// — or anything near its cap), guarantee_rarity swaps the weakest dealt card
+// for a pool domain that CAN absorb it, then promotes that. The full ladder
+// of outcomes at a full bar: dice ultimate > promoted ultimate > redealt
+// ultimate > (only when NO domain anywhere has +3 of headroom) the old
+// clamped-and-honest label. Details at guarantee_rarity.
+//
+// THE THRESHOLDS MATCH THE HUD EXACTLY, and that is deliberate. The luck bar is
+// drawn as 10 segments via set_luck_pct's int(pct/10), so the 10th segment lights
+// at >= 100 and the 5th at >= 50 — the same two numbers below. A player who can
+// see a full bar gets the ULTIMATE, and one who can see five segments gets the
+// SUPER. Do not "helpfully" loosen these to 99.5 or 49.5: that would fire the
+// guarantee on a bar the player can still see is short, which is a worse lie
+// than the one it would be trying to fix.
+//
+// 100 IS REACHABLE — set_bar clamps anything over TOD_LUCK_MAX to exactly 100,
+// so a full bar is exactly 100.0 and not 99.9997.
+#define TOD_UPG_GUAR_ULT_BAR   100  // bar >= this: one card is ULTIMATE (+3)
+#define TOD_UPG_GUAR_SUP_BAR    50  // bar >= this: one card is SUPER+ (+2)
+// v14.9 THE OVERCHARGE PAYOUT (user 2026-08-30: at 150% "both options are
+// guaranteed to be ultimates rarity"). The luck bar secretly tracks 100..150
+// now (_tod_luck TOD_LUCK_OVERMAX — LOCKSTEP PAIR, the two defines must move
+// together); at the ceiling the deal guarantees EVERY non-tier card ULTIMATE,
+// not just one. The band between the two thresholds is deliberately invisible
+// (same full-bar HUD) but still real: roll_rarity keeps riding the raw value,
+// so 100..149 quietly improves both dice before the 150 floor takes over.
+// The 105..111 "thresholds match the HUD" doctrine above still holds for THESE
+// two numbers; 150 is the exception BY DESIGN — its tell is not a segment, it
+// is the overcharge zap animation + sound, which fire at exactly this value.
+#define TOD_UPG_GUAR_BOTH_BAR  150  // bar >= this: EVERY non-tier card is ULTIMATE
+
+// THE OPENING HAND (user 2026-08-26: "the first upgrade in the game for the
+// player that comes after picking a class should always have at least one super
+// card"). That is the round-1 deal the class draft hands out the moment everyone
+// locks (_tod_class_select.gsc:106 calls run_upgrade_event directly).
+//
+// WHY IT NEEDS ITS OWN FLOOR: the luck bar is the ONLY thing that lifts rarity,
+// and at that moment it is exactly 0 — nobody has killed anything yet. So the
+// opening deal rolls the base 80/15/5 and comes up REGULAR+REGULAR about 64% of
+// the time. The one hand that sets the tone for the whole run was the worst hand
+// in the game.
+//
+// PER PLAYER, ONCE PER RUN, latched on player.tod_first_deal_done. Per-player
+// rather than a level flag so a co-op late joiner still gets an opening hand,
+// and so one player's deal cannot consume another's.
+#define TOD_UPG_GUAR_FIRST      2   // first deal of the run: at least SUPER (+2)
 
 #define TOD_UPG_EVERY_N_SHIP    4
 #define TOD_UPG_CHOICE_TIMEOUT  15  // 15s window, then the focused card auto-locks
@@ -156,36 +216,113 @@
 // player-damage lanes, exactly like SPRINT ARMOR — see back_armor_mult().
 #define TOD_UPG_BACK_ARMOR_PER_LVL 0.10
 #define TOD_BACK_ARC_DOT           -0.34
-#define TOD_UPG_SPRINT_TIRELESS 5      // SPRINT/MOBILITY level that grants tireless sprint
-// TIRELESS — what "unlimited sprint" ACTUALLY takes (v9.15, user 2026-08-22
-// "we have tried to fix this multiple times"). The sprint meter is PREDICTED
-// ON THE CLIENT from the client's own `player_sprintTime` dvar, which stock
-// sets per client ONCE at connect to the gametype's 4s
-// (zm/gametypes/_globallogic_player.gsc:125 `SetClientPlayerSprintTime`).
-// The server-side `SetSprintDuration()` every earlier fix leaned on never
-// reaches that dvar, so the meter kept draining at 4s no matter what we set.
-// The lever is the per-client dvar setter itself — official API
-// (docs_modtools/bo3_scriptapifunctions.htm): `<player>
-// SetClientPlayerSprintTime(<time>)` "Sets player_sprintTime dvar only on
-// this client". Both knobs get the SAME number so server and client agree on
-// when a sprint may end. Seconds per full meter — 999 is ~16 min of
-// continuous sprint and the meter recharges: reads as unlimited. (Stock
-// Stamin-Up touches neither knob — it is purely the engine specialty.)
-#define TOD_UPG_TIRELESS_SECS   999
+// ---------------------------------------------------------------------------
+// TIRELESS — REMOVED 2026-08-26. (user: "for sprint we are saying skirmisher
+// gets unlimited. That does work and we tried to implement multiple times.
+// Lets just remove that benefit so skirmisher doesnt get that extra benefit".)
+//
+// SPRINT is now +5% move speed per level and NOTHING ELSE, for both classes
+// that can roll it. There is no Lv5 rider, no class gate on the domain, and no
+// script anywhere sets `specialty_staminup` — Stamin-Up the perk machine is the
+// only thing in the map that grants it again.
+//
+// WHAT WAS TRIED, so nobody spends a fourth session on it:
+//   1. grant `specialty_staminup` only .......... no meter change at all
+//   2. + server-side SetSprintDuration(60) ...... no meter change at all
+//   3. + SetClientPlayerSprintTime(999) ......... the documented per-client
+//      lever (docs_modtools/bo3_scriptapifunctions.htm: "Sets player_sprintTime
+//      dvar only on this client"), set on grant AND re-sent on every spawn by a
+//      dedicated watcher — and the user still reported the meter draining.
+// The diagnosis in (3) is almost certainly right: the meter is PREDICTED ON THE
+// CLIENT from that client's own `player_sprintTime` dvar, which stock writes
+// once at connect (zm/gametypes/_globallogic_player.gsc:125), so the server-side
+// duration can never reach it. What was never established is whether the setter
+// actually sticks for a usermap client. If this is ever revived, THAT is the
+// experiment to run first — print the client's live `player_sprintTime` after
+// the call and confirm it reads 999 — not another round of re-asserting it from
+// a new callback. Three passes have now re-sent the same value more often
+// without once checking whether it landed.
+//
+// The card art carried "LV 5 TIRELESS · SKIRMISHER" on all three rarities and
+// was re-baked without it in the same pass.
+// ---------------------------------------------------------------------------
 // SCAVENGER (v9.10, user 2026-08-22: "max 1 bullet back on one shot ... 1
 // bullet every N kills, N shrinking per level, 2 kills is the most it'll
 // go"): a KILL COUNTER paid ONE round at a time. Kills per round =
 // LV1 - (lvl-1), floored at MIN:
-//   Lv1 7 / Lv2 6 / Lv3 5 / Lv4 4 / Lv5 3 / Lv6 (assault only) 2.
+//   Lv1 6 / Lv2 5 / Lv3 4 / Lv4 3 / Lv5 2 / Lv6 (assault only) 1.
 // History: 2 rounds/kill/Lv -> 1 (2026-08-20 "unlimited ammo") -> 0.25 banked
-// fractionally (2026-08-21 "too strong") -> this ladder. The fractional bank
-// paid 1.5 rounds PER KILL at Lv6, so one penetrating 3-kill shot landed 4
-// rounds at once — the exact complaint.
-#define TOD_SCAV_KILLS_LV1      7      // kills per refunded round at Lv1
-#define TOD_SCAV_KILLS_MIN      2      // floor — the Lv6 (assault) ceiling
+// fractionally (2026-08-21 "too strong") -> the 7..2 ladder -> 2026-08-26 BUFF
+// (user: "we need a buff on scavenger. Move it down by 1 kill on each level"),
+// shipped alongside the +1 magazine on every gun — the same ammo-scarcity
+// complaint answered from both ends.
+//
+// BOTH CONSTANTS HAD TO MOVE, and that is the whole subtlety of this retune.
+// `need` is LV1 - (lvl-1) CLAMPED UP to MIN, and the old MIN of 2 was not a
+// safety rail — it was the exact Lv6 value (7-5 = 2). Dropping LV1 alone would
+// have bought Lv1-Lv4 a kill each and then let the clamp eat the buff at
+// exactly the two levels players grind for: Lv5 and the assault Lv6 would both
+// have stayed at 2. MIN moves in lockstep so every level really does come down
+// by one, which is what was asked for.
+//
+// Lv6 = 1 kill per round is the strongest this has ever been, and it is still
+// bounded by the two rules that have always held it: ONE round per shot (the
+// same-frame latch in on_class_gun_kill, so a penetrating multi-kill still pays
+// exactly one) and maxAmmo (a refund cannot exceed the reserve cap). It is a
+// refund, never a multiplier.
+#define TOD_SCAV_KILLS_LV1      5      // kills per refunded round at Lv1
+#define TOD_SCAV_KILLS_MIN      1      // floor — Lv5 lands here (1 kill, 1 round)
+// THE CAPSTONE (user 2026-08-26, second buff of the night: "buff again by one
+// kill. The final stage should be 3 bullet every 2 kills"). Shrinking `need`
+// one more step per level runs out of room — Lv5 reaches 1 kill and Lv6 would
+// need 0, which is not a thing. So the LAST rung stops shrinking the kill count
+// and starts GROWING the payout instead: 2 kills -> 3 rounds, a rate of 1.5
+// rounds/kill against Lv5's 1.0.
+//
+// IT IS ASSAULT-ONLY, because level 6 is. add_domain gives SCAVENGER max 5 with
+// bonus_class "assault" at 6, so the 6th rung has always been the assault's
+// alone — the capstone lands on the class whose signature this domain already
+// is. Every other class tops out at Lv5 = one round per kill. If the capstone is
+// ever wanted for everyone, the change is `TOD_SCAV_CAP_LVL 5` plus a new value
+// for the assault's 6th; do NOT just lower the cap level and leave Lv6 equal to
+// Lv5, or the assault's bonus rung silently becomes worthless.
+#define TOD_SCAV_CAP_LVL        6      // the capstone rung (assault's bonus level)
+#define TOD_SCAV_CAP_KILLS      2      // capstone: 2 kills...
+#define TOD_SCAV_CAP_ROUNDS     3      // ...pays 3 rounds
 // (TOD_UPG_HP_PER_LVL removed 2026-08-20 — HEALTH became DMG REDUCTION,
 // -4%/Lv, applied in _tod_bosses' player-damage chain.)
-#define TOD_UPG_REGEN_PER_LVL   0.005  // +0.5% max HP regen per second per level (HEAVY)
+// REGEN REMOVED 2026-08-30, v14.11 (user: "Remove regen upgrade from Heavy
+// class"). The define stays as the tuning record, the "echo" pattern; the
+// body-loop hook and the add_domain call are gone. The heavy's sustain is now
+// VITALITY (+max HP) and RECOVERY (regen starts sooner) below.
+#define TOD_UPG_REGEN_PER_LVL   0.005  // DEAD — was +0.5% max HP/s per level (HEAVY)
+// VITALITY (HEAVY, v14.11 — user 2026-08-30: "extra health. 5 levels and
+// player keeps it for whole game. S tier. increase health by 10 for each
+// [level]"). +10 max HP per level, 5 levels => +50 at cap on the 150 base.
+// Scope "class" (set_scope below): survives every tier promotion, per the ask.
+// JUGG-SAFE BY THE SAME MECHANISM AS THE 150 BASE: stock jugg is ADDITIVE
+// (_zm_perks.gsc — preMaxHealth snapshot + jugg_health added on top), so a
+// vitality level bought BEFORE jugg is inside the snapshot and survives the
+// loss-restore; one bought DURING jugg is added immediately by apply_upgrade
+// and, when jugg's restore clobbers it, re-raised (max only, no free heal)
+// by the body loop's want-floor within a second.
+#define TOD_UPG_VITALITY_HP_PER_LVL 10
+// RECOVERY (HEAVY, v14.11 — user 2026-08-30: "start regen faster 10% faster
+// at each tier and goes to 3 tiers at 30% faster at max. A tier"). Stock zm
+// regen is SCRIPT-side (_zm_playerhealth.gsc::playerHealthRegen): above the
+// 20% healthOverlayCutoff it waits playerHealth_RegularRegenDelay (2400ms)
+// after the last hit and then SNAPS to full; below the cutoff it waits
+// longRegenTime (5000ms) and then climbs 0.1 ratio/frame. The delay var is
+// LEVEL-GLOBAL, so it cannot be set per player — instead recovery_loop()
+// EMULATES the stock outcome at the REDUCED delay: after
+// stock_delay x (1 - 0.10 x Lv) without damage it delivers exactly what stock
+// would deliver at the full delay (snap above the cutoff, the 0.2/tick climb
+// below it). Stock's own loop still runs untouched and simply finds the
+// player already healed. Both stock numbers are read LIVE off the level vars
+// (fallbacks mirror the stock inits) so a stock retune propagates.
+#define TOD_UPG_RECOV_PCT_PER_LVL 0.10
+#define TOD_RECOV_TICK_SECS       0.1     // emulation cadence; 0.1s error max on the poll-stamp lane
+#define TOD_RECOV_CLIMB_PER_TICK  0.2     // veryHurt band: ratio climbed per tick (stock: 0.1/50ms frame)
 // SECOND WIND (MP7, skirmisher T3 unique — user 2026-08-23: "you heal as you
 // run. 5% health per second. starts at 1% up to level5 at 5%"). 1% of MAX HP
 // per level per second WHILE SPRINTING, 5 levels => Lv1 1%/s .. Lv5 5%/s.
@@ -194,24 +331,33 @@
 // Gated on IsSprinting() rather than mere movement, which makes it a real
 // decision: BO3 will not let you fire while sprinting, so healing costs you all
 // your damage output. That is the trade — disengage and recover, or stand and
-// shoot. It is also uncopyable by the other classes: SPRINT is skirmisher and
-// slasher only, and only the skirmisher reaches tireless (SPRINT Lv5).
+// shoot. It is also uncopyable by the other classes: SECOND WIND is the MP7's
+// own T3 unique, so no other class can train it at all.
 #define TOD_UPG_SECONDWIND_PER_LVL 0.01
 
-// MOMENTUM (skirmisher CLASS domain — user 2026-08-23: "I like momentum too.
-// Lets add both one as skirmisher upgrade and one unique to MP7"). Damage
-// scales with how fast you are ACTUALLY moving: nothing below MIN_SPEED, full
-// bonus at FULL_SPEED, linear between. +5% per level at full speed, 5 levels
-// => +25% at cap.
-// KEYED ON RUN VELOCITY, NOT SPRINT, and that is load-bearing: BO3 does not
-// let you fire while sprinting, so a sprint-gated damage bonus would be dead on
-// arrival. This rewards firing ON THE MOVE, which is the skirmisher's whole
-// identity and is exactly what RUN AND GUN already pays for in ammo.
-// Speed constants mirror _tod_runandgun's calibration (TOD_RNG_MIN_SPEED 120,
-// base run ~190) so the two domains agree on what "moving" means.
-#define TOD_UPG_MOMENTUM_PER_LVL   0.05
-#define TOD_MOMENTUM_MIN_SPEED     120    // u/s 2D — below this, no bonus at all
-#define TOD_MOMENTUM_FULL_SPEED    190    // u/s 2D — at or above this, full bonus
+// MOMENTUM REMOVED 2026-08-30, v14.11 (user: "Remove momentum upgrade").
+// Was the MP5's unique (a skirmisher class domain until the 2026-08-24
+// binding): up to +5%/Lv damage scaled linearly across 120..190 u/s 2D speed.
+// Defines stay as the tuning record ("echo" pattern); the add_domain call,
+// the set_guns binding and the unique_damage_mult hook are gone. Its niche —
+// damage for moving — is RUN AND GUN's second half now (below), and the MP5
+// inherits SECOND WIND off the MP7 in the same pass.
+#define TOD_UPG_MOMENTUM_PER_LVL   0.05  // DEAD
+#define TOD_MOMENTUM_MIN_SPEED     120   // DEAD — u/s 2D, no bonus below
+#define TOD_MOMENTUM_FULL_SPEED    190   // DEAD — u/s 2D, full bonus at/above
+// RUN AND GUN's DAMAGE HALF (v14.11 — user 2026-08-30: "Run and gun should
+// increase damage while running too. At the same rates so 20%, 35%, and
+// 50%."). Flat while moving, not MOMENTUM's ramp — the ammo half is flat, so
+// the card stays ONE condition with ONE ladder. The percentages and the
+// movement test are LOCKSTEP MIRRORS of _tod_runandgun.gsc
+// (TOD_RNG_PCT_BASE 20 / TOD_RNG_PCT_PER_LV 15 / TOD_RNG_MIN_SPEED 120 and
+// is_running(): IsSprinting() OR 2D speed >= MIN_SPEED) — that module cannot
+// be #used from here (it imports us; the KB cycle rule), so the four numbers
+// are duplicated on purpose. Change one file and you MUST change the other,
+// or the card's two halves trigger on different definitions of "moving".
+#define TOD_UPG_RNG_DMG_BASE       0.20  // Lv1 +20% damage while moving...
+#define TOD_UPG_RNG_DMG_PER_LV     0.15  // ...+15%/Lv -> Lv2 +35%, Lv3 +50%
+#define TOD_UPG_RNG_MIN_SPEED      120   // u/s 2D — LOCKSTEP with TOD_RNG_MIN_SPEED
 #define TOD_UPG_LEECH_PER_LVL   4      // +4 HP per class-gun kill per level (SLASHER)
 // SCAVENGER feedback throttle (user 2026-08-22 asked for a sound).
 // The refund is at most ONE round per shot (v9.10), but a Lv6 assault on a
@@ -230,9 +376,16 @@
 // RATE, not amount. Lv1 every 3.0s ... Lv10 every 0.75s (floored).
 // v8.9 buff (user 2026-08-21: "starts at 2s then improves linearly all the
 // way to 0.4s"): Lv1 = 2.0s/round, linear over the 10 levels to 0.4s at Lv10.
-#define TOD_UPG_FEED_BASE_SECS  2.0    // seconds per round at Lv 1... (was 3.0)
-#define TOD_UPG_FEED_STEP_SECS  0.1778 // ...minus this per level (2.0 -> 0.4 across 9 steps)
-#define TOD_UPG_FEED_MIN_SECS   0.4    // floor — Lv10 lands here (never zero: would spin the catch-up loop)
+// v14.14 2x BUFF (user 2026-08-30: "can you 2x buff bullet feed upgrade"). All
+// three constants HALVED, so throughput exactly doubles at EVERY level — the
+// amount is still ONE round per tick (that is what reads as a belt feeding);
+// only the RATE moved, which is the domain's whole design. Ladder is now
+// Lv1 1.0s/round -> Lv10 0.2s/round (was 2.0 -> 0.4).
+// KEEP THESE THREE IN LOCKSTEP: base - step*(maxLv-1) must land ON min, or the
+// floor clamps early and the top levels stop paying. 1.0 - 0.0889*9 = 0.1999.
+#define TOD_UPG_FEED_BASE_SECS  1.0    // seconds per round at Lv 1... (3.0 -> 2.0 -> 1.0)
+#define TOD_UPG_FEED_STEP_SECS  0.0889 // ...minus this per level (1.0 -> 0.2 across 9 steps)
+#define TOD_UPG_FEED_MIN_SECS   0.2    // floor — Lv10 lands here (never zero: would spin the catch-up loop)
 #define TOD_UPG_CLEAVE_RADIUS   60     // halved 2026-08-20 (user); extra melee victims within this range
 #define TOD_UPG_BASE_HP         150    // base player max HP (user 2026-08-20; stock 100; jugg stacks additively on top)
 // CLASS TIERS (docs/25, user 2026-08-22): once the class gun is PaP'd, this
@@ -253,9 +406,23 @@
 // v9.43 (user 2026-08-23: "its still crazy even if it comes out of reserve ...
 // you basically never have to reload"). See the block in unique_on_kill for
 // why the old per-kill percentage could not be rescued by any number.
-#define TOD_KILLRELOAD_KILLS_LV1  100
-#define TOD_KILLRELOAD_KILLS_LV2   75
-#define TOD_KILLRELOAD_KILLS_LV3   50
+// KILL RELOAD — BUFFED 4x (user 2026-08-27: "no one ever chooses kill reload.
+// That needs a buff"). Was 100/75/50, which is why: 100 kills is roughly a whole
+// round's fair share at mid rounds, so Lv1 paid out about once every two rounds
+// and the card was strictly worse than anything next to it on the deal.
+//
+// 55/40/30 (user's number, 2026-08-27: "55 40 30 makes more sense" — my first
+// cut was 25/15/10 and was too hot). Still close to a 2x buff at every level,
+// and it keeps the card a steady quality-of-life pick rather than something that
+// removes reloading from the class outright. THIS DOMAIN DOES NOT CREATE AMMO:
+// the proc tops the clip up FROM RESERVE (want = cap - clip) and is capped by
+// what the reserve holds, so what it really buys is the RELOAD TIME and never
+// being caught mid-animation. That is why it can be generous without touching
+// the ammo economy, and why it pairs rather than competes with SCAVENGER, which
+// is the one that actually puts rounds back.
+#define TOD_KILLRELOAD_KILLS_LV1   55
+#define TOD_KILLRELOAD_KILLS_LV2   40
+#define TOD_KILLRELOAD_KILLS_LV3   30
 // IMPACT ROUNDS (assault, all three guns since v9.38). v9.45 (user 2026-08-23:
 // "impact rounds can be 10 levels but each level needs to be nerfed. Smaller
 // steps per level"): 3% PER LEVEL over TEN levels — 3/6/9 ... 30% of hits burst.
@@ -284,6 +451,14 @@
 // "zombie_notification") — without it the pause-menu owned-upgrades sync
 // silently never fires and CoD.TodOwned stays empty (bug 2026-08-20).
 #precache( "eventstring", "tod_upg_sync" );
+// v14.13 — the SURVIVES-PROMOTION bit rides INSIDE the max arg of the
+// tod_upg_sync event: sync_max() adds this flag when THIS player's copy of
+// the domain survives a tier card, and the Lua receiver strips it back off
+// (m >= 100 -> safe, m -= 100). Packed rather than sent as a 4th int because
+// no 4-arg LuiNotifyEvent exists anywhere in this tree — the 3-arg shape is
+// the proven one (stock-API doctrine: never be the first caller of an
+// unverified arity). Must stay ABOVE every real max (caps top out at 10).
+#define TOD_SYNC_SAFE_FLAG 100
 #precache( "model", "chaos_pack_a_punch" );   // personal upgrade station terminal
 // THOR'S THUNDER fx (AFTER every #using — the "No generated data" trap)
 #precache( "fx", "_ZoekMeMaar/powerups/thunderstorm_effect" );
@@ -360,6 +535,10 @@ function init()
 	// mechz melee hook uses (level.tod_player_mitigations_fn). The kit must
 	// never import a tod module.
 	level.tod_bounty_preview_fn = &bounty_preview;
+	// BOUNTY as a flat multiplier on a lump-sum payout (v14.5) — same pointer
+	// pattern, first consumer _tod_bosses::grant_elite_reward (the killer-only
+	// elite 500). See bounty_mult below.
+	level.tod_bounty_mult_fn = &bounty_mult;
 
 	callback::on_spawned( &player_upgrade_setup );
 
@@ -392,13 +571,25 @@ function register_domains()
 	//
 	// -- shared core (all classes) --
 	add_domain( "damage",     "DAMAGE",      "+12% damage / Lv",                    10, undefined, TOD_TIER_S );
-	add_domain( "dr",         "DMG REDUCTION", "-5% damage taken / Lv",             10, undefined, TOD_TIER_S );
+	// DR: SLASHER CAPS AT 5 (v14.11, user 2026-08-30: "Dmaage reduction on
+	// slasher will go 5 levels now instead of 10" — half of the slasher
+	// tone-down, with SPRINT ARMOR leaving the class below). This RE-PURPOSES
+	// the bonus_class/bonus_max pair as a per-class OVERRIDE rather than
+	// strictly a bonus: domain_max() just returns bonus_max for the named
+	// class and has never required it to be higher (SCAVENGER uses it upward,
+	// this uses it downward). Every consumer reads through
+	// domain_max(player,d) — audited 2026-08-30: make_option, roll_options,
+	// both guarantee paths, tier_up's sync, refresh_upgrade_list, the spire
+	// grant and player_has_domains_left — so a slasher's deals, clamps,
+	// redeals and pause menu all see 5 while everyone else sees 10.
+	add_domain( "dr",         "DMG REDUCTION", "-5% damage taken / Lv",             10, undefined, TOD_TIER_S, "slasher", 5 );
 	add_domain( "bounty",     "BOUNTY",      "+5% money per kill / Lv",             10, undefined, TOD_TIER_B );
 	add_domain( "luck",       "LUCK",        "+10% luck gain rate / Lv",             5, undefined, TOD_TIER_S );
 	// -- SKIRMISHER + SLASHER --
-	// TIRELESS at Lv5 is SKIRMISHER-ONLY (user 2026-08-22) even though the
-	// slasher also rolls SPRINT — the grant is class-gated in body_systems_loop.
-	add_domain( "sprint",     "SPRINT",      "+5% speed / Lv; Lv 5 tireless (skirmisher)", 10, array( "skirmisher", "slasher" ), TOD_TIER_A );
+	// Move speed and nothing else since 2026-08-26 — the Lv5 TIRELESS rider was
+	// removed (see the block comment where TOD_UPG_TIRELESS_SECS used to live).
+	// Both classes that roll SPRINT now get exactly the same thing from it.
+	add_domain( "sprint",     "SPRINT",      "+5% speed / Lv",                      10, array( "skirmisher", "slasher" ), TOD_TIER_A );
 	// SPRINT FIRE (user 2026-08-21): promoted from a skirmisher INNATE to an
 	// earned card — but still SKIRMISHER-ONLY (user, same day: "sprint fire is
 	// only for smg class upgrades"). So it stays the SMG's identity; you just
@@ -407,12 +598,15 @@ function register_domains()
 	// still just grants the single level).
 	add_domain( "sprintfire", "SPRINT FIRE", "fire your weapon while sprinting",     1, array( "skirmisher" ), TOD_TIER_A );
 	// SPRINT ARMOR (user 2026-08-23): -5%/Lv damage taken WHILE SPRINTING, 5
-	// levels, skirmisher + slasher only — the mobile classes get tougher in
-	// motion, never standing still. Tier A: strong but conditional. Scope
-	// "class" below (it is damage resistance, the one thing the user said
-	// survives a tier-up). The hook lives in _tod_bosses' two damage lanes via
-	// sprint_armor_mult(); domain_id 32.
-	add_domain( "sprintarmor", "SPRINT ARMOR", "-5% damage taken while sprinting / Lv", 5, array( "skirmisher", "slasher" ), TOD_TIER_A );
+	// levels — the mobile class gets tougher in motion, never standing still.
+	// Tier A: strong but conditional. Scope "class" below (it is damage
+	// resistance, the one thing the user said survives a tier-up). The hook
+	// lives in _tod_bosses' two damage lanes via sprint_armor_mult();
+	// domain_id 32.
+	// SKIRMISHER-ONLY since v14.11 (user 2026-08-30: "Remove sprint armor on
+	// slasher" — with the DR cap above, the slasher's whole defensive stack is
+	// deliberately shallower: max mitigation falls from x0.375 to x0.75).
+	add_domain( "sprintarmor", "SPRINT ARMOR", "-5% damage taken while sprinting / Lv", 5, array( "skirmisher" ), TOD_TIER_A );
 	// -- ASSAULT signatures --
 	add_domain( "headshot",   "HEADSHOT",    "+4% headshot damage / Lv",            10, array( "assault" ), TOD_TIER_A );   // v9.45 nerf 4%->3%; RESTORED to 4% 2026-08-26 (user: assault buff)
 	// MAG SIZE = REAL twin variants now (user 2026-08-20: "no bottomless —
@@ -431,14 +625,17 @@ function register_domains()
 	// literal definition of the A band ("strong but conditional").
 	// Applied in BOTH boss-damage lanes — see boss_damage_bonus().
 	add_domain( "bossdmg",    "GIANT SLAYER", "+4% damage to bosses and elites / Lv",  5, array( "assault" ), TOD_TIER_A );   // 3% -> 4% 2026-08-26 (user: assault buff)
-	// BACK ARMOR (v9.45, user 2026-08-23) — the two SLOW classes (assault 0.9,
-	// heavy 0.8 move speed) get the defence the two FAST ones already have.
-	// SPRINT ARMOR pays you for outrunning the horde; this pays the classes
-	// that cannot, for the hits they take precisely because they cannot turn
-	// around fast enough. -10%/Lv from a 140-degree rear arc, 3 levels.
-	// Scope "class" below — it is damage resistance, the one family the user's
-	// tier rule says survives a promotion (with DR and SPRINT ARMOR).
-	add_domain( "backarmor",  "BACK ARMOR",  "-10% damage taken from behind / Lv",     3, array( "assault", "heavy" ), TOD_TIER_A );
+	// BACK ARMOR (v9.45, user 2026-08-23) — the slow class gets the defence
+	// the fast ones have. SPRINT ARMOR pays you for outrunning the horde; this
+	// pays the class that cannot, for the hits it takes precisely because it
+	// cannot turn around fast enough. -10%/Lv from a 140-degree rear arc, 3
+	// levels. Scope "class" below — it is damage resistance, the one family
+	// the user's tier rule says survives a promotion (with DR and SPRINT ARMOR).
+	// HEAVY-ONLY since v14.11 (user 2026-08-30: "Remove back armor upgrade
+	// from assault class"). The assault keeps no rear-arc defence — its
+	// mitigation stack is DR alone now, which also un-does the "both slow
+	// classes" symmetry above by design.
+	add_domain( "backarmor",  "BACK ARMOR",  "-10% damage taken from behind / Lv",     3, array( "heavy" ), TOD_TIER_A );
 	// RESERVE (user 2026-08-22): the ammo-back-on-kills mechanic STAYS as-is
 	// (a real capacity twin would blow the ~230-twin boot ceiling — see the
 	// CHANGELOG v9.1 hold). Opened from assault-only to EVERY GUN CLASS at
@@ -451,12 +648,21 @@ function register_domains()
 	// capacity upgrade that got held on the twin ceiling). INTERNAL KEY STAYS
 	// "reserve" on purpose: domain_id 8, CARD_SLUG[8] and every existing image
 	// filename key off it, so a rename here costs zero wiring.
-	// v9.10 rate: ONE round per 7 kills at Lv1, one kill fewer per level, floor
-	// 2 (TOD_SCAV_KILLS_LV1/MIN) — never more than one round per shot.
-	add_domain( "reserve",    "SCAVENGER",   "1 round back per 7 kills, 1 kill fewer / Lv", 5, array( "skirmisher", "assault", "heavy" ), TOD_TIER_B, "assault", 6 );
+	// 2026-08-26 rate (second buff): ONE round per 5 kills at Lv1, one kill fewer
+	// per level to Lv5 = every kill, then the assault-only Lv6 CAPSTONE pays 3
+	// rounds per 2 kills. See scav_kills_needed/scav_rounds_paid — and note the
+	// payout is CLASS PRIMARY ONLY since the same pass; a sidearm kill pays
+	// nothing and does not even advance the counter.
+	add_domain( "reserve",    "SCAVENGER",   "primary kills: 1 round per 5, 1 fewer / Lv; Lv6 3 per 2", 5, array( "skirmisher", "assault", "heavy" ), TOD_TIER_B, "assault", 6 );
 	// -- HEAVY signatures --
-	add_domain( "mobility",   "MOBILITY",    "+5% move speed / Lv",                 10, array( "heavy" ), TOD_TIER_A );
-	add_domain( "bulletfeed", "BULLET FEED", "reserve trickles into the mag: 2.0s -> 0.4s / round", 10, array( "heavy" ), TOD_TIER_B );
+	// MOBILITY max 10 -> 5 (v14.11, user 2026-08-30: "Mobility will only go to
+	// 5 tiers on Heavy"). Card text is LINEAR (+5%/Lv) so no re-bake — the
+	// domain-retune checklist's safe case. Ceiling falls 0.75 x 1.50 = 1.125
+	// to 0.75 x 1.25 = 0.9375, which makes the heavy the slowest CEILING in
+	// the map (below the assault's 1.125 FORCED MARCH cap) — the intended
+	// trade for VITALITY/RECOVERY below: the heavy tanks, it does not run.
+	add_domain( "mobility",   "MOBILITY",    "+5% move speed / Lv",                  5, array( "heavy" ), TOD_TIER_A );
+	add_domain( "bulletfeed", "BULLET FEED", "reserve trickles into the mag: 1.0s -> 0.2s / round", 10, array( "heavy" ), TOD_TIER_B );
 	// ECHO ROUNDS REMOVED 2026-08-23 (user: "we need to remove echo rounds").
 	// Was: add_domain( "echo", "ECHO ROUNDS", "+10% / Lv chance to strike twice",
 	//                  10, array( "heavy" ), TOD_TIER_S );
@@ -468,7 +674,20 @@ function register_domains()
 	// KEY-KEYED map, not an ordered list, so leaving the entries costs nothing
 	// and keeps every OTHER domain's id stable. Removing the add_domain call is
 	// what takes it out of the pool — it can never be offered, rolled or held.
-	add_domain( "regen",      "REGEN",       "+0.5%/s self-heal / Lv",              10, array( "heavy" ), TOD_TIER_A );
+	// REGEN REMOVED 2026-08-30, v14.11 (user: "Remove regen upgrade from Heavy
+	// class"). Was: add_domain( "regen", "REGEN", "+0.5%/s self-heal / Lv",
+	//                           10, array( "heavy" ), TOD_TIER_A );
+	// Same treatment as "echo"/"grinder"/"lunge": the add_domain call is what
+	// puts a domain in the draw pool, so dropping this line removes it. Its
+	// id 12 stays mapped in _tod_upgrade_ui::domain_id and in the Lua DOMAIN
+	// table on purpose (key-keyed maps — disturbing them shifts ids the pause
+	// plates depend on), and the card art stays zoned as dead .ff bytes. The
+	// body-loop trickle hook is gone too. The heavy's sustain story is now
+	// VITALITY + RECOVERY, registered directly below in its place (order in
+	// this function is presentation only — ids live in _tod_upgrade_ui's
+	// key-keyed domain_id map, where these two are 38 and 39).
+	add_domain( "vitality",   "VITALITY",    "+10 max health / Lv",                  5, array( "heavy" ), TOD_TIER_S );   // v14.11 — id 38; scope "class" set below
+	add_domain( "recovery",   "RECOVERY",    "health regen starts 10% sooner / Lv",  3, array( "heavy" ), TOD_TIER_A );   // v14.11 — id 39; see the define block for the emulation contract
 	// PENETRATION (user 2026-08-21): REAL twin — walks the Stoner's
 	// penetrateType small -> medium -> large. 2 levels by the gun-data rule.
 	// HEAVY-ONLY AGAIN 2026-08-23: the AK-47 traded its p-ladder for r+m so the
@@ -496,9 +715,15 @@ function register_domains()
 	// level you hold (tod_upgrade.lua DETAIL[13]) — the user's own split.
 	add_domain( "leech",      "LEECH",       "blade kills heal you (+1 stage)",      5, array( "slasher" ), TOD_TIER_A );
 	// CLEAVE v8.9 (user 2026-08-21 nerf): a CHANCE ladder, not a guaranteed
-	// count — +33%/Lv for one extra target, every 3 levels banks it and starts
-	// the next. 6 levels, hard cap +2 extras (3 zombies per swing).
-	add_domain( "cleave",     "CLEAVE",      "+33% / Lv chance to hit an extra zombie (max +2)", 6, array( "slasher" ), TOD_TIER_S );
+	// count — +33%/Lv for one extra target, every 3 levels banks it.
+	// MAX 6 -> 3 (v14.11, user 2026-08-30: "Cleave can only go to tier 3 now.
+	// It was 6 but this is too OP"): the ladder now ENDS at the first banked
+	// extra — Lv3 = one guaranteed extra target, and the second block (Lv4-6,
+	// +2 extras) is unreachable. The cb's arithmetic is untouched (int(3/3)=1
+	// extra; the old `extra > 2` clamp is dead but harmless belt). Card art
+	// says "33% CHANCE PER LEVEL" — level-agnostic, verified by opening the
+	// PNG 2026-08-30, so no re-bake.
+	add_domain( "cleave",     "CLEAVE",      "+33% / Lv chance to hit an extra zombie (max +1)", 3, array( "slasher" ), TOD_TIER_S );
 	// -- TWIN domains (REAL gun-data changes via variant swap; 3 levels by
 	//    rule — any upgrade touching gun data caps at 3) --
 	add_domain( "firerate",   "FIRE RATE",   "truly fires faster (-8% fire time / Lv)",   3, array( "skirmisher" ), TOD_TIER_A );
@@ -530,7 +755,14 @@ function register_domains()
 	// — id 23 in _tod_upgrade_ui::domain_id + tod_upgrade.lua DOMAIN. Mechanics
 	// live in _tod_runandgun.gsc (it imports us for get_level; we never import
 	// it). Skirmisher-only; tier B = the ammo-economy band (RESERVE, BULLET FEED).
-	add_domain( "runandgun",  "RUN AND GUN", "shots fired on the move cost no ammo: 20/35/50%", 3, array( "skirmisher" ), TOD_TIER_B );
+	// v14.11 (user 2026-08-30): the card gained a DAMAGE half — same 20/35/50
+	// ladder, same "moving" test, applied in unique_damage_mult. One card, one
+	// condition, two payouts. Still tier B: it shares the ammo-economy band's
+	// weight even though the damage half nudges it toward A — the user set the
+	// rates, the band stays until they say otherwise. Card art re-bake PENDING
+	// ("FREE SHOTS ON THE MOVE" is now half the story — see the v14.11 art
+	// prompt doc); the desc + Lua rows carry the full text meanwhile.
+	add_domain( "runandgun",  "RUN AND GUN", "moving: 20/35/50% free shots, +20/35/50% damage", 3, array( "skirmisher" ), TOD_TIER_B );
 	// ---- CLASS TIER UNIQUES (docs/25 §9; ids 25..31 in _tod_upgrade_ui::domain_id
 	//      + tod_upgrade.lua DOMAIN). Each is bound to ONE tier gun by gun_keys
 	//      (set below) and resets on a tier-up like every gun domain. All
@@ -549,11 +781,18 @@ function register_domains()
 	// near-permanent x2 on top of the (now removed) ECHO ROUNDS x2. OVERDRIVE
 	// tops out at +60%.
 	add_domain( "overdrive",  "OVERDRIVE",        "sustained fire hits harder: +5/+8/+12% per 10 rounds (x5)",           3, array( "heavy" ), TOD_TIER_S );
-	// SECOND WIND — the MP7's replacement unique (gun-bound below).
+	// SECOND WIND — the MP5's unique since v14.11 (user 2026-08-30: "guve
+	// second wind upgrade to the MP5 only instead of Mp7"; it was the MP7's
+	// replacement unique from 2026-08-23). Gun-bound below.
 	add_domain( "secondwind", "SECOND WIND",      "sprint to heal: 1% of your health per second per level",              5, array( "skirmisher" ), TOD_TIER_S );
-	// MOMENTUM — the MP5's unique since 2026-08-24 (it was a skirmisher CLASS
-	// domain, any gun, until the ADRENALINE swap; see set_guns below).
-	add_domain( "momentum",   "MOMENTUM",         "damage scales with your speed: up to +5% per level while moving",     5, array( "skirmisher" ), TOD_TIER_A );
+	// MOMENTUM REMOVED 2026-08-30, v14.11 (user: "Remove momentum upgrade").
+	// Was: add_domain( "momentum", "MOMENTUM",
+	//        "damage scales with your speed: up to +5% per level while moving",
+	//        5, array( "skirmisher" ), TOD_TIER_A );
+	// Id 34 stays mapped in domain_id() and the Lua tables (key-keyed maps);
+	// its card art stays zoned. The set_guns binding and the
+	// unique_damage_mult hook are gone — RUN AND GUN's damage half is the
+	// moving-damage card now, and SECOND WIND (above) takes the MP5 slot.
 	// KILL RELOAD: TIER S -> B (user 2026-08-23: "kill reload is B or A tier").
 	// B is the right one of the two they offered. The v9.43 rework left it an
 	// AMMO-ECONOMY card — a magazine topped up from your own reserve every 100th
@@ -563,7 +802,7 @@ function register_domains()
 	// only because it was S when it WAS game-defining, before the rework.
 	// Effect of the move: draw weight 20 -> 100 (offered 5x as often) and its
 	// SUPER/ULTIMATE slice stops being halved (tier_rarity_factor 0.5 -> 1.0).
-	add_domain( "killreload", "KILL RELOAD",      "every 100th/75th/50th kill refills your magazine",                    3, array( "assault" ),    TOD_TIER_B );
+	add_domain( "killreload", "KILL RELOAD",      "every 55th/40th/30th kill refills your magazine from reserve",       3, array( "assault" ),    TOD_TIER_B );
 	// IMPACT ROUNDS v9.45 (user 2026-08-23): TEN levels at 3%/Lv, so the ramp is
 	// 3/6/9...30% instead of 10/20/30%. Same ceiling, ten times the climb.
 	add_domain( "impact",     "IMPACT ROUNDS",    "3% of hits burst nearby zombies for 40% of the hit, per level",      10, array( "assault" ),    TOD_TIER_S );
@@ -586,7 +825,7 @@ function register_domains()
 	// skirmisher's BASE, still short of a skirmisher who has spent anything on
 	// SPRINT. It rides the SAME lane as SPRINT/MOBILITY in apply_move_speed()
 	// rather than inventing a second speed multiplier — one owner for move speed.
-	add_domain( "march",      "FORCED MARCH",     "+5% move speed / Lv",                                                 3, array( "assault" ),    TOD_TIER_A );
+	add_domain( "march",      "FORCED MARCH",     "+5% move speed / Lv",                                                 5, array( "assault" ),    TOD_TIER_A );   // max 3 -> 5 (user 2026-08-29); card text is LINEAR so no re-bake needed (domain-retune checklist), pips clamp at 3 by design
 
 	// ---- CLASS TIERS (docs/25 §2.3, §3 — user 2026-08-22) ------------------
 	// SCOPE: "gun" (default) = reset to 0 when a TIER card promotes the class;
@@ -597,6 +836,58 @@ function register_domains()
 	set_scope( "luck", "class" );
 	set_scope( "sprintarmor", "class" );   // damage resistance — persists like DR (v9.28)
 	set_scope( "backarmor",   "class" );   // damage resistance — persists like DR (v9.45)
+	// SKIRMISHER BUFF, 2026-08-27 (user: "buff skrimisher so that sprint doesnt
+	// reset after class tier and also shooting while running doesnt reset").
+	// This REVERSES the 2022-08-22 #1 call recorded in the comment above for two
+	// of the four body domains it named.
+	//
+	// WHY THESE TWO AND NOT ALL THE BODY DOMAINS: neither describes the GUN. A
+	// tier-up hands you a new weapon, so everything about that weapon reasonably
+	// starts over — but how fast the PLAYER runs, and whether the PLAYER can
+	// fire on the move, are facts about the body carrying the gun. SPRINT FIRE
+	// is the sharper case: it is a binary engine specialty (max 1) and it is the
+	// skirmisher's whole identity, so losing it to a promotion cost the class its
+	// character at the exact moment the promotion was supposed to reward it.
+	//
+	// SPRINT IS SHARED WITH THE SLASHER and so this buffs that class too. That is
+	// intended rather than tolerated: the argument above is about bodies, not
+	// about skirmishers, and it applies identically to a slasher. SPRINT FIRE is
+	// skirmisher-only, so that half lands where it was aimed.
+	//
+	// NOT CHANGED, and worth stating so the asymmetry is a decision and not an
+	// oversight: MOBILITY (heavy) and FORCED MARCH (assault) ride the SAME
+	// move-speed lane in apply_move_speed() and are still gun-scoped. FORCED
+	// MARCH genuinely belongs to the gun (it is AK-47-bound, so a promotion off
+	// the AK is meant to take it). MOBILITY has the same body argument as SPRINT
+	// and is the obvious next candidate if the heavy ever needs the same buff.
+	//
+	// KEEP tod_upgrade.lua's TIER_SAFE IN STEP — that table drives the pause
+	// menu's "this will be destroyed" badge, and a domain that survives here
+	// while still being badged there is a UI that lies.
+	set_scope( "sprint",     "class" );
+	set_scope( "sprintfire", "class" );
+	// VITALITY (v14.11): "player keeps it for whole game" — the user's own
+	// words, so this is the FIRST non-defensive, non-luck domain to persist
+	// through a promotion. The body argument that carried SPRINT applies at
+	// least as strongly to bone and muscle. RECOVERY is deliberately NOT
+	// here: the user gave persistence to vitality alone, so recovery resets
+	// on a tier-up like MOBILITY does — flip it to "class" here if that ever
+	// reads wrong in play (the body argument covers it too).
+	set_scope( "vitality",   "class" );
+	// HEADSHOT + SCAVENGER PERSIST FOR THE ASSAULT (v14.12, user: "stay even
+	// between class tier upgrades"; v14.13 same night, user: "Scavenger
+	// should only stay for assault"). v14.12 shipped scavenger's persistence
+	// for every class that rolls it (scope was per-domain, the SPRINT
+	// precedent); the correction adds the scope_class lane so persistence can
+	// target ONE class. HEADSHOT needs no qualifier — it is assault-only by
+	// class_keys, so plain scope "class" already lands exactly there.
+	// SCAVENGER survives for the ASSAULT ALONE: a skirmisher or heavy taking
+	// a tier card still loses it, exactly as before v14.12.
+	// The pause badge is SERVER-COMPUTED now (sync_max packs the bit), so
+	// tod_upgrade.lua's TIER_SAFE is only the fallback and needs no per-class
+	// knowledge.
+	set_scope( "headshot",   "class" );
+	set_scope( "reserve",    "class", "assault" );
 	// GUN_KEYS: a domain bound to specific gun STEMS — rollable only while the
 	// player's current-tier gun is one of them. The twin ladders exist only on
 	// the guns the generator built them for (a T2 SMG must never roll a dead
@@ -639,18 +930,15 @@ function register_domains()
 	set_guns( "knifespeed",  array( "t9_me_knife_american", "t9_me_wakizashi", "leviathan" ) );   // every k-ladder blade
 	set_guns( "thunder",     array( "leviathan" ) );
 	// the uniques: one gun each (the tier ladders' T2/T3 guns)
-	// ADRENALINE <-> MOMENTUM SWAPPED (user 2026-08-24: "Adrenaline and momentum
-	// upgrades will be swapped on mp5 and mp7. MP7 will get adrenaline and mp5
-	// momentum"). Note what changed for MOMENTUM specifically: it was NOT
-	// gun-bound at all — a skirmisher CLASS domain rollable on all three rungs —
-	// so this does not just move it, it NARROWS it to the MP5. That is the only
-	// reading under which "mp5 momentum" is not a no-op.
-	// SECOND WIND stays on the MP7, which now carries two uniques; nothing was
-	// asked about it and the MP5 is the rung that gained a binding.
+	// v14.11 (user 2026-08-30): MOMENTUM is gone and SECOND WIND moves
+	// MP7 -> MP5, so each skirmisher rung is back to ONE unique — ADRENALINE
+	// on the MP7 (T3), SECOND WIND on the MP5 (T2), and the MAC-10 keeps its
+	// f-ladder as the T1 identity. (History: 2026-08-24 swapped ADRENALINE to
+	// the MP7 and narrowed MOMENTUM to the MP5; the MP7 carried two uniques
+	// from then until this pass.)
 	set_guns( "adrenaline", array( "t6_mp7" ) );            // was t9_mp5 (2026-08-24)
-	set_guns( "momentum",   array( "t9_mp5" ) );            // was class-wide (2026-08-24)
 	set_guns( "overdrive",  array( "t6_death_machine" ) );   // moved off the MP7 2026-08-23
-	set_guns( "secondwind", array( "t6_mp7" ) );            // the MP7's replacement unique
+	set_guns( "secondwind", array( "t9_mp5" ) );            // MP5 since v14.11 (was t6_mp7)
 	// KILL RELOAD + IMPACT ROUNDS: CLASS-WIDE, NOT GUN-BOUND (user 2026-08-23:
 	// "impact rounds should be for all assault not just AK", "kill reload should
 	// be for all assault not just krig"). Both effects are pure script
@@ -683,6 +971,7 @@ function add_domain( key, display, desc, max, class_keys, tier, bonus_class, bon
 	d.bonus_max = bonus_max;
 	// CLASS TIERS: scope + gun binding (set after registration, see above)
 	d.scope = "gun";
+	d.scope_class = undefined;   // v14.13 — scope "class" limited to ONE class (see set_scope)
 	d.gun_keys = undefined;
 	level.tod_domains[ level.tod_domains.size ] = d;
 }
@@ -697,11 +986,45 @@ function find_domain( key )
 	return undefined;
 }
 
-function set_scope( key, scope )
+// v14.13: the optional third arg limits a "class" scope to ONE class — the
+// domain survives a tier promotion only for that class and resets like any
+// gun domain for everyone else who rolls it. undefined = every class.
+// GSC pads missing args with undefined, so the old 2-arg calls are unchanged.
+function set_scope( key, scope, scope_class )
 {
 	d = find_domain( key );
 	if ( isdefined( d ) )
+	{
 		d.scope = scope;
+		d.scope_class = scope_class;
+	}
+}
+
+// v14.13 — does THIS player's copy of the domain survive a tier promotion?
+// The single authority: tier_up's reset loop skips on it, and sync_max()
+// stamps it into every pause-menu row so the reset badge can never disagree
+// with what tier_up will actually do. A classless player (pre-draft) fails
+// the scope_class test and keeps nothing — irrelevant in practice, since no
+// promotion can happen before the draft.
+function domain_survives_tier( player, d )
+{
+	if ( !isdefined( d.scope ) || d.scope != "class" )
+		return false;
+	if ( isdefined( d.scope_class ) )
+		return ( isdefined( player.tod_class ) && player.tod_class == d.scope_class );
+	return true;
+}
+
+// v14.13 — the max arg every tod_upg_sync send must carry: the per-player cap
+// plus TOD_SYNC_SAFE_FLAG when the domain survives promotion FOR THIS PLAYER.
+// One owner; _tod_spire's grant sync calls it too. Reset rows come out plain
+// by construction (they are being reset precisely because survives is false).
+function sync_max( player, d )
+{
+	mx = domain_max( player, d );
+	if ( domain_survives_tier( player, d ) )
+		mx += TOD_SYNC_SAFE_FLAG;
+	return mx;
 }
 
 function set_guns( key, stems )
@@ -809,24 +1132,33 @@ function player_upgrade_setup()
 	// (mag_watcher REMOVED 2026-08-20 — MAG SIZE is real twin variants now,
 	// no virtual pool; the todMagBonus clientfield stays registered but 0.)
 
-	// BASE 150 HP (user 2026-08-20). Stock jugg is ADDITIVE on the current
-	// maxhealth and restores preMaxHealth on loss (_zm_perks.gsc:801/848), so
-	// raising the base BEFORE jugg stacks cleanly (jugg = 150 + bonus). The
-	// body loop below maintains it against stock 100-resets; only the spawn
-	// grant heals the difference (the maintain never free-heals).
-	if ( self.maxhealth < TOD_UPG_BASE_HP )
+	// BASE 150 HP (user 2026-08-20) + VITALITY (v14.11: +10/Lv rides the same
+	// floor). Stock jugg is ADDITIVE on the current maxhealth and restores
+	// preMaxHealth on loss (_zm_perks.gsc:801/848), so raising the base
+	// BEFORE jugg stacks cleanly (jugg = floor + bonus). The body loop below
+	// maintains it against stock 100-resets; only the spawn grant heals the
+	// difference (the maintain never free-heals) — so a respawning heavy
+	// comes back with their vitality HP filled, same doctrine as the base 150.
+	// (tod_levels is initialised above, so get_level is safe here.)
+	want = TOD_UPG_BASE_HP + TOD_UPG_VITALITY_HP_PER_LVL * get_level( self, "vitality" );
+	if ( self.maxhealth < want )
 	{
-		self.maxhealth = TOD_UPG_BASE_HP;
-		self SetMaxHealth( TOD_UPG_BASE_HP );
-		if ( self.health < TOD_UPG_BASE_HP )
-			self.health = TOD_UPG_BASE_HP;
+		self.maxhealth = want;
+		self SetMaxHealth( want );
+		if ( self.health < want )
+			self.health = want;
 	}
 
 	if ( !IS_TRUE( self.tod_body_systems_on ) )
 	{
 		self.tod_body_systems_on = true;
 		self thread body_systems_loop();
-		self thread tireless_spawn_watch();
+		self thread recovery_loop();          // RECOVERY (v14.11) — its own 0.1s cadence
+		self thread recovery_damage_watch();  // exact last-hit stamps for it
+		// v14.16 — runs for EVERY player, not just RECOVERY holders: VITALITY's
+		// purchase heal desyncs the same vignette. See the block comment.
+		self thread health_overlay_sync();
+		// (tireless_spawn_watch removed 2026-08-26 with TIRELESS itself.)
 	}
 
 	// move scale must be re-applied on every spawn (it resets)
@@ -835,7 +1167,7 @@ function player_upgrade_setup()
 
 // ---------------------------------------------------------------------------
 // BODY DOMAINS (persist across class switches — trained on the player):
-// SPRINT/MOBILITY (move scale + tireless sprint), HEALTH (max HP maintain,
+// SPRINT/MOBILITY (move scale), HEALTH (max HP maintain,
 // jugg-aware), REGEN (trickle heal), BULLET FEED (reserve -> mag). 1s cadence.
 // ---------------------------------------------------------------------------
 
@@ -1125,54 +1457,12 @@ function menu_freeze( on )
 	}
 }
 
-// TIRELESS helpers (v9.15) — self = player. See TOD_UPG_TIRELESS_SECS for why
-// BOTH calls are needed: the server duration alone never changed the meter.
-function tireless_apply()
-{
-	self.tod_tireless_on = true;
-	self SetSprintDuration( TOD_UPG_TIRELESS_SECS );
-	self SetClientPlayerSprintTime( TOD_UPG_TIRELESS_SECS );
-}
-
-// Back to stock on both sides. The specialty is stripped only if the player
-// did not BUY Stamin-Up (stock tracks purchases in perks_active,
-// _zm_perks.gsc:778). Idempotent — safe from the body loop AND reset_gun_state.
-function tireless_clear()
-{
-	self.tod_tireless_on = undefined;
-	self SetSprintDuration( 4 );
-	self SetClientPlayerSprintTime( stock_sprint_time() );
-	if ( !( isdefined( self.perks_active ) && IsInArray( self.perks_active, "specialty_staminup" ) ) )
-	{
-		if ( self HasPerk( "specialty_staminup" ) )
-			self UnsetPerk( "specialty_staminup" );
-	}
-}
-
-// The gametype's per-client sprint seconds (zm/gametypes/_globallogic.gsc:2200
-// reads it from the gametype table; 4 for zclassic). Fallback 4.
-function stock_sprint_time()
-{
-	if ( isdefined( level.playerSprintTime ) && level.playerSprintTime > 0 )
-		return level.playerSprintTime;
-	return 4;
-}
-
-// Stock sets the client dvar only at CONNECT (not at spawn), so a respawn
-// should not touch it — this is insurance, not a known reset path. Re-sends
-// the pair only while the latch is on; one per player, threaded once beside
-// body_systems_loop.
-function tireless_spawn_watch()
-{
-	self endon( "disconnect" );
-	level endon( "end_game" );
-	for ( ;; )
-	{
-		self waittill( "spawned_player" );
-		if ( IS_TRUE( self.tod_tireless_on ) )
-			self tireless_apply();
-	}
-}
+// (tireless_apply / tireless_clear / stock_sprint_time / tireless_spawn_watch
+// all REMOVED 2026-08-26 with the TIRELESS feature — see the block comment
+// where TOD_UPG_TIRELESS_SECS used to live for the full history and for what to
+// try first if it is ever revived. Nothing in the map now calls
+// SetSprintDuration or SetClientPlayerSprintTime, so both sprint knobs stay at
+// the gametype's stock 4s for every player, which is what they read as anyway.)
 
 function body_systems_loop()
 {
@@ -1193,45 +1483,24 @@ function body_systems_loop()
 		// stomps SetMoveSpeedScale (last-writer-wins). Idempotent.
 		self apply_move_speed();
 
-		// BASE 150 HP maintain (jugg-aware: only ever RAISES a sub-150 max,
-		// so an active jugg's 150+bonus is never touched; no free healing).
-		if ( self.maxhealth < TOD_UPG_BASE_HP )
+		// BASE 150 HP + VITALITY maintain (v14.11: the floor is now
+		// 150 + 10 x the heavy's VITALITY level). Jugg-aware exactly as
+		// before: only ever RAISES a max below the floor, so an active jugg's
+		// floor+bonus is never touched; no free healing. This floor is also
+		// what re-lands a vitality level after stock's jugg-loss restore or
+		// spawn reboot clobbers the additive apply (see apply_upgrade).
+		want = TOD_UPG_BASE_HP + TOD_UPG_VITALITY_HP_PER_LVL * get_level( self, "vitality" );
+		if ( self.maxhealth < want )
 		{
-			self.maxhealth = TOD_UPG_BASE_HP;
-			self SetMaxHealth( TOD_UPG_BASE_HP );
+			self.maxhealth = want;
+			self SetMaxHealth( want );
 		}
 
-		// TIRELESS — v9.15 (user 2026-08-22: "unlimited running with sprint lv
-		// 5 ... doesn't work still"). History: the first cut granted only the
-		// staminup specialty (no meter change); the second added the
-		// server-side SetSprintDuration(60) — ALSO no effect, because the meter
-		// is predicted on the CLIENT from the client's `player_sprintTime`
-		// dvar (see TOD_UPG_TIRELESS_SECS). tireless_apply() now sets BOTH the
-		// server duration and, via SetClientPlayerSprintTime, that client dvar.
-		// Latched (tod_tireless_on): applied once on grant, re-sent on every
-		// spawn by tireless_spawn_watch, CLEARED here the moment eligibility is
-		// lost (class switch at the station, tier-up level reset) — the old
-		// code had no un-apply path outside reset_gun_state. The specialty
-		// stays too (Stamin-Up's engine speed/sprint multiplier + the glow/HUD
-		// systems that read it).
-		//
-		// SKIRMISHER ONLY (user 2026-08-22: "I want only skirmisher to be able
-		// to get tireless"). SPRINT is ALSO on the slasher, so the level alone
-		// is not sufficient — the grant is CLASS-GATED. Keep it that way: if a
-		// future edit drops this gate, the slasher silently inherits tireless.
-		c = tod_classes::get_class( self );
-		if ( isdefined( c ) && c.key == "skirmisher"
-		  && get_level( self, "sprint" ) >= TOD_UPG_SPRINT_TIRELESS )
-		{
-			if ( !( self HasPerk( "specialty_staminup" ) ) )
-				self SetPerk( "specialty_staminup" );
-			if ( !IS_TRUE( self.tod_tireless_on ) )
-				self tireless_apply();
-		}
-		else if ( IS_TRUE( self.tod_tireless_on ) )
-		{
-			self tireless_clear();
-		}
+		// (The TIRELESS grant/clear pair lived here until 2026-08-26. It was the
+		// only thing in the map that called SetPerk("specialty_staminup"), so
+		// with it gone the specialty is once again purely the perk machine's —
+		// no script grants it, and nothing needs to strip it. See the block
+		// comment where TOD_UPG_TIRELESS_SECS used to live.)
 
 		// SHOOT WHILE SPRINTING — the SPRINT FIRE upgrade (user 2026-08-21:
 		// "fire while sprinting is an upgrade ... it's not just part of the
@@ -1257,12 +1526,12 @@ function body_systems_loop()
 		// damage chain (_tod_bosses::boss_player_damage + the panzer-melee
 		// mitigation hook), not here; maxhealth is stock's again.)
 
-		// REGEN (heavy): trickle self-heal.
-		rgn = get_level( self, "regen" );
-		if ( rgn > 0 )
-			self trickle_heal( self.maxhealth * TOD_UPG_REGEN_PER_LVL * rgn );
+		// (REGEN's trickle hook lived here until 2026-08-30 — removed with the
+		// domain, v14.11. RECOVERY replaces the heavy's sustain and runs on
+		// its own faster thread, recovery_loop — a 1s tick is too coarse for
+		// a 240..1500ms delay reduction.)
 
-		// SECOND WIND (skirmisher, MP7-bound): heal WHILE SPRINTING, 1% of max
+		// SECOND WIND (skirmisher, MP5-bound since v14.11): heal WHILE SPRINTING, 1% of max
 		// HP per level per second. This loop is the 1s tick REGEN already rides,
 		// so the per-second wording is literal. Sprint-gated on purpose — you
 		// cannot fire while sprinting in BO3, so the heal costs you your damage
@@ -1331,8 +1600,10 @@ function body_systems_loop()
 		//   * ALWAYS exactly ONE round per tick — the amount never scales, the
 		//     RATE does. That is what reads as a belt feeding.
 		//   * Interval = TOD_UPG_FEED_BASE_SECS - TOD_UPG_FEED_STEP_SECS*(Lv-1)
-		//     -> Lv1 every 3.0s ... Lv10 every 0.75s, floored so it can never
-		//     hit zero.
+		//     -> Lv1 every 1.0s ... Lv10 every 0.2s, floored so it can never
+		//     hit zero. (This comment said 3.0s/0.75s until 2026-08-30 — it was
+		//     never updated through the v8.9 retune OR the 2x buff. The DEFINES
+		//     are the source of truth; distrust the prose.)
 		//   * Runs on the CLASS GUN whether or not it is in hand — we look the
 		//     weapon up in the player's inventory instead of reading
 		//     GetCurrentWeapon, so the belt keeps loading while the pistol (or
@@ -1383,6 +1654,169 @@ function trickle_heal( amount )   // self = player
 		n = self.maxhealth;
 	if ( n > self.health )
 		self.health = n;
+}
+
+// ---------------------------------------------------------------------------
+// RECOVERY (HEAVY, v14.11) — "health regen starts 10% sooner / Lv", 3 levels.
+// Stock zm regen is script-side in _zm_playerhealth.gsc::playerHealthRegen and
+// its delay is LEVEL-GLOBAL, so it cannot be shortened for one player. This
+// pair EMULATES the stock outcome at the reduced delay instead — see the
+// contract at the TOD_UPG_RECOV_* defines. Stock's loop is untouched: when it
+// wakes at the full delay it finds the player already healed and idles.
+//
+// Two damage stamps feed tod_last_dmg_ms, belt and braces:
+//   * recovery_damage_watch — the engine's own "damage" notify, the same
+//     input stock's playerHurtcheck trusts. Exact timing, every source
+//     (Panzer flame, falls, everything that actually costs health).
+//   * the poll below — any health DROP between ticks stamps too, so a
+//     damage path that somehow skipped the notify is still caught within
+//     one 0.1s tick. Our own heals only ever raise health, never re-stamp.
+// ---------------------------------------------------------------------------
+
+// self = player. One thread per player for the whole game (started once from
+// player_upgrade_setup, same lifetime contract as body_systems_loop).
+function recovery_loop()
+{
+	self endon( "disconnect" );
+	level endon( "end_game" );
+
+	self.tod_last_dmg_ms = 0;
+	last_hp = ( ( isdefined( self.health ) ) ? self.health : 0 );
+
+	for ( ;; )
+	{
+		wait TOD_RECOV_TICK_SECS;
+
+		// poll-stamp BEFORE any gating — a drop is a drop even at level 0
+		// (levels can arrive mid-fight; the stamp must already be honest)
+		hp = ( ( isdefined( self.health ) ) ? self.health : 0 );
+		if ( hp < last_hp )
+			self.tod_last_dmg_ms = GetTime();
+		last_hp = hp;
+
+		lvl = get_level( self, "recovery" );
+		if ( lvl <= 0 )
+			continue;
+		if ( !IsAlive( self ) || ( self laststand::player_is_in_laststand() ) )
+			continue;   // never heal the downed — stock's own regen never does
+		if ( !isdefined( self.maxhealth ) || self.maxhealth <= 0 )
+			continue;
+		if ( self.health <= 0 || self.health >= self.maxhealth )
+			continue;
+
+		// Which band? Mirrors stock's healthOverlayCutoff split: above it a
+		// finished delay SNAPS to full; below it the (longer) delay gates a
+		// climb. Read the stock numbers LIVE so a retune there propagates.
+		ratio = self.health / self.maxhealth;
+		cutoff = ( ( isdefined( level.healthOverlayCutoff ) ) ? level.healthOverlayCutoff : 0.2 );
+		if ( ratio > cutoff )
+			delay = ( ( isdefined( level.playerHealth_RegularRegenDelay ) ) ? level.playerHealth_RegularRegenDelay : 2400 );
+		else
+			delay = ( ( isdefined( level.longRegenTime ) ) ? level.longRegenTime : 5000 );
+
+		if ( ( GetTime() - self.tod_last_dmg_ms ) < int( delay * ( 1.0 - TOD_UPG_RECOV_PCT_PER_LVL * lvl ) ) )
+			continue;
+
+		// Window earned early — deliver what stock would deliver at the full
+		// delay. SetNormalHealth takes a RATIO (stock's own idiom in this
+		// exact spot, _zm_playerhealth.gsc:243).
+		if ( ratio > cutoff )
+			self SetNormalHealth( 1 );
+		else
+		{
+			nr = ratio + TOD_RECOV_CLIMB_PER_TICK;
+			if ( nr > 1.0 )
+				nr = 1.0;
+			self SetNormalHealth( nr );
+		}
+		last_hp = self.health;   // our heal is a rise; never let it read as anything else
+	}
+}
+
+// self = player. The exact-timing stamp lane (see the block comment above).
+function recovery_damage_watch()
+{
+	self endon( "disconnect" );
+	level endon( "end_game" );
+
+	for ( ;; )
+	{
+		self waittill( "damage", amount, attacker );
+		// FRIENDLY FIRE DOES NOT OPEN A REGEN WINDOW — mirrors stock's own
+		// filter in playerHurtcheck (_zm_playerhealth.gsc:101) and map 1's
+		// qr_damage_time_watcher. Without it a teammate's splash (or your own
+		// PHD dive) would delay your regen where stock would not.
+		if ( isdefined( attacker ) && isplayer( attacker )
+		  && isdefined( attacker.team ) && attacker.team == self.team )
+			continue;
+		self.tod_last_dmg_ms = GetTime();
+	}
+}
+
+// ---------------------------------------------------------------------------
+// RED-VIGNETTE SYNC (v14.16) — the downstream cost of ANY recovery modifier.
+//
+// PORTED FROM MAP 1, WHERE IT WAS A USER-REPORTED BUG (acc _acc_perks.gsc
+// health_overlay_sync, 2026-07-25: "the screen keeps flashing red for seconds
+// at 100% HP"). Their Mega Quick Revive shortens the same stock regen delay
+// RECOVERY does, so they hit this first and paid for the diagnosis.
+//
+// THE MECHANISM (verified in the stock tree, not assumed): the red vignette
+// (_zm_playerhealth.gsc::redFlashingOverlay) is TIME-based and NEVER re-reads
+// self.health — once you dip under healthOverlayCutoff it pulses until
+// hurtTime + longRegenTime plus a fixed fade tail. Stock got away with that
+// because stock's "very hurt" regen ALSO waits exactly longRegenTime, so the
+// overlay ending and the heal completing land together BY CONSTRUCTION.
+//
+// WE BREAK THAT ALIGNMENT TWICE OVER:
+//   * RECOVERY starts the heal at longRegenTime x (1 - 0.10 x Lv) — at Lv3
+//     that is 3.5s, and the 0.2/tick climb tops off ~0.4s later, while the
+//     vignette runs on past 5s + its tail. Seconds of red screen at full HP.
+//   * VITALITY's apply_upgrade HEALS on purchase, which can top a critical
+//     player off instantly — same desync, no RECOVERY required.
+//
+// THE LEVER IS STOCK'S OWN KILL SWITCH: "clear_red_flashing_overlay", which
+// watchHideRedFlashingOverlay waits on (:396) and redFlashingOverlay endons
+// (:414); _zm_laststand.gsc:1370 fires it on revive, so this is a blessed
+// lane rather than a hack. Fired EDGE-TRIGGERED on not-full -> full.
+//
+// DELIBERATELY NOT GATED on the player_has_red_flashing_overlay flag: stock's
+// regen loop clears that flag at full health WITHOUT stopping the visual, so
+// "flag off, overlay still pulsing" is precisely the broken state being fixed.
+// A notify with no overlay up is a no-op (fades an alpha-0 element).
+//
+// THREAD LIFETIME — one difference from map 1, and it is deliberate. They
+// re-thread per life and needed a custom "acc_perk_life" notify to kill the
+// previous copies, because a BO3 ZM player NEVER notifies "death" during play
+// so endon("death") leaks a loop per respawn (their 2026-06-27 crash-hunt).
+// OURS CANNOT LEAK: player_upgrade_setup latches on tod_body_systems_on and
+// starts these threads exactly ONCE per player (the latch is set and never
+// cleared — grep-verified), so they simply survive death and respawn. Do NOT
+// "fix" this by re-threading on spawn without adding a kill notify first.
+// ---------------------------------------------------------------------------
+
+// self = player.
+function health_overlay_sync()
+{
+	self endon( "disconnect" );
+	level endon( "end_game" );
+
+	was_full = true;   // spawns land at full — only a real recovery may edge-trigger
+
+	for ( ;; )
+	{
+		wait TOD_RECOV_TICK_SECS;
+
+		if ( !isdefined( self.maxhealth ) || self.maxhealth <= 0 )
+			continue;
+		if ( self.health <= 0 )
+			continue;   // downed/dead — laststand's revive path clears the overlay itself
+
+		is_full = ( self.health >= self.maxhealth );
+		if ( is_full && !was_full )
+			self notify( "clear_red_flashing_overlay" );
+		was_full = is_full;
+	}
 }
 
 // ---------------------------------------------------------------------------
@@ -1473,7 +1907,18 @@ function reconcile_twin()   // self = player
 		if ( !isdefined( want ) )
 			return;   // variant not linked — never take the player's gun
 
-		self swap_primary( w, want, false );
+		// PAP CROSSING = FULL AMMO (v13.18, Workshop report "Yikes" 2026-08-29:
+		// "i pap the stoner and my bullet size went from 60-25"). The delta
+		// copy below preserved his 10 remaining rounds: 10 + (75-60) = the
+		// exactly-25 on his screen, read as a capacity nerf. The delta is the
+		// RIGHT rule for twin LEVEL walks — an upgrade card must never mint
+		// free ammo — but base->_up here is the player's paid Pack-a-Punch,
+		// and stock PaP has returned a FULL gun in every zombies title: the
+		// 5000 buys the refill too. Detected as: the wanted form is _up while
+		// the HELD form is not. (_up-to-_up level walks and base-to-base walks
+		// keep the delta; the tier-up path already passes fresh=true itself.)
+		crossing = ( is_up && !IsSubStr( w.name, g.up_suffix ) );
+		self swap_primary( w, want, crossing );
 		return;
 	}
 }
@@ -1629,13 +2074,13 @@ function refresh_upgrade_list()   // self = player
 		d = level.tod_domains[ i ];
 		lvl = get_level( self, d.key );
 		if ( lvl > 0 )
-			self LuiNotifyEvent( &"tod_upg_sync", 3, tod_upgrade_ui::domain_id( d.key ), lvl, domain_max( self, d ) );
+			self LuiNotifyEvent( &"tod_upg_sync", 3, tod_upgrade_ui::domain_id( d.key ), lvl, sync_max( self, d ) );
 	}
 	// CLASS TIER row (id 24): pips = the tier, shown from tier 2 on (tier 1 is
 	// the baseline, not an upgrade). Same int-only lane.
 	t = tod_classes::tier( self );
 	if ( t >= 2 )
-		self LuiNotifyEvent( &"tod_upg_sync", 3, tod_upgrade_ui::domain_id( "tier" ), t, tod_classes::tier_max() );
+		self LuiNotifyEvent( &"tod_upg_sync", 3, tod_upgrade_ui::domain_id( "tier" ), t, tod_classes::tier_max() + TOD_SYNC_SAFE_FLAG );   // the tier row IS the promotion — always "safe"
 }
 
 // ---------------------------------------------------------------------------
@@ -2043,7 +2488,301 @@ function roll_options( player )
 	if ( tier_deal )
 		opts[ 1 ] = make_tier_option( player );
 
+	// THE LUCK FLOOR — LAST, and it has to be last. The tier card overwrites
+	// slot 1 directly above, so a guarantee applied any earlier could be spent
+	// on a card that no longer exists by the time the deal is presented.
+	//
+	// The OPENING-HAND latch is read and set here rather than inside
+	// guarantee_rarity, so it is spent exactly once even on the paths where the
+	// guarantee itself returns early (dice already cleared the floor, or every
+	// candidate was maxed). Reading it inside and setting it outside would let a
+	// satisfied first deal hand the floor to the second one as well.
+	first = !IS_TRUE( player.tod_first_deal_done );
+	player.tod_first_deal_done = true;
+	// v14.6: the pool rides along so the guarantee can REDEAL a slot when
+	// neither dealt card has the headroom to absorb the owed rarity.
+	guarantee_rarity( player, opts, first, pool );
+
 	return opts;
+}
+
+// The LUCK GUARANTEE (see TOD_UPG_GUAR_ULT_BAR). opts = the 1-2 card structs,
+// already rolled. Promotes ONE card up to the floor the bar has earned, or does
+// nothing at all if the dice already met it.
+//
+// THE TIER CARD IS NOT AN ULTIMATE FOR THIS PURPOSE, on both sides of the test.
+// It carries rarity 3 so it draws the ULTIMATE frame and sting, but it is a gun
+// promotion, not "an ultimate upgrade" — so it neither SATISFIES the guarantee
+// nor is eligible to be promoted (there is nothing to promote it to; its levels
+// mean a tier, not a count). The player who draws one on a full bar gets a
+// genuine choice: the promotion, or a guaranteed ULTIMATE in the other slot.
+//
+// HEADROOM IS REQUIRED WHEN THE POOL CAN SUPPLY IT (v14.6, user 2026-08-30:
+// "if you have max luck you should get an ultimate at least 1 of the cards
+// 100% of the time. And at 50% luck at least 1 super 100% of the time" —
+// after a max-luck game dealt no ULTIMATE). The old behavior promoted only
+// WITHIN the dealt cards: a deal of low-cap/near-cap domains (PENETRATION and
+// RECOIL cap at 2, SPRINT FIRE at 1, anything one level from its cap) had no
+// card that could hold a +3, so the promotion clamped and the band-honesty
+// pass relabeled it DOWN — a full bar paying out as "SUPER". Honest, but it
+// broke the promise the bar makes. NOW: when no dealt card can absorb the
+// owed rarity, ONE slot is REDEALT (weighted draw, same as the original
+// deal) from the pool's domains that CAN absorb it, then promoted — so the
+// guarantee is met with a real, full-paying card. The redeal replaces the
+// dealt card with the LEAST headroom (keeping the stronger card and the tier
+// card untouched) and never duplicates the kept card's domain. Only when NO
+// available domain has the headroom (deep late-game, everything near max)
+// does it fall back to the old clamped-and-honest promotion — at that point
+// a full ULTIMATE is arithmetically impossible, not merely unlucky. Among
+// equal candidates every pick is RANDOM, so the floor never trains players
+// to expect it in a fixed slot.
+function guarantee_rarity( player, opts, first_deal, deal_pool )
+{
+	if ( !isdefined( player ) || !isdefined( opts ) )
+		return;
+
+	// Field-read, never #using — _tod_luck imports this module (the KB cycle
+	// rule), the same way roll_rarity reads the bar.
+	b = 0;
+	if ( isdefined( player.tod_luck_bar ) )
+		b = player.tod_luck_bar;
+
+	// v14.9 OVERCHARGE (see TOD_UPG_GUAR_BOTH_BAR): at the secret ceiling the
+	// floor covers the WHOLE deal — every non-tier slot, each with its own
+	// per-slot redeal when it lacks the +3 headroom. Handled by its own pass
+	// because everything below is single-promotion logic ("promotes ONE card")
+	// and its early-return on any satisfied slot is exactly wrong here.
+	if ( b >= TOD_UPG_GUAR_BOTH_BAR )
+	{
+		guarantee_both_ultimate( player, opts, deal_pool );
+		return;
+	}
+
+	want = 0;
+	if ( b >= TOD_UPG_GUAR_ULT_BAR )
+		want = 3;
+	else if ( b >= TOD_UPG_GUAR_SUP_BAR )
+		want = 2;
+	// THE OPENING HAND floors the run's first deal at SUPER. Raises `want`,
+	// never lowers it — a full bar on a first deal (only reachable at a station,
+	// never at the round-1 draft) still guarantees the ULTIMATE.
+	if ( IS_TRUE( first_deal ) && want < TOD_UPG_GUAR_FIRST )
+		want = TOD_UPG_GUAR_FIRST;
+	if ( want == 0 )
+		return;
+
+	cands = [];
+	full = [];
+	for ( i = 0; i < opts.size; i++ )
+	{
+		o = opts[ i ];
+		if ( !isdefined( o ) || o.domain == "tier" )
+			continue;
+		if ( o.rarity >= want )
+			return;                      // the dice already cleared the floor
+		room = o.max - o.cur;
+		if ( room <= 0 )
+			continue;                    // maxed while deferred — nothing to raise
+		cands[ cands.size ] = o;
+		if ( room >= want )
+			full[ full.size ] = o;
+	}
+
+	// THE REDEAL (v14.6 — the user quote in the header). No dealt card can
+	// absorb the whole promotion, so swap the weakest one for a domain that
+	// can, IN PLACE (the struct is aliased by the caller's opts array, so
+	// field-overwrite propagates without relying on array-reference
+	// semantics). The kept card's domain is excluded so the two cards stay
+	// distinct; the victim's own domain excludes itself by headroom (if it
+	// could absorb `want` it would be in `full` and we would not be here).
+	if ( full.size == 0 && cands.size > 0 && isdefined( deal_pool ) )
+	{
+		// victim = the dealt card with the LEAST headroom; ties random.
+		victim = cands[ 0 ];
+		for ( i = 1; i < cands.size; i++ )
+		{
+			ri = cands[ i ].max - cands[ i ].cur;
+			rv = victim.max - victim.cur;
+			if ( ri < rv || ( ri == rv && RandomInt( 2 ) == 0 ) )
+				victim = cands[ i ];
+		}
+		// the kept non-tier card's domain (at most one — deals are 2 cards)
+		kept_key = undefined;
+		for ( i = 0; i < opts.size; i++ )
+		{
+			o = opts[ i ];
+			if ( isdefined( o ) && o.domain != "tier" && o != victim )
+				kept_key = o.domain;
+		}
+
+		sub = [];
+		for ( i = 0; i < deal_pool.size; i++ )
+		{
+			d = deal_pool[ i ];
+			if ( domain_max( player, d ) - get_level( player, d.key ) < want )
+				continue;
+			if ( isdefined( kept_key ) && d.key == kept_key )
+				continue;
+			sub[ sub.size ] = d;
+		}
+		if ( sub.size > 0 )
+		{
+			no = make_option( player, sub[ weighted_draw( sub ) ] );
+			victim.domain      = no.domain;
+			victim.display     = no.display;
+			victim.desc        = no.desc;
+			victim.tier        = no.tier;
+			victim.cur         = no.cur;
+			victim.max         = no.max;
+			victim.rarity      = no.rarity;
+			victim.levels      = no.levels;
+			victim.rarity_name = no.rarity_name;
+			full[ 0 ] = victim;          // absorbs `want` by construction
+		}
+	}
+
+	// HEADROOM FIRST: a promotion clamped down to +1 by the level cap would
+	// defeat the guarantee outright, so cards that can absorb the whole thing
+	// win over cards that cannot. Fall back to the clamped ones rather than
+	// doing nothing (only reachable now when NO available domain has the
+	// headroom — see the redeal above).
+	pool = full;
+	if ( pool.size == 0 )
+		pool = cands;
+	if ( pool.size == 0 )
+		return;                          // tier-card-only deal: nothing to promote
+
+	// THEN THE LOWEST RARITY, which is what stops the floor wasting itself.
+	// Promoting a card that ALREADY rolled SUPER spends the guarantee on the
+	// half of the deal that was already good and leaves the player holding
+	// ULTIMATE + REGULAR; promoting the REGULAR instead leaves ULTIMATE + SUPER,
+	// which is strictly better and costs nothing. This is not a rare corner: at
+	// a full bar, 36% of deals come up one SUPER and one REGULAR, so picking
+	// blind between them degraded almost 18% of ALL max-luck deals.
+	lo = 4;                              // above every real rarity (1..3)
+	for ( i = 0; i < pool.size; i++ )
+	{
+		if ( pool[ i ].rarity < lo )
+			lo = pool[ i ].rarity;
+	}
+	best = [];
+	for ( i = 0; i < pool.size; i++ )
+	{
+		if ( pool[ i ].rarity == lo )
+			best[ best.size ] = pool[ i ];
+	}
+
+	pick = best[ RandomInt( best.size ) ];   // random among true ties only
+
+	pick.rarity = want;
+	// Re-clamp exactly as make_option does — the per-class cap still wins.
+	pick.levels = want;
+	if ( pick.cur + pick.levels > pick.max )
+		pick.levels = pick.max - pick.cur;
+
+	// ...AND THE SAME BAND-HONESTY CLAMP, or this function would be the one hole
+	// left in it. The headroom preference above means we normally promote a card
+	// that can absorb the whole thing, but when NO candidate can (everything on
+	// the deal is near its cap) it deliberately falls back to a clamped one — and
+	// without this the guarantee would stamp "ULTIMATE +3" on a card paying +1,
+	// which is exactly the label this pass exists to remove. A floor that has to
+	// lie to hit its number is not a floor worth having; showing the best rarity
+	// actually deliverable is the honest outcome.
+	if ( pick.levels >= 1 && pick.levels < pick.rarity )
+		pick.rarity = pick.levels;
+
+	if ( pick.rarity == 3 )      pick.rarity_name = "ULTIMATE";
+	else if ( pick.rarity == 2 ) pick.rarity_name = "SUPER";
+	else                         pick.rarity_name = "";
+}
+
+// v14.9 THE OVERCHARGE PAYOUT (TOD_UPG_GUAR_BOTH_BAR — user 2026-08-30: at
+// 150% luck "both options are guaranteed to be ultimates rarity"). EVERY
+// non-tier slot is raised to ULTIMATE, each slot independently, composing with
+// the v14.6 redeal per slot: a slot without +3 of headroom is redealt (same
+// weighted draw, same in-place field overwrite — the struct is aliased by the
+// caller's opts array) from the pool domains that CAN absorb it, always
+// excluding the OTHER slot's CURRENT domain so the two cards stay distinct
+// through any sequence of redeals.
+//
+// THE TIER CARD KEEPS ITS EXEMPTION (the guarantee_rarity header owns that
+// contract): it is neither promotable nor "an ultimate" here, so an
+// overcharged deal that draws one presents promotion-vs-guaranteed-ULTIMATE —
+// the same genuine choice as at 100, just with the other slot certain.
+//
+// Each slot that cannot redeal (no pool domain anywhere with +3 headroom —
+// deep late-game) falls back to the clamped promotion UNDER the band-honesty
+// clamp, exactly like the single path: the card pays every level it can and
+// wears the rarity it actually pays. A slot already rolled ULTIMATE, or maxed
+// while deferred (room 0, the station re-present corner), is left alone.
+function guarantee_both_ultimate( player, opts, deal_pool )
+{
+	if ( !isdefined( opts ) )
+		return;
+
+	for ( i = 0; i < opts.size; i++ )
+	{
+		o = opts[ i ];
+		if ( !isdefined( o ) || o.domain == "tier" )
+			continue;
+		if ( o.rarity >= 3 )
+			continue;                    // the dice already paid this slot
+		room = o.max - o.cur;
+		if ( room <= 0 )
+			continue;                    // maxed while deferred — nothing to raise
+
+		if ( room < 3 && isdefined( deal_pool ) )
+		{
+			// PER-SLOT REDEAL. kept_key = the other slot's domain AS IT
+			// STANDS NOW (a slot 0 redeal has already landed by the time
+			// slot 1 runs), so distinctness holds through both.
+			kept_key = undefined;
+			for ( j = 0; j < opts.size; j++ )
+			{
+				k = opts[ j ];
+				if ( isdefined( k ) && k != o && k.domain != "tier" )
+					kept_key = k.domain;
+			}
+
+			sub = [];
+			for ( j = 0; j < deal_pool.size; j++ )
+			{
+				d = deal_pool[ j ];
+				if ( domain_max( player, d ) - get_level( player, d.key ) < 3 )
+					continue;
+				if ( isdefined( kept_key ) && d.key == kept_key )
+					continue;
+				sub[ sub.size ] = d;
+			}
+			if ( sub.size > 0 )
+			{
+				no = make_option( player, sub[ weighted_draw( sub ) ] );
+				o.domain      = no.domain;
+				o.display     = no.display;
+				o.desc        = no.desc;
+				o.tier        = no.tier;
+				o.cur         = no.cur;
+				o.max         = no.max;
+				o.rarity      = no.rarity;
+				o.levels      = no.levels;
+				o.rarity_name = no.rarity_name;
+			}
+		}
+
+		// Promote — same re-clamp as make_option, same band-honesty clamp as
+		// guarantee_rarity (a card that can only pay +1 is labeled REGULAR,
+		// never a lying "ULTIMATE +3").
+		o.rarity = 3;
+		o.levels = 3;
+		if ( o.cur + o.levels > o.max )
+			o.levels = o.max - o.cur;
+		if ( o.levels >= 1 && o.levels < o.rarity )
+			o.rarity = o.levels;
+
+		if ( o.rarity == 3 )      o.rarity_name = "ULTIMATE";
+		else if ( o.rarity == 2 ) o.rarity_name = "SUPER";
+		else                      o.rarity_name = "";
+	}
 }
 
 // -> an INDEX into `pool`, picked with probability proportional to tier weight.
@@ -2098,15 +2837,47 @@ function make_option( player, domain )
 	o.tier = domain.tier;
 
 	o.rarity = roll_rarity( player, domain.tier );
-	if ( o.rarity == 3 )      o.rarity_name = "ULTIMATE";
-	else if ( o.rarity == 2 ) o.rarity_name = "SUPER";
-	else                      o.rarity_name = "";
 
 	o.cur = get_level( player, domain.key );
 	o.max = domain_max( player, domain );   // per-class cap (RESERVE: assault 6)
 	o.levels = o.rarity;
 	if ( o.cur + o.levels > o.max )
 		o.levels = o.max - o.cur;
+
+	// THE BAND NEVER PROMISES MORE THAN IT PAYS (user 2026-08-27).
+	//
+	// `levels` has always been clamped to the headroom; `rarity` was not, so the
+	// two could disagree and the card said so out loud. A domain capped below 3
+	// could deal an "ULTIMATE +3" that paid +2 every single time it appeared:
+	// PENETRATION and RECOIL are max 2, SPRINT FIRE is max 1, and near its cap
+	// ANY domain does it — a player at Lv9 of a 10-level domain drawing an
+	// ULTIMATE got "+3" and one level. The value line stayed truthful about the
+	// EFFECT (that is why RECOIL could ship saying `· MAX`), but the number on
+	// the band was simply wrong, and the band is the thing players compare two
+	// cards on.
+	//
+	// CLAMPS DOWN ONLY, NEVER UP. rarity follows levels, so the card shows the
+	// rarity it can actually deliver — a 2-level payout presents as SUPER, a
+	// 1-level payout as REGULAR. Nothing is taken from the player: the LEVELS
+	// paid are identical either way, and this only ever relabels a card that was
+	// going to underdeliver. It also picks the right art, since the frame/sting
+	// key off `rarity`.
+	//
+	// CONSEQUENCE, DELIBERATE: four card files become unreachable —
+	// penetration_ultimate, recoil_ultimate, sprint_fire_super and
+	// sprint_fire_ultimate. They stay zoned and installed on purpose: they cost
+	// nothing but .ff bytes, they cannot render, and if a cap is ever raised the
+	// art is already there. Do NOT "clean them up" — unzoning them is real risk
+	// (a CARD_SLUG miss) for no gain.
+	//
+	// THE TIER CARD IS EXEMPT BY CONSTRUCTION: it is built by make_tier_option,
+	// never here, and its `levels` means a tier rather than a count.
+	if ( o.levels >= 1 && o.levels < o.rarity )
+		o.rarity = o.levels;
+
+	if ( o.rarity == 3 )      o.rarity_name = "ULTIMATE";
+	else if ( o.rarity == 2 ) o.rarity_name = "SUPER";
+	else                      o.rarity_name = "";
 
 	return o;
 }
@@ -2126,6 +2897,12 @@ function roll_rarity( player, tier )
 	//   bar   0% -> 80 / 15 /  5
 	//   bar  50% -> 60 / 30 / 10
 	//   bar 100% -> 40 / 45 / 15
+	//   bar 150% -> 20 / 60 / 20  (v14.9: the raw bar secretly runs to 150 —
+	//                              _tod_luck TOD_LUCK_OVERMAX. The linear
+	//                              formula stays positive the whole way, so no
+	//                              clamp is needed here; the band that matters
+	//                              to THESE dice is 101..149, because at 150
+	//                              guarantee_both_ultimate overrides the deal.)
 	// Field-read, never #using — _tod_luck imports this module (the KB
 	// cycle rule).
 	b = 0;
@@ -2282,17 +3059,19 @@ function tier_up( player )
 	else
 		player GiveStartAmmo( old );   // same asset (cannot happen past the null ladder) — still a refill
 
-	// 2. reset every GUN-scoped domain (CLASS-scoped — DR, LUCK — kept)
+	// 2. reset every domain that does not survive for THIS player —
+	// domain_survives_tier is the one authority (v14.13: scope "class" can be
+	// limited to a single class; SCAVENGER survives for the assault alone)
 	for ( i = 0; i < level.tod_domains.size; i++ )
 	{
 		d = level.tod_domains[ i ];
-		if ( isdefined( d.scope ) && d.scope == "class" )
+		if ( domain_survives_tier( player, d ) )
 			continue;
 		if ( get_level( player, d.key ) <= 0 )
 			continue;
 		player.tod_levels[ d.key ] = 0;
 		// the pause list hides level-0 rows (AetheriumStartMenu.lua filters lvl > 0)
-		player LuiNotifyEvent( &"tod_upg_sync", 3, tod_upgrade_ui::domain_id( d.key ), 0, domain_max( player, d ) );
+		player LuiNotifyEvent( &"tod_upg_sync", 3, tod_upgrade_ui::domain_id( d.key ), 0, sync_max( player, d ) );
 	}
 	player reset_gun_state();
 
@@ -2354,12 +3133,8 @@ function reset_gun_state()
 	self.tod_scav_kills = 0;          // SCAVENGER kill counter (v9.10)
 	self.tod_killreload_kills = 0;    // KILL RELOAD kill counter (v9.43)
 	self.tod_scav_pay_ms = undefined;
-	// TIRELESS (v9.15): the body loop would clear it on its next tick (level
-	// gone = latch off), but do it NOW — both the server duration and the
-	// client `player_sprintTime` dvar go back to stock, and the specialty is
-	// stripped unless the player BOUGHT Stamin-Up (perks_active check inside).
-	if ( IS_TRUE( self.tod_tireless_on ) )
-		self tireless_clear();
+	// (The TIRELESS un-apply lived here until 2026-08-26. Nothing to undo now:
+	// no script touches the sprint knobs or grants specialty_staminup.)
 	// SPRINT FIRE: the body loop's UnsetPerk branch strips it within 1s.
 }
 
@@ -2397,6 +3172,25 @@ function apply_upgrade( player, o )
 	// body domains apply instantly, not on the next spawn/tick
 	if ( o.domain == "sprint" || o.domain == "mobility" )
 		player apply_move_speed();
+	// VITALITY (v14.11): the new max HP lands NOW, additively — the same
+	// shape stock jugg uses (+= on the current max), so it composes with an
+	// active jugg instead of being swallowed by it. The gained HP is also
+	// HEALED in (a card is a payoff, the jugg-purchase precedent), unlike the
+	// body loop's floor, which only ever raises the ceiling. If stock later
+	// clobbers the max (jugg loss restore, spawn reboot), the body-loop floor
+	// re-raises it within a second.
+	if ( o.domain == "vitality" )
+	{
+		hp_add = TOD_UPG_VITALITY_HP_PER_LVL * ( lv - cur );
+		player.maxhealth = player.maxhealth + hp_add;
+		player SetMaxHealth( player.maxhealth );
+		if ( IsAlive( player ) && !( player laststand::player_is_in_laststand() ) )
+		{
+			player.health = player.health + hp_add;
+			if ( player.health > player.maxhealth )
+				player.health = player.maxhealth;
+		}
+	}
 	// twin domains swap the gun in place immediately — reconcile is generic
 	// now (it compares the held variant to the axes' levels), so every apply
 	// may call it; it returns in one compare when nothing changed.
@@ -2502,6 +3296,32 @@ function upgrade_damage_cb( inflictor, attacker, damage, flags, meansofdeath, we
 	// head hit now come out to exactly the same number.
 	headshot = ( headshot_kind( self, sHitLoc, vpoint ) != "none" );
 
+	// INSTA-KILL = A REAL ONE-HIT ON THE TRASH HORDE (user 2026-08-30: "make
+	// instakill a one hit on normal zombies but keep the 3x for everything
+	// else"). While the window is live (dmult > 1), any player hit on a
+	// non-boss actor is simply lethal; the boss triad — Panzer, Rogue
+	// Protector, Reaver, AND the hellhounds (they carry all three flags,
+	// _tod_hellhounds.gsc:345-347) — falls through to the normal math below,
+	// where dmult still multiplies the final: that IS the kept 3x. Armored
+	// sprinters carry no boss flag, so they one-hit too — "insta-kill treat
+	// them as the zombies they are" was accepted at their design
+	// (_tod_sprinter.gsc:41), and returning the lethal value directly is what
+	// lets the hit bypass their 1/4 bullet armor further down.
+	// Placed AFTER the cleave-consume (a splash must pass through untouched,
+	// mark cleared) and AFTER the player-attacker guard (a boss clubbing a
+	// zombie is not an insta-kill). Skipping the rest of the chain skips
+	// on-hit procs (SUPPRESSING FIRE et al.) for the window — irrelevant, the
+	// victim is dead. The crosshair number is pushed here because the normal
+	// push site is never reached on this path (the xmas_fixed_shots_cb
+	// pattern).
+	if ( dmult > 1 &&
+	     !IS_TRUE( self.is_boss ) && !IS_TRUE( self.acc_is_boss ) && !IS_TRUE( self.acc_is_mini_boss ) )
+	{
+		kill = ( ( isdefined( self.health ) && self.health > 0 ) ? self.health : 32767 ) + 666;
+		attacker tod_upgrade_ui::push_dmg_num( kill, headshot );
+		return kill;
+	}
+
 	// GUN BALANCE PASS (user 2026-08-20: "pistol was doing like 6 damage a
 	// shot while m60 was doing 100+ — apply an evenly spread balance"):
 	// per-gun multipliers on the RAW damage, script-side ONLY — the Skye GDTs
@@ -2573,7 +3393,54 @@ function upgrade_damage_cb( inflictor, attacker, damage, flags, meansofdeath, we
 	// (0.25x). Every other consumer wants `final`.
 	swing = int( damage * mult * dmult );
 	final = int( swing * melee_boss_mult( self, is_melee ) );
-	attacker tod_upgrade_ui::push_dmg_num( final, headshot );
+
+	// SPRINTER ARMOR (v13.7, user 2026-08-29: "bullets do 1/4 damage on them
+	// ... you can hear bullets bouncing off" — spec'd for the Reaver rework,
+	// re-scoped the same hour to the NEW Armored Sprinter, lap-30 door; the
+	// Fury Reaver is back at lap 20 and never reads these fields). It lives
+	// HERE and not in a second register_actor_damage_callback because stock's
+	// dispatch (_zm.gsc:5822) is FIRST-NON-(-1)-WINS — this callback returns a
+	// final for every player hit, so anything registered after it never runs.
+	// Same integration point as melee_boss_mult above, same reason: applied
+	// BEFORE push_dmg_num so the crosshair number is what the sprinter took.
+	// Fields, not an import (_tod_sprinter sets tod_is_sprinter and publishes
+	// level.tod_sprinter_bullet_frac) — the KB cycle rule.
+	// BULLETS ONLY, deliberately: melee, explosives and the blades stay full —
+	// they are the counter-play, exactly map 1's Shielded contract. Floor at 1
+	// so armor can never make a zombie chip-proof.
+	// MOD_HEAD_SHOT is a BULLET for armor purposes: the engine substitutes it
+	// for the bullet MOD on head hits, and matching "BULLET" alone would hand
+	// headshot builds a silent full bypass of the whole armor (the exact shape
+	// of leak the ELEMENTAL POP gate accepts on purpose — this one must not).
+	b_sprint_armor = false;
+	if ( IS_TRUE( self.tod_is_sprinter ) && !is_melee
+	     && isdefined( meansofdeath )
+	     && ( IsSubStr( meansofdeath, "BULLET" ) || meansofdeath == "MOD_HEAD_SHOT" ) )
+	{
+		b_sprint_armor = true;
+		// Fallback tracks TOD_SPRINT_BULLET_FRAC (1/3 since the 2026-08-29
+		// same-day retune; was 1/4) — the level field is the live source, this
+		// only fires if the sprinter module somehow never init'd.
+		frac = ( isdefined( level.tod_sprinter_bullet_frac ) ? level.tod_sprinter_bullet_frac : 0.3333 );
+		final = int( final * frac );
+		if ( final < 1 )
+			final = 1;
+		// THE RICOCHET (v13.9, user: "when you shoot them they will make a
+		// sound in the 3D world like a metal ricochet. I have 3 wav downloads
+		// ... every shot will trigger one at random. So spraying into it will
+		// trigger a whole bunch"). tod_sprint_ricochet = ONE alias, THREE rows
+		// in tod_ui.csv — the engine's own multi-row random pick, the same
+		// mechanism every multi-take fire sound uses. NO DEBOUNCE, per the
+		// spec: per-HIT, so an LMG spray rattles and a shotgun blast lands one
+		// per pellet. The old zmb_rocketshield_imp + 200ms debounce is
+		// REPLACED, not kept alongside.
+		PlaySoundAtPosition( "tod_sprint_ricochet", self.origin );
+	}
+
+	// The third arg is the RED-NUMBER flag (v13.9, user: "those damage numbers
+	// ... should be red too. Specific for this type of enemy to show you are
+	// doing reduced damage"). Only the sprinter armor branch above sets it.
+	attacker tod_upgrade_ui::push_dmg_num( final, headshot, b_sprint_armor );
 
 	// SUPPRESSING FIRE + IMPACT ROUNDS ride bullet hits only (never the cleave
 	// re-entry above, never melee).
@@ -2588,10 +3455,11 @@ function upgrade_damage_cb( inflictor, attacker, damage, flags, meansofdeath, we
 		if ( cleave > 0 )
 		{
 			// v8.9 nerf (user 2026-08-21): CHANCE ladder, not guaranteed count.
-			// Each block of 3 levels buys one extra target: within a block the
-			// chance climbs +33%/Lv (Lv1 33% / Lv2 67% / Lv3 always +1), then
-			// Lv4-6 repeat the ladder for a SECOND extra. Hard cap +2 extras
-			// (3 zombies per swing). Max level is 6 (add_domain).
+			// Within a block of 3 levels the chance climbs +33%/Lv
+			// (Lv1 33% / Lv2 67% / Lv3 always +1). Max level is 3 since
+			// v14.11 (user: "too OP"), so the second block (Lv4-6, a second
+			// extra) is unreachable — the `extra > 2` clamp below is dead
+			// belt, kept in case the cap ever goes back up.
 			extra = int( cleave / 3 );              // guaranteed extras
 			rem = cleave % 3;                        // 0/1/2 -> 0%/33%/67%
 			if ( rem > 0 && RandomInt( 3 ) < rem )
@@ -2689,28 +3557,35 @@ function unique_damage_mult( attacker, is_melee )
 		}
 		return add;
 	}
-	// MOMENTUM (skirmisher, any gun): scales with 2D ground speed. Computed
-	// BEFORE the fire-streak gate below on purpose — it has nothing to do with
-	// holding the trigger, so a lapsed streak must not suppress it.
-	lvl = get_level( attacker, "momentum" );
+	// (MOMENTUM removed 2026-08-30, v14.11 — see the note at its old
+	// add_domain. Its slot in this function belongs to RUN AND GUN now.)
+	// RUN AND GUN's damage half (v14.11): flat +20/35/50% on bullets fired
+	// while MOVING. Computed BEFORE the fire-streak gate below on purpose —
+	// it has nothing to do with holding the trigger, so a lapsed streak must
+	// not suppress it (the rule MOMENTUM established in this exact spot).
+	// The movement test is a LOCKSTEP MIRROR of _tod_runandgun::is_running()
+	// — IsSprinting() OR 2D speed >= the shared 120 floor — so the ammo half
+	// and this half fire on the same trigger pull, always together. Applies
+	// to any weapon (the ammo half was widened the same way 2026-08-23) and,
+	// like MOMENTUM before it, to bosses too.
+	lvl = get_level( attacker, "runandgun" );
 	if ( lvl > 0 && isplayer( attacker ) )
 	{
-		v = attacker GetVelocity();
-		sp = Sqrt( v[ 0 ] * v[ 0 ] + v[ 1 ] * v[ 1 ] );
-		if ( sp > TOD_MOMENTUM_MIN_SPEED )
+		moving = ( attacker IsSprinting() );
+		if ( !moving )
 		{
-			f = ( ( sp - TOD_MOMENTUM_MIN_SPEED ) / ( TOD_MOMENTUM_FULL_SPEED - TOD_MOMENTUM_MIN_SPEED ) );
-			if ( f > 1.0 )
-				f = 1.0;
-			add += f * TOD_UPG_MOMENTUM_PER_LVL * lvl;
+			v = attacker GetVelocity();
+			moving = ( ( v[ 0 ] * v[ 0 ] + v[ 1 ] * v[ 1 ] ) >= ( TOD_UPG_RNG_MIN_SPEED * TOD_UPG_RNG_MIN_SPEED ) );
 		}
+		if ( moving )
+			add += ( TOD_UPG_RNG_DMG_BASE + TOD_UPG_RNG_DMG_PER_LV * ( lvl - 1 ) );
 	}
 
 	streak = ( isdefined( attacker.tod_fire_streak ) ? attacker.tod_fire_streak : 0 );
 	last = ( isdefined( attacker.tod_fire_last_ms ) ? attacker.tod_fire_last_ms : 0 );
 	if ( ( now - last ) > TOD_STREAK_GAP_MS )
 		return add;   // streak lapsed — streak-based uniques contribute nothing,
-		              // but MOMENTUM above still stands (it is speed, not streak)
+		              // but RUN AND GUN above still stands (it is speed, not streak)
 	// OVERDRIVE (MP7): +X% per 10 consecutive rounds, 5 stacks
 	lvl = get_level( attacker, "overdrive" );
 	if ( lvl > 0 )
@@ -2805,9 +3680,22 @@ function gun_balance_mult( weapon )
 	// other. THE OPENING ROUNDS RIDE ON THE BASE NUMBER: this is the gun every
 	// player holds before the first door, so if round 1-3 starts feeling like
 	// chip damage, 7.2 is the digit to move, not the twins' knob.
+	// PaP FORM NERFED A FURTHER 50% (user 2026-08-28: "The MR6 pap needs a 50%
+	// damage nerf"): 4.32 x 0.5 = 2.16. THE NERFS COMPOSE, they do not replace —
+	// 2.16 is 9.6 x 0.6 (the 2026-08-23 40%) x 0.75 (the secondary-slot 25%)
+	// x 0.5 (this one). Read the chain before changing any single factor: each
+	// one was asked for separately and the product is the shipped number.
+	// The BASE pistol stays at 7.2, untouched again — it is the gun every player
+	// holds before the first door and it is what carries rounds 1-3. Only the
+	// PaP form was named, both times.
+	// NOTE THIS IS NOW BELOW THE BASE: a Pack-a-Punched MR6 does LESS damage
+	// than an un-packed one (2.16 vs 7.2). That is what the two nerfs
+	// arithmetically produce and it is not a typo — but it does mean packing the
+	// MR6 is now a downgrade, so if that reads wrong in play, this is the digit,
+	// and the base 7.2 is the one to compare it against.
 	if ( IsSubStr( n, "pistol_standard" ) )
 	{
-		if ( IsSubStr( n, "_upgraded" ) ) return 4.32;
+		if ( IsSubStr( n, "_upgraded" ) ) return 2.16;
 		return 7.2;
 	}
 
@@ -3040,7 +3928,7 @@ function cleave_splash( attacker, dmg, count )
 // this comment said 3% until 2026-08-26 — stale since the 2026-08-20 buff).
 // self = the dead zombie,
 // attacker = the killer. Stock kill money varies by hit type, so the bonus is
-// computed off the matching nominal value (melee 130 / headshot 100 / bullet
+// computed off the matching nominal value (melee 120 / headshot 100 / bullet
 // 60) and BANKED: zm_score::add_to_player_score rounds UP to multiples of 10
 // (KB trap), so fractional bonuses accumulate on the player and pay out in
 // exact 10s — over time the payout is exactly 3%/Lv, never inflated.
@@ -3050,8 +3938,15 @@ function cleave_splash( attacker, dmg, count )
 // preview below so they can never drift apart.
 function bounty_kill_value( mod, hitloc )
 {
+	// 130 -> 120 (user 2026-08-26: "knife kills go down from 130 to 120"). This
+	// number is NOT the source of truth — the engine pays
+	// get_zombie_death_player_points() 50 + zombie_vars["zombie_score_bonus_melee"],
+	// and that bonus is set to 70 in zm_tower_of_doom.gsc::main(). This mirror
+	// exists so BOUNTY's percentage and the HUD's popup preview are computed off
+	// the same number the player is actually paid. THE TWO MOVE TOGETHER OR THE
+	// HUD LIES: 50 + the zombie_var must always equal what is returned here.
 	if ( isdefined( mod ) && IsSubStr( mod, "MELEE" ) )
-		return 130;
+		return 120;
 	if ( isdefined( hitloc ) && ( hitloc == "head" || hitloc == "helmet" ) )
 		return 100;
 	return 60;
@@ -3096,6 +3991,42 @@ function bounty_preview( attacker, weapon, mod, hitloc )
 	if ( bank < 10 )
 		return 0;
 	return int( bank / 10 ) * 10;
+}
+
+// PUBLIC via level.tod_bounty_mult_fn (the tod_bounty_preview_fn pattern —
+// consumers must not import this module). BOUNTY as a FLAT MULTIPLIER for a
+// lump-sum payout: 1.0 + 5%/Lv, the same TOD_UPG_BOUNTY_PER_LVL rate the
+// per-kill bank pays — so the card's "+5% money per kill / Lv" promise holds
+// for lump rewards too. First consumer: the killer-only elite 500
+// (_tod_bosses::grant_elite_reward, v14.5). Weapon-agnostic on purpose,
+// matching the widened domain (see bounty_preview above).
+function bounty_mult( player )
+{
+	if ( !isdefined( player ) || !IsPlayer( player ) )
+		return 1;
+	return 1.0 + get_level( player, "bounty" ) * TOD_UPG_BOUNTY_PER_LVL;
+}
+
+// SCAVENGER's ladder, split in two because the last rung changes shape rather
+// than continuing the pattern (see TOD_SCAV_CAP_LVL). Both are pure functions of
+// the level so the GSC payout and the LUI's DETAIL readout can never disagree
+// about what a level is worth — keep tod_upgrade.lua's [8] val() in step.
+//   Lv1 1/5   Lv2 1/4   Lv3 1/3   Lv4 1/2   Lv5 1/1   Lv6 3/2 (assault only)
+function scav_kills_needed( lvl )
+{
+	if ( lvl >= TOD_SCAV_CAP_LVL )
+		return TOD_SCAV_CAP_KILLS;
+	need = TOD_SCAV_KILLS_LV1 - ( lvl - 1 );
+	if ( need < TOD_SCAV_KILLS_MIN )
+		need = TOD_SCAV_KILLS_MIN;
+	return need;
+}
+
+function scav_rounds_paid( lvl )
+{
+	if ( lvl >= TOD_SCAV_CAP_LVL )
+		return TOD_SCAV_CAP_ROUNDS;
+	return 1;
 }
 
 // Every class-gun kill funnels through here: BOUNTY (shared), SCAVENGER
@@ -3148,12 +4079,19 @@ function on_class_gun_kill( attacker )
 	// counter is held at need-1 ("one kill away") — a 10-kill penetration shot
 	// is one round now and one on the next kill, never a stack of pre-paid
 	// rounds. The counter survives level-ups (need just shrinks under it).
+	// PRIMARIES ONLY (user 2026-08-26: "it will not apply to secondaries. Only
+	// primaries guns for each class"). A sidearm kill now pays NOTHING — it does
+	// not refund the sidearm, and it does not divert a refund to the primary
+	// either. Gating here rather than on the weapon the refund lands on is the
+	// whole point: `w` below is self.damageweapon, so without this gate a kill
+	// made with the pistol topped the PISTOL up. Note this also means a sidearm
+	// kill no longer even ADVANCES the counter, which is the honest reading of
+	// "does not apply to secondaries" — the upgrade is a reward for fighting
+	// with your class weapon.
 	lvl = get_level( attacker, "reserve" );
-	if ( lvl > 0 )
+	if ( lvl > 0 && is_primary )
 	{
-		need = TOD_SCAV_KILLS_LV1 - ( lvl - 1 );
-		if ( need < TOD_SCAV_KILLS_MIN )
-			need = TOD_SCAV_KILLS_MIN;
+		need = scav_kills_needed( lvl );
 		if ( !isdefined( attacker.tod_scav_kills ) )
 			attacker.tod_scav_kills = 0;
 		attacker.tod_scav_kills++;
@@ -3168,7 +4106,12 @@ function on_class_gun_kill( attacker )
 				stock = attacker GetWeaponAmmoStock( w );
 				if ( stock < w.maxAmmo )
 				{
-					attacker SetWeaponAmmoStock( w, stock + 1 );
+					// CLAMP: the capstone pays 3, so stock+pay can overshoot the
+					// reserve cap where the old flat +1 never could.
+					give = stock + scav_rounds_paid( lvl );
+					if ( give > w.maxAmmo )
+						give = w.maxAmmo;
+					attacker SetWeaponAmmoStock( w, give );
 					// the clink only fires when ammo ACTUALLY landed — never on
 					// a payout wasted against a full reserve
 					attacker scavenger_feedback();
@@ -3334,44 +4277,88 @@ function station_spawn()
 	station_place( ( 0, -320, 0 ), ( 0, -360, 0 ), 359.999 );
 
 	// ONE PER BREATHER (user 2026-08-21: "add a card update station on each
-	// platform"). Breather laps are 10/20/30/40 — all EVEN, so every balcony
-	// is the mirrored (SW) one. REAL FOOTPRINT from the generator (line 291,
-	// even-parity branch): floor x[-640,-256], y[-816,-416]; players ARRIVE at
-	// the NE corner off the SW landing and walk south/west into it.
-	//
-	// LAYOUT (fixed 2026-08-21 — the first pass put the terminal mid-floor
-	// with its trigger BEHIND the machine, so you had to squeeze between it
-	// and the perk machines to use it):
-	//   south wall  y=-783 : the two PERK machines (x -360 / -536), facing north
-	//   west wall   x=-600 : the UPGRADE STATION, facing EAST into the balcony
-	// Yaw convention on this map (live-verified): 0/359.999 = front toward -y,
-	// 180 = +y, 90 = +x (east), 270 = -x (west). So yaw 90 faces the terminal
-	// into the open floor, and the trigger sits 56u EAST of it — in front of
-	// the machine, on the walking line from the entrance, clear of both perk
-	// machines (nearest is ~185u away, well outside the 64u radius).
-	// Breather mid z = (lap-1)*384 + 192.
-	// v9.37: the breathers grew (BR_EAST 224 -> 384): the W wall moved from
-	// x=-640 to x=-800, so the terminal backs it at -760 (was -600) and its
-	// trigger sits 56u east at -704. The teleporter pad (_tod_teleport) takes
-	// the SE quarter at (-640,-800) — 210u from this trigger.
-	zs = array( 3648, 7488, 11328, 15168 );
+	// platform"). v13: the terminal owns the lounge's NORTH wall — the
+	// entrance side — facing south into the room, so it is the first fixture
+	// an arriving player walks past (the W wall it used to back now belongs
+	// to the Pack-a-Punch). Anchors are GENERATED (_tod_breather_data.gsc);
+	// the generator asserts every lounge trigger pair clears by both radii
+	// + 64. Yaw convention on this map (live-verified): 0/359.999 = front
+	// toward -y, 180 = +y, 90 = +x, 270 = -x; the trigger sits 56u in front
+	// of the machine face, same as the base station below.
+	zs = tod_breather_data::breather_zs();
 	foreach ( z in zs )
-		station_place( ( -760, -600, z ), ( -704, -600, z ), 90 );
+		station_place( tod_breather_data::station_org( z ), tod_breather_data::station_trig( z ), tod_breather_data::station_yaw() );
 
 	// THE CROWN (v9): one terminal inside the citadel, on the west wall south
 	// of the pilaster — the last chance to spend before the uplink. Anchors
 	// are GENERATED (parity-mirrored with the rest of the crown).
 	station_place( tod_crown_data::station_org(), tod_crown_data::station_trig_org(), tod_crown_data::station_yaw() );
+	// (The 2026-08-29 diagnosis instruments — floating anchor marker,
+	// "stations placed" bold print, per-second trig-state heartbeat — were
+	// REMOVED for the v14.1 publish. If the crown altar needs diagnosing
+	// again, the recipe: bold-print level.tod_station_count here; thread a
+	// spinning chaos_pack_a_punch mesh 160u above station 5's trig_org; and
+	// in station_triggers_manager bold-print "trig=UP/none d=N" once a
+	// second for any player above z=19000. Ships-dormant diagnostics that
+	// STAY: the manager's spawn-fail retry print, the use-loop press/deny
+	// narration, the manager's station-5 trigger-up print.)
 }
 
-// One terminal: the model plus its own use trigger. Every station shares the
-// per-PLAYER price ladder (station_cost reads player.tod_station_buys), so
-// building more of them never makes upgrades cheaper — only closer.
+// One terminal: the model plus its own use trigger. Every station charges the
+// same FLAT 3000 (station_cost, 2026-08-30 — the escalating per-player ladder
+// is gone), so building more of them never makes upgrades cheaper — only
+// closer. The per-station use cap is what still pushes players UP the tower.
 function station_place( model_org, trig_org, yaw )
 {
+	// THE TRIGGER MANAGER LAUNCHES FIRST — BEFORE ANY OTHER SPAWN IN THIS
+	// FUNCTION (2026-08-29, the crown altar's second no-trigger report, made
+	// AFTER the entity-relief build). The manager is the only thing the
+	// altar's USABILITY depends on, yet it used to launch LAST — below one
+	// model spawn and three clip spawns, none of them guarded. Any of those
+	// four Spawn() calls returning undefined killed this thread on the very
+	// next line's method call, and the manager then never started: a station
+	// with a VISIBLE MESH and NO TRIGGER, forever, with nothing to self-heal
+	// it (the guard added earlier today lives INSIDE the manager and cannot
+	// help a manager that never ran). That is the crown altar's exact
+	// signature — the last station placed, standing at the entity-pressure
+	// peak, model present, untriggerable. Launched first, the trigger's
+	// existence now depends on nothing but the manager's own guarded,
+	// 1s-retrying spawn loop; the mesh and clips below are cosmetics and
+	// collision, and a failure there costs looks, not function.
+	level thread station_triggers_manager( trig_org, level.tod_station_count );   // base 0, breathers 1-4, crown 5
+	level.tod_station_count++;
+
 	m = Spawn( "script_model", model_org );
+	if ( !isdefined( m ) )
+	{
+		// Pool pressure ate the mesh. The trigger manager above is already
+		// running and unaffected — the station works, it just has no prop.
+		if ( IS_TRUE( level.tod_dev ) )
+			IPrintLn( "station " + ( level.tod_station_count - 1 ) + ": MODEL SPAWN FAILED" );
+		return;
+	}
 	m.angles = ( 0, yaw, 0 );
 	m SetModel( "chaos_pack_a_punch" );
+
+	// THE HEAVENLY AURA (user 2026-08-29: "a awwwwwww heanly aura sounds on loop
+	// always so when you get close you hear it ... very subtle but adds
+	// atmosphere"). One looping 3D emitter per altar, played ON THE MODEL rather
+	// than a spawned script_origin: the model already lives for the whole game at
+	// exactly the right spot, and a loop that dies with its machine is the
+	// behaviour we want anyway. Placed HERE, in the shared placer, so all six
+	// altars — base + four breathers + crown — get it by construction, and any
+	// altar added later inherits it without a second edit.
+	//
+	// THE ALIAS IS WHERE THE TUNING LIVES, not this line: DistMin 64 (the altar's
+	// own trigger radius, so full level exactly where the buy prompt appears)
+	// falling to nothing by 320, at volume 68. Widening the audible ring or
+	// changing the level is a one-row CSV edit and a -GscOnly.
+	//
+	// LimitCount is set to 8 ON THE ROW, deliberately overriding the UIN_MOD
+	// template's default of 2 — six of these loop simultaneously for the whole
+	// game, and at the default the emitters would steal each other's voices
+	// (LimitType oldest) and some altars would fall silent.
+	m PlayLoopSound( "tod_altar_aura" );
 
 	// COLLISION (user 2026-08-23: "the Heavenly Altar doesnt have a clip. In all
 	// locations its walk through"). A script_model is a VISUAL ONLY — the xmodel
@@ -3428,13 +4415,17 @@ function station_place( model_org, trig_org, yaw )
 	for ( ci = 0; ci < clip_offs.size; ci++ )
 	{
 		c = Spawn( "script_model", model_org + VectorScale( fwd, clip_offs[ ci ] ), 1 );
+		if ( !isdefined( c ) )           // pool-guard: a lost clip is a cosmetic
+			continue;                    // hole, never a dead thread (see header)
 		c.angles = m.angles;             // same yaw as the mesh, so the boxes line up
 		c SetModel( "zm_collision_perks1" );
 		c.script_noteworthy = "clip";
 		c DisconnectPaths();
 		clips[ clips.size ] = c;
 	}
-	m.tod_clip = clips[ 1 ];             // the CENTRE clip — handle kept because
+	if ( clips.size == 0 )
+		return;                          // no clips spawned; trigger manager unaffected
+	m.tod_clip = clips[ 0 ];             // a surviving clip — handle kept because
 	                                     // anything that later hides a station must
 	                                     // NotSolid + ConnectPaths it (Hide() !=
 	                                     // NotSolid — the QR invisible wall bug,
@@ -3442,27 +4433,153 @@ function station_place( model_org, trig_org, yaw )
 	m.tod_clips = clips;                 // ...and the full set, which is what such a
 	                                     // teardown actually has to walk now
 
-	t = spawn( "trigger_radius_use", trig_org, 0, 64, 100 );
-	t TriggerIgnoreTeam();      // REQUIRED for a script-spawned use-trigger
-	t SetCursorHint( "HINT_NOICON" );
-	t.tod_station_id = level.tod_station_count;   // base 0, breathers 1-4, crown 5
-	level.tod_station_count++;
-	t thread station_hint_loop();
-	t thread station_use_loop();
+	// PER-PLAYER TRIGGERS (2026-08-27). The altar used to run ONE shared trigger
+	// whose hint showed the NEAREST player's price — and when two players in
+	// range owed different amounts it fell back to a priceless generic
+	// ("HEAVENLY GIFT ALTAR - per player"), because a single global hint showing
+	// one player's number would lie to the other. The user read that generic as
+	// a bug ("It just says something like heavenly alter. No price or anything"),
+	// and they were right that it is a worse experience, honest or not.
+	//
+	// THE FIX IS MAP 1'S MEGA-BOTTLES PATTERN (_acc_mega_bottles.gsc:687 /
+	// _acc_perk_scatter.gsc:651): N overlapping triggers at the same origin,
+	// each SetInvisibleToPlayer-hidden from everyone except its OWNER. An
+	// invisible trigger shows no hint and takes no use from the hidden player,
+	// so every player sees exactly one prompt — theirs — carrying THEIR price,
+	// THEIR spent state, THEIR maxed state. The mixed-party generic is dead
+	// because the situation it papered over no longer exists.
+	//
+	// The altar is the only per-player-priced buyable in the map (doors and
+	// extraction are party-wide prices), which is why only this vendor needs it.
+	// (The trigger manager itself launches at the TOP of this function — see
+	// the header comment: its start must not sit downstream of any Spawn.)
 }
 
+// One manager per station: keeps one live trigger per connected player, spawns
+// for late joiners, prunes when an owner disconnects. 6 stations x 4 players =
+// 24 triggers at most — nothing by entity-count standards.
+function station_triggers_manager( trig_org, station_id )
+{
+	level endon( "end_game" );
+
+	trigs = [];
+	for ( ;; )
+	{
+		// prune triggers whose owner left (entity refs go undefined on disconnect)
+		alive = [];
+		for ( i = 0; i < trigs.size; i++ )
+		{
+			t = trigs[ i ];
+			if ( !isdefined( t ) )
+				continue;
+			if ( !isdefined( t.tod_owner ) )
+			{
+				t Delete();
+				continue;
+			}
+			alive[ alive.size ] = t;
+		}
+		trigs = alive;
+
+		players = GetPlayers();
+		foreach ( p in players )
+		{
+			if ( !isdefined( p ) )
+				continue;
+			have = false;
+			for ( i = 0; i < trigs.size; i++ )
+			{
+				if ( isdefined( trigs[ i ].tod_owner ) && trigs[ i ].tod_owner == p )
+					have = true;
+			}
+			if ( have )
+				continue;
+			t = spawn( "trigger_radius_use", trig_org, 0, 64, 100 );
+			// ENTITY POOL GUARD (the 2026-08-29 crown-altar failure: G_Spawn
+			// returned undefined at init pressure and the unguarded method call
+			// below KILLED this manager thread — that altar then never got a
+			// trigger for the whole game). Skip and retry on the next 1s pass:
+			// the pool frees as temp ents die, and the manager self-heals.
+			if ( !isdefined( t ) )
+			{
+				// LOUD in dev (2026-08-29 second report): a silent skip here
+				// is indistinguishable from a healthy station to the tester.
+				if ( IS_TRUE( level.tod_dev ) )
+					IPrintLn( "altar " + station_id + ": TRIG SPAWN FAILED (pool) - retrying" );
+				continue;
+			}
+			t TriggerIgnoreTeam();      // REQUIRED for a script-spawned use-trigger
+			t SetCursorHint( "HINT_NOICON" );
+			t.tod_station_id = station_id;
+			t.tod_owner = p;
+			// DEV: prove the crown altar's trigger EXISTS and where (the
+			// 2026-08-29 "cant trigger it" diagnosis lane — no spawn print +
+			// no press print = station_place never ran; spawn print but no
+			// press = the trigger is not receiving).
+			if ( IS_TRUE( level.tod_dev ) && station_id == 5 )
+				IPrintLn( "altar 5: trigger up at " + trig_org[ 0 ] + " " + trig_org[ 1 ] + " " + trig_org[ 2 ] );
+			t thread station_visibility_loop();
+			t thread station_hint_loop();
+			t thread station_use_loop();
+			trigs[ trigs.size ] = t;
+		}
+		wait 1;
+	}
+}
+
+// self = trigger. RE-ASSERTED on a cadence rather than set once, exactly as map
+// 1 does — visibility is per-(trigger,player) state the engine can lose on a
+// roster change, and a new joiner must be hidden from every trigger that is not
+// theirs before they can wander into range of six stations' worth of them.
+function station_visibility_loop()
+{
+	level endon( "end_game" );
+
+	for ( ;; )
+	{
+		if ( !isdefined( self.tod_owner ) )
+			return;   // manager will Delete() us on its next pass
+		players = GetPlayers();
+		foreach ( p in players )
+		{
+			if ( !isdefined( p ) )
+				continue;
+			self SetInvisibleToPlayer( p, p != self.tod_owner );
+		}
+		wait 0.25;
+	}
+}
+
+// FLAT 3000, ALWAYS (user 2026-08-30: "Make the alter 3000 then all the time").
+//
+// THE ESCALATING LADDER IS GONE, AND IT WAS THE LAST UNBOUNDED TRIGGERSTRING
+// ACCUMULATOR IN THE MAP. History: +1000/buy -> +500 -> +250 (2026-08-23), as
+// `2000 + 250 * n` with n a GLOBAL per-player lifetime buy count and no clamp.
+// station_hint_loop:4050 interpolates this straight into the prompt, so EVERY
+// purchase minted a hint string no previous purchase had produced — one
+// permanent BG-cache 'triggerstring' slot each, cap 250 match-wide, never freed
+// (see the shipped crash two players reported 2026-08-29/30). It was
+// structurally identical to map 1's 2026-06-25 soul-box crash: a live counter
+// baked into a hint and re-set per event. The crown altar's 5-use cap coming
+// off on 2026-08-29 removed the last thing bounding it.
+//
+// A flat price makes the prompt ONE string for the whole match, so the map's
+// entire hint budget is now STATIC — run length no longer moves it at all,
+// which is what actually fixes the crash rather than deferring it. Unlimited
+// buys are UNTOUCHED (station_depleted still exempts the crown altar); only the
+// escalation is gone. Economically this is a straight buff — buy #10 was 4,250
+// and every buy past #5 now costs less than it did.
+//
+// player.tod_station_buys is still counted (and still decremented on a refunded
+// buy at :4415); it simply no longer prices anything. Left in place rather than
+// ripped out — it is harmless and something may want the tally later.
+//
+// IF THIS EVER GOES BACK TO A LADDER: the price must NOT go back into the hint
+// literal. Bound it, bucket what is DISPLAYED, or move the number to
+// IPrintLnBold / a clientfield. Memory: triggerstring-250-cap.
 function station_cost( player )
 {
-	n = 0;
-	if ( isdefined( player ) && isdefined( player.tod_station_buys ) )
-		n = player.tod_station_buys;
-	// +250 per prior buy (user 2026-08-23; was +500, and +1000 before that).
-	// The ladder is GLOBAL per player: n counts every station buy anywhere, so
-	// extra terminals only ever make upgrades CLOSER, never cheaper. Ladder is
-	// now 2000 / 2250 / 2500 / 2750 ... Across all 30 available buys that is
-	// ~168,750 points (was ~277,500 at +500), and buy #10 is 4,250 (was 6,500):
-	// the whole curve stays inside the range a mid-tower run can actually pay.
-	return 2000 + 250 * n;
+	return 3000;
 }
 
 // How many times this player has bought at terminal `id` (per-player, per-station).
@@ -3476,6 +4593,19 @@ function station_uses( player, id )
 function station_depleted( player, id )
 {
 	if ( IS_TRUE( level.tod_dev ) )   // DEV: no per-station cap (user 2026-08-21) — test any terminal endlessly
+		return false;
+	// THE CROWN ALTAR IS UNLIMITED (user 2026-08-29: "The heavenly alter in
+	// the crown room shouldnt have a limit"). It is the last-chance vendor
+	// before the ending and the only one on the crown — the per-station cap
+	// exists to push players UP the tower, and there is no further up.
+	// (2026-08-30 correction, peer audit: this comment used to claim "the
+	// price ladder (+250 per buy) still binds it economically" — VOID since
+	// station_cost() went FLAT 3000 for the triggerstring-250 crash fix. The
+	// crown altar is now uncapped AND flat-priced: the only binder is the
+	// player's points. Deliberate — deep crown runs are exactly when a
+	// last-chance vendor should stay open; re-cap here if that reads wrong.)
+	// Station ids: base 0, breathers 1-4, crown 5 (station_place call order).
+	if ( id == 5 )
 		return false;
 	return ( station_uses( player, id ) >= TOD_STATION_USES_PER );
 }
@@ -3494,67 +4624,32 @@ function station_hint_loop()
 	// the mixed-party case, "cost == shown" was already true and the loop
 	// skipped before ever calling SetHintString: that altar then had NO hint
 	// at all, permanently, because shown never changes again either. Every other
-	// sentinel-guarded loop in this map (door_price_watch, uplink_hint_loop,
-	// teleport refresh) seeds outside its own domain; this one did not.
+	// sentinel-guarded loop in this map (uplink_hint_loop, teleport refresh —
+	// and _tod_doors::door_price_watch, until it was deleted 2026-08-30 for the
+	// 250-triggerstring cap) seeds outside its own domain; this one did not.
+	// PER-PLAYER SINCE 2026-08-27: self.tod_owner is the ONE player who can see
+	// this trigger (station_visibility_loop hides it from everyone else), so
+	// the hint answers one question for one person — no nearest-player search,
+	// and the mixed-party -1 state is GONE because two players can no longer be
+	// reading the same hint. STATE CODES now: >=0 a live price, -2 this station
+	// is spent for them, -3 they have nothing left to buy anywhere.
+	//
+	// -3 IS CHECKED AFTER -2 AND WINS (live report 2026-08-25: "When you hit
+	// max it should tell you"): "nothing left to buy anywhere" outranks "you
+	// have spent this particular one".
 	shown = -999;
 	for ( ;; )
 	{
 		wait 0.3;
 
-		near = undefined;
-		best = 160 * 160;
-		foreach ( p in GetPlayers() )
-		{
-			if ( !isdefined( p ) || !IsAlive( p ) )
-				continue;
-			d = DistanceSquared( p.origin, self.origin );
-			if ( d < best )
-			{
-				best = d;
-				near = p;
-			}
-		}
-		if ( !isdefined( near ) )
-			continue;
+		if ( !isdefined( self.tod_owner ) )
+			return;   // owner disconnected; the manager will Delete() us
 
-		// Co-op honesty (verify 2026-08-20): the trigger hint is GLOBAL but
-		// the price is per-player — if 2+ players in range owe DIFFERENT
-		// prices, show the priceless generic instead of the nearest player's
-		// number (which would lie to the other one). cost -1 = generic.
-		// PER-STATION CAP: a player who has spent their TOD_STATION_USES_PER
-		// buys HERE sees the depleted line (cost -2) — unless someone else in
-		// range still can buy, in which case the honest answer is the generic.
-		// STATE CODES: >=0 a live price, -1 mixed party (show the generic),
-		// -2 this station is spent for them, -3 they have nothing left to buy.
-		//
-		// -3 IS NEW (live report 2026-08-25: "When you hit max it should tell
-		// you"). station_use_loop has always refused a maxed-out player with
-		// player_has_upgrades_left() and a deny SOUND — but the hint kept
-		// advertising "HEAVENLY GIFT ALTAR [Cost: N]", so the altar looked buyable
-		// and simply did not work. Checked BEFORE depleted: "you have nothing
-		// left to buy anywhere" outranks "you have spent this particular one".
-		cost = station_cost( near );
-		if ( station_depleted( near, self.tod_station_id ) )
+		cost = station_cost( self.tod_owner );
+		if ( station_depleted( self.tod_owner, self.tod_station_id ) )
 			cost = -2;
-		if ( !player_has_upgrades_left( near ) )
+		if ( !player_has_upgrades_left( self.tod_owner ) )
 			cost = -3;
-		foreach ( p in GetPlayers() )
-		{
-			if ( !isdefined( p ) || !IsAlive( p ) || p == near )
-				continue;
-			if ( DistanceSquared( p.origin, self.origin ) >= 160 * 160 )
-				continue;
-			pc = station_cost( p );
-			if ( station_depleted( p, self.tod_station_id ) )
-				pc = -2;
-			if ( !player_has_upgrades_left( p ) )
-				pc = -3;
-			if ( pc != cost )
-			{
-				cost = -1;
-				break;
-			}
-		}
 		if ( cost == shown )
 			continue;
 		// Wording is deliberate (2026-08-21). It must NOT collide with the
@@ -3585,13 +4680,10 @@ function station_hint_loop()
 			self SetHintString( "^1ALL UPGRADES MAXED^7" );
 		else if ( cost == -2 )
 			self SetHintString( "^1ALTAR SPENT^7 - try another" );
-		else if ( cost == -1 )
-			// MIXED PARTY. The price is per-player and two people in range owe
-			// different amounts, so a single number would lie to one of them.
-			// It still says WHY there is no figure — a buyable with no price and
-			// no explanation reads as broken (audit 2026-08-25).
-			self SetHintString( "Hold ^3[{+activate}]^7 ^5HEAVENLY GIFT ALTAR^7 - per player" );
 		else
+			// (The mixed-party "- per player" generic died with the shared
+			// trigger, 2026-08-27 — this hint is visible to exactly one player,
+			// so the price is always THEIRS.)
 			self SetHintString( "Hold ^3[{+activate}]^7 ^5HEAVENLY GIFT ALTAR ^2[Cost: " + cost + "]" );
 	}
 }
@@ -3605,8 +4697,27 @@ function station_use_loop()
 	{
 		self waittill( "trigger", player );
 
+		// DEV DIAGNOSIS LANE (live report 2026-08-29: the crown altar "doesnt
+		// even work. I cant trigger it" — none of the six guards below says
+		// which one ate the press, so an armed run now narrates. Behind
+		// tod_dev like every debug print on this map; ships silent.)
+		if ( IS_TRUE( level.tod_dev ) )
+			IPrintLn( "altar " + self.tod_station_id + ": press" );
+
 		if ( !isdefined( player ) || !isplayer( player ) )
 			continue;
+		// PER-PLAYER TRIGGER (2026-08-27): only the owner may buy through this
+		// one. SetInvisibleToPlayer should already stop anyone else using it,
+		// but that is an engine behaviour this loop does not get to assume —
+		// a charge landing on the wrong player's ladder would be a real bug.
+		if ( !isdefined( self.tod_owner ) )
+			return;   // owner disconnected; manager will Delete() us
+		if ( player != self.tod_owner )
+		{
+			if ( IS_TRUE( level.tod_dev ) )
+				IPrintLn( "altar " + self.tod_station_id + ": deny NOT-OWNER" );
+			continue;
+		}
 		if ( !IS_TRUE( level.tod_class_select_done ) )    // never during the draft
 			continue;
 		// A round event is live — refuse, but SAY SO. Mute refusals read as dead
@@ -3617,11 +4728,17 @@ function station_use_loop()
 		// machine-gun in their ear for the whole crawl.
 		if ( IS_TRUE( level.tod_upgrade_pause ) )
 		{
+			if ( IS_TRUE( level.tod_dev ) )
+				IPrintLn( "altar " + self.tod_station_id + ": deny PAUSE" );
 			player PlaySound( "zmb_no_purchase" );
 			continue;
 		}
 		if ( IS_TRUE( player.tod_solo_upg_active ) )      // already mid-pick
+		{
+			if ( IS_TRUE( level.tod_dev ) )
+				IPrintLn( "altar " + self.tod_station_id + ": deny MID-PICK" );
 			continue;
+		}
 		if ( player laststand::player_is_in_laststand() )
 			continue;
 		// A revive press is not a purchase (_zm_blockers.gsc:307). Reviving polls
@@ -3630,13 +4747,19 @@ function station_use_loop()
 		// burns one of this station's limited uses. Silent, like the branch
 		// above: the player is holding use.
 		if ( player zm_utility::in_revive_trigger() )
+		{
+			if ( IS_TRUE( level.tod_dev ) )
+				IPrintLn( "altar " + self.tod_station_id + ": deny REVIVE-TRIG" );
 			continue;
+		}
 		if ( !player_has_upgrades_left( player ) )        // everything maxed
 		{
+			if ( IS_TRUE( level.tod_dev ) )
+				IPrintLn( "altar " + self.tod_station_id + ": deny ALL-MAXED" );
 			player PlaySound( "zmb_no_purchase" );
 			continue;
 		}
-		if ( station_depleted( player, self.tod_station_id ) )   // 3 buys here — climb (user 2026-08-21)
+		if ( station_depleted( player, self.tod_station_id ) )   // per-station cap (crown 5 exempt)
 		{
 			player PlaySound( "zmb_no_purchase" );
 			continue;
@@ -3645,6 +4768,8 @@ function station_use_loop()
 		cost = station_cost( player );
 		if ( !( player zm_score::can_player_purchase( cost ) ) )
 		{
+			if ( IS_TRUE( level.tod_dev ) )
+				IPrintLn( "altar " + self.tod_station_id + ": deny POOR (" + cost + ")" );
 			player PlaySound( "zmb_no_purchase" );
 			continue;
 		}
@@ -3873,6 +4998,21 @@ function solo_refresh_option( o )
 	o.cur = get_level( self, o.domain );
 	if ( o.cur + o.levels > o.max )
 		o.levels = o.max - o.cur;
+
+	// BAND HONESTY on the deferred path too — the third and last place `levels`
+	// can shrink out from under `rarity`. This card was rolled BEFORE a scheduled
+	// round event took over, and the player may have levelled this very domain in
+	// that event; re-presenting it still wearing its original band would show
+	// "ULTIMATE +3" over a payout the takeover just cut to +1. Same clamp-down
+	// rule as make_option, and the TIER card never reaches here (it returns
+	// above).
+	if ( o.levels >= 1 && o.levels < o.rarity )
+	{
+		o.rarity = o.levels;
+		if ( o.rarity == 3 )      o.rarity_name = "ULTIMATE";
+		else if ( o.rarity == 2 ) o.rarity_name = "SUPER";
+		else                      o.rarity_name = "";
+	}
 	return ( o.levels > 0 );
 }
 

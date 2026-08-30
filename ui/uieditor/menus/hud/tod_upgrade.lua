@@ -10,7 +10,11 @@
 --   todUpgAR/BR rarity     1 regular | 2 SUPER | 3 ULTIMATE
 --   todUpgHold  hold-to-lock progress 0..15 (the fill bar)
 --   todUpgAL/BL current level 0..10
---   todUpgLuck  luck spent on these rolls 0..15
+--   todUpgLuck  0..10 = luck bar in tens (the top-left bar AND the deal
+--               badge); 11..14 = OVERCHARGE zap frames (v14.9 — the bar
+--               secretly tracks to 150 server-side; at the ceiling
+--               _tod_luck's overcharge_driver cycles these four values at
+--               ~7 Hz, server-driven like every blink in this file)
 --   todUpgFocus hover state, SERVER-driven blink (no UITimers client-side):
 --               0 none | 1 left bright | 2 left dim | 3 right bright | 4 right dim
 --               (the GSC hold-to-confirm loop toggles bright/dim at ~7 Hz while
@@ -56,7 +60,7 @@ local DOMAIN = {
     [2]  = { name = "DMG REDUCTION", desc = "-5% damage taken per level",        max = 10 },
     [3]  = { name = "BOUNTY",      desc = "+5% money per kill per level",        max = 10 },
     [4]  = { name = "LUCK",        desc = "+10% luck gain rate per level",       max = 5 },
-    [5]  = { name = "SPRINT",      desc = "+5% speed/Lv - Lv 5: tireless",       max = 10 },
+    [5]  = { name = "SPRINT",      desc = "+5% move speed per level",            max = 10 },
     [6]  = { name = "HEADSHOT",    desc = "+4% headshot damage per level",       max = 10 },
     [7]  = { name = "MAG SIZE",    desc = "real mag +30/+60/+90%",               max = 3 },
     -- max 6 = the ASSAULT cap (all other gun classes stop at 5; the server
@@ -65,13 +69,19 @@ local DOMAIN = {
     -- stay "reserve", so the art FILENAMES are unchanged. The art itself was
     -- re-baked and does say SCAVENGER (verified 2026-08-23) — do not rename the
     -- files to match the label; the slug is the contract with the zone list.
-    [8]  = { name = "SCAVENGER",   desc = "1 round per 7 kills, 1 kill fewer/Lv", max = 6 },
-    [9]  = { name = "MOBILITY",    desc = "+5% move speed per level",            max = 10 },
-    [10] = { name = "BULLET FEED", desc = "reserve trickles in: 2.0s to 0.4s",  max = 10 },
+    [8]  = { name = "SCAVENGER",   desc = "primary kills: 1 per 5, 1 fewer/Lv, Lv6 3 per 2", max = 6 },
+    -- 9 MOBILITY: max 10 -> 5 (v14.11, user 2026-08-30). Display ceiling only;
+    -- the server sends the real cap in every sync/deal.
+    [9]  = { name = "MOBILITY",    desc = "+5% move speed per level",            max = 5 },
+    [10] = { name = "BULLET FEED", desc = "reserve trickles in: 1.0s to 0.2s",  max = 10 },
     [11] = { name = "ECHO ROUNDS", desc = "+10%/Lv chance to strike twice",      max = 10 },
-    [12] = { name = "REGEN",       desc = "+0.5%/s self-heal per level",         max = 10 },
+    -- 12 REGEN: DOMAIN REMOVED v14.11 (2026-08-30, with 11/22/30/34). The row
+    -- stays because this table is keyed by id — the server can no longer send
+    -- 12. The heavy's sustain is VITALITY (38) + RECOVERY (39) now.
+    [12] = { name = "REGEN",       desc = "REMOVED 2026-08-30",                  max = 10 },
     [13] = { name = "LEECH",       desc = "blade kills heal you (+1 stage)",     max = 5 },
-    [14] = { name = "CLEAVE",      desc = "+33%/Lv chance for an extra zombie",  max = 6 },
+    -- 14 CLEAVE: max 6 -> 3 (v14.11 — "too OP"; one banked extra now).
+    [14] = { name = "CLEAVE",      desc = "+33%/Lv chance for an extra zombie",  max = 3 },
     [15] = { name = "FIRE RATE",   desc = "truly fires faster per level",        max = 3 },
     [16] = { name = "HANDLING",    desc = "faster reload, swap and ADS",         max = 3 },
     -- 17 v9.45: TWO levels now (-10/-20% since the 2026-08-26 assault buff). max here is the display ceiling for
@@ -93,7 +103,8 @@ local DOMAIN = {
     -- 23 RUN AND GUN (2026-08-22, skirmisher): baked art installed + zoned
     -- (files (28).zip) -> CARD_SLUG[23] = "run_and_gun"; this row is the
     -- no-art fallback text.
-    [23] = { name = "RUN AND GUN", desc = "shots fired on the move cost no ammo: 20 / 35 / 50%", max = 3 },
+    -- 23 v14.11: gained the DAMAGE half (same ladder, same movement test).
+    [23] = { name = "RUN AND GUN", desc = "moving: 20 / 35 / 50% of shots free, +20 / 35 / 50% damage", max = 3 },
     -- CLASS TIERS (docs/25, 2026-08-22). The domain-id fields are 6 bits now.
     -- 24 is the TIER card: its "level" field carries (class-1)*2 + (tier-2),
     -- and PaintCard rewrites name/desc from TIER_LADDER below. 25..31 are the
@@ -104,7 +115,7 @@ local DOMAIN = {
     [26] = { name = "OVERDRIVE",        desc = "sustained fire hits harder: +5 / +8 / +12% per 10 rounds", max = 3 },
     -- 27 v9.43: the ladder is FREQUENCY now, not size. Every 10th/7th/5th kill
     -- tops the mag back to full from reserve; it was 25/50/75% per kill.
-    [27] = { name = "KILL RELOAD",      desc = "every 100th / 75th / 50th kill refills your mag from reserve", max = 3 },
+    [27] = { name = "KILL RELOAD",      desc = "every 55th / 40th / 30th kill refills your mag from reserve", max = 3 },
     -- 28 v9.45: TEN levels at 3% each (was 3 levels at 10%) — same 30% ceiling,
     -- a much longer climb to it.
     [28] = { name = "IMPACT ROUNDS",    desc = "3% of hits burst nearby zombies per level", max = 10 },
@@ -121,8 +132,11 @@ local DOMAIN = {
     -- i_tod_pause_r33/r34), CARD_SLUG[33]/[34] are set, and PAUSE_PLATE_MAX is
     -- 34 — so these render as full art rows, not text. These rows are the
     -- no-art fallback text.
+    -- 33 SECOND WIND is the MP5's unique since v14.11 (was the MP7's).
     [33] = { name = "SECOND WIND",      desc = "sprint to heal: 1% of your health per second per level", max = 5 },
-    [34] = { name = "MOMENTUM",         desc = "damage scales with your speed: up to +5% per level while moving", max = 5 },
+    -- 34 MOMENTUM: DOMAIN REMOVED v14.11 (2026-08-30) — RUN AND GUN's damage
+    -- half is the moving-damage card now. Row kept, id-keyed table.
+    [34] = { name = "MOMENTUM",         desc = "REMOVED 2026-08-30", max = 5 },
     -- 35 GIANT SLAYER / 36 BACK ARMOR (2026-08-23, v9.45). Card art AND pause
     -- plates installed + zoned the same day (files (38).zip, docs/31) ->
     -- CARD_SLUG[35]/[36] set, PAUSE_PLATE_MAX 36. These rows are the no-art
@@ -134,6 +148,14 @@ local DOMAIN = {
     -- CARD_SLUG[37] = "march", PAUSE_PLATE_MAX = 37. This row is the no-art
     -- fallback text.
     [37] = { name = "FORCED MARCH",     desc = "+5% move speed per level", max = 3 },
+    -- 38 VITALITY / 39 RECOVERY (v14.11, 2026-08-30 — the heavy's new sustain
+    -- pair, replacing REGEN). NO card art or pause plates yet: these render
+    -- through the no-art text fallback (PaintCard's nil-slug branch) and as
+    -- text rows in the pause list (38 > PAUSE_PLATE_MAX). When the art drop
+    -- lands: add CARD_SLUG[38]/[39], bump PAUSE_PLATE_MAX to 39, install +
+    -- zone the images — the v14.11 art prompt doc carries the checklist.
+    [38] = { name = "VITALITY",         desc = "+10 max health per level", max = 5 },
+    [39] = { name = "RECOVERY",         desc = "health regen starts 10% sooner per level", max = 3 },
     -- 11 ECHO ROUNDS and 30 MEAT GRINDER were REMOVED 2026-08-23. Their rows
     -- stay because this table is keyed by id, not ordered — a stale row is
     -- never reachable (the server can no longer send those ids) and deleting
@@ -192,51 +214,69 @@ local DETAIL = {
     -- only, because the variant forms only exist for that gun.
     [3]  = { eff = "+{V}% points on every kill",          act = "on each kill, banked, paid out in 10s",      val = function( l ) return 5 * l end },
     [4]  = { eff = "+{V}% luck bar gain",                 act = "on every luck gain, never on losses",        val = function( l ) return 10 * l end },
-    [5]  = { eff = "+{V}% move speed",                    act = "always on; lv5+ tireless (skirmisher)",      val = function( l ) return 5 * l end },
-    [6]  = { eff = "+{V}% headshot damage",               act = "on a head hit, any weapon",                  val = function( l ) return 4 * l end },
+    -- [tod] 2026-08-26: the "lv5+ tireless (skirmisher)" rider is GONE — the
+    -- unlimited-sprint grant was removed after three failed attempts to make the
+    -- meter actually stop draining. SPRINT is move speed only, for both classes.
+    [5]  = { eff = "+{V}% move speed",                    act = "always on, both classes",                    val = function( l ) return 5 * l end },
+    [6]  = { eff = "+{V}% headshot damage",               act = "head hits, any weapon; survives promotion",  val = function( l ) return 4 * l end },   -- scope class since v14.12
     [7]  = { eff = "+{V}% magazine size",                 act = "always on, swaps in a bigger-mag gun",       val = function( l ) return 30 * l end },
-    [8]  = { eff = "1 reserve round back per {V} kills",  act = "on any kill, 1 round per frame",             val = function( l ) return math.max( 2, 8 - l ) end },
+    -- [tod] 2026-08-26 SECOND buff + primary-only. Mirrors GSC
+    -- scav_kills_needed/scav_rounds_paid: Lv1 1/5 .. Lv5 1/1, assault Lv6 3/2.
+    -- val returns a whole PHRASE rather than a number, because the capstone
+    -- changes the shape of the sentence and not just the value in it (the
+    -- formatter above tostring()s any non-number, so this is supported).
+    [8]  = { eff = "{V}",                                 act = "primary kills; assault keeps on promotion", val = function( l )   -- v14.13: scope class FOR ASSAULT ONLY (scope_class lane)
+                if l >= 6 then return "3 reserve rounds back per 2 kills" end
+                local n = math.max( 1, 6 - l )
+                if n == 1 then return "1 reserve round back on every kill" end
+                return "1 reserve round back per " .. n .. " kills"
+            end },
     [9]  = { eff = "+{V}% move speed",                    act = "always on",                                  val = function( l ) return 5 * l end },
-    [10] = { eff = "1 round into the mag every {V}s",     act = "always on, even with the gun stowed",        val = function( l ) return math.max( 0.4, 2.0 - 0.1778 * ( l - 1 ) ) end, dec = 1 },
+    [10] = { eff = "1 round into the mag every {V}s",     act = "always on, even with the gun stowed",        val = function( l ) return math.max( 0.2, 1.0 - 0.0889 * ( l - 1 ) ) end, dec = 1 },
     -- 11 ECHO ROUNDS: domain REMOVED 2026-08-23. No detail row — unreachable.
-    [12] = { eff = "heal {V}% of max health per second",  act = "always on, 1/s tick, not while downed",      val = function( l ) return 0.5 * l end, dec = 1 },
+    -- 12 REGEN: domain REMOVED v14.11 (2026-08-30). No detail row — unreachable
+    -- (the 11/22/30 pattern; a fresh run can never own it).
     [13] = { eff = "heal +{V} hp per blade kill",         act = "on a direct kill with your blade",           val = function( l ) return ({0,4,6,8,9,10})[ math.min(l,5) + 1 ] or 10 end },
     -- CLEAVE is NOT a chance: the ladder passes 100% at Lv3 (one guaranteed
     -- extra target) and caps at 200% = +2. The wording must never say "chance".
-    [14] = { eff = "+{V}% extra targets per swing",       act = "on a melee hit, 60u, caps at +2",            val = function( l ) local v = math.floor( 100 * l / 3 + 0.5 ) if v > 200 then v = 200 end return v end },
-    [15] = { eff = "-{V}% time between shots",            act = "always on, class gun only",                  val = function( l ) return ( { 8, 16, 24 } )[ l ] end },
-    [16] = { eff = "-{V}% reload, swap and ADS time",     act = "always on, class gun only",                  val = function( l ) return ( { 15, 25, 35 } )[ l ] end },
-    [17] = { eff = "-{V}% weapon kick, hip and ads",      act = "always on, class gun only",                  val = function( l ) return ( { 10, 20 } )[ l ] end },
+    -- 14 v14.11: cap 3 — one banked extra at Lv3 (the 200% clamp is dead belt).
+    [14] = { eff = "+{V}% extra targets per swing",       act = "on a melee hit, 60u, caps at +1",            val = function( l ) local v = math.floor( 100 * l / 3 + 0.5 ) if v > 200 then v = 200 end return v end },
+    [15] = { eff = "-{V}% time between shots",            act = "always on, MAC-10 only",                     val = function( l ) return ( { 8, 16, 24 } )[ l ] end },
+    [16] = { eff = "-{V}% reload, swap and ADS time",     act = "always on, class primary only",              val = function( l ) return ( { 15, 25, 35 } )[ l ] end },
+    [17] = { eff = "-{V}% weapon kick, hip and ads",      act = "always on, class primary only",              val = function( l ) return ( { 10, 20 } )[ l ] end },
     [18] = { eff = "-{V}% blade swing time",              act = "always on while the blade is held",          val = function( l ) return ({0,10,16,20,23,26})[ math.min(l,5) + 1 ] or 26 end },
     -- PENETRATION is a penetrateType TIER, not a number. Lv0 = small (BELOW
     -- stock) but a row only renders at lvl > 0, so index straight by level.
-    [19] = { eff = "shoots through {V} cover",            act = "always on, class gun only",                  val = function( l ) return ( { "medium", "large" } )[ l ] end },
-    [20] = { eff = "lightning for {V}% of enemy max hp",  act = "on a melee hit, 3.8s to 1.3s cooldown",      val = function( l ) return 5 + 15 * l end },
+    [19] = { eff = "shoots through {V} cover",            act = "always on, Stoner 63 and Death Machine",     val = function( l ) return ( { "medium", "large" } )[ l ] end },
+    [20] = { eff = "lightning for {V}% of enemy max hp",  act = "Stormbreaker only; melee hit, 3.8-1.3s cd",      val = function( l ) return 5 + 15 * l end },
     [21] = { eff = "shoot while sprinting, no sprint-out", act = "always on" },
     -- 22 CHAIN LUNGE: domain REMOVED 2026-08-24. No detail row — unreachable.
-    [23] = { eff = "{V}% of shots on the move are free",  act = "per bullet while running or sprinting",      val = function( l ) return 20 + 15 * ( l - 1 ) end },
+    -- 23 v14.11: both halves share one number, so one {V} substitution covers
+    -- them (string.gsub replaces every occurrence).
+    [23] = { eff = "{V}% shots free and +{V}% damage",    act = "per bullet while running or sprinting",      val = function( l ) return 20 + 15 * ( l - 1 ) end },
     -- 24 CLASS TIER: `lvl` is the plain tier number (2 or 3) — refresh_upgrade_list
     -- sends it raw. The pause lane does not carry the CLASS, so this line stays
     -- class-agnostic on purpose; naming the gun here would require a new channel.
     [24] = { eff = "your class gun is tier {V} of 3",     act = "gun upgrades reset on promotion",            val = function( l ) return l end },
-    [25] = { eff = "+{V}% move speed per stack",          act = "on any kill, 4s, stacks x3",                 val = function( l ) return 2 * l + 2 end },
-    [26] = { eff = "+{V}% bullet damage per 10 shots",    act = "firing nonstop, 0.5s gap resets, x5",        val = function( l ) return ( { 5, 8, 12 } )[ l ] end },
+    [25] = { eff = "+{V}% move speed per stack",          act = "MP7 only; on any kill, 4s, stacks x3",                 val = function( l ) return 2 * l + 2 end },
+    [26] = { eff = "+{V}% bullet damage per 10 shots",    act = "Death Machine only; nonstop fire, x5",        val = function( l ) return ( { 5, 8, 12 } )[ l ] end },
     -- 27 v9.43: value is KILLS-PER-PROC and DESCENDS with level (10/7/5) — the
     -- only row where a bigger level shows a smaller number. Verified against
     -- killreload_kills_needed + unique_on_kill: the proc sets clip to full
     -- (want = cap - clip), so it tops up rather than adding a magazine, and it
     -- is capped by what the reserve actually holds.
-    [27] = { eff = "mag back to full every {V} kills",    act = "on any kill; drawn from reserve",            val = function( l ) return ( { 100, 75, 50 } )[ l ] end },
+    -- [tod] 2026-08-27 buff 100/75/50 -> 55/40/30 (nobody was taking it).
+    [27] = { eff = "mag back to full every {V} kills",    act = "on any kill; drawn from reserve",            val = function( l ) return ( { 55, 40, 30 } )[ l ] end },
     [28] = { eff = "{V}% of hits splash 40% dmg nearby",  act = "per bullet hit, up to 6 within 64u",         val = function( l ) return 3 * l end },
     -- 29 SUPPRESSING FIRE nerfed 2026-08-24: 25/40/55 -> 12/24/36, so the val
     -- is a flat 12 per level now (it was 15*l + 10). The CARD ART carries these
     -- numbers baked in and is stale until re-baked — see the art work list.
-    [29] = { eff = "the zombie you hit moves {V}% slower", act = "per bullet hit, 1.5s, refreshes",           val = function( l ) return 12 * l end },
+    [29] = { eff = "the zombie you hit moves {V}% slower", act = "HK21 only; per bullet hit, 1.5s",           val = function( l ) return 12 * l end },
     -- 30 MEAT GRINDER: domain REMOVED 2026-08-23. No detail row — unreachable.
-    [31] = { eff = "+{V}% melee damage",                  act = "swing while sprinting or within 0.4s",       val = function( l ) return 50 * l end },
+    [31] = { eff = "+{V}% melee damage",                  act = "Katana only; sprinting or within 0.4s",       val = function( l ) return 50 * l end },
     [32] = { eff = "-{V}% damage taken",                  act = "while sprinting, checked on each hit",       val = function( l ) return 5 * l end },
-    [33] = { eff = "heal {V}% of max hp per second",      act = "while sprinting, ticks once a second",       val = function( l ) return 1 * l end },
-    [34] = { eff = "up to +{V}% bullet damage",           act = "while moving; full at a normal run",         val = function( l ) return 5 * l end },
+    [33] = { eff = "heal {V}% of max hp per second",      act = "MP5 only; while sprinting, 1/s tick",       val = function( l ) return 1 * l end },   -- MP5 since v14.11 (was MP7)
+    -- 34 MOMENTUM: domain REMOVED v14.11 (2026-08-30). No detail row — unreachable.
     -- 35 GIANT SLAYER: the multiplier is ADDITIVE with DAMAGE and HEADSHOT, and
     -- pays out only against the boss/elite triad (Panzer, Rogue Protector,
     -- Reaver) — never on the horde. Both boss-damage lanes call
@@ -250,6 +290,10 @@ local DETAIL = {
     -- rides the same +5%/Lv lane as SPRINT (5) and MOBILITY (9) in
     -- _tod_upgrades::apply_move_speed — one owner, three doors.
     [37] = { eff = "+{V}% move speed",                    act = "always on, AK-47 only",                      val = function( l ) return 5 * l end },
+    -- 38/39 (v14.11): read back off the apply sites — apply_upgrade +
+    -- body_systems_loop's want-floor for 38, recovery_loop for 39.
+    [38] = { eff = "+{V} max health",                     act = "always on, survives a tier promotion",       val = function( l ) return 10 * l end },
+    [39] = { eff = "regen starts {V}% sooner",            act = "always on, after the last hit taken",        val = function( l ) return 10 * l end },
 }
 
 -- PUBLIC — read by AetheriumStartMenu.lua (same client Lua VM, the same way it
@@ -296,7 +340,18 @@ local USE_TITLE_ART = true
 -- FULL-CARD SET ART (user drop files (10).zip 2026-08-20): 54 baked cartoon
 -- cards (18 domains x 3 rarities, PORTRAIT 2:3, all text in the art) REPLACE
 -- the composite frame+base+icon+text. Images-over-LUI doctrine: LUI keeps
--- only layout, the focus/hold/timer overlays and the live "Lv X > Y" line.
+-- only layout and the focus/hold/timer overlays.
+--
+-- THERE IS NO "Lv X > Y" LINE. This header advertised one until 2026-08-30 and
+-- it was WRONG — the overlay was removed 2026-08-20 (see the note at the
+-- card.Desc construction below, which is authoritative). Two sessions read this
+-- comment and concluded the deal screen shows a live value; it does not.
+-- NO LUI TEXT IS DRAWN ON THE CARDS AT ALL — PaintCard blanks Tag/Name/Desc and
+-- the baked art carries everything, with the rarity gem "+N" carrying the gain.
+-- CONSEQUENCE FOR CARD ART: a number that is not baked into the card is not
+-- visible at deal time anywhere. Level-aware values live ONLY in the pause menu
+-- (CoD.TodDomainDesc -> DETAIL[id].val(lvl)). That is the deliberate trade for
+-- level-agnostic art that never needs re-baking on a retune — see docs/47.
 -- The composite path below survives as the no-art fallback.
 local USE_CARD_SET_ART = true
 if USE_CARD_SET_ART then
@@ -323,9 +378,34 @@ local USE_TIER_CARD_ART = true
 -- plates, hold bar, fallback text stack) is keyed off them, so nothing else
 -- needed touching in either direction. The card ART is unaffected too — the
 -- PNGs are 768x1152 and the engine scales them into this rect, so no re-bake.
-local CARD_Y0, CARD_Y1 = 230, 550
-local CARD_AX0, CARD_AX1 = 390, 603
-local CARD_BX0, CARD_BX1 = 677, 890
+-- CARDS DRAWN BIGGER (user 2026-08-27: "Some have text that is so hard to
+-- read"). The card art is 768x1152 and was being drawn at 213x320 — a 0.277
+-- downscale, 2.3x harder than anything else in the UI (the pause header is
+-- 0.70, the name plates 0.64, the switch hint 0.61). At that scale the card's
+-- SUBLINE — the line carrying qualifiers like "CLASS PRIMARY ONLY" — lands at
+-- about 7 virtual px, i.e. ~10px at 1080p and ~7px at 720p. Unreadable inside a
+-- 15-second timed pick.
+--
+-- Now 234x351 — EXACTLY +10% linear (user 2026-08-27: "Only increase card size
+-- by 10%. Thats all"). The layout had room for +19%, but 10% is the call; the
+-- headroom is recorded here rather than taken.
+--
+-- 234/351 is EXACTLY 2:3, matching the art's 768/1152, so this is a pure
+-- scale-up with no new stretch. Every child element positions off xLo/xHi/
+-- CARD_Y0/CARD_Y1 and follows automatically. Nothing else on the menu moves:
+--   * TOP  banner ends at y=215                     -> Y0 226 (11px clear)
+--   * BOT  hold bar sits at CARD_Y1+39..+43 and must clear the switch-hint
+--          plate at y=650                           -> Y1 577, bar ends 620 (30px clear)
+--   * RIGHT luck badge starts at x=950              -> 911 (39px clear)
+--   * the 74px gap between the two cards is unchanged and both stay centred on
+--     x=640.
+--
+-- This alone takes the subline from ~6.7 to ~7.4 virtual px. It is the smaller
+-- half of the fix: the other half is baking the subline larger in the art (see
+-- the card-legibility prompt). The two compound, and this half re-bakes nothing.
+local CARD_Y0, CARD_Y1 = 226, 577
+local CARD_AX0, CARD_AX1 = 369, 603
+local CARD_BX0, CARD_BX1 = 677, 911
 
 local MAX_LEVEL_TIME_DANGER = 5   -- countdown turns red at this many seconds
 
@@ -433,6 +513,8 @@ function CoD.TodUpgradePanel.new( HudRef, InstanceRef )
             [35] = "giant_slayer",  -- art installed + zoned 2026-08-23 (files (38).zip, docs/31)
             [36] = "back_armor",    -- art installed + zoned 2026-08-23 (files (38).zip, docs/31)
             [37] = "march",         -- FORCED MARCH — art installed + zoned 2026-08-24 (files (39).zip, docs/33)
+            [38] = "vitality",      -- VITALITY — art installed + zoned 2026-08-30 (files (69).zip, docs/46)
+            [39] = "recovery",      -- RECOVERY — art installed + zoned 2026-08-30 (files (69).zip, docs/46)
         }
         art.cards = {}
         for id, slug in pairs( CARD_SLUG ) do
@@ -726,7 +808,7 @@ function CoD.TodUpgradePanel.new( HudRef, InstanceRef )
     local st = { show = 0, ad = 0, ar = 1, al = 0, bd = 0, br = 1, bl = 0, luck = 0, focus = 0, time = 0, hold = 0 }
     -- LUCK AT DEAL TIME, latched on the show 0->1 edge (audit 2026-08-25).
     -- todUpgLuck is the LIVE luck bar and it keeps moving while the cards are
-    -- up — which is fine for LuckSegs, but the badge claims to describe THESE
+    -- up — which is fine for the top-left bar, but the badge claims to describe THESE
     -- rolls. At a HEAVENLY GIFT ALTAR the world is NOT paused, so a player who
     -- keeps killing watched the badge climb under a deal it had nothing to do
     -- with. Latched client-side because a second clientfield is not affordable
@@ -746,8 +828,13 @@ function CoD.TodUpgradePanel.new( HudRef, InstanceRef )
             local lad = TIER_LADDER[ tierCls ]
             local gun = ( lad and lad[ tierN ] ) or "NEW WEAPON"
             local cls = ( lad and lad.class ) or "CLASS"
+            -- [tod v14.12] the kept-list is NOT enumerated here on purpose: it
+            -- has grown three times (DR+LUCK -> +sprint pair -> +vitality ->
+            -- +headshot/scavenger) and a stale enumeration lies on a card.
+            -- TIER_SAFE in AetheriumStartMenu.lua is the authority; the pause
+            -- menu's reset badges show the player exactly what survives.
             d = { name = "TIER " .. tierN .. ": " .. gun,
-                  desc = cls .. " - new weapon. Gun upgrades reset; DMG REDUCTION + LUCK kept",
+                  desc = cls .. " - new weapon. Gun upgrades reset; class-wide upgrades kept",
                   max = 3 }
         end
         local r = RARITY[ rar ] or RARITY[ 1 ]
@@ -1022,6 +1109,12 @@ end
 -- ---------------------------------------------------------------------------
 local DMG_COLOR    = { 1.0, 0.88, 0.25 }
 local DMG_COLOR_HS = { 0.20, 0.95, 0.85 }
+-- ARMORED (sprinter) hits: RED, and red WINS over the headshot colour (v13.9,
+-- user: "should be red too. Specific for this type of enemy to show you are
+-- doing reduced damage" -- a reduced headshot is still reduced, and that is
+-- the fact the colour carries). Distinct from WARN_COLOR's alarm red only by
+-- use; same family on purpose.
+local DMG_COLOR_RED = { 1.0, 0.22, 0.18 }
 local DMG_POOL   = 12
 local DMG_LIFE   = 500
 local DMG_RISE   = 36
@@ -1057,11 +1150,12 @@ function CoD.TodDmgNum.new( HudRef, InstanceRef )
     end
     local nextIdx = 1
 
-    local function spawnNum( dmg, hs )
+    local function spawnNum( dmg, hs, red )
         local t = pool[ nextIdx ]
         local p = DMG_SCATTER[ nextIdx ]
         nextIdx = ( nextIdx % DMG_POOL ) + 1
-        local c  = hs and DMG_COLOR_HS or DMG_COLOR
+        -- red (armored/reduced) beats headshot; scale still honours the headshot
+        local c  = red and DMG_COLOR_RED or ( hs and DMG_COLOR_HS or DMG_COLOR )
         local sc = hs and DMG_SCALE_HS or DMG_SCALE
         local cx = p[ 1 ] * DMG_SPREAD
         local cy = p[ 2 ] * DMG_SPREAD
@@ -1082,10 +1176,13 @@ function CoD.TodDmgNum.new( HudRef, InstanceRef )
         self:subscribeToModel( dmgModel, function ( ModelRef )
             local v = tonumber( Engine.GetModelValue( ModelRef ) ) or 0
             if v == 0 then return end
-            local dmg = math.floor( v / 4 ) * 10   -- TENS encoding (server sends dmg/10; cap 20,470)
+            -- v13.9 encoding, LOCKSTEP with push_dmg_num_now (14 bits):
+            -- dmg*8 + reduced*4 + headshot*2 + parity
+            local dmg = math.floor( v / 8 ) * 10   -- TENS encoding (server sends dmg/10; cap 20,470)
             if dmg <= 0 then return end
-            local hs = math.floor( v / 2 ) % 2 >= 1
-            spawnNum( dmg, hs )
+            local red = math.floor( v / 4 ) % 2 >= 1
+            local hs  = math.floor( v / 2 ) % 2 >= 1
+            spawnNum( dmg, hs, red )
         end )
     end
 
@@ -1211,59 +1308,53 @@ function LUI.createMenu.tod_upgrade( Instance )
     todGateHud( Enum.UIVisibilityBit.BIT_SCOREBOARD_OPEN )
     todGateHud( Enum.UIVisibilityBit.BIT_UI_ACTIVE )
 
-    -- LUCK BAR (user art drop 2026-08-20; all-LUI 2026-08-20 — the server
-    -- hudelem fill never sat cleanly in the frame window). 10 segments inside
-    -- the frame art's transparent window (x 9.8..88.4%, y 22..78% of the
-    -- frame rect), lit 1-per-10% by the live todUpgLuck field (_tod_luck
-    -- pushes bar/10 on every change). Hot (80%+) = gold. "%" readout right
-    -- of the frame. Segments added BEFORE the frame so the art overlays them.
-    -- v2 frame art (user drop 2026-08-20, files (9).zip): "LUCK" label on top
-    -- + dice icon + angled bar; measured window (alpha-0 verified) =
-    -- x 103..920, y 64..105 of the 1024x128 canvas.
+    -- LUCK BAR v3 (user art drop 2026-08-29, files (65).zip): 11 BAKED fill
+    -- states, i_tod_luck_00 (empty) .. i_tod_luck_10 (full) — one whole-image
+    -- swap per todUpgLuck change (_tod_luck pushes bar/10). Replaces the v2
+    -- frame-with-transparent-window + 10 tinted LUI quads; the gold hot tell
+    -- (8..9) and the molten MAX state are baked into the art, so there is no
+    -- client-side tinting or fill math left. Same screen rect as v2.
     local LUCK_X, LUCK_Y, LUCK_W, LUCK_H = 24, 56, 304, 38
-    local winL = LUCK_X + LUCK_W * 0.1006
-    local winR = LUCK_X + LUCK_W * 0.8994
-    local winT = LUCK_Y + LUCK_H * 0.50
-    local winB = LUCK_Y + LUCK_H * 0.828
-    local SEG_GAP = 3
-    local segW = ( ( winR - winL ) - SEG_GAP * 9 ) / 10
-
-    local LuckSegs = {}
-    for i = 1, 10 do
-        local s = LUI.UIImage.new()
-        local x0 = winL + ( i - 1 ) * ( segW + SEG_GAP )
-        s:setLeftRight( true, false, x0, x0 + segW )
-        s:setTopBottom( true, false, winT + 2, winB - 2 )
-        s:setRGB( 0.2, 0.95, 0.85 )
-        s:setAlpha( 0.12 )
-        Hud:addElement( s )
-        LuckSegs[ i ] = s
+    local luckStates = {}
+    for i = 0, 10 do
+        local n = ( i < 10 ) and ( "0" .. i ) or tostring( i )
+        luckStates[ i ] = RegisterImage( "i_tod_luck_" .. n )
+    end
+    -- OVERCHARGE frames (v14.9): four zap variants of the full bar
+    -- (i_tod_luck_max_01..04), driven by todUpgLuck 11..14 — the server cycles
+    -- them (~7 Hz, random order) while the secret 150% ceiling holds. Flag per
+    -- the file rule at line 27: only true once the images are installed WITH
+    -- zone lines; false clamps 11..14 back to the plain full bar.
+    local USE_LUCK_OVERCHARGE_ART = true
+    local luckOverStates = nil
+    if USE_LUCK_OVERCHARGE_ART then
+        luckOverStates = {}
+        for i = 1, 4 do
+            luckOverStates[ i ] = RegisterImage( "i_tod_luck_max_0" .. i )
+        end
     end
 
-    local LuckFrame = LUI.UIImage.new()
-    LuckFrame:setLeftRight( true, false, LUCK_X, LUCK_X + LUCK_W )
-    LuckFrame:setTopBottom( true, false, LUCK_Y, LUCK_Y + LUCK_H )
-    LuckFrame:setImage( RegisterImage( "i_tod_luck_frame" ) )
-    Hud:addElement( LuckFrame )
+    local LuckBar = LUI.UIImage.new()
+    LuckBar:setLeftRight( true, false, LUCK_X, LUCK_X + LUCK_W )
+    LuckBar:setTopBottom( true, false, LUCK_Y, LUCK_Y + LUCK_H )
+    LuckBar:setImage( luckStates[ 0 ] )
+    Hud:addElement( LuckBar )
 
-    -- (the "%" readout was REMOVED 2026-08-20 — no LUI text, the doctrine;
-    -- the segment fill + gold-at-hot IS the readout. Subscription rides
-    -- LuckSegs[1], any always-alive element works.)
+    -- (no LUI text — the fill + baked gold-at-hot IS the readout, doctrine
+    -- since 2026-08-20)
     local luckModel = Engine.CreateModel( Engine.GetModelForController( Instance ), "todUpgLuck" )
     if luckModel then
-        LuckSegs[ 1 ]:subscribeToModel( luckModel, function ( ModelRef )
-            local v = tonumber( Engine.GetModelValue( ModelRef ) ) or 0
-            if v > 10 then v = 10 end
-            local hot = v >= 8
-            for i = 1, 10 do
-                local on = i <= v
-                LuckSegs[ i ]:setAlpha( on and 0.9 or 0.12 )
-                if on and hot then
-                    LuckSegs[ i ]:setRGB( 1.0, 0.85, 0.25 )
-                else
-                    LuckSegs[ i ]:setRGB( 0.2, 0.95, 0.85 )
-                end
+        LuckBar:subscribeToModel( luckModel, function ( ModelRef )
+            local v = math.floor( tonumber( Engine.GetModelValue( ModelRef ) ) or 0 )
+            -- 11..14 = OVERCHARGE zap frames (server-driven swap — this
+            -- subscription only fires on a model CHANGE, which is why the
+            -- server never sends the same frame twice in a row)
+            if v >= 11 and v <= 14 and luckOverStates then
+                LuckBar:setImage( luckOverStates[ v - 10 ] )
+                return
             end
+            if v < 0 then v = 0 elseif v > 10 then v = 10 end
+            LuckBar:setImage( luckStates[ v ] )
         end )
     end
 
@@ -1351,7 +1442,7 @@ function LUI.createMenu.tod_upgrade( Instance )
         GaugeBoss:setLeftRight( true, false, GA_X - 9, GA_X - 2 )
         GaugeBoss:setTopBottom( true, false, ay( cellTop( 1 ) + 6 ), ay( cellTop( 1 ) + 30 ) )
         -- no setImage: an image-less UIImage is a solid fill that setRGB
-        -- tints (the LuckSegs pattern, proven on this HUD)
+        -- tints (proven on this HUD by the old v2 luck segments)
         GaugeBoss:setRGB( 1.0, 0.25, 0.22 )
         GaugeBoss:setAlpha( 0 )
         Hud:addElement( GaugeBoss )
@@ -1390,11 +1481,25 @@ function LUI.createMenu.tod_upgrade( Instance )
     -- CoD.GetScriptNotifyData). Accumulated here because THIS menu is always
     -- open; AetheriumStartMenu.lua reads CoD.TodOwned on every pause open.
     CoD.TodOwned = CoD.TodOwned or {}
-    LuckSegs[ 1 ]:subscribeToGlobalModel( Instance, "PerController", "scriptNotify", function ( model )
+    LuckBar:subscribeToGlobalModel( Instance, "PerController", "scriptNotify", function ( model )
         if Engine.GetModelValue( model ) == "tod_upg_sync" then
             local d = CoD.GetScriptNotifyData( model )
             if d and type( d[ 1 ] ) == "number" and type( d[ 2 ] ) == "number" then
-                CoD.TodOwned[ d[ 1 ] ] = { lvl = d[ 2 ], max = ( type( d[ 3 ] ) == "number" and d[ 3 ] ) or 10 }
+                -- [tod v14.13] the max arg CARRIES the survives-promotion bit:
+                -- GSC sync_max() adds 100 when THIS player's copy of the domain
+                -- survives a tier card (SCAVENGER is assault-only persistence
+                -- now, so a static table cannot know — the server does). Strip
+                -- it here; AetheriumStartMenu's reset badge reads .safe and
+                -- falls back to its static TIER_SAFE only when .safe is nil.
+                local m = ( type( d[ 3 ] ) == "number" and d[ 3 ] ) or 10
+                local safe = nil
+                if m >= 100 then
+                    safe = true
+                    m = m - 100
+                else
+                    safe = false
+                end
+                CoD.TodOwned[ d[ 1 ] ] = { lvl = d[ 2 ], max = m, safe = safe }
             end
         end
     end )

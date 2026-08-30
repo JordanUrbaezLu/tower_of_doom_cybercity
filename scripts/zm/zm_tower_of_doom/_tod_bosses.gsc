@@ -84,7 +84,7 @@
 // 8 -> 5 (user 2026-08-25). Part of the PROTECTOR TANKINESS PASS below: this
 // is both the concurrency roof AND the wave-size cap, so it cuts the late-game
 // health pool ~38% on its own and thins how many stand on you at once.
-#define TOD_RP_MAX_ALIVE         5
+#define TOD_RP_MAX_ALIVE         5     // SOLO base since v13.22 — the live roof is rp_max_alive() (4+players: 5/6/7/8)
 // ---- THE LAST MILE: finale pressure (v10, 2026-08-23) ---------------------
 // User: "they get ambushed in all directions max aggressivness on spawns and
 // all types of enemies. Remember there is a limit on enemies so we dont want
@@ -249,6 +249,12 @@
 #define TOD_BOSS_CLEARANCE       150   // min distance from every living boss
 #define TOD_XMAS_PANZER_SHOTS    20    // Gift of Death shots to kill a Panzer (user 2026-08-21, was 30)
 #define TOD_XMAS_RP_SHOTS        6     // ...and a Rogue Protector (user 2026-08-21, was 10)
+// v14.8 (user 2026-08-30: "buff the death machine by 30% for bosses and
+// elites") — multiplies the per-shot slice at both sites below, so the shot
+// counts above stay the readable historical baseline (effective: Panzer
+// ~15.4 -> 16 shots, RP ~4.6 -> 5). LOCKSTEP: must equal XMAS_ELITE_BUFF in
+// _tod_powerups.gsc, which owns the Reaver/hellhound Gift lanes.
+#define TOD_XMAS_ELITE_BUFF      1.3
 #define TOD_BOSS_ZONE_CHECKS     12    // max get_zone_from_position calls per spawn pick (each spawns a temp entity)
 #define TOD_BOSS_PLAYER_CLEAR    100   // min distance from every player
 // DROP-IN ENTRANCE (v9.19, user 2026-08-22: "the spawn in animations need to
@@ -265,10 +271,25 @@
 #define TOD_DROP_H_MIN           120   // less clear air than this: no descent, just the slam
 #define TOD_DROP_SECS            0.8   // proxy fall time (accelerating)
 #define TOD_DROP_TELL_SECS       2.0   // ground-tell FX lead-in before impact
+// RELOCATION LANDING (user 2026-08-30: "occassionally elites and boss will
+// randomly spawn at you when you are too far away"). pick_spawn_point's ONLY
+// player filter is TOD_BOSS_PLAYER_CLEAR = 100 — arm's reach — and its last
+// resort is `return anchor;`, the player's own origin. 450 is deliberately just
+// above pick_spawn_point's 400-unit pass-0 radius, so a rejected roll falls
+// through to its wider 800-unit pass instead of re-rolling the same ring.
+#define TOD_RELOC_MIN_DIST       450
 
-// --- rewards: POINTS team-wide; LUCK = last hit only, values live in
-// _tod_luck.gsc (TOD_LUCK_PROTECTOR / TOD_LUCK_PANZER) ------------------------
-#define TOD_RP_PTS               250
+// --- rewards (v14.5, user 2026-08-30: "elites give 500 on kill. Only the
+// person who kills gets the money. The payout is still effected by double
+// points and bounty upgrade"):
+//   ELITES (Protector / Reaver / Hellhound / Sprinter) — TOD_ELITE_PTS to the
+//   KILLER ONLY, scaled by double points + the BOUNTY domain; one shared
+//   number, one function (grant_elite_reward). The old per-module team-wide
+//   values (RP 250 / Reaver 400 / Hound 150 / Sprinter 400) are RETIRED.
+//   PANZER — he is the BOSS, not an elite: keeps the 1000 team-wide jackpot.
+// LUCK is separate everywhere: last hit only, values in _tod_luck.gsc
+// (TOD_LUCK_PROTECTOR / TOD_LUCK_PANZER). --------------------------------------
+#define TOD_ELITE_PTS            500
 #define TOD_PANZER_PTS           1000
 
 #namespace tod_bosses;
@@ -336,6 +357,20 @@ function dbg( msg )
 // Rogue Protectors: every 3rd round owes a WAVE. Size = round( players/3 ×
 // round ) to the nearest whole (user 2026-08-20: "too many on solo"). Solo
 // r3=1/r6=2/r9=3; duo r3=2; quad r3=4. Never below 1 on a due round.
+// v13.22 (user 2026-08-29: "coop scale appropriately... more elites for more
+// players", incremental): the protector roof is per-player — 4+np = 5/6/7/8.
+// Solo is BYTE-UNCHANGED (5, the tankiness-pass value); a full lobby returns
+// to the pre-tankiness 8, which the actor-budget note above already carried.
+// Both live consumers (the wave clamp and the director's standing gate) go
+// through this; the define stays as the documented solo base.
+function rp_max_alive()
+{
+	np = GetPlayers().size;
+	if ( np < 1 )
+		np = 1;
+	return 4 + np;
+}
+
 function protector_due( round )
 {
 	// ENEMY UNLOCK GATE (user 2026-08-21: "it gets harder the higher you go —
@@ -357,7 +392,7 @@ function protector_due( round )
 	if ( np < 1 )
 		np = 1;
 	// x0.8 = the "reduce counts that spawn per wave by like 20%" half of the
-	// 2026-08-25 tankiness pass. Applied to the RAW np*round/3 figure BEFORE the
+	// 2026-08-25 tankiness pass (comment continues below). Applied to the RAW np*round/3 figure BEFORE the
 	// TOD_RP_MAX_ALIVE clamp below, so it thins the mid rounds (where the wave is
 	// still under the roof) and the clamp keeps owning the late ones.
 	n = int( ( np * round ) / 3.0 * 0.8 + 0.5 );
@@ -366,8 +401,9 @@ function protector_due( round )
 	// WAVE CAP (playtest 2026-08-23: "I saw like 30 on round 18"): np*round/3
 	// is unbounded — a duo at round 18 rolls a 12-wave, a quad 24. No wave may
 	// ask for more than the concurrency roof can even stand up at once.
-	if ( n > TOD_RP_MAX_ALIVE )
-		n = TOD_RP_MAX_ALIVE;
+	roof = rp_max_alive();
+	if ( n > roof )
+		n = roof;
 	return n;
 }
 
@@ -414,6 +450,22 @@ function drop_clearance( v_ground )
 	return h;
 }
 
+// GROUND SNAP (v13.3, user live report 2026-08-28: "the protector will
+// sometimes spawn in the floor"). The navmesh over the spiral's flights is a
+// SMOOTHED RAMP through the treads, so a PositionQuery point mid-flight sits
+// up to a tread-height BELOW the step top — and both spawners place the actor
+// at the query point verbatim, burying his feet in the step. (Landings and
+// the road are flat, which is why it is "sometimes".) Trace from knee height
+// down past a full step: the first solid IS the walk surface; stand him ON
+// it. A point already on flat ground round-trips unchanged (+1u).
+function ground_snap( v )
+{
+	tr = BulletTrace( v + ( 0, 0, 48 ), v - ( 0, 0, 96 ), false, undefined );
+	if ( isdefined( tr ) && isdefined( tr[ "fraction" ] ) && tr[ "fraction" ] < 1 && isdefined( tr[ "position" ] ) )
+		return ( v[ 0 ], v[ 1 ], tr[ "position" ][ 2 ] + 1 );
+	return v;
+}
+
 // Ground-tell FX at the landing point for `secs`. Own model + own timer: the
 // vendored zod_robot_spawn_fx retires on a LEVEL notify ("robot_landed"),
 // which a concurrent entrance (Panzer + wave unit) would trip early.
@@ -437,9 +489,16 @@ function tell_fx( v_ground, secs )
 // If the upgrade pause starts mid-fall he stays frozen on impact —
 // boss_pause_watch, which the caller threads right after, restores him on the
 // unpause edge (its first tick re-applies the freeze, then watches).
-function drop_in( boss, v_ground, ang, base_rate )
+function drop_in( boss, v_ground, ang, base_rate, b_relocate )
 {
 	boss Ghost();
+	// b_relocate = a LIVE boss being un-stranded by tod_boss_stuck_watch, not a
+	// fresh spawn. The watcher used to ForceTeleport BARE — no entrance, no FX,
+	// no ground_snap — and pick_spawn_point can legally land him 100 units from
+	// your face. Ghosted first, so the fall IS the arrival. Every caller that
+	// omits this argument gets undefined, so the shipped spawn path is unchanged.
+	if ( IS_TRUE( b_relocate ) )
+		boss ForceTeleport( v_ground, ang );
 	boss SetCanDamage( false );
 	boss.ignoreall = true;
 	boss ASMSetAnimationRate( 0.05 );
@@ -489,15 +548,29 @@ function drop_in( boss, v_ground, ang, base_rate )
 	boss.tod_dropping = undefined;
 	boss Show();
 	boss SetCanDamage( true );
-	if ( !IS_TRUE( level.tod_upgrade_pause ) )
+	if ( !IS_TRUE( level.tod_upgrade_pause ) && !IS_TRUE( boss.tod_frozen ) )
 	{
 		boss.ignoreall = false;
 		boss ASMSetAnimationRate( base_rate );
 	}
-	Earthquake( 0.55, 1.2, v_ground, 1200 );
 	PlayFX( level._effect[ "robot_landing" ], v_ground );
-	level thread landing_kill_splash( v_ground, boss );
-	level thread landing_rumble();
+	// NEVER ON A RELOCATION: landing_kill_splash DoDamages every non-boss axis AI
+	// within 350u for health+10000 with NO attacker — no points, no luck. On the
+	// spawn path that is the intended arrival shockwave; on an un-stranding it
+	// would be a silent AoE nuke going off next to whichever player the boss was
+	// sent to. landing_rumble likewise shakes EVERY player wherever they are.
+	// Both are spawn-scale events; an un-stranding gets a smaller quake and
+	// nothing else.
+	if ( IS_TRUE( b_relocate ) )
+	{
+		Earthquake( 0.4, 0.9, v_ground, 900 );
+	}
+	else
+	{
+		Earthquake( 0.55, 1.2, v_ground, 1200 );
+		level thread landing_kill_splash( v_ground, boss );
+		level thread landing_rumble();
+	}
 	return true;
 }
 
@@ -511,6 +584,53 @@ function drop_in( boss, v_ground, ang, base_rate )
 #define TOD_BOSS_STUCK_STEP      2
 #define TOD_BOSS_STUCK_IMPROVE   120    // must close this much toward a player to count as progress
 #define TOD_BOSS_NEAR_PLAYER     1500   // within this = engaging, never relocate
+
+// A RELOCATION landing spot. The case that actually bites is pick_spawn_point's
+// own last resort — `return anchor;`, the player's exact origin — which one
+// re-roll cannot fix by chance, so test the distance explicitly. ground_snap
+// too: the old bare teleport never did, and that is the same feet-in-the-tread
+// bug ground_snap was written for.
+function pick_reloc_point( anchor )
+{
+	p = ground_snap( pick_spawn_point( anchor ) );
+	if ( nearest_player_dist( p ) >= TOD_RELOC_MIN_DIST )
+		return p;
+	p2 = ground_snap( pick_spawn_point( anchor ) );
+	if ( nearest_player_dist( p2 ) >= TOD_RELOC_MIN_DIST )
+		return p2;
+	return p;   // both close — the ENTRANCE is what makes that survivable, and a
+	            // boss we fail to un-strand never dies at all.
+}
+
+// PANZER + PROTECTOR. Runs as its OWN thread and deliberately carries NO
+// self endon("death"): drop_in deletes its proxy and trail INLINE and handles a
+// boss that died mid-fall, but tod_boss_stuck_watch carries self endon("death")
+// — calling drop_in from inside it would strand a script_model wearing the boss
+// model plus a tag_origin playing robot_sky_trail forever, every time a boss
+// died during its own arrival.
+function relocate_entrance( v_ground )   // self = the boss
+{
+	level endon( "end_game" );
+	drop_in( self, v_ground, self.angles, self.tod_base_rate, true );
+}
+
+// HELLHOUND + REAVER. The ground tell, then the move — no Ghost, no
+// ASMSetAnimationRate, no SetGoal pin, no invulnerability window. A dog falling
+// out of the ceiling reads as a bug, the hound's whole contract is that nothing
+// writes its ASM (_tod_hellhounds.gsc trap 3), its behaviour tree never
+// re-SetGoals (which is exactly the frozen-hound bug hound_target_watch fixes),
+// and the Reaver never called drop_in at all — its spawn entrance is the
+// apothicon meteor. tell_fx is level-threaded and self-deletes, so nothing leaks.
+function relocate_tell( v_ground )   // self = hound / reaver
+{
+	level endon( "end_game" );
+	level thread tell_fx( v_ground, 0.8 );
+	wait 0.8;
+	if ( !isdefined( self ) || !isalive( self ) )
+		return;
+	self ForceTeleport( v_ground, self.angles );
+	PlayFX( level._effect[ "robot_landing" ], v_ground );
+}
 
 function nearest_player_dist( org )
 {
@@ -535,6 +655,13 @@ function tod_boss_stuck_watch()   // self = boss
 
 	best = -1;         // best (smallest) distance-to-nearest-player seen
 	stalled = 0;
+	// A PLAYER TELEPORT IS NOT A BOSS STALL — and this is the real reason the
+	// user sees elites "randomly spawn at you when you are too far away".
+	// `best` only ever ratchets DOWN, so the moment a player takes a breather
+	// ride, d jumps by thousands and can never beat the stale best again; the
+	// accumulator then runs out ~18s later and relocates a boss that was never
+	// stuck. _tod_teleport bumps this counter on every ride with riders aboard.
+	tp = ( ( isdefined( level.tod_tp_stamp ) ) ? level.tod_tp_stamp : 0 );
 	for ( ;; )
 	{
 		wait TOD_BOSS_STUCK_STEP;
@@ -542,6 +669,12 @@ function tod_boss_stuck_watch()   // self = boss
 			return;
 		if ( IS_TRUE( level.tod_upgrade_pause ) || IS_TRUE( self.tod_frozen ) )
 			continue;   // the freeze isn't "stuck"
+		now_tp = ( ( isdefined( level.tod_tp_stamp ) ) ? level.tod_tp_stamp : 0 );
+		if ( now_tp != tp )
+		{
+			tp = now_tp;
+			best = -1;   stalled = 0;   continue;   // the PLAYER moved, not us
+		}
 
 		d = nearest_player_dist( self.origin );
 		if ( d < 0 )
@@ -566,8 +699,16 @@ function tod_boss_stuck_watch()   // self = boss
 				target = pick_target_player();
 			if ( isdefined( target ) )
 			{
-				self ForceTeleport( pick_spawn_point( target.origin ), self.angles );
-				dbg( "boss stalled — relocated near a player" );
+				dest = pick_reloc_point( target.origin );
+				// tod_base_rate present = an actor whose ASM we are allowed to
+				// write (Panzer, Protector) -> the real sky-drop entrance.
+				// Absent = hound or Reaver -> ground tell only. The hound opts
+				// out by having nothing set, the same shape as its speed exemption.
+				if ( isdefined( self.tod_base_rate ) )
+					self thread relocate_entrance( dest );
+				else
+					self thread relocate_tell( dest );
+				dbg( "boss stalled — relocating with an entrance" );
 			}
 			best = -1;   stalled = 0;
 		}
@@ -672,7 +813,7 @@ function director()
 		// Wave debt drains while under the concurrency roof — the AI budget
 		// must keep feeding zombies (endless rounds depend on it), so the
 		// rest of the wave enters as the front line dies.
-		if ( level.tod_protector_debt > 0 && protectors_alive() < TOD_RP_MAX_ALIVE )
+		if ( level.tod_protector_debt > 0 && protectors_alive() < rp_max_alive() )
 		{
 			boss = spawn_protector();
 			if ( isdefined( boss ) && isalive( boss ) )
@@ -697,8 +838,13 @@ function finale_pressure_start()
 	// aggro flag now SUSPENDS both round-scheduled debt writers (they check
 	// it), and any debt banked before the buy is clamped here so the run
 	// starts inside the roof.
-	if ( level.tod_panzer_debt > 1 )
-		level.tod_panzer_debt = 1;
+	// v12.13 (review FIX 4, the spec's "zero the type's debt"): pre-buy OWED
+	// panzer debt is dropped outright, not clamped — with the beat armed from
+	// the run's first frame, the first Panzer of the run IS the Narrows drop.
+	// (A Panzer already ALIVE at the buy still legitimately blocks the beat;
+	// that is the designed degrade.) Protector debt keeps the old clamp: the
+	// road's opening wave is theirs.
+	level.tod_panzer_debt = 0;
 	if ( level.tod_protector_debt > 2 )
 		level.tod_protector_debt = 2;
 	if ( isdefined( level.tod_reaver_debt ) && level.tod_reaver_debt > 1 )
@@ -727,16 +873,60 @@ function finale_holdout_start()
 		level.tod_panzer_debt = 1;
 }
 
+// PUBLIC — AUTHORED BOSS BEATS (v12.13, docs/41 §A2/§A4). _tod_finale asks for
+// a drop at a specific point; THIS file answers, because the roof arithmetic
+// lives here and must stay in one place. Both REPLACE scheduled pressure
+// rather than adding to it: debts cap at the same values the pressure loop
+// writes, the per-type MAX_ALIVE roofs still gate the director, and a request
+// that would breach TOD_FINALE_BOSS_ROOF is refused (returns false — the
+// caller may retry a beat later or let it go; the road is already loud).
+function finale_beat_panzer( org )
+{
+	if ( level.tod_panzer_alive >= TOD_PANZER_MAX_ALIVE )
+		return false;
+	rv = ( ( isdefined( level.tod_reaver_alive_n ) ) ? level.tod_reaver_alive_n : 0 );
+	hd = ( ( isdefined( level.tod_hound_alive_n ) ) ? level.tod_hound_alive_n : 0 );
+	live = level.tod_panzer_alive + protectors_alive() + rv + hd;
+	if ( live >= TOD_FINALE_BOSS_ROOF )
+		return false;
+	level.tod_boss_force_org = org;
+	if ( level.tod_panzer_debt < 1 )
+		level.tod_panzer_debt = 1;
+	return true;
+}
+
+function finale_beat_protectors( orgs )
+{
+	if ( !isdefined( orgs ) || orgs.size == 0 )
+		return false;
+	rv = ( ( isdefined( level.tod_reaver_alive_n ) ) ? level.tod_reaver_alive_n : 0 );
+	hd = ( ( isdefined( level.tod_hound_alive_n ) ) ? level.tod_hound_alive_n : 0 );
+	live = level.tod_panzer_alive + protectors_alive() + rv + hd;
+	if ( live >= TOD_FINALE_BOSS_ROOF )
+		return false;
+	level.tod_rp_force_orgs = orgs;
+	if ( level.tod_protector_debt < 2 )
+		level.tod_protector_debt = 2;
+	return true;
+}
+
 function finale_pressure_loop()
 {
 	level endon( "end_game" );
+	level endon( "tod_ascend" );   // v14: the spire retires the finale's pressure — its own hot pacing takes over
 	// Cycle the type we top up so no single kind dominates the road — the ask
 	// was "all types of enemies", and topping every debt at once would just
 	// fill TOD_FINALE_BOSS_ROOF with whichever director ticks first.
 	which = 0;
 	for ( ;; )
 	{
-		wait TOD_FINALE_PRESSURE_TICK;
+		// v12.13 (docs/41 §A2): the tick is a level field so the finale can
+		// tighten it (6 -> 4) as the song enters its sustained half. Absent
+		// field = the old constant, byte-for-byte.
+		tick = TOD_FINALE_PRESSURE_TICK;
+		if ( isdefined( level.tod_finale_pressure_tick ) )
+			tick = level.tod_finale_pressure_tick;
+		wait tick;
 		if ( IS_TRUE( level.tod_upgrade_pause ) )
 			continue;
 
@@ -763,10 +953,18 @@ function finale_pressure_loop()
 		switch ( which % 4 )
 		{
 			case 0:
+				// v12.13 (review FIX 4): while the Narrows beat is ARMED this
+				// turn is skipped, so the beat's Panzer replaces the rotation's
+				// rather than queueing behind a roving one. The hold-out top-up
+				// above is unaffected (it runs before the switch).
+				if ( IS_TRUE( level.tod_beat_panzer_armed ) )
+					break;
 				if ( level.tod_panzer_debt < 1 )
 					level.tod_panzer_debt = 1;
 				break;
 			case 1:
+				if ( IS_TRUE( level.tod_beat_prot_armed ) )
+					break;
 				if ( level.tod_protector_debt < 2 )
 					level.tod_protector_debt = 2;
 				break;
@@ -942,7 +1140,11 @@ function coop_hp_mult()   // map 1's boss coop table verbatim
 	if ( n <= 1 ) return 1.0;
 	if ( n == 2 ) return 1.7;
 	if ( n == 3 ) return 2.3;
-	return 2.6;
+	// 2.6 -> 2.8 (user 2026-08-28: "make 4 players 2.8x", from the Panzer HP
+	// review). NOTE this table is shared by boss_hp(), so the +7.7% at 4
+	// players reaches the PROTECTORS too, not just the Panzer — accepted, one
+	// coop table for all bosses is the map-1 doctrine this function ports.
+	return 2.8;
 }
 
 // ---------------------------------------------------------------------------
@@ -992,16 +1194,37 @@ function spawn_panzer()
 	// which is how we can tell), ask again from the player himself. He is still
 	// the thing standing between the party and the Crown; he just enters from
 	// beside them instead of ahead.
-	anchor_org = target.origin;
-	if ( IS_TRUE( level.tod_finale_aggro ) )
+	// THE BEAT SEAM (v12.13, docs/41 §A2/§A4): a consume-once forced landing
+	// point. The pressure loop only writes DEBT and this director picks its own
+	// point on its own cadence — so without this, an authored drop lands ±a
+	// tick and anywhere. The org comes from GENERATED _tod_crown_data (deck-
+	// centre, navmesh by construction); if SpawnActor still refuses it, the
+	// existing retry-at-the-target's-feet below is the net, same as ever.
+	force = undefined;
+	if ( isdefined( level.tod_boss_force_org ) )
 	{
-		t_ang = target GetPlayerAngles();
-		t_fwd = AnglesToForward( ( 0, t_ang[ 1 ], 0 ) );
-		anchor_org = target.origin + VectorScale( t_fwd, TOD_PANZER_FRONT_DIST );
+		force = level.tod_boss_force_org;
+		level.tod_boss_force_org = undefined;
 	}
-	org    = pick_spawn_point( anchor_org );
-	if ( org == anchor_org && anchor_org != target.origin )
-		org = pick_spawn_point( target.origin );
+	anchor_org = target.origin;
+	if ( isdefined( force ) )
+	{
+		org = force;
+	}
+	else
+	{
+		if ( IS_TRUE( level.tod_finale_aggro ) )
+		{
+			t_ang = target GetPlayerAngles();
+			t_fwd = AnglesToForward( ( 0, t_ang[ 1 ], 0 ) );
+			anchor_org = target.origin + VectorScale( t_fwd, TOD_PANZER_FRONT_DIST );
+		}
+		org = pick_spawn_point( anchor_org );
+		if ( org == anchor_org && anchor_org != target.origin )
+			org = pick_spawn_point( target.origin );
+	}
+	// Mid-flight navmesh points sit below the tread tops — see ground_snap.
+	org = ground_snap( org );
 
 	// Refresh the pack's per-round part-health fields BEFORE setup reads them
 	// (defined-but-never-called in the pack — HP undefined without this).
@@ -1029,6 +1252,29 @@ function spawn_panzer()
 		dbg( "panzer spawn FAILED" );
 		return undefined;
 	}
+
+	// PRE-ENTRANCE SHIELD (v13.3, user live report 2026-08-28: "panzers will
+	// spawn and insta die and then respawn"). Between this SpawnActor and
+	// drop_in's Ghost (the 0.1s + 0.25s waits and setup below) he used to
+	// stand VISIBLE, DAMAGEABLE, at the ARCHETYPE'S DEFAULT HEALTH (the real
+	// hp lands in acc_setup_mechz), with NO boss identity flags — so players
+	// mid-fight could shred him before setup ran, and a concurrent
+	// protector's landing_kill_splash saw an unflagged axis AI inside its
+	// 350u radius and killed him outright (solo makes that overlap routine:
+	// the panzer anchors the HIGHEST player and the wave the LOWEST — the
+	// same person). Either death made this function return undefined at the
+	// isalive checks below, the debt was never decremented, and the
+	// director's next 3s tick spawned the "respawn" the user watched.
+	// Shield + flag him on the SPAWN FRAME. drop_in re-applies the same
+	// Ghost/SetCanDamage pair and its reveal path restores both, so this
+	// only extends the entrance state backward over the init window; the
+	// identity block after acc_setup_mechz re-sets the flags harmlessly.
+	boss Ghost();
+	boss SetCanDamage( false );
+	boss.ignoreall        = true;
+	boss.is_boss          = true;
+	boss.acc_is_boss      = true;
+	boss.acc_is_mini_boss = true;   // landing_kill_splash's filter reads these
 
 	// Let the archetype spawn funcs run before our overrides land on top.
 	wait 0.1;
@@ -1070,6 +1316,7 @@ function spawn_panzer()
 	boss.disableAmmoDrop       = true;
 
 	boss ASMSetAnimationRate( TOD_PANZER_ANIM_RATE );
+	boss.tod_base_rate = TOD_PANZER_ANIM_RATE;   // relocate_entrance restores this
 
 	boss.maxhealth = hp;
 	boss.health    = hp;
@@ -1126,7 +1373,7 @@ function tod_mechz_damage_wrap( inflictor, attacker, damage, dFlags, mod, weapon
 		if ( isdefined( self.tod_xmas_hit_ms ) && self.tod_xmas_hit_ms == now )
 			return 1;
 		self.tod_xmas_hit_ms = now;
-		return int( self.maxhealth / TOD_XMAS_PANZER_SHOTS ) + 1;
+		return int( ( self.maxhealth / TOD_XMAS_PANZER_SHOTS ) * TOD_XMAS_ELITE_BUFF ) + 1;
 	}
 
 	result = self [[ level.tod_mechz_stock_damage_func ]]( inflictor, attacker, damage, dFlags, mod, weapon, point, dir, hitLoc, offsetTime, boneIndex );
@@ -1235,6 +1482,8 @@ function goal_driver()
 			return;
 		if ( IS_TRUE( level.tod_upgrade_pause ) )
 			continue;
+		if ( IS_TRUE( self.tod_dropping ) )
+			continue;   // mid-entrance: drop_in owns the goal
 		if ( self HasPath() )
 		{
 			fail_streak = 0;
@@ -1435,7 +1684,26 @@ function spawn_protector()
 	if ( !isdefined( target ) )
 		return undefined;
 
-	v_ground = pick_spawn_point( target.origin );
+	// THE BEAT SEAM, protector flavour (v12.13, docs/41 §A2): a QUEUE rather
+	// than a single field, because the flare beat lands TWO of them and the
+	// director drains one per tick. Pop-from-front; empty/absent = stock path.
+	force = undefined;
+	if ( isdefined( level.tod_rp_force_orgs ) && level.tod_rp_force_orgs.size > 0 )
+	{
+		force = level.tod_rp_force_orgs[ 0 ];
+		rest = [];
+		for ( fi = 1; fi < level.tod_rp_force_orgs.size; fi++ )
+			rest[ rest.size ] = level.tod_rp_force_orgs[ fi ];
+		level.tod_rp_force_orgs = rest;
+	}
+	if ( isdefined( force ) )
+		v_ground = force;
+	else
+		v_ground = pick_spawn_point( target.origin );
+	// Mid-flight navmesh points sit below the tread tops — see ground_snap.
+	// This is THE "protector in the floor" fix: he spends the whole entrance
+	// pinned at v_ground (SetGoal in drop_in) and is revealed standing there.
+	v_ground = ground_snap( v_ground );
 	ang      = ( 0, RandomInt( 360 ), 0 );
 
 	boss = SpawnActor( "spawner_acc_zod_robot_boss", v_ground, ang, "tod_protector", true );
@@ -1470,6 +1738,7 @@ function spawn_protector()
 	boss.acc_is_mini_boss = true;   // vendored landing-splash filter reads this
 	boss.acc_is_rogue_protector = true;   // boss_player_damage lanes key off it
 	boss.tod_boss_kind = "protector";
+	boss.tod_base_rate = TOD_RP_ANIM_RATE;   // relocate_entrance restores this
 	boss.ignore_enemy_count = true;
 	boss.ignore_nuke = true;
 	boss.allow_zombie_to_target_ai = 0;
@@ -1571,6 +1840,11 @@ function hunt_players()
 
 	for ( ;; )
 	{
+		if ( IS_TRUE( self.tod_dropping ) )
+		{
+			wait 0.5;
+			continue;   // drop_in owns the goal until the reveal
+		}
 		if ( IS_TRUE( level.tod_upgrade_pause ) )
 		{
 			wait 0.5;
@@ -1629,6 +1903,8 @@ function fire_loop()
 
 		if ( IS_TRUE( level.tod_upgrade_pause ) )
 			continue;
+		if ( IS_TRUE( self.tod_dropping ) )
+			continue;   // no shooting from inside the fall
 
 		target = undefined;
 		if ( isdefined( self.enemy ) && isplayer( self.enemy ) && zm_utility::is_player_valid( self.enemy ) )
@@ -1760,7 +2036,7 @@ function death_watch()
 		self StopLoopSound();   // the hover hum otherwise loops on the corpse forever
 
 	tod_luck::boss_kill( attacker, "protector" );   // LAST HIT takes the luck
-	grant_boss_reward( "ROGUE PROTECTOR", TOD_RP_PTS, true );
+	grant_elite_reward( "ROGUE PROTECTOR", attacker );   // v14.5: killer-only 500
 }
 
 // ---------------------------------------------------------------------------
@@ -1783,6 +2059,12 @@ function boss_pause_watch( base_rate )   // self = the boss
 		wait 0.25;
 		if ( !isdefined( self ) || !isalive( self ) )
 			return;
+		if ( IS_TRUE( self.tod_dropping ) )
+			continue;   // mid-entrance: drop_in owns ignoreall + the anim rate,
+			            // and it re-reads tod_upgrade_pause itself on reveal. An
+			            // unpause edge landing inside the 2s fall would otherwise
+			            // clear ignoreall and restore the rate on a Ghosted,
+			            // undamageable boss.
 		now = IS_TRUE( level.tod_upgrade_pause );
 		if ( now && !was_paused )
 		{
@@ -2023,7 +2305,7 @@ function rp_damage_feed( inflictor, attacker, damage, flags, meansOfDeath, weapo
 		if ( isdefined( self.tod_xmas_hit_ms ) && self.tod_xmas_hit_ms == now )
 			return 1;
 		self.tod_xmas_hit_ms = now;
-		return int( self.maxhealth / TOD_XMAS_RP_SHOTS ) + 1;
+		return int( ( self.maxhealth / TOD_XMAS_RP_SHOTS ) * TOD_XMAS_ELITE_BUFF ) + 1;
 	}
 
 	if ( isdefined( self.tod_actor_cb_ms ) && self.tod_actor_cb_ms == GetTime() )
@@ -2094,9 +2376,9 @@ function rp_damage_feed( inflictor, attacker, damage, flags, meansOfDeath, weapo
 // the PANZER's boss_track_start/end swap the channel. Refcount + the
 // stoppable-loop primitive are all in that module.)
 
-// Boss down: POINTS to every player (team-wide); LUCK goes to the LAST HIT
-// only (user 2026-08-20) via tod_luck::boss_kill at the call sites. quiet =
-// wave units (no per-kill banner — a round-6 wave would print 12 of them).
+// BOSS down (the PANZER only, since v14.5): POINTS to every player
+// (team-wide); LUCK goes to the LAST HIT only (user 2026-08-20) via
+// tod_luck::boss_kill at the call sites. quiet = no per-kill banner.
 function grant_boss_reward( name, pts, quiet )
 {
 	// (kill text removed 2026-08-20 — points award silently; the drop tells)
@@ -2107,4 +2389,37 @@ function grant_boss_reward( name, pts, quiet )
 			continue;
 		p zm_score::add_to_player_score( pts );
 	}
+}
+
+// ELITE down (v14.5 — the user quote at the TOD_ELITE_PTS define): the flat
+// 500 goes to THE KILLER ALONE, scaled by
+//   1. DOUBLE POINTS — level.zombie_vars[team]["zombie_point_scalar"], the
+//      exact multiplier stock applies to normal kill money (_zm_score.gsc:341,
+//      set 2/1 by _zm_powerup_double_points.gsc:79/:97), and
+//   2. the BOUNTY domain — 1.0 + 5%/Lv via level.tod_bounty_mult_fn (the
+//      pointer pattern tod_bounty_preview_fn established; no _tod_upgrades
+//      import from this module, no cycle). Weapon-agnostic like the widened
+//      domain itself.
+// NO KILLER = NO MONEY, on purpose ("Only the person who kills gets the
+// money"): an elite reaped by cleanup, a trap, another boss or the void pays
+// nobody. `attacker` comes from each module's waittill("death", attacker)
+// watcher — all four elite watchers carry it. Callers: the Rogue Protector
+// death_watch below, _tod_reaver, _tod_hellhounds, _tod_sprinter. Silent
+// like every kill payout since 2026-08-20 (the score delta tells).
+function grant_elite_reward( name, attacker )
+{
+	if ( !isdefined( attacker ) || !isplayer( attacker ) )
+		return;
+
+	pts = TOD_ELITE_PTS;
+	if ( isdefined( attacker.team )
+	  && isdefined( level.zombie_vars[ attacker.team ] )
+	  && isdefined( level.zombie_vars[ attacker.team ][ "zombie_point_scalar" ] ) )
+	{
+		pts = pts * level.zombie_vars[ attacker.team ][ "zombie_point_scalar" ];
+	}
+	if ( isdefined( level.tod_bounty_mult_fn ) )
+		pts = pts * [[ level.tod_bounty_mult_fn ]]( attacker );
+
+	attacker zm_score::add_to_player_score( int( pts ) );
 }

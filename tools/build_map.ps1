@@ -58,6 +58,33 @@ $WaivedLinkerErrors = @(
     # anywhere, so the linker logs it and substitutes. The beam RENDERS in
     # game (user-verified 2026-08-23: "Seems good, the teleporters").
     'gfx_teleport_tube_em_scroll_nocull'
+    # THE THREE reflex_* ERRORS: CLOSED 2026-08-28 — FIXED, NEVER WAIVED,
+    # and the answer to the recorded in-game exit condition was NOT BENIGN.
+    # The user's play report ("the UDM has a weird sight. Like a sight that
+    # you cant even see through") was the exit condition firing negative:
+    # reflex_reddot_lens_ads is literally the ADS lens material, and missing
+    # meant an OPAQUE optic on the PaP'd SLASHER tier-2 sidearm. Resolution
+    # (parallel cybercity session, same day): the port was incomplete —
+    # skinOverride SOURCES need not exist, TARGETS and un-remapped slots
+    # must, and the porter had remapped exactly one mesh's slots. Every
+    # reflex_* slot on all four UDM meshes now remaps to materials the UDM's
+    # own GDT declares (lens -> weapon_udm45_glass etc.); edit lives in the
+    # TOOLS-ROOT-ONLY source_data\skye_iw7_udm.gdt (backup .tod-reflex-orig;
+    # root-only GDTs SURVIVE builds — our sync copies, never mirrors).
+    # Verified: the 20:22 build logged ZERO reflex errors.
+    # DO NOT ADD THE THREE NAMES TO THE WAIVE LIST — if a reflex_* error
+    # ever reappears here it means the root GDT fix was lost (a pack
+    # reinstall, a new machine), and the UNEXPECTED lane below flagging it
+    # is exactly the alarm we want. Portable lesson for any ported gun
+    # throwing "material not found in gdtDB": check the skinOverride
+    # source/target asymmetry before waiving or dropping the gun.
+    # (History: briefly waived 2026-08-28 on root-cause evidence alone;
+    # reverted the same hour — the bar was seeing it render, and holding
+    # that bar is what caught a real defect. A cross-map "fires with zero
+    # UDM assets" scare was RETRACTED: it paired remembered console output
+    # with a later run's assetlist. Pair build symptoms only with artifacts
+    # from the SAME run. The HK21 was a red herring — only its unused
+    # reflex variant is packed.)
     # Gift of Death pack's bundled window-glass-shard debris props — their
     # native material isn't in the modtools gdtDB (stock material, substitutes
     # at runtime). Cosmetic; the .ff builds. (skinOverride black_glass blanked)

@@ -81,6 +81,16 @@ function door_buy_setup( d )
 	d TriggerEnable( false );   // the dead map trigger; our spawned ones drive the buy
 	d.tod_bought = false;
 	d.tod_trigs = [];
+	// v13.9: kept on the ent + a flag-keyed registry so force_open_by_flag can
+	// run the open path without the buy closure's locals.
+	d.tod_slab = slab;
+	d.tod_flag = flag;
+	if ( flag != "" )
+	{
+		if ( !isdefined( level.tod_doors_by_flag ) )
+			level.tod_doors_by_flag = [];
+		level.tod_doors_by_flag[ flag ] = d;
+	}
 
 	spawn_buy_trigger( d, info.org + info.off, cost, slab, flag, info.dest );
 	spawn_buy_trigger( d, info.org - info.off, cost, slab, flag, info.dest );
@@ -140,8 +150,14 @@ function door_cost_mult()
 }
 
 // The price a door asks RIGHT NOW. Kept as a function rather than a number
-// baked at spawn because players connect and drop mid-game: the trigger's hint
-// and its charge both read this, so they can never disagree.
+// baked at spawn because players connect and drop mid-game, so the CHARGE has
+// to be re-read at the moment of purchase (buy_trigger_wait, below).
+//
+// THE HINT READS THIS ONCE, AT SPAWN. Hint and charge can therefore disagree
+// after a party-size change; that is deliberate and the reasoning is in the
+// block above buy_trigger_wait. Do NOT add a per-door hint re-stamp to close
+// the gap — one used to live here and it is what overflowed the engine's
+// 250-entry triggerstring cache in co-op.
 function door_price( base_cost )
 {
 	c = int( base_cost * door_cost_mult() );
@@ -169,63 +185,42 @@ function spawn_buy_trigger( d, pos, cost, slab, flag, dest )
 	d.tod_trigs[ d.tod_trigs.size ] = t;
 
 	t thread buy_trigger_wait( d, cost, slab, flag );
-	t thread door_price_watch( d, cost, dest );
 }
 
-// self = trigger. Re-writes the hint when the party size changes (a join, a
-// drop, a host migration). Polls the MULTIPLIER, not the player count, so it
-// only ever pays a SetHintString when the number a player can actually see
-// would change — config-string discipline (every distinct hint costs one).
-// PROXIMITY GATE (co-op audit 2026-08-23). Every distinct hint string a trigger
-// is given costs one entry in the engine's trigger-string table, and that table
-// is not large. This watcher used to re-stamp EVERY unbought door the moment the
-// party size changed — 52 doors, each with a distinct destination AND a distinct
-// cost, so 52 brand-new strings per change, on top of the 52 minted at init. A
-// lobby that fills to four and then bleeds back down to one walks the multiplier
-// through all four of its values and burns ~208 strings on doors nobody is
-// standing near, most of them dozens of floors away.
+// THE PRICE WATCHER IS GONE (2026-08-30, the 250-triggerstring crash).
 //
-// The price only has to be right on a door a player can actually read, so the
-// re-stamp now waits until somebody is close enough to read it. Live distinct
-// strings drop from "all 52" to "the one or two doors the party is at". The
-// price itself is unchanged and still read live at purchase time in
-// buy_trigger_wait, so the number on screen and the number charged can still
-// never disagree — that was always the point of door_price() being a function.
-#define TOD_DOOR_HINT_RANGE  512
-
-function door_price_watch( d, base_cost, dest )
-{
-	level endon( "end_game" );
-	shown = door_price( base_cost );
-	for ( ;; )
-	{
-		wait 2;
-		if ( IS_TRUE( d.tod_bought ) )
-			return;                     // bought: the trigger is done with
-		p = door_price( base_cost );
-		if ( p == shown )
-			continue;
-		if ( !player_near( self.origin, TOD_DOOR_HINT_RANGE ) )
-			continue;                   // nobody can read it — do not mint a string
-		shown = p;
-		self SetHintString( "Hold ^3[{+activate}]^7 Open Door to " + dest + " ^2[Cost: " + p + "]" );
-	}
-}
-
-// Any living player within `rad` of a point. Cheap enough for a 2s tick.
-function player_near( org, rad )
-{
-	players = GetPlayers();
-	for ( i = 0; i < players.size; i++ )
-	{
-		p = players[ i ];
-		if ( !isdefined( p ) || !isplayer( p ) )
-			continue;
-		if ( DistanceSquared( p.origin, org ) <= ( rad * rad ) )
-			return true;
-	}
-	return false;
-}
+// THE RULE: SetHintString mints ONE PERMANENT entry in the engine's
+// 'triggerstring' BG-cache per DISTINCT string. That cache caps at 250 for the
+// WHOLE MATCH and a slot is never freed — not on Delete(), not between rounds.
+// Overflow fatals with BG_Cache_GetIndexInternal and BLAMES WHOEVER REGISTERS
+// NEXT, so the site named in a crash report is never the accumulator.
+//
+// WHAT WAS HERE: door_price_watch(), a 2s poll per trigger that re-stamped a
+// door's hint whenever door_cost_mult() moved (a join, a drop, a migration),
+// gated on a player being within 512u. It was written to BOUND the cost of
+// re-stamping and it did — but it could not bound it to zero. `shown` only
+// advanced when the re-stamp actually FIRED, so after one party-size change
+// every door the party had not yet walked up to still held its load-time price
+// and minted a SECOND string on approach. Shipped players hit the cap in
+// 4-player games: one party-size change cost ~46 slots, two crossed 250 in the
+// upper spiral. The ceiling for this lane alone was 53 x 4 = 212.
+//
+// WHY DELETING IT IS THE WHOLE FIX, AND WHY THE PRICE STAYS ON SCREEN:
+// init() threads door_buy_setup for all 53 doors in one waitless loop, and
+// door_buy_setup runs straight through to spawn_buy_trigger — so every hint is
+// minted in a SINGLE FRAME off ONE GetPlayers() snapshot. The 53 destinations
+// are distinct, so the door-hint set is a fixed 53 whether or not the price is
+// in the string. With no watcher that set cannot grow, and stripping the price
+// out of the hint would therefore save exactly ZERO slots while making every
+// door in the map a blind purchase. It costs nothing to show it, so it is shown.
+//
+// THE RESIDUAL, ACCEPTED DELIBERATELY: without the watcher a hint can go stale
+// if the party size changes mid-match — the sign shows the load-time price
+// while buy_trigger_wait charges the live one. A shrinking party is charged
+// LESS than shown, a growing party MORE. That is the trade for a hard slot
+// bound. If it ever needs closing, close it with IPrintLnBold (chat prints do
+// NOT feed this cache) or a clientfield -> LUI lookup. NEVER with another
+// SetHintString, and NEVER with a per-door re-stamp — that is this exact bug.
 
 function buy_trigger_wait( d, cost, slab, flag )
 {
@@ -289,6 +284,22 @@ function buy_trigger_wait( d, cost, slab, flag )
 		if ( !( zm_utility::is_player_valid( player ) ) )
 			continue;   // downed / spectating (_zm_blockers.gsc:318)
 
+		// THE UPGRADE-PAUSE GUARD — the doors were the ONE map-owned trigger
+		// family missing it (map-wide trigger audit 2026-08-28, found twice
+		// independently). HOLD-USE IS THE CARD-LOCK BUTTON: during an upgrade
+		// event the world is frozen and the player holds USE to lock their
+		// pick, so a player frozen within reach of an unbought door bought it
+		// too — silently, with no prompt read, at the live price (up to 3000,
+		// 7500 for the roof, ~2.4x that in a quad). The zone opened at a moment
+		// the player never chose, and the points were gone.
+		// SILENT on purpose: the class draft and the upgrade pause both hold
+		// USE for seconds at a time, so a deny sound here would machine-gun —
+		// the same reasoning as the revive-trigger case just above. The player
+		// is not being refused a purchase they attempted; they are being
+		// prevented from making one they never attempted.
+		if ( IS_TRUE( level.tod_upgrade_pause ) || IS_TRUE( player.tod_menu_frozen ) )
+			continue;
+
 		if ( IS_TRUE( d.tod_bought ) )
 			return;
 		// LIVE price, re-read on every attempt — `cost` is the AUTHORED base.
@@ -331,6 +342,53 @@ function buy_trigger_wait( d, cost, slab, flag )
 }
 
 // ---------------------------------------------------------------------------
+// v13.9 — PUBLIC: open a door by its script_flag WITHOUT a purchase.
+//
+// Born from a live report (user 2026-08-29): "when i took the teleporter I
+// ended up in teleporter room with door closed which is what I expected but
+// then I went to 1 health and hear the teddy bear like I was out of bounds".
+// That IS the out-of-bounds punisher: a zone only activates when its door's
+// flag sets, so a player teleported into the sealed bay stood in an INACTIVE
+// zone and stock's playable-area monitor drained them to 1 with the giggle.
+// Exempting arrivals from the monitor instead would have minted an
+// invulnerable camp room (inactive zone = no spawns, sealed slab = no path),
+// so the fix follows the user's own teleporter rule to its conclusion:
+// ARRIVING BY TELEPORTER OPENS THE BAY FROM THE INSIDE, free — flag set (zone
+// live, monitor satisfied, risers wake), slab open (zombies path in — no
+// stranded actors), prompts retired. Mirrors the buy path exactly, minus the
+// charge and the luck. Idempotent; returns true if the door is open after.
+function force_open_by_flag( flag )
+{
+	if ( !isdefined( level.tod_doors_by_flag ) || !isdefined( level.tod_doors_by_flag[ flag ] ) )
+		return false;
+	d = level.tod_doors_by_flag[ flag ];
+	if ( IS_TRUE( d.tod_bought ) )
+		return true;
+	d.tod_bought = true;
+
+	if ( isdefined( d.tod_flag ) && d.tod_flag != "" && level flag::exists( d.tod_flag ) )
+	{
+		level flag::set( d.tod_flag );
+		breather_unlock( d.tod_flag );   // harmless for enter_tpbay (no enemy row)
+	}
+	if ( isdefined( d.tod_slab ) )
+	{
+		d.tod_slab Hide();
+		d.tod_slab NotSolid();
+		d.tod_slab ConnectPaths();
+	}
+	for ( i = 0; i < d.tod_trigs.size; i++ )
+	{
+		if ( isdefined( d.tod_trigs[ i ] ) )
+		{
+			d.tod_trigs[ i ] SetHintString( "" );
+			d.tod_trigs[ i ] TriggerEnable( false );
+		}
+	}
+	return true;
+}
+
+// ---------------------------------------------------------------------------
 // ENEMY UNLOCKS — the tower gets harder the higher you climb
 // ---------------------------------------------------------------------------
 // User 2026-08-21: "Every time you open a door to a breather (the gold section
@@ -359,13 +417,21 @@ function breather_unlock( flag )
 		// elite. Cadence anchors here — _tod_reaver::reaver_due reads this
 		// stamp and owes a spawn on THIS round and every 4th after.
 		case "enter_lap20": kind = "reaver"; break;
+		// THE ARMORED SPRINTER (v13.7, user 2026-08-29 ladder): smoke-trailing
+		// chain-armor converts promoted out of the horde — _tod_sprinter reads
+		// this stamp, every 3rd round after. Took the lap-30 slot from the
+		// hounds when the user re-dealt the ladder ("add an enemy rather than
+		// replace").
+		case "enter_lap30": kind = "sprinter"; break;
 		// HELLHOUNDS: the stock zm_factory dog archetype run as a tower elite.
 		// Cadence anchors HERE — _tod_hellhounds::hound_due reads this stamp and
 		// owes a PACK on THIS round and every 3rd after. This is NOT a dog
 		// round: level.dog_rounds_allowed stays 0 and enable_dog_rounds is never
-		// called anywhere in the map.
-		case "enter_lap30": kind = "hellhound"; break;
-		// case "enter_lap40": kind = "<enemy 4>"; break;
+		// called anywhere in the map. MOVED lap30 -> lap40 in the same re-deal —
+		// the fourth slot, reserved-empty since the ladder was built, is now
+		// filled and the ladder is complete: 10 protector / 20 reaver /
+		// 30 sprinter / 40 hellhound.
+		case "enter_lap40": kind = "hellhound"; break;
 	}
 	if ( !isdefined( kind ) )
 		return;

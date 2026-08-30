@@ -21,6 +21,7 @@
 // Client half: _tod_powerups.csc (include + add for tod_free_pap).
 // =============================================================================
 
+#using scripts\shared\clientfield_shared;   // v13.6b: the ALXS idle-FX clientfield on the breather vendors
 #using scripts\shared\flag_shared;   // power_on gate on the free-PaP drop
 #using scripts\shared\laststand_shared;
 #using scripts\shared\system_shared;
@@ -32,6 +33,8 @@
 #using scripts\zm\_zm_score;      // breather Pack-a-Punch charges points
 #using scripts\zm\_zm_utility;
 #using scripts\zm\_zm_weapons;   // can_upgrade_weapon / get_upgrade_weapon (vendor stock lane)
+#using scripts\zm\zm_cwpap;   // v13.12 — register_pap_machine: the vendors run the pack's own flow
+#using scripts\zm\zm_tower_of_doom\_tod_breather_data;   // GENERATED — lounge PaP anchors (v13)
 #using scripts\zm\zm_tower_of_doom\_tod_classes;   // is_class_primary (vendor: which lane)
 #using scripts\zm\_zm_weapons;
 #using scripts\zm\zm_tower_of_doom\_tod_upgrade_ui;   // push_dmg_num (crosshair numbers)
@@ -41,7 +44,11 @@
 #insert scripts\zm\_zm_powerups.gsh;
 
 #precache( "string", "" );
-#precache( "model", "p7_zm_vending_packapunch_on" );   // breather Pack-a-Punch vendor mesh
+#precache( "model", "p9_fxanim_zm_gp_pap_xmodel_off" );   // breather PaP vendor mesh, unpowered (ALXS pack, v13.6)
+#precache( "model", "p9_fxanim_zm_gp_pap_xmodel" );       // its powered/animated twin (swapped at the flip)
+// (v13.6b/c's anim grafts lived here between builds — RETIRED v13.12; the
+// animtree, xanims and every show now run inside zm_cwpap itself, one code
+// path for all five machines. See the tombstone below.)
 
 // Gift of Death (Xmas Gun) grants on the Death Machine drop with FIXED
 // shots-to-kill, round-independent: damage = health / shots, per archetype.
@@ -81,7 +88,21 @@
 // The DEATH MACHINE is deliberately untouched at 50: only PaP was named.
 #define TOD_PAP_DROP_PCT      25   // free-PaP drop: a quarter of its former share
 #define TOD_MINIGUN_DROP_PCT  50   // Death Machine (= the Gift of Death here): same
-#define XMAS_ZOMBIE_SHOTS  2     // normal zombie (bosses handled in _tod_bosses)
+#define XMAS_ZOMBIE_SHOTS  2     // normal zombie (Panzer/Protector handled in _tod_bosses)
+// v14.8 (user 2026-08-30: "buff the death machine by 30% for bosses and
+// elites") — the buff multiplier PLUS the two elite lanes that never existed:
+// the Reaver and the hellhound postdate the original 2/10/30 design, and the
+// blanket boss-skip in xmas_fixed_shots_cb meant the Gift of Death did only
+// its RAW GDT weapon damage against them — negligible against 11-43k HP, so
+// "the DM works on elites" was quietly false for half the roster. Their
+// fixed-shot lanes live HERE (first in the level damage chain) because,
+// unlike the Panzer (mechz wrap) and the Protector (its own aiOverrideDamage
+// feed), NOTHING dispatches after this chain to rescale their damage —
+// _tod_upgrades' GIANT SLAYER comment documents the same fact for the Reaver.
+// LOCKSTEP: XMAS_ELITE_BUFF == TOD_XMAS_ELITE_BUFF in _tod_bosses.gsc.
+#define XMAS_ELITE_BUFF    1.3
+#define XMAS_REAVER_SHOTS  6     // pre-buff baseline — same HP class as the Protector (~43k @ r30 solo)
+#define XMAS_HOUND_SHOTS   3     // pre-buff baseline — ~1/4 a Protector's HP, and they arrive in packs
 #define TOD_BREATHER_PAP_COST  5000   // stock PaP price
 
 #namespace tod_powerups;
@@ -184,6 +205,7 @@ function __init__()
 
 	// BREATHER PACK-A-PUNCH vendors (see below) — one per rest balcony.
 	level thread breather_pap_spawn();
+	level thread crown_pap_clips();   // v13.9 — the ALXS prefab ships no collision
 	level thread pap_power_hint();   // "REQUIRES POWER" copy while the switch is off
 }
 
@@ -191,11 +213,25 @@ function __init__()
 // BREATHER PACK-A-PUNCH (user 2026-08-22) — a standalone vendor per balcony
 // ---------------------------------------------------------------------------
 // WHY IT EXISTS: the CLASS TIER card requires the class gun Pack-a-Punched
-// (tier_card_eligible), but the map's only PaP machine sits in the CROWN,
-// above all 50 laps — unreachable during the climb where the gun is actually
-// maxed. So the promotion could never fire (user: "I maxed out my Enfield and
-// was never able to upgrade my class"). One machine per breather (floors
-// 10/20/30/40) makes PaP reachable, which makes the tier ladder reachable.
+// (tier_card_eligible), but when this was written the map's only PaP machine
+// sat in the CROWN, above all 50 laps — unreachable during the climb where
+// the gun is actually maxed. So the promotion could never fire (user: "I
+// maxed out my Enfield and was never able to upgrade my class"). One machine
+// per breather (floors 10/20/30/40) makes PaP reachable, which makes the
+// tier ladder reachable.
+//
+// 2026-08-28 CORRECTION (same night, second pass): the crown PaP DOES still
+// exist. An earlier claim that it was removed — briefly recorded here — came
+// from grepping map_source for zm_pack_a_punch/packapunch, and the stock
+// prefab matches NEITHER string: it is `vending_weapon_upgrade_spawnable.map`
+// (gen_tower_map.js:4109, .map entity at (-480, 7913, 19392), hall west of
+// the gate). VERIFY PaP-EXISTENCE AGAINST THE GENERATOR'S EMISSION, never by
+// string-matching the output. So the hall holds TWO machines: the REAL
+// Pack-a-Punch (west of the gate) and the personal UPGRADE STATION on the
+// west wall wearing the chaos_pack_a_punch mesh (_tod_upgrades) — which is
+// why "what does that pap do?" is such an easy question to ask up there.
+// These four breather vendors exist because the crown machine is unreachable
+// during the climb, exactly as the paragraph above says.
 //
 // WHY SCRIPT-SPAWNED AND NOT THE STOCK PREFAB — HARD-WON, DO NOT "SIMPLIFY":
 // a SECOND stock `zm_pack_a_punch` zbarrier FATALS THE MAP LOAD. Stock
@@ -224,38 +260,115 @@ function breather_pap_spawn()
 		wait 0.05;
 	level flag::wait_till( "initial_blackscreen_passed" );
 
-	// Breather laps are 10/20/30/40 — all EVEN, so every balcony is the
-	// mirrored (SW) one: floor x[-800,-256], y[-992,-416] (gen_tower_map.js,
-	// v9.37 expansion). Already occupied: the two PERK pads on the south wall
-	// (y -959, x -360 / -536), the UPGRADE STATION on the west wall (model
-	// -760,-600; trigger -704,-600, radius 64) and the TELEPORTER pad in the
-	// SE quarter (-640,-800, ~167u ring, trigger radius 110). The PaP takes
-	// the NORTH edge facing SOUTH into the floor — yaw 359.999 = front toward
-	// -y, the live-verified vending convention on this map. Nearest neighbour
-	// (the teleporter trigger) is ~430u away, well clear of our 64u radius.
-	// Breather mid z = (lap-1) * 384 + 192.
-	zs = array( 3648, 7488, 11328, 15168 );
+	// v13 — the PaP owns the lounge's WEST wall, facing east into the room
+	// (it used to stand IN the entrance path at (-320,-470), its trigger 174u
+	// from the ammo crate's with both costing 5000 — the reported wrong-buy).
+	// Anchors are GENERATED (_tod_breather_data.gsc, the door-data no-drift
+	// contract); the generator asserts every lounge trigger pair clears by
+	// both radii + 64, so this machine can never crowd a neighbour again.
+	zs = tod_breather_data::breather_zs();
 	foreach ( z in zs )
-		breather_pap_place( ( -320, -470, z ), ( -320, -526, z ), 359.999 );
+		breather_pap_place( tod_breather_data::pap_org( z ), tod_breather_data::pap_trig( z ), tod_breather_data::pap_yaw() );
 }
 
-// One vendor: the machine model plus its own use trigger.
+// v13.10 (user at the publish gate: "The pap at the crown had all these cool
+// fx ... Can we please have that on all the paps? ... glwoing middle and top")
+// — THE FX WERE ALREADY WIRED ON EVERY MACHINE; what the vendors were missing
+// is the REKICK. The idle field is set once at the power flip, and the map-1
+// lesson _tod_perk_lights' header records applies verbatim: "an FX spawned
+// far from the viewer never becomes visible on approach". The crown got seen
+// working; the four tower vendors sat beyond render reach when power came on
+// and their glow never materialised for a climbing player. Fix = the same
+// cure the perk glows ship: re-pulse the clientfield on the 0->1 edge the
+// first time any player comes near the machine. Threaded on all FIVE
+// machines (vendors at the flip, crown from its clips hook — a double pulse
+// on the crown is harmless).
+// ---------------------------------------------------------------------------
+// v13.12 TOMBSTONE — breather_pap_use_loop / breather_pap_power_hint /
+// vendor_pap_show / vendor_pap_lever / pap_fx_rekick are GONE. Every vendor
+// interaction (trigger, hints incl. NEED_POWER, power model swap, idle show,
+// purchase show, sounds, network-global cooldown, class-gun tier latch) now
+// runs through the de-singularized zm_cwpap flow (user 2026-08-29: "just do
+// it that way now") — one code path for the crown and all four vendors, via
+// zm_cwpap::register_pap_machine in breather_pap_place. The refund-triage
+// lesson from the old non-class lane lives on inside zm_cwpap ordering
+// (can_upgrade is checked BEFORE the charge). The rekick died with the graft:
+// the crown map-proven flow never needed one.
+// ---------------------------------------------------------------------------
+
+// v13.9 — the shared machine-collision row (see the comment at the vendor's
+// call site). self-less helper: m = the machine script_model, clips stored on
+// it for any future teardown (Hide != NotSolid — the QR invisible-wall rule).
+function pap_place_clips( m )
+{
+	fwd = AnglesToForward( m.angles );
+	offs = array( -32, 0, 32 );
+	clips = [];
+	for ( ci = 0; ci < offs.size; ci++ )
+	{
+		c = Spawn( "script_model", m.origin + VectorScale( fwd, offs[ ci ] ), 1 );
+		c.angles = m.angles;
+		c SetModel( "zm_collision_perks1" );
+		c.script_noteworthy = "clip";
+		c DisconnectPaths();
+		clips[ clips.size ] = c;
+	}
+	m.tod_clips = clips;
+}
+
+// v13.9 — the CROWN machine gets the same row: the ALXS prefab ships model +
+// trigger struct and NO collision (verified: walk-through, user report). The
+// pack's model is singular by name, so this finds exactly one.
+function crown_pap_clips()
+{
+	level endon( "end_game" );
+	for ( i = 0; i < 40; i++ )
+	{
+		m = GetEnt( "pack_a_punch_model", "targetname" );
+		if ( isdefined( m ) )
+		{
+			pap_place_clips( m );
+			return;
+		}
+		wait 0.25;   // prefab models exist at init; the retry is pure paranoia
+	}
+}
+
+// One vendor — v13.12: the machine model + collision, REGISTERED into the
+// de-singularized zm_cwpap flow (user: "just do it that way now ... they all
+// need to act as if they work together"). The pack's own code now runs this
+// machine: its unitrigger, hints, power swap, idle show, purchase show, the
+// network-global cooldown, and the class-gun tier lane — one code path for
+// all five stations. Everything this module used to graft (use loop, power
+// hint, show, rekick) is RETIRED below.
 function breather_pap_place( model_org, trig_org, yaw )
 {
 	m = Spawn( "script_model", model_org );
 	m.angles = ( 0, yaw, 0 );
-	m SetModel( "p7_zm_vending_packapunch_on" );   // packed (assetlist-verified)
-	// DELIBERATELY NOT SOLID: the navmesh ignores entity collision entirely
-	// (KB §navmesh), so a solid machine would need DisconnectPaths and would
-	// still be a grinding spot for the horde on a small balcony. The model is
-	// the landmark; the trigger is the interaction.
+	// v13.6 (user: "replace all pap machines with this new version"): the ALXS
+	// CW/BO6 PaP mesh — the _off state at spawn; breather_pap_power_hint swaps
+	// to the animated-on form at the power flip alongside its copy change.
+	// Both models ride the alxs_cwpap zpkg (force-packed there). The full
+	// animated system (zm_cwpap) is SINGULAR by design and lives on the crown;
+	// these four keep our tod_pap_owned lane wearing the pack's machine.
+	m SetModel( "p9_fxanim_zm_gp_pap_xmodel_off" );
+	// SOLID SINCE v13.9 (user: "The new pap has no clip. I just walk through").
+	// The old "deliberately not solid" stance was written for the small p7
+	// wall-box; the CW cabinet is a real machine you expect to bump into, and
+	// walking through it reads as a bug. Recipe = the upgrade stations'
+	// proven one (_tod_upgrades:3711-3737, the Heavenly-Altar fix): THREE
+	// zm_collision_perks1 script_models spaced +-32 along the mesh's local +X
+	// (its wide axis, mapped by the entity yaw via AnglesToForward — do not
+	// simplify to world axes), each DisconnectPaths'd per the navmesh rule.
+	// The asset is stock-resident (station precedent: no zone line, no
+	// precache). Machines back a wall, so over-cover is safe; zombies path
+	// around the front like they do at every station.
+	pap_place_clips( m );
 
-	t = Spawn( "trigger_radius_use", trig_org, 0, 64, 100 );
-	t TriggerIgnoreTeam();      // REQUIRED for a script-spawned use-trigger
-	t SetCursorHint( "HINT_NOICON" );
-	t SetHintString( "Hold ^3[{+activate}]^7 ^5PACK-A-PUNCH ^2[Cost: " + TOD_BREATHER_PAP_COST + "]" );
-	t thread breather_pap_use_loop();
-	t thread breather_pap_power_hint();   // <- the unpowered state (2026-08-25)
+	// v13.12 — the whole interaction belongs to zm_cwpap now. No jingle on
+	// vendors (five overlapping music stings with unknown 2d routing; the
+	// crown keeps it — flip the last arg to true to change that).
+	zm_cwpap::register_pap_machine( m, trig_org, ( 0, yaw, 0 ), false );
 }
 
 // self = trigger. THE UNPOWERED STATE FOR THE FOUR BREATHER PACK-A-PUNCHES
@@ -285,161 +398,23 @@ function breather_pap_place( model_org, trig_org, yaw )
 // Edge-driven, not polled: two SetHintString calls per machine per game. Every
 // distinct hint string costs a slot in the engine's trigger-string table, which
 // is the config-string discipline the door price watcher documents.
-function breather_pap_power_hint()
-{
-	level endon( "end_game" );
 
-	// The flag may not exist yet — waiting on a flag that has not been created
-	// negates undefined and fatals the server script (the 2026-08-25 crash
-	// documented in pap_power_hint below).
-	while ( !( level flag::exists( "power_on" ) ) )
-		wait 0.1;
+// v13.6c — THE FULL PURCHASE SHOW ON EVERY VENDOR (user: "Okay can this be
+// on every machine. DOe sit have to be crown only"). The pack's presentation
+// is clientfield-driven PER ENTITY (all eight FX fields registered in BOTH
+// VMs by zm_cwpap.gsc:51-58 / .csc:32-39 — parity verified), so the crown's
+// buy sequence ports to the vendors verbatim: in-use anim, purchase FX,
+// machine + lever + sting sounds, then back to idle. Cribbed exactly from
+// zm_cwpap.gsc:127-147 (the sequence), :196-203 (the restore) and :318-341
+// (the sounds), timings included (UPGRADE_FXANIM_TIME = 4).
+// ONE DELIBERATE DIFFERENCE, stated so nobody "fixes" it: the crown hands
+// the gun back after the show; the vendors keep our INSTANT take-and-give
+// (the proven tod_pap_owned / refund lane, and no disarmed-for-4s window on
+// a mid-climb balcony) while the machine plays the identical show beside
+// you. self = the vendor machine model.
 
-	if ( level flag::get( "power_on" ) )
-		return;                       // already powered — the buy line stands
-
-	if ( !isdefined( self ) )
-		return;
-	self SetHintString( "^1NO POWER^7 - you must turn on the power first" );
-
-	level flag::wait_till( "power_on" );
-	if ( !isdefined( self ) )
-		return;
-	self SetHintString( "Hold ^3[{+activate}]^7 ^5PACK-A-PUNCH ^2[Cost: " + TOD_BREATHER_PAP_COST + "]" );
-}
 
 // self = trigger
-function breather_pap_use_loop()
-{
-	level endon( "end_game" );
-
-	for ( ;; )
-	{
-		self waittill( "trigger", player );
-
-		if ( !isdefined( player ) || !isplayer( player ) )
-			continue;
-		if ( player laststand::player_is_in_laststand() )
-			continue;
-		// A revive press is not a purchase (_zm_blockers.gsc:307 — stock checks
-		// this on every buy path). Reviving polls the raw USE button
-		// (_zm_laststand.gsc:1129), so without this the press that revives a
-		// teammate ALSO buys a 5000-point pack. Silent, like the laststand
-		// branch above: the player is holding use.
-		if ( player zm_utility::in_revive_trigger() )
-			continue;
-		// Power gates every PaP on this map (the switch is at the base).
-		if ( !( level flag::exists( "power_on" ) ) || !( level flag::get( "power_on" ) ) )
-		{
-			player PlaySound( "zmb_no_purchase" );
-			continue;
-		}
-		// (v10.4, audit find: the tod_pap_owned refusal used to sit HERE, above
-		// the lane split — so once the class primary was packed the vendor
-		// refused EVERYTHING, including a sidearm the stock lane below could
-		// upgrade fine. The latch check now lives inside the class-gun lane,
-		// where it belongs: it is a fact about the class gun only.)
-		// Never while holding a temporary powerup gun — its restore would
-		// fight the swap (same guard grab_pap uses).
-		if ( isdefined( player.zombie_vars ) && IS_TRUE( player.zombie_vars[ "zombie_powerup_minigun_on" ] ) )
-		{
-			player PlaySound( "zmb_no_purchase" );
-			continue;
-		}
-		if ( !( player zm_score::can_player_purchase( TOD_BREATHER_PAP_COST ) ) )
-		{
-			player PlaySound( "zmb_no_purchase" );
-			continue;
-		}
-
-		// v10.3 (playtest 2026-08-23: "Enfield, Knife, MR6. Pap machine doesnt
-		// work but grabbing the power up worked for MR6"): the vendor used to
-		// latch tod_pap_owned UNCONDITIONALLY — which only reconcile_twin acts
-		// on, and reconcile only ever touches the CLASS PRIMARY. Paying while
-		// holding the MR6 (or any sidearm) took the points and did NOTHING.
-		// The free-PaP drop never had this hole: grab_pap has always carried a
-		// second, stock-path lane for non-class weapons. The vendor now has
-		// the same two lanes:
-		//  - class primary in hand -> the latch (reconcile swaps within 1s;
-		//    since v10.2 the lookup resolves either asset spelling)
-		//  - anything else in hand -> the stock upgrade path, inline
-		w = player GetCurrentWeapon();
-		// v10.7 (peer catch off CZ's second comment, 2026-08-23): the v10.3 lane
-		// keyed PURELY off the weapon in hand — so a player holding their PISTOL
-		// paid 5000 and got a PaP'd pistol while the class gun stayed dry. On a
-		// map whose identity is the class gun, with the pistol as the starting
-		// weapon, that is "my AR didn't get pap'd" with the points buying the
-		// wrong thing instead of nothing. The sidearm lane now opens ONLY once
-		// the class gun is ALREADY packed: the class gun is always the vendor's
-		// first sale regardless of what is in hand (the latch lane below packs
-		// it even while a sidearm is held — reconcile swaps it in inventory),
-		// and the MR6-after-class-gun case the playtest reported stays served.
-		// v10.30 (user 2026-08-25: "When i pack my secondary before my primary is
-		// packed and im holding my secondary when i pap my primary will get
-		// papped. It should pap the gun im holding"). THE v10.7 GATE IS REMOVED:
-		// this lane no longer requires the class gun to be packed first.
-		//
-		// WHAT v10.7 WAS PROTECTING AND WHY IT NO LONGER APPLIES: back then the
-		// only sidearm was the starting MR6, so "pack what is in hand" mostly
-		// meant "accidentally pack the pistol you spawned holding" and lose 5000.
-		// Since the secondary ladder (2026-08-24) every class carries a real,
-		// chosen, tier-appropriate sidearm that a player may very reasonably want
-		// packed first — and the gate made that impossible, silently packing the
-		// PRIMARY instead while the player watched their secondary stay dry.
-		// Taking the points and upgrading a gun the player is not holding is the
-		// worse failure of the two.
-		//
-		// THE TRADE IS ACCEPTED, NOT OVERLOOKED: holding the MR6 at the vendor
-		// now packs the MR6. That is the standard zombies contract — the machine
-		// packs what you are holding — and it is predictable, which the two-lane
-		// rule never was.
-		if ( isdefined( w ) && w != level.weaponNone
-		     && !( tod_classes::is_class_primary( player, w ) ) )
-		{
-			if ( !( zm_weapons::can_upgrade_weapon( w ) ) )
-			{
-				player PlaySound( "zmb_no_purchase" );
-				continue;   // already upgraded / not upgradable — refuse, keep the points
-			}
-			up = zm_weapons::get_upgrade_weapon( w, false );
-			if ( !isdefined( up ) )
-			{
-				player PlaySound( "zmb_no_purchase" );
-				continue;
-			}
-			player PlaySound( "zmb_cha_ching" );
-			player zm_score::minus_to_player_score( TOD_BREATHER_PAP_COST );
-			player TakeWeapon( w );
-			up = player zm_weapons::weapon_give( up );
-			if ( isdefined( up ) )
-			{
-				player GiveStartAmmo( up );
-				player notify( "weapon_give", up );
-				player SwitchToWeapon( up );
-			}
-			else
-			{
-				player zm_weapons::weapon_give( w );   // give failed — never strand them unarmed
-			}
-			player PlayLocalSound( "free_packapunch_vox" );
-			wait 0.5;
-			continue;
-		}
-
-		// CLASS-GUN LANE: refuse a second buy on an already-packed class gun
-		// (the latch survives until a tier-up clears it).
-		if ( IS_TRUE( player.tod_pap_owned ) )
-		{
-			player PlaySound( "zmb_no_purchase" );
-			continue;
-		}
-		player PlaySound( "zmb_cha_ching" );
-		player zm_score::minus_to_player_score( TOD_BREATHER_PAP_COST );
-		player.tod_pap_owned = true;   // reconcile_twin swaps to the _up form within 1s
-		player PlayLocalSound( "free_packapunch_vox" );
-		wait 0.5;   // debounce a held use
-	}
-}
 
 // ---------------------------------------------------------------------------
 // FREE PACK-A-PUNCH DROP (user 2026-08-21) — its own drop, own model
@@ -534,9 +509,14 @@ function grab_pap( player )
 		return;   // consumed
 	}
 
-	// FALLBACK 3: everything that could be packed already is — consolation ammo.
+	// FALLBACK 3: everything that could be packed already is — consolation ammo
+	// PLUS +20% LUCK (v14.8, user 2026-08-30: "if a player already has a pap
+	// gun but gets a pap drop they will get 20% luck"). Via the level pointer,
+	// never a #using — powerups -> luck -> upgrades -> powerups is a cycle.
 	if ( isdefined( w ) && w != level.weaponNone )
 		player GiveMaxAmmo( w );
+	if ( isdefined( level.tod_luck_dupe_fn ) )
+		[[ level.tod_luck_dupe_fn ]]( player, "pap" );
 	// consumed
 }
 
@@ -878,11 +858,13 @@ function pap_power_hint()
     // fixes the CURSOR ICON, which is still worth doing.
     //
     // NOTE ON REACH: this targets script_noteworthy "pack_a_punch", which stock
-    // stamps on the ONE zbarrier-derived trigger — the CROWN PaP. That machine
-    // sits behind the roof door at the top of a 50-floor climb, so in practice
-    // nobody is standing at it with the power off. The reachable machines are
-    // the four breather vendors, and they are handled by
-    // breather_pap_power_hint() above.
+    // stamps on the ONE zbarrier-derived trigger — the CROWN PaP
+    // (vending_weapon_upgrade_spawnable, gen_tower_map.js:4109; a 2026-08-28
+    // claim that it had been removed was a grep-term artifact — the prefab
+    // name contains neither "packapunch" nor "zm_pack_a_punch"). That machine
+    // sits at the top of the 50-floor climb, so in practice nobody stands at
+    // it with the power off. The reachable machines are the four breather
+    // vendors, handled by breather_pap_power_hint() above.
     foreach ( t in trigs )
     {
         if ( !isdefined( t ) )
@@ -935,19 +917,72 @@ function grab_free_pap( player )
 	if ( isdefined( player.is_drinking ) && player.is_drinking > 0 )
 		return true;
 
-	// A PERK the grabber does not already own. give_random_perk builds the
-	// not-owned list itself and returns undefined when every perk is held —
-	// in that case DON'T strand the drop (solo has no teammate to save it
-	// for): consume it and refill ammo as the consolation, the same rule the
-	// old PaP grant used.
-	got = player zm_perks::give_random_perk();
+	// A PERK the grabber does not already own — FROM THE MACHINES THIS MAP
+	// ACTUALLY SELLS. NOT stock give_random_perk (live bug, 3-player report
+	// 2026-08-29): that helper draws from ALL of level._custom_perks, and this
+	// map #using's stock perk modules it does not sell — MULE KICK
+	// (_zm_perk_additionalprimaryweapon, kept for its clientfield: the Death
+	// Perception HUD icon BORROWS hudItems.perks.additional_primary_weapon,
+	// see _tod_perk_electric_cherry's icon note) and stock ELECTRIC CHERRY
+	// (kept for the tesla-FX pipeline). A drop that rolled Mule Kick lit the
+	// borrowed field — so the player saw the DEATH PERCEPTION icon appear,
+	// got no outlines, and the DP machine still sold the perk (they never had
+	// that specialty). tod_give_random_map_perk below draws only from perks
+	// with a live vending trigger in the .map. Returns undefined when every
+	// sellable perk is held — DON'T strand the drop (solo has no teammate to
+	// save it for): consume it and refill ammo as the consolation, the same
+	// rule the old PaP grant used.
+	got = player tod_give_random_map_perk();
 	if ( !isdefined( got ) )
 	{
+		// Every sellable perk owned — consolation ammo PLUS +10% LUCK (v14.8,
+		// user 2026-08-30: "if they get a perk bottle with max perks they
+		// will get 10% luck"). Same pointer lane as the PaP dupe above.
 		w = player GetCurrentWeapon();
 		if ( isdefined( w ) && w != level.weaponNone )
 			player GiveMaxAmmo( w );
+		if ( isdefined( level.tod_luck_dupe_fn ) )
+			[[ level.tod_luck_dupe_fn ]]( player, "perk" );
 	}
 	// consumed (no return value) — stock plays zmb_powerup_grabbed + hides it
+}
+
+// self = player. Stock give_random_perk with the pool cut to MAP TRUTH: only
+// specialties that have a zombie_vending use-trigger in this .map (the same
+// query _tod_perk_scatter captures its machines from) qualify. That is the 8
+// scatter machines + PhD — registered-but-machineless perks (Mule Kick, stock
+// cherry) can never roll out of a bottle again. Give rides stock give_perk so
+// the perk threads / HUD clientfield / HasPerk state all land exactly as a
+// machine buy would (minus the bought presentation, same as stock's helper).
+function tod_give_random_map_perk()
+{
+	pool = [];
+	seen = [];
+	trigs = GetEntArray( "zombie_vending", "targetname" );
+	for ( i = 0; i < trigs.size; i++ )
+	{
+		t = trigs[ i ];
+		if ( !isdefined( t ) || !isdefined( t.script_noteworthy ) || t.script_noteworthy == "" )
+			continue;
+		spec = t.script_noteworthy;
+		if ( IS_TRUE( seen[ spec ] ) )
+			continue;   // one entry per machine, however many triggers it grew
+		seen[ spec ] = true;
+		// Registered with the perk framework (paranoia — a stray trigger name
+		// must not reach give_perk) and not already owned or merely paused.
+		if ( !isdefined( level._custom_perks ) || !isdefined( level._custom_perks[ spec ] ) )
+			continue;
+		if ( self HasPerk( spec ) || ( self zm_perks::has_perk_paused( spec ) ) )
+			continue;
+		pool[ pool.size ] = spec;
+	}
+
+	if ( pool.size == 0 )
+		return undefined;
+
+	perk = pool[ RandomInt( pool.size ) ];
+	self zm_perks::give_perk( perk );
+	return perk;
 }
 
 
@@ -1016,9 +1051,34 @@ function xmas_fixed_shots_cb( inflictor, attacker, damage, flags, meansofdeath, 
 {
 	if ( !isdefined( weapon ) || !isdefined( weapon.name ) || !IsSubStr( weapon.name, "xmas_gun" ) )
 		return -1;   // not the Gift of Death — let the rest of the chain run
-	// Bosses are handled in _tod_bosses (the wrap would rescale a value here).
+	// Boss-flagged victims: the Panzer and the Protector are handled in
+	// _tod_bosses (their wraps dispatch after this chain and would rescale a
+	// value set here) — but the REAVER and the HELLHOUND have no such wrap and
+	// take their fixed-shot Gift damage RIGHT HERE (v14.8; see the defines).
+	// No dmult on these lanes, matching the Panzer/RP sites: the Gift's boss
+	// damage is fixed shots by design, insta-kill window or not.
 	if ( IS_TRUE( self.is_boss ) || IS_TRUE( self.acc_is_boss ) || IS_TRUE( self.acc_is_mini_boss ) )
-		return -1;
+	{
+		kind = ( isdefined( self.tod_boss_kind ) ? self.tod_boss_kind : "" );
+		if ( kind != "reaver" && kind != "hellhound" )
+			return -1;   // Panzer / Protector: their own callbacks own the Gift
+		if ( IS_TRUE( level.tod_upgrade_pause ) )
+			return 0;    // no free hits on the frozen board (same rule as below)
+		if ( !isdefined( damage ) || damage <= 0 )
+			return -1;
+		now = GetTime();
+		if ( isdefined( self.tod_xmas_hit_ms ) && self.tod_xmas_hit_ms == now )
+			return 1;    // same-frame dedupe (the trap the zombie lane documents)
+		self.tod_xmas_hit_ms = now;
+		hp = ( isdefined( self.maxhealth ) ? self.maxhealth : self.health );
+		shots = XMAS_HOUND_SHOTS;
+		if ( kind == "reaver" )
+			shots = XMAS_REAVER_SHOTS;
+		final = int( ( hp / shots ) * XMAS_ELITE_BUFF ) + 1;
+		if ( isdefined( attacker ) && isplayer( attacker ) )
+			attacker tod_upgrade_ui::push_dmg_num( final, false );   // crosshair parity
+		return final;
+	}
 	// No free damage on the frozen horde during an upgrade pick.
 	if ( IS_TRUE( level.tod_upgrade_pause ) )
 		return 0;

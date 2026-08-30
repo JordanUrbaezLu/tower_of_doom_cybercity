@@ -20,9 +20,29 @@ re-learn lessons that map already paid for.
   parity-mirrored in the generator. 52 zones; buyable doors one per lap + roof
   + power (v10.4: 750 +60/lap cap 3000, roof 7500, power 750 — the price
   rides in the GENERATED `_tod_door_data.gsc`, so a price change is a
-  -GscOnly build). **NO wallbuys** (user: "I never asked for those").
-  **PERKS = the 8-machine random scatter** (`_tod_perk_scatter.gsc`): all 8
-  base machines (Jugg/Speed/QR/Stamin-Up/Widow's/Cherry/DoubleTap/Deadshot)
+  -GscOnly build; the `.map`'s own `zombie_cost` is a dead CONSTANT 1000
+  placeholder since v14.14 and must stay constant — see below). The prompt
+  shows destination AND price; the price is read live at purchase, so after a
+  party-size change the sign can be stale by design.
+  **TRIGGERSTRING BUDGET — A STANDING CONSTRAINT, NOT A PAST BUG (v14.14).**
+  `SetHintString` mints ONE PERMANENT engine slot per DISTINCT string, cap
+  **250 per match**, never freed, shared with stock; overflow fatals with
+  `BG_Cache_GetIndexInternal` and **blames whoever registers NEXT**, so the
+  reported site is never the cause. The map sits at **140/250**. The Aetherium
+  hint pack routes on hint TEXT (`string.find` in every `is*Hint()`), so
+  `SetHintString` is its ONLY input channel — every new interactive object with
+  a varying prompt spends permanent slots. Two rules paid for in blood:
+  (1) **never interpolate a many-valued runtime value into a hint** — a
+  re-stamp keyed on party size is fine on ONE trigger (≤4 strings) and fatal
+  across 53; (2) **count DISTINCT STRINGS to prove a fix** — v14.3's flatten
+  ran too late to do anything and its dev print still reported success, because
+  it proved the loop executed rather than that a slot was saved. Free lanes:
+  constant strings, `IPrintLnBold`, clientfield → LUI. LUI `SetText` is a
+  DIFFERENT cache (cap 2048) and is safe. **NO wallbuys** (user: "I never asked for those").
+  **PERKS = the 9-machine random scatter** (`_tod_perk_scatter.gsc`): all 9
+  machines (Jugg/Speed/QR/Stamin-Up/Widow's/Death Perception/DoubleTap/PhD/
+  WISP TEA — v14.16 2026-08-30: Deadshot RETIRED for the BO7 Wisp Tea, a
+  vendored WetEgg module on specialty_nomotionsensor, `_zm_perk_wisp_tea.gsc`)
   park at the base N wall in the .map, scatter to random pads at load and
   reshuffle every 4 rounds (v10.3; was the round after each Panzer), never
   onto the same floor; pads = **the 8 breather pads ONLY**
@@ -30,11 +50,23 @@ re-learn lessons that map already paid for.
   is pinned** (v6.9 solo carve-out: the first-breather pin costs 15,750 pts of doors to
   reach (lap 10 under the v9.43 prices), leaving solo with no self-revive for ~10k pts. Granting the perk early
   is NOT an alternative — the stock vending trigger refuses a buy while the
-  player holds the perk, `_zm_perks.gsc:545`). 9 pads / 8 machines = one
-  breather pad empty each run.
-  Breathers (floors 10/20/30/40) are LARGER (544×576 since v9.37), parity-mirrored, and
-  emit **ZERO risers** (v6.9) so they are real rest stops — the horde must
-  climb to you.
+  player holds the perk, `_zm_perks.gsc:545`). 9 pads / 9 machines — every
+  pad filled (the "one empty pad" era ended when PhD joined the pool,
+  2026-08-25).
+  Breathers (floors 10/20/30/40) are **ENCLOSED LOUNGES since v13**
+  (2026-08-28; docs/42): the 544×576 deck kept its footprint but grew ROOF +
+  WALLS (56 sill / open window band with glowing mullions, `clip_player` so
+  bullets pass / lintel / dark roof + glowing trim), ONE THEME COLOUR each —
+  10 blue, 20 green, 30 orange, 40 gold — and the TELEPORTER moved onto its
+  own open-air SPUR (gated doorway → 320 gantry → 288×288 floating pad).
+  Furniture is one-per-wall (station N, PaP W, crate E, perks S) and rides in
+  GENERATED `_tod_breather_data.gsc` from the generator's `BR_FURN` table,
+  which ASSERTS every trigger pair ≥ r_a+r_b+64 (the old PaP↔crate 38u rim
+  gap mis-sold 5000-point buys). THREE risers per lounge (v13.2: the third
+  sits mid-gantry ON the teleporter spur at even (-704,-1120), y derived from
+  the arrival point so the ~165u materialize-clearance rule holds by
+  construction; v10.12 added the first two after the v6.9 zero-riser
+  experiment); the S riser guards the spur mouth from the room side.
   **Tron Grid look**: edge-lit `_tinted_edge` floors cycling 5 colors, navy
   base + glowing inlay ring, PaP-material roof floor; Miami night skybox
   (`skybox_t9_mp_miami` + `acc_ssi_miami_night`, Nastian pack — credit before
@@ -57,8 +89,10 @@ re-learn lessons that map already paid for.
   and the loudness-matching recipe in sound_assets/tod/music/README.md.
   Bosses: Panzer every 5th round (music + luck-to-last-hit), Rogue Protector
   WAVE every 3rd round, wave size = int(players×round/3+0.5) CAPPED at the
-  concurrency roof 8, debt SET not summed (v10.4; quiet
-  per-unit rewards). **Power switch at the BOTTOM.** The generator prints the live
+  concurrency roof 8, debt SET not summed (v10.4). REWARDS (v14.5): every
+  ELITE (Protector/Reaver/Hound/Sprinter) pays a flat 500 to the KILLER ONLY,
+  ×double-points ×BOUNTY (`grant_elite_reward`, one shared TOD_ELITE_PTS);
+  the PANZER alone keeps the 1000 team-wide boss jackpot. **Power switch at the BOTTOM.** The generator prints the live
   world-brush / entity / lap counts on every run — read them there rather than
   trusting a number copied into this brief. LED bake is the ceiling; generator
   `PARA_EVERY` is the bake-budget knob.
@@ -68,8 +102,9 @@ re-learn lessons that map already paid for.
   Death Machine** (0.75), SLASHER **Combat Knife → Wakizashi → STORMBREAKER
   (Leviathan port)** (1.1). Once the class gun is PaP'd, 20% (v9.42; was 10%) of card deals
   (dev 100%) carry a TIER card (right slot, never auto-locked): new gun at
-  its level-0 form, every GUN-scoped domain reset, DMG REDUCTION + LUCK
-  kept. Guns are GENERATED by `tools/gen_tod_twins.js` (ladder table, TIER_DPS
+  its level-0 form, every GUN-scoped domain reset, class-scoped domains kept
+  (the v14.12 list in the upgrade bullet below — never enumerate it here,
+  it has drifted twice; TIER_SAFE in the Lua is the mirror). Guns are GENERATED by `tools/gen_tod_twins.js` (ladder table, TIER_DPS
   normalization, never-shrink clips, altWeapon blanked on every form —
   audit it per build) under a 200-registration guard (map 1's ~230 ceiling).
   Every gun: LOC_NORM 3.0, move 1.0, recoil ×1.15, ADS ×1.20, PaP = +25%.
@@ -114,9 +149,23 @@ re-learn lessons that map already paid for.
 - **UPGRADE TOWER** (`_tod_upgrades.gsc`): events at rounds 1 (post-draft),
   4, 8, 12… (dev: every round) — the world pauses, each player picks 1 of 2
   rolled options (33 live domains + the TIER card × rarity REGULAR/SUPER/ULTIMATE = +1/+2/+3
-  Lv; ids run to 37 with 11/22/30 retired — `domain_id()` and the Lua tables are
+  Lv; ids run to 39 with 11/12/22/30/34 retired — `domain_id()` and the Lua tables are
   KEY-KEYED, so a removed domain's id STAYS mapped and only its `add_domain`
-  call goes).
+  call goes). v14.11 rebalance (2026-08-30): heavy = the TANK (new VITALITY
+  id 38 +10HP/Lv ×5 scope-class, new RECOVERY id 39 regen-starts-sooner ×3;
+  REGEN and assault BACK ARMOR gone, MOBILITY capped 5); slasher trimmed
+  (CLEAVE max 3, no SPRINT ARMOR, DR capped 5 via the bonus_max-as-override
+  lane); RUN AND GUN pays +20/35/50% damage while moving (LOCKSTEP duplicate
+  constants across _tod_upgrades/_tod_runandgun — change both); MOMENTUM
+  removed, SECOND WIND is the MP5's unique (MP7 keeps only ADRENALINE).
+  v14.12/13: HEADSHOT + SCAVENGER persist through promotions — SCAVENGER
+  for the ASSAULT ONLY (set_scope's scope_class lane, v14.13;
+  domain_survives_tier is the one authority). The pause reset badge is
+  SERVER-COMPUTED: sync_max() packs a survives bit into every tod_upg_sync
+  max arg (+100, int-packed — no 4-arg LuiNotifyEvent exists in-tree);
+  TIER_SAFE in the Lua is only the nil-fallback now. Persistent set:
+  DR/LUCK/SPRINT/SPRINTFIRE/SPRINTARMOR/BACKARMOR/VITALITY/HEADSHOT/
+  SCAVENGER(assault).
   **CARD ART CARRIES THE NUMBERS BAKED IN, so a domain retune is not finished
   until the card is re-baked** — the card is the only place a player ever reads
   the value. Audit + prompts: `docs/33_upgrade_art_audit.md`. When auditing,
@@ -125,7 +174,13 @@ re-learn lessons that map already paid for.
   Odds ride the **LUCK BAR** (`_tod_luck.gsc`, 0–100% per player: kills
   normalized 40×players÷round_total, headshots ×1.5, revive +15, door +8,
   down −25, boss LAST HIT takes all; FULL RESET to 0 after each event; LUCK
-  domain = +10% gain rate/Lv). **NO-TWIN RULE: upgrades are NEVER weapon
+  domain = +10% gain rate/Lv). **OVERCHARGE (v14.9)**: the bar SECRETLY tracks
+  to 150 (HUD + pips capped at 100 — the band is invisible); at exactly 150
+  the bar art zap-animates (todUpgLuck spare values 11..14, server-cycled) +
+  a per-client semi-deep zap fires every 3s (v14.9b), and the deal guarantees BOTH
+  non-tier cards ULTIMATE (LOCKSTEP TRIO: TOD_LUCK_OVERMAX /
+  TOD_UPG_GUAR_BOTH_BAR / TOD_UPG_LUCK_OVERMAX_PCT; contracts + art/SFX
+  prompts in docs/45). **NO-TWIN RULE: upgrades are NEVER weapon
   variants** (engine ~230-twin boot-AV ceiling, map 1 docs/21 §A) —
   damage/firerate(echo-proc)/magsize(virtual pool) are all script-side.
   UI = real LUI (`tod_upgrade.lua` + `_tod_upgrade_ui.gsc|.csc`, 18
@@ -135,8 +190,11 @@ re-learn lessons that map already paid for.
   pause menu (int-only `LuiNotifyEvent(&"tod_upg_sync")` → `CoD.TodOwned` →
   AetheriumStartMenu.lua panel — `SetClientDvar` does NOT exist in T7).
   **PERSONAL UPGRADE STATION** (base, core south face, Chaos PaP mesh):
-  solo upgrade buy at 2000 +250/purchase PER PLAYER, 5 uses per station;
-  world does NOT pause
+  solo upgrade buy at a FLAT 3000 (the 2000 +250/purchase ladder was RETIRED
+  with the triggerstring-250 crash fix — the price must stay a single
+  constant, or at least never reach the hint literal; see station_cost()
+  and the triggerstring-250-cap memory), 5 uses per station (crown altar
+  id 5 unlimited); world does NOT pause
   (the risk), 15s timer; a scheduled round OVERRIDES a manual pick and the
   same cards re-present after (re-clamped — stale cards never lower levels).
 - **HUD: Aetherium kit** (vendored, `zone_source/aetherium_hud.zpkg`) + our
@@ -254,6 +312,32 @@ re-learn lessons that map already paid for.
   `level.tod_finale_boss_fn` owns the hold-out if defined. Rails everywhere
   carry invisible clip caps (`RAIL_CAP_H`) — rail tops are not launch pads.
 
+- **THE ENDLESS SPIRE (v14.0, 2026-08-29, docs/44)** — the post-victory
+  endless mode, THE MAP'S HARD MODE by design (the v13.24 base tone-down was
+  justified by its existence). The finale win no longer auto-departs: THE
+  CHOICE — the exfil pad EXTRACTS (old ending) or the dais teleporter ASCENDS
+  the party (first committed hold wins, ONE WAY) to a second 100-lap tower at
+  x=+10240 (generator SECTION 6, `SPIRE_ENABLED`; monochrome red, gold hubs
+  every 10th floor, crate shelves floors 5+, gold summit, beacon z=39104 —
+  visible from the whole climb, deliberately). On ascension `_tod_spire.gsc`
+  runs: full GRANT (T3 PaP'd via the real tier_up path + free-PaP latch,
+  domains maxed through the card system's own fields, all TEN perks —
+  perk_purchase_limit is 10 now), TOWER TEARDOWN (deletes the old world's
+  script entities — the ~1024-gentity budget is the spire's binding
+  constraint), perk machines MIGRATE onto spire pads (scatter's own
+  reshuffle continues), music → `tod_music_spire` (Suno "Neon Static", single
+  band row, Panzer override intact), spawn pacing HOT (0.18 floor — lockstep
+  pair in _tod_spire.gsc and _tod_endless_rounds.gsc). Doors sequential
+  (ONE live buy at a time, flat 3000 through door_price), crates in a
+  ±3-floor lazy window. Wipe = "THE CLIMB ENDS HERE"; summit extraction
+  @7500 = "YOU CONQUERED THE SPIRE". _tod_finale ↔ _tod_spire talk ONLY by
+  level notifies (tod_choice_begin/tod_ascend/tod_extract) — no import
+  either way, each no-ops without the other. Anchors ride GENERATED
+  `_tod_spire_data.gsc`. The lint carries spire-island proofs (own flood,
+  arena→summit, own detachment bucket). ⚠️ SHIPPED BOOT-VERIFIED BUT THE
+  POST-WIN LADDER HAS NO REAL RUN — tools/spire_wip/WIRING.md §10 is the
+  ladder, HARNESS.md the fast-path recipe.
+
 ## Conventions
 
 - Map name `zm_tower_of_doom`; script prefix **`tod`** (`_tod_*.gsc` modules,
@@ -284,6 +368,38 @@ re-learn lessons that map already paid for.
   rebuild to arm a test session; ship state `= false;`). NEVER add dev dvars or
   tell the user to set console dvars — same doctrine as the old map (its
   CLAUDE.md "Dev/test mode" section).
+
+## Match the effort to the question (user 2026-08-28)
+
+**"Why is it taking a whole research team to turn a machine model?"** — a fair
+callout, and the rule now: **DO NOT spin up a multi-agent workflow for a
+question with one small answer.** Rotating a model is one number. Four
+research agents plus verifiers to find "-90" is waste, and it delays the fix
+past the point the user could have just looked at it in game.
+
+The test before delegating: *how many distinct places must be read, and what
+does being wrong cost?*
+- **One number / one file / one obvious call site → just do it.** A wrong yaw
+  costs one 4-minute `-GscOnly`. That is cheaper than the research.
+- **Reversible + instantly visible in game → prefer shipping a guess** over
+  proving it on paper. The user testing IS the measurement, and they are
+  faster at it than any parser.
+- **Fan out only when the answer genuinely lives in many places at once** —
+  the map-wide trigger/UI-copy audit was the right call (5 systems x every
+  runtime state, 32 findings, one of them a live regression nobody would have
+  found by reading one file). Sweeps, audits, and "what did we miss" earn it.
+- Never let a running workflow become the reason a known-broken thing sits
+  unfixed. If the fix is obvious, ship it and let the research land later.
+
+TWO AXES, NOT ONE (both-sessions postmortem, same night). Scale the WORK to
+cost/reversibility — but never scale down the CHECKING of a factual claim.
+The same evening produced both failures: research prices paid for a one-number
+yaw (over-delegation), and a confident "there is no crown PaP" told to the
+user off a name-grep while the emission site sat open in the editor
+(under-checking). A wrong yaw reverts with one build; a wrong CLAIM
+propagates into what people believe and act on, and does not revert.
+**CHEAP TO CHANGE IS NOT THE SAME AS CHEAP TO BE WRONG ABOUT** — before
+asserting what the code does or contains, read the site that produces it.
 
 ## Build / run (same pipeline as the old map)
 
@@ -335,7 +451,15 @@ re-learn lessons that map already paid for.
   diff -rq zone_source <modtools>/usermaps/zm_tower_of_doom/zone_source
   ```
   (ignore the generated `all/`, `english/`, `loc/` output dirs). Empty = the
-  linker consumed exactly this source. **An mtime gate cannot answer this**:
+  linker consumed exactly this source. **Do NOT "improve" it by adding
+  map_source/** — after any `-GscOnly` the sync makes deployed .map == repo
+  .map while the `.ff`'s compiled BSP is a regen behind, so a map_source diff
+  passes exactly when it should fail (live 2026-08-28: a `-GscOnly` synced the
+  615-entity .map while the `.ff` geometry was still the 611-entity compile;
+  the spur risers were "deployed" and absent). scripts/ + zone_source/ is the
+  whole sanctioned check BECAUSE it has no such hole; geometry freshness is
+  proven by the FULL build's own regen-count print, nothing else.
+  **An mtime gate cannot answer this**:
   `build_map.ps1` SYNCS AT THE START, so a file edited mid-build is older than
   the `.ff` and newer than the sync — a peer edit 25 s before the `.ff` was
   written was not in it, and `find -newer` called the tree clean.

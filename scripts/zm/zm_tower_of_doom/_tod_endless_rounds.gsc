@@ -35,6 +35,8 @@
 #using scripts\zm\_zm;
 #using scripts\zm\_zm_audio;
 #using scripts\zm\zm_tower_of_doom\_tod_crown_data;   // beyond_gate (the sealed-road spawn filter)
+#using scripts\zm\zm_tower_of_doom\_tod_breather_data;   // v13.21 — lounge z-levels (the breather calm-down check)
+#using scripts\zm\zm_tower_of_doom\_tod_spire_data;   // v14 — in_spire (the endless-mode spawn filter; leaf module, no cycle)
 
 #insert scripts\shared\shared.gsh;
 
@@ -70,7 +72,18 @@ function init()
 	// would crash (it switches on level.players.size, which is 0 here).
 	level.tod_stock_spawn_delay_func = level.func_get_zombie_spawn_delay;
 	level.func_get_zombie_spawn_delay = &tod_spawn_delay;
-	level.zombie_vars[ "zombie_spawn_delay" ] = 1.3;   // stock solo round 1 = 2.0, at 0.65x (1.6/0.8x -> 1.3/0.65x, user 2026-08-22 "spawn more aggressively"; 1.0/0.5x was rejected as too hot 2026-08-20)
+	level.zombie_vars[ "zombie_spawn_delay" ] = 1.66;   // stock solo round 1 = 2.0, at 0.83x. PING-PONG LEDGER: 0.5x too hot (08-20) -> 0.8x "too slow" (08-22) -> 0.65x -> 0.75x (08-29 first tone-down) -> 0.83x (08-29 SECOND tone-down, Workshop difficulty comments — DELIBERATELY past the old 0.8 bound: that bound predates sprinters, scaled co-op elites and the faster speed curve, and live player feedback outranks it. New working band 0.65-0.90.)
+
+	// v13.24 (same order): TRASH ZOMBIE HP -10% AT EVERY ROUND. Scaling the
+	// stock start (150->135) and per-round increase (100->90) by 0.9 with the
+	// compounding multiplier untouched is EXACTLY -10% at every round number
+	// (pre-10 linear and post-10 exponential alike). Bosses keep their own
+	// curves (deliberate); sprinters read level.zombie_health x20 at
+	// conversion so they inherit the -10% automatically, as do all
+	// %-of-health effects. The vendored packs that read zombie_health_start
+	// (mechz, fury) use it as a RATIO base, which a uniform scale preserves.
+	level.zombie_vars[ "zombie_health_start" ]    = 135;
+	level.zombie_vars[ "zombie_health_increase" ] = 90;
 
 	// One-time pre-round-1 stall (stock waits 2s before the first spawn pass).
 	level.zombie_round_start_delay = 1;
@@ -81,6 +94,36 @@ function init()
 	// zm_giant.gsc:1014), so we are not patching the spawn path — just choosing
 	// from the candidate list stock already built.
 	level.zm_custom_spawn_location_selection = &finale_spawn_selection;
+}
+
+// v13.21 — TRUE while any player stands inside a breather lounge (the
+// "extra tone down in breather rooms"). The lounge footprint is one box in
+// the even/mirrored frame (all four breathers share it — deck + teleporter
+// spur, generous margins) at the four generated z-levels. Checked per
+// spawn-delay resolve, so a player stepping out re-arms full pace within one
+// spawn. Co-op note, deliberate: one resting player calms the whole spawn
+// clock — the alternative (per-zone rate) does not exist in stock's single
+// global delay, and a team regrouping at a lounge is exactly when the map
+// should breathe.
+function tod_player_in_breather()
+{
+	players = GetPlayers();
+	zs = tod_breather_data::breather_zs();
+	for ( i = 0; i < players.size; i++ )
+	{
+		p = players[ i ];
+		if ( !isdefined( p ) || !IsAlive( p ) )
+			continue;
+		o = p.origin;
+		if ( o[ 0 ] < -900 || o[ 0 ] > -200 || o[ 1 ] < -1550 || o[ 1 ] > -400 )
+			continue;
+		for ( j = 0; j < zs.size; j++ )
+		{
+			if ( o[ 2 ] >= zs[ j ] - 64 && o[ 2 ] <= zs[ j ] + 256 )
+				return true;
+		}
+	}
+	return false;
 }
 
 // -> the spawn location stock should use, from the candidates it offers.
@@ -117,6 +160,43 @@ function finale_spawn_selection( spots )
 		if ( inside.size > 0 )
 			spots = inside;
 	}
+	// THE LANE LOTTERY (v12.13, docs/41 §B1): risers inside a SEALED lane's
+	// band are dropped — the lane is walled off at its mouth, so anything
+	// rising there is the stranded-actor trap the gate filter above exists to
+	// prevent (path-connected via the merge, yes, but with no player ever
+	// inside). _tod_finale publishes the two rolled bands as WORLD-space AABB
+	// vector pairs; absent fields = no lottery = stock behaviour.
+	if ( isdefined( level.tod_lane_seal_mins ) && isdefined( level.tod_lane_seal_maxs ) )
+	{
+		open_spots = [];
+		for ( i = 0; i < spots.size; i++ )
+		{
+			sp = spots[ i ];
+			if ( !isdefined( sp ) || !isdefined( sp.origin ) )
+				continue;
+			sealed = false;
+			for ( b = 0; b < level.tod_lane_seal_mins.size; b++ )
+			{
+				mn = level.tod_lane_seal_mins[ b ];
+				mx = level.tod_lane_seal_maxs[ b ];
+				if ( sp.origin[ 0 ] >= mn[ 0 ] && sp.origin[ 0 ] <= mx[ 0 ]
+				  && sp.origin[ 1 ] >= mn[ 1 ] && sp.origin[ 1 ] <= mx[ 1 ]
+				  && sp.origin[ 2 ] > 18928 )
+				{
+					sealed = true;
+					break;
+				}
+			}
+			if ( sealed )
+				continue;
+			open_spots[ open_spots.size ] = sp;
+		}
+		// Same fail-safe shape as every filter in this function.
+		if ( open_spots.size > 0 )
+			spots = open_spots;
+	}
+	// (THE DEREZ TIDE's dead-road filter lived here for one day — removed
+	// 2026-08-27 with the tide itself; post-mortem in _tod_finale's beat table.)
 	// ONCE THE CROWN IS SEALED, only risers INSIDE the hall are eligible. The
 	// party is locked in a 1536-square room and the causeway behind them is
 	// pathing-severed by the shut door, so a zombie rising out there is the
@@ -140,6 +220,29 @@ function finale_spawn_selection( spots )
 		// silent.
 		if ( hall.size > 0 )
 			spots = hall;
+	}
+	// v14 — THE ENDLESS SPIRE (docs/44): once ascended, only spire risers at
+	// or below the highest bought door are eligible. A riser above the door
+	// line is the stranded-actor trap the gate filter exists to prevent, one
+	// flight up: path-severed by the slab, holding a slot forever. The z gate
+	// (level.tod_spire_door_max_z) is maintained by _tod_spire's door manager.
+	if ( IS_TRUE( level.tod_spire_active ) )
+	{
+		up = [];
+		for ( i = 0; i < spots.size; i++ )
+		{
+			sp = spots[ i ];
+			if ( !isdefined( sp ) || !isdefined( sp.origin ) )
+				continue;
+			if ( !( tod_spire_data::in_spire( sp.origin ) ) )
+				continue;
+			if ( isdefined( level.tod_spire_door_max_z ) && sp.origin[ 2 ] > level.tod_spire_door_max_z )
+				continue;
+			up[ up.size ] = sp;
+		}
+		// Same fail-safe shape as every filter in this function.
+		if ( up.size > 0 )
+			spots = up;
 	}
 
 	if ( !IS_TRUE( level.tod_finale_aggro ) || spots.size == 1 )
@@ -247,15 +350,37 @@ function finale_spawn_selection( spots )
 // twist stays, the trickle just breathes more).
 function tod_spawn_delay( n_round )
 {
-	// v9.9 (user 2026-08-22: "zombies need to spawn more aggressively — they
-	// take too long entering the map"). 0.8x/0.3 -> 0.65x/0.2. NOTE the
-	// history so this does not ping-pong: 0.5x/0.15 was tried and REJECTED as
-	// "too aggressive" (2026-08-20); this is a measured step between the two,
-	// not a swing back to the rejected value.
+	// v14 — THE ENDLESS SPIRE (docs/44): the spire runs hot (user: "aggression
+	// picks up ... rounds will fly by but zombies just keep coming non stop and
+	// quickly"). 0.18 = sustained finale pressure — keep in lockstep with
+	// _tod_spire.gsc's TOD_SPIRE_SPAWN_FLOOR, which ALSO writes it straight
+	// into zombie_vars at ascension (this resolver is only consulted per
+	// round, live-test lesson 2026-08-29 — a mid-round change lands late).
+	// Deliberately ABOVE the base curve's tone-downs below: the base game got
+	// gentler for the Workshop audience BECAUSE the spire is the hard mode.
+	// (THE CHOICE no longer starves spawning here: a 999 return marinated in
+	// zombie_vars and deadlocked the spire's first round — the choice rides
+	// stock's world_is_paused flag now, _tod_finale::choice_phase.)
+	if ( IS_TRUE( level.tod_spire_active ) )
+		return 0.18;
+
+	// v13.24 (user 2026-08-29, SECOND tone-down, driven by Workshop
+	// difficulty comments: "another 10% less aggressive" + "breather zone
+	// gets an extra 5%"): 0.75x/0.23 -> 0.83x/0.25, breather x1.13 -> x1.19
+	// (lounges now run at ~0.99x ≈ STOCK pace — a true rest). FULL PING-PONG
+	// LEDGER: 0.5x/0.15 too hot (08-20), 0.8x/0.3 "too slow" (08-22),
+	// 0.65x/0.2 middle, 0.75x/0.23 first tone-down (08-29). 0.83 sits PAST
+	// the old 0.8 bound DELIBERATELY — that bound predates sprinters, scaled
+	// co-op elites and the round-18 speed ramp, and live player feedback
+	// outranks a stale measurement. New working band 0.65-0.90. Player-count
+	// scaling rides the STOCK resolver underneath, so these percentages hold
+	// at every lobby size.
 	d = [[ level.tod_stock_spawn_delay_func ]]( n_round );
-	d = d * 0.65;
-	if ( d < 0.2 )
-		d = 0.2;
+	d = d * 0.83;
+	if ( d < 0.25 )
+		d = 0.25;
+	if ( tod_player_in_breather() )
+		d = d * 1.19;
 
 	// THE LAST MILE (v10): during the finale run the trickle goes to its floor —
 	// "max aggressivness on spawns" (user 2026-08-23). This is a RATE change
@@ -263,8 +388,20 @@ function tod_spawn_delay( n_round )
 	// effect is that the 24 slots refill the instant one empties, not that
 	// there are more of them. See _tod_bosses::finale_pressure_loop for why
 	// raising the cap itself is the one thing this feature must not do.
-	if ( IS_TRUE( level.tod_finale_aggro ) && d > TOD_FINALE_SPAWN_DELAY )
-		d = TOD_FINALE_SPAWN_DELAY;
+	//
+	// v12.13 (docs/41 §A2): the floor is PHASED — _tod_finale publishes
+	// tod_finale_spawn_floor as the song builds (0.4 quiet overture -> 0.2 ->
+	// 0.1 from the sustained section on), so the run ESCALATES with the score
+	// instead of starting at 11. When the field is not published (any build
+	// where the finale module did not set it) this is byte-for-byte the old
+	// flat TOD_FINALE_SPAWN_DELAY behaviour.
+	if ( IS_TRUE( level.tod_finale_aggro ) )
+	{
+		f = TOD_FINALE_SPAWN_DELAY;
+		if ( isdefined( level.tod_finale_spawn_floor ) )
+			f = level.tod_finale_spawn_floor;
+		d = f;
+	}
 	return d;
 }
 
