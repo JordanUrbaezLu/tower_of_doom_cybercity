@@ -72,7 +72,8 @@ if ($dirty.Count -gt 0 -or "$ahead" -ne '0') {
     if ($DryRun -or $AllowUnpushed) { Warn $msg } else { Die $msg }
 }
 
-if (-not $DryRun) { New-Item -ItemType Directory -Force -Path $Dest | Out-Null }
+# (only when missing: PS 5.1 New-Item throws "not of a legal form" on a share root such as \\host\share)
+if (-not $DryRun -and -not (Test-Path -LiteralPath $Dest)) { New-Item -ItemType Directory -Force -Path $Dest | Out-Null }
 $LogDir = PJ $Dest 'logs'
 if (-not $DryRun) { New-Item -ItemType Directory -Force -Path $LogDir | Out-Null }
 $RoboLog = PJ $LogDir 'robocopy.log'
