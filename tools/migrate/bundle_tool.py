@@ -303,9 +303,19 @@ def overlay_export(a):
     return 0
 
 
+def load_stock(tools, arg):
+    """This machine's stock file list, or None (then a 'modified' stock file is always replaced)."""
+    try:
+        return stock_files(find_stock_manifest(tools, arg))[1]
+    except (SystemExit, OSError, ValueError) as e:
+        print('  (no Steam stock manifest here: %s - modified stock files are always replaced)' % e)
+        return None
+
+
 def overlay_import(a):
     tools = find_tools(a.tools)
     man = json.load(open(os.path.join(a.src, 'overlay_manifest.json'), encoding='utf-8'))
+    stock = load_stock(tools, a.stock_manifest)
     files = man['files']
     present = copied = 0
     bad, missing, newer = [], [], []
@@ -320,10 +330,20 @@ def overlay_import(a):
                 pr.step(r['size'])
                 continue
             if st.st_mtime > r['mtime'] + 2 and not a.force:
-                # changed on this machine after the export (a build, a sync): never roll it back
-                newer.append(r['p'])
-                pr.step(r['size'])
-                continue
+                if st.st_size == r['size'] and sha1_file(dst) == r['sha1']:
+                    present += 1                    # same bytes, only the date differs
+                    pr.step(r['size'])
+                    continue
+                # Steam stamps a fresh install with the INSTALL time, so an untouched stock file
+                # always looks newer than the bundle's modified copy (the 30 modified stock files:
+                # libtiff64r.dll, converter_gdt_dirs_0.txt, archetypes.gdt ...). Only a file that
+                # is NOT byte-for-byte stock was really changed here - and only that is kept.
+                s = stock.get(r['p'].lower()) if stock is not None else None
+                still_stock = s is not None and st.st_size == s[0] and sha1_file(dst) == s[1].hex()
+                if not still_stock and not (stock is None and r['kind'] == 'modified'):
+                    newer.append(r['p'])            # changed on this machine (a build, a sync, an edit)
+                    pr.step(r['size'])
+                    continue
         if not os.path.isfile(lp(src)):
             missing.append(r['p'])
         elif copy_hash(src, dst, r['mtime'], expect=r['sha1']) != r['sha1']:
@@ -354,6 +374,7 @@ def overlay_verify(a):
     own = 'usermaps/%s/' % MAP
     files = [r for r in man['files'] if not r['p'].lower().startswith(own) or
              r['p'].lower().startswith(own + 'zone/workshop')]
+    stock = load_stock(tools, a.stock_manifest)
     probs = collections.defaultdict(list)
     changed = []
     pr = Progress(len(files), sum(r['size'] for r in files), 'verify')
@@ -364,10 +385,15 @@ def overlay_verify(a):
             probs['missing'].append(r['p'])
             continue
         st = os.stat(lp(dst))
-        differs = st.st_size != r['size'] or (not a.quick and sha1_file(dst) != r['sha1'])
+        # a 'modified' stock file is always hashed, even with --quick: the stock copy can share its size
+        full = not a.quick or r['kind'] == 'modified'
+        differs = st.st_size != r['size'] or (full and sha1_file(dst) != r['sha1'])
         if not differs:
             continue
-        if st.st_mtime > r['mtime'] + 2:
+        s = stock.get(r['p'].lower()) if stock is not None else None
+        if s is not None and st.st_size == s[0] and sha1_file(dst) == s[1].hex():
+            probs['still_stock'].append(r['p'])  # the import never replaced the fresh Steam copy
+        elif st.st_mtime > r['mtime'] + 2:
             changed.append(r['p'])          # edited / rebuilt here after the import: fine
         else:
             probs['size' if st.st_size != r['size'] else 'sha1'].append(r['p'])
@@ -378,8 +404,9 @@ def overlay_verify(a):
         print('OVERLAY VERIFY OK: %d files present%s in %s%s'
               % (len(files), '' if a.quick else ' and sha1-identical', tools, note))
         return 0
+    label = {'missing': 'missing', 'still_stock': 'still the STOCK Steam copy (the modified version was never applied)'}
     for k, v in probs.items():
-        print('OVERLAY VERIFY FAIL: %d %s' % (len(v), 'missing' if k == 'missing' else 'differ from the bundle (' + k + ')'))
+        print('OVERLAY VERIFY FAIL: %d %s' % (len(v), label.get(k, 'differ from the bundle (' + k + ')')))
         for p in v[:15]:
             print('   ', p)
     if note:
@@ -503,9 +530,11 @@ def main():
     i.add_argument('--src', required=True)
     i.add_argument('--tools')
     i.add_argument('--force', action='store_true', help='also replace files that are newer on this machine')
+    i.add_argument('--stock-manifest', help="this machine's Steam depot manifest (auto-found)")
     v = sub.add_parser('overlay-verify')
     v.add_argument('--manifest', required=True)
     v.add_argument('--tools')
+    v.add_argument('--stock-manifest', help="this machine's Steam depot manifest (auto-found)")
     v.add_argument('--quick', action='store_true', help='sizes only, no sha1')
     c = sub.add_parser('copylist')
     c.add_argument('--src', required=True)

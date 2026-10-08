@@ -52,6 +52,11 @@ USB cable between the two laptops showed up as nothing on this side — no drive
   first draft and 2 build-breaking gaps (line endings; the `TA_*` environment). All fixed; the copy
   logic is tested end-to-end (exclusions, >260-char paths, Unicode names, resume, junctions not
   followed, full-hash verify, a corrupted bundle file refused, a newer local file never rolled back).
+  The new laptop's Claude then caught one more (2026-10-08): Steam stamps a fresh install with the
+  INSTALL time, so the 30 untouched stock files looked newer than the bundle's modified copies and
+  the "never roll back newer work" rule kept the stock ones. Now a newer local file is kept only if it
+  is NOT byte-for-byte stock (hashed against the depot manifest), and verify FAILs on a stock copy left
+  where a modified one belongs (tested with a real stock file).
 
 ## A. Old laptop (this one)
 
