@@ -1,8 +1,12 @@
-# Line-ending policy: LF in the repo, LF on checkout, machine-independent.
-# Same policy as abandoned_cyber_city_zombies (proven there 2026-06):
-# Radiant/GSC/linker all accept LF; Radiant re-saves CRLF on Windows and a
-# commit normalizes back, so the repo never churns line endings.
-* text=auto eol=lf
+# Line-ending policy (2026-10-08, docs/174): STORE EVERY FILE BYTE-FOR-BYTE, no conversion.
+# Was `* text=auto eol=lf` (map 1's policy: normalize to LF so Radiant's CRLF re-saves never
+# churn). It broke fresh clones: ~389 working files are CRLF on disk (written by Windows tools)
+# and many build gates pin sha256s / string-compare those exact bytes - gen_tod_amp63.js
+# --check (every build, even -GscOnly), the staff, roster, altar, inducer, perk, Thunder Smash
+# and sign manifests, the size-pass state. A clone checked them out as LF and the FIRST gate
+# failed. `-text` also overrides Git for Windows' system core.autocrlf=true. Cost: a tool that
+# flips a file's line endings now shows as a whole-file change - commit it as written.
+* -text
 
 # Binaries - never touch.
 *.png binary

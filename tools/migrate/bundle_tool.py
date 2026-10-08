@@ -127,18 +127,34 @@ def sha1_file(path):
     return h.hexdigest()
 
 
-def classify(tools, stock, all_usermaps, log=print):
-    """Return [(rel, size, mtime, kind)] for every added/modified file the rules keep."""
+def is_link(p):
+    """Junction or symlink: never followed (os.walk follows junctions on Windows). Tower II's
+    usermaps/zm_tod2_cybercity is a junction into another tools copy - not part of this root."""
+    return os.path.islink(p) or (hasattr(os.path, 'isjunction') and os.path.isjunction(p))
+
+
+def classify(tools, stock, all_usermaps, hash_all=True, log=print):
+    """Return (sel, errors, links). sel = [(rel, size, mtime, kind)] for every added/modified
+    file the rules keep; errors = paths that could not be read (the export FAILS on any - a
+    silent skip is a missed file); links = junctions/symlinks met and deliberately not followed.
+    hash_all: sha1 every same-size stock file (the real export); False = only the ones whose
+    mtime is outside the install's busiest hours (dry runs - minutes faster, not exhaustive)."""
     t0 = time.time()
     root = lp(tools)
-    added, size_mod, same = [], [], []
-    for dp, dns, fns in os.walk(root):
+    added, size_mod, same, errors, links = [], [], [], [], []
+    onerr = lambda e: errors.append('%s: %s' % (e.filename, e.strerror))
+    for dp, dns, fns in os.walk(root, onerror=onerr):
         reldir = os.path.relpath(dp, root).replace(chr(92), '/')
         reldir = '' if reldir == '.' else reldir + '/'
         keep = []
         for d in dns:
-            if keep_dir((reldir + d + '/').lower(), all_usermaps):
-                keep.append(d)
+            rd = reldir + d + '/'
+            if not keep_dir(rd.lower(), all_usermaps):
+                continue
+            if is_link(os.path.join(dp, d)):
+                links.append(rd)
+                continue
+            keep.append(d)
         dns[:] = keep
         if not keep_dir(reldir.lower(), all_usermaps):
             continue
@@ -149,7 +165,8 @@ def classify(tools, stock, all_usermaps, log=print):
                 continue
             try:
                 st = os.stat(os.path.join(dp, fn))
-            except OSError:
+            except OSError as e:
+                errors.append('%s: %s' % (rel, e.strerror))
                 continue
             s = stock.get(low)
             if s is None:
@@ -158,20 +175,25 @@ def classify(tools, stock, all_usermaps, log=print):
                 size_mod.append((rel, st.st_size, st.st_mtime, 'modified'))
             else:
                 same.append((rel, st.st_size, st.st_mtime))
-    # A stock file overwritten with a same-size different file carries the overwriting copy's
-    # mtime, never the install's - so only files outside the install's dominant hours are hashed.
-    hour = lambda t: datetime.datetime.fromtimestamp(t).strftime('%Y-%m-%d %H')
-    hours = collections.Counter(hour(m) for _, _, m in same)
-    top = {h for h, _ in hours.most_common(3)}
+    if hash_all:
+        candidates = same
+    else:
+        hour = lambda t: datetime.datetime.fromtimestamp(t).strftime('%Y-%m-%d %H')
+        top = {h for h, _ in collections.Counter(hour(m) for _, _, m in same).most_common(3)}
+        candidates = [r for r in same if hour(r[2]) not in top]
     same_mod = []
-    for rel, size, mt in same:
-        if hour(mt) in top:
-            continue
-        if sha1_file(os.path.join(tools, rel)) != stock[rel.lower()][1].hex():
-            same_mod.append((rel, size, mt, 'modified'))
-    log('scanned %s in %.0fs: %d added, %d modified (+%d same-size), %d stock files untouched'
-        % (tools, time.time() - t0, len(added), len(size_mod), len(same_mod), len(same) - len(same_mod)))
-    return sorted(added + size_mod + same_mod)
+    for rel, size, mt in candidates:
+        try:
+            if sha1_file(os.path.join(tools, rel)) != stock[rel.lower()][1].hex():
+                same_mod.append((rel, size, mt, 'modified'))
+        except OSError as e:
+            errors.append('%s: %s' % (rel, e.strerror))
+    log('scanned %s in %.0fs: %d added, %d modified (+%d same-size), %d stock files byte-identical%s'
+        % (tools, time.time() - t0, len(added), len(size_mod), len(same_mod), len(same) - len(same_mod),
+           '' if hash_all else ' (dry run: only date-suspect stock files hashed)'))
+    for l in links:
+        log('  not followed (junction/symlink): %s' % l)
+    return sorted(added + size_mod + same_mod), errors, links
 
 
 def summary(sel, depth=2, limit=40):
@@ -231,11 +253,16 @@ def overlay_export(a):
     man_path = find_stock_manifest(tools, a.stock_manifest)
     meta, stock = stock_files(man_path)
     print('stock manifest %s: %d files' % (os.path.basename(man_path), len(stock)))
-    sel = classify(tools, stock, a.all_usermaps)
+    sel, errors, links = classify(tools, stock, a.all_usermaps, hash_all=not a.dry_run)
     total = sum(r[1] for r in sel)
     print('overlay: %d files, %s' % (len(sel), gb(total)))
     summary(sel)
     print('BYTES=%d FILES=%d' % (total, len(sel)))
+    if errors:
+        print('OVERLAY EXPORT FAIL: %d path(s) could not be read - fix access (close the mod tools / BO3) and re-run:' % len(errors))
+        for e in errors[:25]:
+            print('   ', e)
+        return 1
     if a.dry_run:
         return 0
     os.makedirs(lp(a.dest), exist_ok=True)
@@ -268,6 +295,7 @@ def overlay_export(a):
            'source_tools_root': tools, 'stock_manifest': os.path.basename(man_path),
            'stock_depot_manifest_id': str(meta.get(2)), 'map': MAP, 'all_usermaps': a.all_usermaps,
            'excluded_dirs': list(EXCLUDE_DIRS) + ['**/_xpak_prev/', 'usermaps/<other maps>/ (zone/workshop* kept)'],
+           'links_not_followed': links,
            'file_count': len(records), 'total_bytes': sum(r['size'] for r in records), 'files': records}
     with open(os.path.join(a.dest, 'overlay_manifest.json'), 'w', encoding='utf-8') as f:
         json.dump(out, f)
@@ -280,7 +308,7 @@ def overlay_import(a):
     man = json.load(open(os.path.join(a.src, 'overlay_manifest.json'), encoding='utf-8'))
     files = man['files']
     present = copied = 0
-    bad, missing = [], []
+    bad, missing, newer = [], [], []
     pr = Progress(len(files), man['total_bytes'], 'import')
     for r in files:
         src = os.path.join(a.src, 'files', r['p'])
@@ -291,6 +319,11 @@ def overlay_import(a):
                 present += 1
                 pr.step(r['size'])
                 continue
+            if st.st_mtime > r['mtime'] + 2 and not a.force:
+                # changed on this machine after the export (a build, a sync): never roll it back
+                newer.append(r['p'])
+                pr.step(r['size'])
+                continue
         if not os.path.isfile(lp(src)):
             missing.append(r['p'])
         elif copy_hash(src, dst, r['mtime'], expect=r['sha1']) != r['sha1']:
@@ -298,8 +331,12 @@ def overlay_import(a):
         else:
             copied += 1
         pr.step(r['size'])
-    print('overlay import: %d copied, %d already present, %d missing from bundle, %d failed sha1'
-          % (copied, present, len(missing), len(bad)))
+    print('overlay import: %d copied, %d already present, %d kept (newer on this machine), %d missing from bundle, %d failed sha1'
+          % (copied, present, len(newer), len(missing), len(bad)))
+    if newer:
+        print('   kept because the local copy is newer than the bundle (use --force to take the bundle copy):')
+        for p in newer[:10]:
+            print('     ', p)
     for p in (missing + bad)[:25]:
         print('   PROBLEM:', p)
     if missing or bad:
@@ -312,25 +349,41 @@ def overlay_import(a):
 def overlay_verify(a):
     tools = find_tools(a.tools)
     man = json.load(open(a.manifest, encoding='utf-8'))
+    # this map's own usermaps tree is build output + synced copies: every build rewrites it, so only
+    # its Workshop publish files are checked (they are the link to the published item)
+    own = 'usermaps/%s/' % MAP
+    files = [r for r in man['files'] if not r['p'].lower().startswith(own) or
+             r['p'].lower().startswith(own + 'zone/workshop')]
     probs = collections.defaultdict(list)
-    pr = Progress(len(man['files']), man['total_bytes'], 'verify')
-    for r in man['files']:
+    changed = []
+    pr = Progress(len(files), sum(r['size'] for r in files), 'verify')
+    for r in files:
         dst = os.path.join(tools, r['p'])
+        pr.step(r['size'])
         if not os.path.isfile(lp(dst)):
             probs['missing'].append(r['p'])
-        elif os.path.getsize(lp(dst)) != r['size']:
-            probs['size'].append(r['p'])
-        elif not a.quick and sha1_file(dst) != r['sha1']:
-            probs['sha1'].append(r['p'])
-        pr.step(r['size'])
+            continue
+        st = os.stat(lp(dst))
+        differs = st.st_size != r['size'] or (not a.quick and sha1_file(dst) != r['sha1'])
+        if not differs:
+            continue
+        if st.st_mtime > r['mtime'] + 2:
+            changed.append(r['p'])          # edited / rebuilt here after the import: fine
+        else:
+            probs['size' if st.st_size != r['size'] else 'sha1'].append(r['p'])
+    note = ''
+    if changed:
+        note = ' (%d changed on this machine since the import - normal after builds or edits)' % len(changed)
     if not probs:
-        print('OVERLAY VERIFY OK: all %d files present%s in %s'
-              % (len(man['files']), '' if a.quick else ' with matching sha1', tools))
+        print('OVERLAY VERIFY OK: %d files present%s in %s%s'
+              % (len(files), '' if a.quick else ' and sha1-identical', tools, note))
         return 0
     for k, v in probs.items():
-        print('OVERLAY VERIFY FAIL: %d %s' % (len(v), k))
+        print('OVERLAY VERIFY FAIL: %d %s' % (len(v), 'missing' if k == 'missing' else 'differ from the bundle (' + k + ')'))
         for p in v[:15]:
             print('   ', p)
+    if note:
+        print('   ' + note.strip())
     return 1
 
 
@@ -347,38 +400,70 @@ def copylist(a):
     else:
         raw = open(a.list, 'rb').read().decode('utf-8')
     items = [x.rstrip('\r') for x in re.split('[\0\n]', raw) if x.strip()]
-    n = b = skipped = 0
+    n = b = skipped = kept = 0
+    errors, links, absent = [], [], []
+    onerr = lambda e: errors.append('%s: %s' % (e.filename, e.strerror))
     for rel in items:
         src = os.path.join(a.src, rel)
         srcs = []
         if os.path.isdir(lp(src)):
-            for dp, _, fns in os.walk(lp(src)):
+            for dp, dns, fns in os.walk(lp(src), onerror=onerr):
+                for d in list(dns):
+                    if is_link(os.path.join(dp, d)):
+                        links.append(os.path.relpath(os.path.join(dp, d), lp(a.src)))
+                        dns.remove(d)
                 for fn in fns:
                     full = os.path.join(dp, fn)
                     srcs.append(os.path.relpath(full, lp(a.src)))
         elif os.path.isfile(lp(src)):
             srcs.append(rel.rstrip('/'))
+        else:
+            absent.append(rel)
         for r in srcs:
             s, d = os.path.join(a.src, r), os.path.join(a.dest, r)
-            st = os.stat(lp(s))
+            try:
+                st = os.stat(lp(s))
+            except OSError as e:
+                errors.append('%s: %s' % (r, e.strerror))
+                continue
             if a.dry_run:
                 n += 1
                 b += st.st_size
                 continue
             if os.path.isfile(lp(d)):
+                if a.no_overwrite:
+                    kept += 1          # import: a file the clone (or the user) already has wins
+                    continue
                 dt = os.stat(lp(d))
                 if dt.st_size == st.st_size and abs(dt.st_mtime - st.st_mtime) < 2:
                     skipped += 1
                     continue
-            os.makedirs(lp(os.path.dirname(d)), exist_ok=True)
-            shutil.copy2(lp(s), lp(d))
+            try:
+                os.makedirs(lp(os.path.dirname(d)), exist_ok=True)
+                shutil.copy2(lp(s), lp(d))
+            except OSError as e:
+                errors.append('%s: %s' % (r, e.strerror))
+                continue
             n += 1
             b += st.st_size
+    for l in links:
+        print('  not followed (junction/symlink): %s' % l)
+    if absent:
+        print('  %d list entr%s no longer exist at the source (skipped): %s'
+              % (len(absent), 'y' if len(absent) == 1 else 'ies', ', '.join(absent[:5])))
     if a.dry_run:
         print('copylist (dry run): %d files, %s from %d list entries' % (n, gb(b), len(items)))
     else:
-        print('COPYLIST OK: %d copied (%s), %d already current, from %d list entries' % (n, gb(b), skipped, len(items)))
+        print('copylist: %d copied (%s), %d already current, %d kept (already at the destination), from %d list entries'
+              % (n, gb(b), skipped, kept, len(items)))
     print('BYTES=%d FILES=%d' % (b, n))
+    if errors:
+        print('COPYLIST FAIL: %d file(s) could not be read/written:' % len(errors))
+        for e in errors[:25]:
+            print('   ', e)
+        return 1
+    if not a.dry_run:
+        print('COPYLIST OK')
     return 0
 
 
@@ -417,6 +502,7 @@ def main():
     i = sub.add_parser('overlay-import')
     i.add_argument('--src', required=True)
     i.add_argument('--tools')
+    i.add_argument('--force', action='store_true', help='also replace files that are newer on this machine')
     v = sub.add_parser('overlay-verify')
     v.add_argument('--manifest', required=True)
     v.add_argument('--tools')
@@ -428,6 +514,7 @@ def main():
     g.add_argument('--list', help='NUL- or newline-separated relative paths')
     g.add_argument('--git-untracked', action='store_true', help='copy every path git does not track in --src')
     c.add_argument('--save-list', help='with --git-untracked: also write the list here')
+    c.add_argument('--no-overwrite', action='store_true', help='never replace a file already at the destination')
     c.add_argument('--dry-run', action='store_true')
     d = sub.add_parser('du')
     d.add_argument('paths', nargs='+')
