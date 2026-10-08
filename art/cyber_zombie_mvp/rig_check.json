@@ -1,0 +1,23 @@
+{
+  "kind": "Offline Blender evaluated-mesh check; not BO3 validation",
+  "packed_textures": 12,
+  "attachment_objects": 63,
+  "poses": [
+    {
+      "name": "rest",
+      "max_attachment_error_units": 1.1757686620653107e-05
+    },
+    {
+      "name": "head_turn",
+      "max_attachment_error_units": 1.5993604499100134e-05
+    },
+    {
+      "name": "arm_flex",
+      "max_attachment_error_units": 1.4153310851722555e-05
+    },
+    {
+      "name": "torso_leg",
+      "max_attachment_error_units": 1.5325697593677708e-05
+    }
+  ]
+}

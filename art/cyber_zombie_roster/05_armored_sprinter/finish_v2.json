@@ -1,0 +1,29 @@
+{
+  "id": "05_armored_sprinter",
+  "revision": 2,
+  "donor_geometry_weights_preserved": true,
+  "source_backup": "tmp\\cyber_finish_v1\\art\\cyber_zombie_roster\\05_armored_sprinter\\05_armored_sprinter.blend",
+  "previous_attachment_objects": 13,
+  "attachment_objects": 41,
+  "attachment_triangles": 4644,
+  "poses": [
+    {
+      "pose": "rest",
+      "max_attachment_error": 7.66655692616154e-06
+    },
+    {
+      "pose": "head_turn",
+      "max_attachment_error": 1.537938444411291e-05
+    },
+    {
+      "pose": "arm_flex",
+      "max_attachment_error": 7.66655692616154e-06
+    },
+    {
+      "pose": "torso_leg",
+      "max_attachment_error": 1.5451289888400697e-05
+    }
+  ],
+  "emission_scale": 6,
+  "notes": "Studio previews; native map appearance still requires user playtest."
+}

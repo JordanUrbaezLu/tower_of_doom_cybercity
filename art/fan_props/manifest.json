@@ -1,0 +1,861 @@
+{
+ "revision": "fan_props_4",
+ "source": "art/fan_props/source (Nikolai, Meshy AI, 2026-09-30 pack)",
+ "sharp_deg": 60.0,
+ "metal_diffuse_cut": 0.35,
+ "props": {
+  "sign": {
+   "model": "tod_cybercity_sign",
+   "material": "mtl_tod_cybercity_sign",
+   "front": "+X",
+   "pivot": "back",
+   "scale_from_meshy_m": 134.8787,
+   "tris": 11999,
+   "verts": 5670,
+   "bounds": [
+    [
+     0.0,
+     -128.0,
+     0.0
+    ],
+    [
+     24.49,
+     128.0,
+     118.98
+    ]
+   ],
+   "size": [
+    24.49,
+    256.0,
+    118.98
+   ],
+   "shader": "fullspec",
+   "scale_rgb": "6",
+   "glow": [
+    [
+     160,
+     172,
+     205,
+     222,
+     0.3,
+     0.55,
+     0.35,
+     0.7,
+     1.0
+    ],
+    [
+     255,
+     270,
+     335,
+     350,
+     0.3,
+     0.55,
+     0.3,
+     0.65,
+     1.0
+    ]
+   ],
+   "glow_fraction": 0.1668,
+   "metal_mean": 0.007,
+   "rough_mean": 0.452,
+   "files": {
+    "model_export/tod_fan_props/tod_cybercity_sign.xmodel_bin": "fcc650e9a3c8dc7248757b56338554aae9f73cabb9135c482312f4c4ddf0829b",
+    "model_export/tod_fan_props/_images/i_tod_csign_c.png": "7d9e466c9c46b30a8557aa47bfc5df1c327f5d42cd9dedfcd18f06ce5ccb686d",
+    "model_export/tod_fan_props/_images/i_tod_csign_n.png": "1dc745a95e0eb6244d85eca0004fb4ec0704a0f028a13486f226ceba356032b3",
+    "model_export/tod_fan_props/_images/i_tod_csign_s.png": "4a192a4fa107156ea6b3041cea2cfde237fa09bd1ed9a4ae4af0bb34f28815ce",
+    "model_export/tod_fan_props/_images/i_tod_csign_g.png": "00fa73c15d7c6b9b9ea8731fbed6dd865e02141705d8ec9bc71836b18b971cfb",
+    "model_export/tod_fan_props/_images/i_tod_csign_e.png": "5296d128a7a3295fd69b31d1cc7ff63a69c9a7b77680e351849c240bd2ed7a1a"
+   },
+   "previews": [
+    "art/fan_props/preview_sign_front.jpg",
+    "art/fan_props/preview_sign_three_quarter.jpg",
+    "art/fan_props/preview_sign_side.jpg",
+    "art/fan_props/preview_sign_above.jpg",
+    "art/fan_props/preview_sign_dark_glow.jpg"
+   ]
+  },
+  "terminal": {
+   "model": "tod_uplink_terminal",
+   "material": "mtl_tod_uplink_terminal",
+   "front": "+X",
+   "pivot": "floor",
+   "scale_from_meshy_m": 44.2173,
+   "tris": 14000,
+   "verts": 6970,
+   "bounds": [
+    [
+     -22.93,
+     -24.11,
+     0.0
+    ],
+    [
+     22.93,
+     24.11,
+     84.0
+    ]
+   ],
+   "size": [
+    45.86,
+    48.22,
+    84.0
+   ],
+   "shader": "plus",
+   "scale_rgb": "5",
+   "glow": [
+    [
+     165,
+     175,
+     200,
+     215,
+     0.4,
+     0.65,
+     0.35,
+     0.7,
+     1.0
+    ],
+    [
+     280,
+     292,
+     330,
+     342,
+     0.4,
+     0.65,
+     0.35,
+     0.7,
+     1.0
+    ]
+   ],
+   "glow_fraction": 0.0082,
+   "metal_mean": null,
+   "rough_mean": null,
+   "files": {
+    "model_export/tod_fan_props/tod_uplink_terminal.xmodel_bin": "f69b0523d28ad9d668be6b154ab7303741e8e48859a673b62ed387b13ca45842",
+    "model_export/tod_fan_props/_images/i_tod_uterm_c.png": "3df4246beb9182293c82d7a66df438fd5ef5b2b01ef8fcf9c72131d492f8bb10",
+    "model_export/tod_fan_props/_images/i_tod_uterm_n.png": "e044b459740b4b7da3e03cddfd6d8ce2dc883d97c8f565998673cbbda3944720",
+    "model_export/tod_fan_props/_images/i_tod_uterm_e.png": "b4bcc594e70eed0abef96e0534e9bc8130ace1915ff3d8a2751fb144dd6e6790"
+   },
+   "previews": [
+    "art/fan_props/preview_terminal_front.jpg",
+    "art/fan_props/preview_terminal_three_quarter.jpg",
+    "art/fan_props/preview_terminal_side.jpg",
+    "art/fan_props/preview_terminal_above.jpg",
+    "art/fan_props/preview_terminal_dark_glow.jpg"
+   ]
+  },
+  "chest": {
+   "model": "tod_ammo_chest",
+   "material": "mtl_tod_ammo_chest",
+   "front": "+Y",
+   "pivot": "crate",
+   "scale_from_meshy_m": 51.6565,
+   "tris": 45535,
+   "verts": 26534,
+   "bounds": [
+    [
+     -49.0,
+     -37.0,
+     0.0
+    ],
+    [
+     49.0,
+     32.19,
+     29.41
+    ]
+   ],
+   "size": [
+    98.0,
+    69.19,
+    29.41
+   ],
+   "shader": "fullspec",
+   "scale_rgb": "4",
+   "glow": [
+    [
+     184,
+     190,
+     205,
+     212,
+     0.55,
+     0.8,
+     0.55,
+     0.85,
+     1.0
+    ]
+   ],
+   "glow_fraction": 0.0316,
+   "metal_mean": 0.295,
+   "rough_mean": 0.256,
+   "files": {
+    "model_export/tod_fan_props/tod_ammo_chest.xmodel_bin": "5675a66586c79b18ba222d3b551a260b4d5619e87324594319d459b2904208af",
+    "model_export/tod_fan_props/_images/i_tod_achest_c.png": "5484843c79619581c364bcd3b329809169c4920f304e57b8c3f9a03fee5e2fd2",
+    "model_export/tod_fan_props/_images/i_tod_achest_n.png": "09c4b52efaea1a83d313a2f2813185448a4490539898bf91d4d06e5909532301",
+    "model_export/tod_fan_props/_images/i_tod_achest_s.png": "04045310251dd1e9fc6b784c8b3617b1bea1ce8b99d1ac791a7f60501a62cf13",
+    "model_export/tod_fan_props/_images/i_tod_achest_g.png": "65f1bb7ba900997fc6009e84957706a54eecee65ebd55ba742a02ce132f0643c",
+    "model_export/tod_fan_props/_images/i_tod_achest_e.png": "11157f2841ee7c4dd4bf757db349233480d8e53991819d594ecda08894dc24cb"
+   },
+   "previews": [
+    "art/fan_props/preview_chest_front.jpg",
+    "art/fan_props/preview_chest_three_quarter.jpg",
+    "art/fan_props/preview_chest_side.jpg",
+    "art/fan_props/preview_chest_above.jpg",
+    "art/fan_props/preview_chest_dark_glow.jpg"
+   ]
+  },
+  "rocket_spire": {
+   "model": "tod_rocket_spire",
+   "material": "mtl_tod_rocket_spire",
+   "front": "nose+X",
+   "pivot": "tail",
+   "scale_from_meshy_m": 231.098,
+   "tris": 32000,
+   "verts": 16002,
+   "bounds": [
+    [
+     0.0,
+     -110.43,
+     -110.42
+    ],
+    [
+     440.0,
+     110.43,
+     110.42
+    ]
+   ],
+   "size": [
+    440.0,
+    220.87,
+    220.83
+   ],
+   "shader": "fullspec",
+   "scale_rgb": "6",
+   "glow": [
+    [
+     165,
+     175,
+     352,
+     360,
+     0.28,
+     0.5,
+     0.4,
+     0.66,
+     1.0
+    ],
+    [
+     -1,
+     0,
+     38,
+     55,
+     0.35,
+     0.58,
+     0.48,
+     0.74,
+     0.95
+    ]
+   ],
+   "glow_fraction": 0.0671,
+   "metal_mean": 0.13,
+   "rough_mean": 0.204,
+   "files": {
+    "model_export/tod_fan_props/tod_rocket_spire.xmodel_bin": "8255b202617cc4a13daf3b0917d66d2d53f3769818624402691a6e4e5f1953bd",
+    "model_export/tod_fan_props/_images/i_tod_rkspire_c.png": "1ee65cfb841da5e6dfe963f5952e669390dd7e45d4019223829ae78d9fcc5ca7",
+    "model_export/tod_fan_props/_images/i_tod_rkspire_n.png": "2a26dcea12d0dd2995aef27392f5ed14356245e9aae3ff6bbed36a3919ccafa9",
+    "model_export/tod_fan_props/_images/i_tod_rkspire_s.png": "c420f1d4690105d2a8b7a33a87b5629e5371b031db5dba5571afad475273e0cc",
+    "model_export/tod_fan_props/_images/i_tod_rkspire_g.png": "69afa015907314154a8704100211429ed378f4373cf8743cbf3fbb01733365e8",
+    "model_export/tod_fan_props/_images/i_tod_rkspire_e.png": "5b8a056ad6c761921b35b95cf8aac3b58bc3ee279e5c1e7c4818a98a542e8d4b",
+    "model_export/tod_fan_props/_images/i_tod_rkwreck_c.png": "c5cda6be9bc81ff412b12b060604b5d96337bd395994e9486b9b8cf285642462",
+    "model_export/tod_fan_props/_images/i_tod_rkwreck_e.png": "7c4b6547bd12be64291c2c1bae6046ef65ae8c171278f2b8de801c2ccdadad46"
+   },
+   "rocket": {
+    "len": 440.0,
+    "profile": [
+     [
+      0.0,
+      104.27,
+      108.22
+     ],
+     [
+      11.0,
+      100.25,
+      108.5
+     ],
+     [
+      22.0,
+      45.53,
+      109.27
+     ],
+     [
+      33.0,
+      43.66,
+      109.54
+     ],
+     [
+      44.0,
+      48.91,
+      109.8
+     ],
+     [
+      55.0,
+      56.29,
+      110.44
+     ],
+     [
+      66.0,
+      57.82,
+      109.02
+     ],
+     [
+      77.0,
+      59.5,
+      91.19
+     ],
+     [
+      88.0,
+      59.5,
+      86.28
+     ],
+     [
+      99.0,
+      60.1,
+      75.96
+     ],
+     [
+      110.0,
+      60.97,
+      67.6
+     ],
+     [
+      121.0,
+      59.84,
+      62.17
+     ],
+     [
+      132.0,
+      58.9,
+      62.91
+     ],
+     [
+      143.0,
+      61.13,
+      64.03
+     ],
+     [
+      154.0,
+      61.33,
+      64.36
+     ],
+     [
+      165.0,
+      60.33,
+      64.9
+     ],
+     [
+      176.0,
+      61.91,
+      64.64
+     ],
+     [
+      187.0,
+      62.53,
+      65.39
+     ],
+     [
+      198.0,
+      62.81,
+      65.35
+     ],
+     [
+      209.0,
+      61.18,
+      63.84
+     ],
+     [
+      220.0,
+      62.67,
+      63.87
+     ],
+     [
+      231.0,
+      62.72,
+      65.15
+     ],
+     [
+      242.0,
+      64.1,
+      66.69
+     ],
+     [
+      253.0,
+      62.61,
+      66.76
+     ],
+     [
+      264.0,
+      62.6,
+      66.13
+     ],
+     [
+      275.0,
+      62.35,
+      65.53
+     ],
+     [
+      286.0,
+      61.95,
+      65.1
+     ],
+     [
+      297.0,
+      60.13,
+      61.73
+     ],
+     [
+      308.0,
+      58.7,
+      60.61
+     ],
+     [
+      319.0,
+      55.69,
+      59.59
+     ],
+     [
+      330.0,
+      55.22,
+      57.62
+     ],
+     [
+      341.0,
+      52.6,
+      55.66
+     ],
+     [
+      352.0,
+      50.3,
+      53.29
+     ],
+     [
+      363.0,
+      47.59,
+      50.52
+     ],
+     [
+      374.0,
+      43.71,
+      47.69
+     ],
+     [
+      385.0,
+      38.51,
+      39.24
+     ],
+     [
+      396.0,
+      34.21,
+      35.77
+     ],
+     [
+      407.0,
+      28.95,
+      31.79
+     ],
+     [
+      418.0,
+      22.29,
+      25.94
+     ],
+     [
+      429.0,
+      13.89,
+      18.42
+     ],
+     [
+      440.0,
+      6.06,
+      9.2
+     ]
+    ],
+    "bell": [
+     21.85,
+     39.45
+    ],
+    "feet_r": 106.6,
+    "max_r": 110.44
+   },
+   "previews": [
+    "art/fan_props/preview_rocket_spire_front.jpg",
+    "art/fan_props/preview_rocket_spire_three_quarter.jpg",
+    "art/fan_props/preview_rocket_spire_side.jpg",
+    "art/fan_props/preview_rocket_spire_above.jpg",
+    "art/fan_props/preview_rocket_spire_dark_glow.jpg"
+   ]
+  },
+  "rocket_extract": {
+   "model": "tod_rocket_extract",
+   "material": "mtl_tod_rocket_extract",
+   "front": "nose+X",
+   "pivot": "tail",
+   "scale_from_meshy_m": 231.1247,
+   "tris": 32000,
+   "verts": 16002,
+   "bounds": [
+    [
+     0.0,
+     -108.94,
+     -110.33
+    ],
+    [
+     440.0,
+     108.94,
+     110.33
+    ]
+   ],
+   "size": [
+    440.0,
+    217.89,
+    220.65
+   ],
+   "shader": "fullspec",
+   "scale_rgb": "6",
+   "glow": [
+    [
+     165,
+     175,
+     318,
+     334,
+     0.28,
+     0.5,
+     0.4,
+     0.66,
+     1.0
+    ]
+   ],
+   "glow_fraction": 0.0645,
+   "metal_mean": 0.243,
+   "rough_mean": 0.195,
+   "files": {
+    "model_export/tod_fan_props/tod_rocket_extract.xmodel_bin": "961818b6afb080994f292cb213c2a92e8550ac9b4b6de4fc9d8239ad70d9a51c",
+    "model_export/tod_fan_props/_images/i_tod_rkexit_c.png": "a6c354c880fbf71f017eeeadb908a6dcd25acee62f39732b46224706a13f0d32",
+    "model_export/tod_fan_props/_images/i_tod_rkexit_n.png": "46705ca8a3ef127dada495b9ff198c9ae7cb8abb9c4eecc33d29c30393503c31",
+    "model_export/tod_fan_props/_images/i_tod_rkexit_s.png": "114316ed9498d07bfe40fcef6ab436fb92f4f5728afc05010678981b42c61ca9",
+    "model_export/tod_fan_props/_images/i_tod_rkexit_g.png": "32acdc725c995981bfdad983ce3e00896bc4ba47ca9de7e843f9b1cda2a7382e",
+    "model_export/tod_fan_props/_images/i_tod_rkexit_e.png": "40956b58fa51ee654762b158de1f74e38260ce35da5362de030778b4bd157ff7"
+   },
+   "rocket": {
+    "len": 440.0,
+    "profile": [
+     [
+      0.0,
+      101.4,
+      106.5
+     ],
+     [
+      11.0,
+      98.9,
+      107.57
+     ],
+     [
+      22.0,
+      39.52,
+      108.2
+     ],
+     [
+      33.0,
+      40.91,
+      108.83
+     ],
+     [
+      44.0,
+      48.92,
+      110.32
+     ],
+     [
+      55.0,
+      55.51,
+      110.33
+     ],
+     [
+      66.0,
+      87.93,
+      105.2
+     ],
+     [
+      77.0,
+      54.13,
+      90.26
+     ],
+     [
+      88.0,
+      56.37,
+      80.84
+     ],
+     [
+      99.0,
+      57.7,
+      74.07
+     ],
+     [
+      110.0,
+      57.73,
+      64.74
+     ],
+     [
+      121.0,
+      57.38,
+      61.71
+     ],
+     [
+      132.0,
+      59.73,
+      62.94
+     ],
+     [
+      143.0,
+      59.66,
+      62.8
+     ],
+     [
+      154.0,
+      59.26,
+      63.76
+     ],
+     [
+      165.0,
+      60.16,
+      64.24
+     ],
+     [
+      176.0,
+      60.52,
+      64.61
+     ],
+     [
+      187.0,
+      61.17,
+      64.75
+     ],
+     [
+      198.0,
+      62.49,
+      65.27
+     ],
+     [
+      209.0,
+      61.49,
+      64.56
+     ],
+     [
+      220.0,
+      61.13,
+      63.47
+     ],
+     [
+      231.0,
+      63.06,
+      65.47
+     ],
+     [
+      242.0,
+      62.76,
+      65.55
+     ],
+     [
+      253.0,
+      61.5,
+      65.37
+     ],
+     [
+      264.0,
+      61.58,
+      64.67
+     ],
+     [
+      275.0,
+      61.53,
+      64.37
+     ],
+     [
+      286.0,
+      60.68,
+      64.2
+     ],
+     [
+      297.0,
+      58.42,
+      61.73
+     ],
+     [
+      308.0,
+      57.63,
+      60.92
+     ],
+     [
+      319.0,
+      55.4,
+      59.15
+     ],
+     [
+      330.0,
+      54.54,
+      58.58
+     ],
+     [
+      341.0,
+      52.13,
+      56.58
+     ],
+     [
+      352.0,
+      49.4,
+      54.28
+     ],
+     [
+      363.0,
+      46.79,
+      51.21
+     ],
+     [
+      374.0,
+      43.37,
+      48.6
+     ],
+     [
+      385.0,
+      37.77,
+      40.04
+     ],
+     [
+      396.0,
+      33.96,
+      36.69
+     ],
+     [
+      407.0,
+      28.56,
+      31.39
+     ],
+     [
+      418.0,
+      22.28,
+      25.86
+     ],
+     [
+      429.0,
+      14.02,
+      19.09
+     ],
+     [
+      440.0,
+      5.65,
+      9.71
+     ]
+    ],
+    "bell": [
+     20.04,
+     39.6
+    ],
+    "feet_r": 105.32,
+    "max_r": 110.33
+   },
+   "previews": [
+    "art/fan_props/preview_rocket_extract_front.jpg",
+    "art/fan_props/preview_rocket_extract_three_quarter.jpg",
+    "art/fan_props/preview_rocket_extract_side.jpg",
+    "art/fan_props/preview_rocket_extract_above.jpg",
+    "art/fan_props/preview_rocket_extract_dark_glow.jpg"
+   ]
+  },
+  "power": {
+   "model": "tod_power_terminal",
+   "material": "mtl_tod_power_terminal",
+   "front": "+X",
+   "pivot": "back",
+   "scale_from_meshy_m": 46.2924,
+   "tris": 24136,
+   "verts": 12992,
+   "bounds": [
+    [
+     0.0,
+     -30.12,
+     0.0
+    ],
+    [
+     10.86,
+     30.12,
+     88.0
+    ]
+   ],
+   "size": [
+    10.86,
+    60.24,
+    88.0
+   ],
+   "shader": "plus",
+   "scale_rgb": "5",
+   "glow": [
+    [
+     165,
+     175,
+     200,
+     215,
+     0.4,
+     0.65,
+     0.35,
+     0.7,
+     1.0
+    ],
+    [
+     275,
+     288,
+     330,
+     342,
+     0.4,
+     0.65,
+     0.35,
+     0.7,
+     1.0
+    ],
+    [
+     165,
+     175,
+     205,
+     220,
+     0.2,
+     0.32,
+     0.62,
+     0.8,
+     1.0
+    ],
+    [
+     205,
+     215,
+     275,
+     290,
+     0.55,
+     0.7,
+     0.45,
+     0.6,
+     0.9
+    ]
+   ],
+   "glow_fraction": 0.0942,
+   "metal_mean": null,
+   "rough_mean": null,
+   "files": {
+    "model_export/tod_fan_props/tod_power_terminal.xmodel_bin": "899032550fe62b324c74626afdf11b1ff3c8a6d21af9e6bc83e2df56b1e84409",
+    "model_export/tod_fan_props/_images/i_tod_pterm_c.png": "f5e9271189e4ae24aa3446b04618605de6e83ebfa0de8e195a63ef223b9509a4",
+    "model_export/tod_fan_props/_images/i_tod_pterm_n.png": "02861121048057441be72f53ac83e19a5a7416b4724cb7d9dd24ee473d54bc8f",
+    "model_export/tod_fan_props/_images/i_tod_pterm_e.png": "3dac7a4637de28a2612c1223a3c276a9b405bd3d7199631f8e29ed6a99fec3cb"
+   },
+   "previews": [
+    "art/fan_props/preview_power_front.jpg",
+    "art/fan_props/preview_power_three_quarter.jpg",
+    "art/fan_props/preview_power_side.jpg",
+    "art/fan_props/preview_power_above.jpg",
+    "art/fan_props/preview_power_dark_glow.jpg"
+   ]
+  }
+ },
+ "gdt": {
+  "source_data/tod_fan_props.gdt": "b264bba3208a377d048a930b4120775962895ab83e49991d05751d3b0d7b56c1"
+ }
+}

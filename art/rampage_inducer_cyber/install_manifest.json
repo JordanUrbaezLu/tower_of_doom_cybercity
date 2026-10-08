@@ -1,0 +1,177 @@
+{
+  "revision": "cyber_core_1",
+  "xmodel": "tod_inducer_cyber",
+  "xmodel_on": "tod_inducer_cyber_on",
+  "materials": [
+    "mtl_tod_icyber",
+    "mtl_tod_icyber_plasma"
+  ],
+  "master_sha256": "910dc9b73cefce80caaa479ceb3341d7f34266eb1ddf6751e27ef7dc5527f45e",
+  "gdt_sha256": "93ebb11dd0c641566d57189fc822c10a0e92a42e32dddd335b46781765c2e5e5",
+  "atr_sha256": "f976012678a36a9083c5162bda5fa62a82ffe2b58a267381c32cb6b9b0499211",
+  "xmodel_bin_sha256": "293ba87cc2abc3054dad737e9523de12ec9993982333a9c8720de51d44d15cef",
+  "faces": {
+    "solid": 52770,
+    "plasma": 1600
+  },
+  "bone_vertices": {
+    "tag_origin": 25596,
+    "j_crystal": 175,
+    "j_shards": 75,
+    "j_halo_lo": 696,
+    "j_halo_hi": 928,
+    "j_beacon": 460
+  },
+  "bounds": {
+    "x": [
+      -23.10431480407715,
+      22.0
+    ],
+    "y": [
+      -22.0,
+      22.0
+    ],
+    "z": [
+      0.0,
+      67.1500015258789
+    ]
+  },
+  "bones": [
+    "tag_origin",
+    "j_crystal",
+    "j_shards",
+    "j_halo_lo",
+    "j_halo_hi",
+    "j_beacon"
+  ],
+  "anim": {
+    "idle": {
+      "frames": 360,
+      "seconds": 12.0,
+      "xanim": "tod_inducer_cyber_loop_idle",
+      "bones": {
+        "j_crystal": {
+          "yaw": 1,
+          "spin": 0,
+          "bob": 0.55,
+          "bob_cycles": 2,
+          "shiver": 0.0,
+          "shiver_cycles": 0
+        },
+        "j_shards": {
+          "yaw": -2,
+          "spin": 0,
+          "bob": 0.35,
+          "bob_cycles": 3,
+          "shiver": 0.0,
+          "shiver_cycles": 0
+        },
+        "j_halo_lo": {
+          "yaw": 1,
+          "spin": 2,
+          "bob": 0.0,
+          "bob_cycles": 0,
+          "shiver": 0.0,
+          "shiver_cycles": 0
+        },
+        "j_halo_hi": {
+          "yaw": -1,
+          "spin": -3,
+          "bob": 0.0,
+          "bob_cycles": 0,
+          "shiver": 0.0,
+          "shiver_cycles": 0
+        },
+        "j_beacon": {
+          "yaw": 2,
+          "spin": 0,
+          "bob": 0.0,
+          "bob_cycles": 0,
+          "shiver": 0.0,
+          "shiver_cycles": 0
+        }
+      }
+    },
+    "on": {
+      "frames": 90,
+      "seconds": 3.0,
+      "xanim": "tod_inducer_cyber_loop_on",
+      "bones": {
+        "j_crystal": {
+          "yaw": 1,
+          "spin": 0,
+          "bob": 1.05,
+          "bob_cycles": 2,
+          "shiver": 1.6,
+          "shiver_cycles": 9
+        },
+        "j_shards": {
+          "yaw": -2,
+          "spin": 0,
+          "bob": 0.6,
+          "bob_cycles": 3,
+          "shiver": 0.0,
+          "shiver_cycles": 0
+        },
+        "j_halo_lo": {
+          "yaw": 1,
+          "spin": 2,
+          "bob": 0.0,
+          "bob_cycles": 0,
+          "shiver": 0.0,
+          "shiver_cycles": 0
+        },
+        "j_halo_hi": {
+          "yaw": -1,
+          "spin": -3,
+          "bob": 0.0,
+          "bob_cycles": 0,
+          "shiver": 0.0,
+          "shiver_cycles": 0
+        },
+        "j_beacon": {
+          "yaw": 4,
+          "spin": 0,
+          "bob": 0.0,
+          "bob_cycles": 0,
+          "shiver": 0.0,
+          "shiver_cycles": 0
+        }
+      }
+    }
+  },
+  "xanims": {
+    "idle": {
+      "name": "tod_inducer_cyber_loop_idle",
+      "frames": 361,
+      "sha256": "076951a70ec859754331c23c3cd1a00158e9c3de40dc951fef0fa151fe70f127"
+    },
+    "on": {
+      "name": "tod_inducer_cyber_loop_on",
+      "frames": 91,
+      "sha256": "ab66a5a16e2905588ef20081bfb5f35460d4908fb125bc78e34ee46a328c4eba"
+    }
+  },
+  "scale_rgb": {
+    "solid": {
+      "idle": 4,
+      "on": 12
+    },
+    "plasma": {
+      "idle": 1.4,
+      "on": 5
+    }
+  },
+  "images": {
+    "i_tod_icyber_c.png": "23dc2df14ea9e0fffe46feea3b3c1977584ae6cde6b5565a928c0678be3c7b94",
+    "i_tod_icyber_e.png": "4cfa49418e33fbb440bffa4393f93b78e819820675c63ef7967dc9905fe61fe7",
+    "i_tod_icyber_eon.png": "6f213c296af1b9920f6cf97dce3eb7e2d8012560d0a625dc0ddf67da70a82a14",
+    "i_tod_icyber_g.png": "f20d29488a001372fdd81f24986a6f68cb9d776e4cad9f4995d7903cfa8d78cc",
+    "i_tod_icyber_n.png": "93d658ce7e3ee6792ad8c29649af61fa76d61474fb388472ee54b86ce68b7b43",
+    "i_tod_icyber_plasma_c.png": "941e4c0fad0621d39c89bc76bbfcc6206c2c4d84be32902b2ac6405272df902b",
+    "i_tod_icyber_plasma_e.png": "a3d04afecbe0639f1b9b518b10c70edb37a6e2692eef53b8ed3943e0a69bae09",
+    "i_tod_icyber_plasma_n.png": "05ab8f18a74566086ff67380d6284bcda971a9a6d5c4529270673d84b999c0bf",
+    "i_tod_icyber_s.png": "5fdbc4076209428ea6c109ec2de1879d71c05ed2678eb47edd0b5b33c1170b03"
+  },
+  "native_playtested": false
+}

@@ -1,0 +1,41 @@
+{
+  "master": "art\\cyber_reference_one_mcp\\reference_one.blend",
+  "master_sha256": "447177e28549772eeb678d6be66ef33943aabd829f3d5662870f9eef1534d07b",
+  "revision": 5,
+  "fit_pass": 2,
+  "authoring_stage": "10_reference_refinement",
+  "textures": {
+    "i_tod_cyber_kit_c.png": "c8d9c53741b12d44cd3a64add34295e0843ee469d36a82f1383eebbe832befc9",
+    "i_tod_cyber_kit_e.png": "e21ea88f0debe560eee4d0e5b5e4eded269c1ad3f12a515eb30df8baf81639d0",
+    "i_tod_cyber_kit_g.png": "40a09bff5a3f36157f119510e83834beae2397d18140834890134f0aac36e047",
+    "i_tod_cyber_kit_n.png": "08951f263ef76e2ca94245b8f4e85fb1fb04cedaf40602784d84c44439381d49",
+    "i_tod_cyber_kit_s.png": "2acdd1de127f85464d02037b8c22446ca441d0fbbf96006f0a4299d1b5809c78"
+  },
+  "groups": [
+    "arm",
+    "chest",
+    "finger_index_le",
+    "finger_index_le_2",
+    "finger_index_le_3",
+    "finger_mid_le",
+    "finger_mid_le_2",
+    "finger_mid_le_3",
+    "finger_pinky_le",
+    "finger_pinky_le_2",
+    "finger_pinky_le_3",
+    "finger_ring_le",
+    "finger_ring_le_2",
+    "finger_ring_le_3",
+    "finger_thumb_le",
+    "finger_thumb_le_2",
+    "finger_thumb_le_3",
+    "hand_le",
+    "head",
+    "hip_le",
+    "shin_le",
+    "shoulder_le",
+    "shoulder_ri"
+  ],
+  "atlas_size": 4096,
+  "lod_method": "component_floor_v1"
+}

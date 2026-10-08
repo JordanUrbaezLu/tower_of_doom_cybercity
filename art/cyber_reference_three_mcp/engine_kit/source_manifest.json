@@ -1,0 +1,110 @@
+{
+  "master": "art\\cyber_reference_three_mcp\\reference_three.blend",
+  "master_sha256": "12214ca651157f5bb57e2f2ec992cc91f3424f5735951f6f992ddb7195dec874",
+  "revision": 6,
+  "fit_pass": 3,
+  "authoring_stage": "03_completed_reference_three_armored_only",
+  "emission_scale": 16.0,
+  "armored_helmet": {
+    "policy": "executioner_enclosed_v1",
+    "closed_crown": true,
+    "full_skull_shell": true,
+    "separate_forehead_shield": false,
+    "eye_aperture_height": 0.38,
+    "eye_core_height": 0.11,
+    "eye_emission_strength": 14.0,
+    "eye_core_emission_strength": 16.0,
+    "previous_eye_emission_strength": 3.5,
+    "emission_bake_range": 16.0,
+    "dim_body_lamps_preserve_radiance": true,
+    "head_bone": "j_head"
+  },
+  "backpack_removal": {
+    "policy": "no_pressure_pack_v1",
+    "removed_objects": 489,
+    "tank_frame_plumbing_and_standoffs_removed": true,
+    "dorsal_armor_spikes_retained": true
+  },
+  "armor_finish": {
+    "policy": "shared_worn_gunmetal_v1",
+    "material_bone_usage": {
+      "R1 | armored shared worn gunmetal": [
+        "j_elbow_le",
+        "j_elbow_ri",
+        "j_head",
+        "j_knee_le",
+        "j_spine4"
+      ],
+      "R1 | armored shared abraded steel edges": [
+        "j_elbow_le",
+        "j_elbow_ri",
+        "j_head",
+        "j_hip_ri",
+        "j_knee_le",
+        "j_shoulder_le",
+        "j_spine4"
+      ],
+      "R1 | armored shared blackened fittings": [
+        "j_elbow_le",
+        "j_elbow_ri",
+        "j_hip_ri",
+        "j_knee_le",
+        "j_shoulder_le",
+        "j_spine4"
+      ],
+      "R1 | armored shared aged black hoses": [
+        "j_shoulder_le"
+      ]
+    },
+    "shared_surface_details": [
+      "oily staining",
+      "brown oxidation",
+      "forging relief",
+      "directional abrasion"
+    ],
+    "stock_donor_materials_unchanged": true,
+    "primary_accent": "continuous red optic",
+    "secondary_accents": "existing small cyan/amber status lamps and faded hazard paint"
+  },
+  "lod_preserve_largest": [
+    "head"
+  ],
+  "lod_method": "component_floor_v1",
+  "lod_area_floors": {
+    "chest": [
+      0,
+      0.025,
+      0.18,
+      0.6,
+      1.5,
+      3.5,
+      12.0
+    ],
+    "head": [
+      0,
+      0.01,
+      0.06,
+      0.12,
+      0.25,
+      0.5,
+      0.8
+    ]
+  },
+  "textures": {
+    "i_tod_roster_sprinter_c.png": "94b11129e3cbf551d516175d26a97aab5733db040ae0e3fee3a63d6038637515",
+    "i_tod_roster_sprinter_e.png": "ac798f03407d61b29895d088424b23034a621704106405cd8913cbe81bca6f21",
+    "i_tod_roster_sprinter_g.png": "7af4eeb6def1c8a44a38997747879710e68849e6cb07850b4d8253f87653121c",
+    "i_tod_roster_sprinter_n.png": "90048267c403c11b2acce924fbb66de0caa0aeb923ee5695df79e98a2f119132",
+    "i_tod_roster_sprinter_s.png": "b55aa9bbaf4e03f2eee349e0ddae23abb3808bc39fd6e860f8796156e98943fd"
+  },
+  "groups": [
+    "arm",
+    "chest",
+    "head",
+    "hip_ri",
+    "rightarm",
+    "shin_le",
+    "shoulder_le"
+  ],
+  "atlas_size": 4096
+}

@@ -1,0 +1,29 @@
+{
+  "id": "01_line_trooper",
+  "revision": 2,
+  "donor_geometry_weights_preserved": true,
+  "source_backup": "tmp\\cyber_finish_v1\\art\\cyber_zombie_roster\\01_line_trooper\\01_line_trooper.blend",
+  "previous_attachment_objects": 32,
+  "attachment_objects": 60,
+  "attachment_triangles": 9248,
+  "poses": [
+    {
+      "pose": "rest",
+      "max_attachment_error": 1.164107858250971e-05
+    },
+    {
+      "pose": "head_turn",
+      "max_attachment_error": 1.561971531316326e-05
+    },
+    {
+      "pose": "arm_flex",
+      "max_attachment_error": 1.239776611328125e-05
+    },
+    {
+      "pose": "torso_leg",
+      "max_attachment_error": 2.2913005403011252e-05
+    }
+  ],
+  "emission_scale": 6,
+  "notes": "Studio previews; native map appearance still requires user playtest."
+}

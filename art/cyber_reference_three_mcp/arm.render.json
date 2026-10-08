@@ -1,0 +1,6 @@
+{
+  "view": "arm",
+  "master_sha256": "12214ca651157f5bb57e2f2ec992cc91f3424f5735951f6f992ddb7195dec874",
+  "stage": "03_completed_reference_three_armored_only",
+  "image_sha256": "4f209386fbb49a8edcc4fc84e871e99956b7aae44892e103453534e1ecb41e72"
+}

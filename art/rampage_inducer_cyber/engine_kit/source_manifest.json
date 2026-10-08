@@ -1,0 +1,132 @@
+{
+  "master": "art\\rampage_inducer_cyber\\rampage_inducer_cyber.blend",
+  "master_sha256": "910dc9b73cefce80caaa479ceb3341d7f34266eb1ddf6751e27ef7dc5527f45e",
+  "atlas": 2048,
+  "emission_scale": {
+    "e": 4.0,
+    "eon": 12.0
+  },
+  "normal_convention": "DirectX -Y",
+  "bones": [
+    "tag_origin",
+    "j_crystal",
+    "j_shards",
+    "j_halo_lo",
+    "j_halo_hi",
+    "j_beacon"
+  ],
+  "anim": {
+    "idle": {
+      "frames": 360,
+      "seconds": 12.0,
+      "xanim": "tod_inducer_cyber_idle",
+      "bones": {
+        "j_crystal": {
+          "yaw": 1,
+          "spin": 0,
+          "bob": 0.55,
+          "bob_cycles": 2,
+          "shiver": 0.0,
+          "shiver_cycles": 0
+        },
+        "j_shards": {
+          "yaw": -2,
+          "spin": 0,
+          "bob": 0.35,
+          "bob_cycles": 3,
+          "shiver": 0.0,
+          "shiver_cycles": 0
+        },
+        "j_halo_lo": {
+          "yaw": 1,
+          "spin": 2,
+          "bob": 0.0,
+          "bob_cycles": 0,
+          "shiver": 0.0,
+          "shiver_cycles": 0
+        },
+        "j_halo_hi": {
+          "yaw": -1,
+          "spin": -3,
+          "bob": 0.0,
+          "bob_cycles": 0,
+          "shiver": 0.0,
+          "shiver_cycles": 0
+        },
+        "j_beacon": {
+          "yaw": 2,
+          "spin": 0,
+          "bob": 0.0,
+          "bob_cycles": 0,
+          "shiver": 0.0,
+          "shiver_cycles": 0
+        }
+      }
+    },
+    "on": {
+      "frames": 90,
+      "seconds": 3.0,
+      "xanim": "tod_inducer_cyber_on",
+      "bones": {
+        "j_crystal": {
+          "yaw": 1,
+          "spin": 0,
+          "bob": 1.05,
+          "bob_cycles": 2,
+          "shiver": 1.6,
+          "shiver_cycles": 9
+        },
+        "j_shards": {
+          "yaw": -2,
+          "spin": 0,
+          "bob": 0.6,
+          "bob_cycles": 3,
+          "shiver": 0.0,
+          "shiver_cycles": 0
+        },
+        "j_halo_lo": {
+          "yaw": 1,
+          "spin": 2,
+          "bob": 0.0,
+          "bob_cycles": 0,
+          "shiver": 0.0,
+          "shiver_cycles": 0
+        },
+        "j_halo_hi": {
+          "yaw": -1,
+          "spin": -3,
+          "bob": 0.0,
+          "bob_cycles": 0,
+          "shiver": 0.0,
+          "shiver_cycles": 0
+        },
+        "j_beacon": {
+          "yaw": 4,
+          "spin": 0,
+          "bob": 0.0,
+          "bob_cycles": 0,
+          "shiver": 0.0,
+          "shiver_cycles": 0
+        }
+      }
+    }
+  },
+  "counts": {
+    "solid": [
+      52770,
+      8
+    ],
+    "plasma": [
+      800,
+      0
+    ]
+  },
+  "textures": {
+    "i_tod_icyber_c.png": "23dc2df14ea9e0fffe46feea3b3c1977584ae6cde6b5565a928c0678be3c7b94",
+    "i_tod_icyber_e.png": "4cfa49418e33fbb440bffa4393f93b78e819820675c63ef7967dc9905fe61fe7",
+    "i_tod_icyber_eon.png": "6f213c296af1b9920f6cf97dce3eb7e2d8012560d0a625dc0ddf67da70a82a14",
+    "i_tod_icyber_g.png": "f20d29488a001372fdd81f24986a6f68cb9d776e4cad9f4995d7903cfa8d78cc",
+    "i_tod_icyber_n.png": "93d658ce7e3ee6792ad8c29649af61fa76d61474fb388472ee54b86ce68b7b43",
+    "i_tod_icyber_s.png": "5fdbc4076209428ea6c109ec2de1879d71c05ed2678eb47edd0b5b33c1170b03"
+  }
+}

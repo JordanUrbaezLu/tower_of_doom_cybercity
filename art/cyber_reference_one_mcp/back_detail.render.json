@@ -1,0 +1,7 @@
+{
+  "view": "back_detail",
+  "master_sha256": "447177e28549772eeb678d6be66ef33943aabd829f3d5662870f9eef1534d07b",
+  "stage": "10_reference_refinement",
+  "equipment_objects": 1640,
+  "image_sha256": "9cb1feb5407fa17816746d376b7009f89263e316a5cff6a08587f6561a5093b1"
+}

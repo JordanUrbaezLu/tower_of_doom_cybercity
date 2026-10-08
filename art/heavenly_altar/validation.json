@@ -1,0 +1,143 @@
+{
+  "authoring": "Live Blender MCP localhost:9878",
+  "stage": "07 full-depth armor after three-quarter review",
+  "visible_mesh_objects": 1954,
+  "evaluated_triangles": 367530,
+  "bounds": [
+    [
+      -51.0,
+      -27.850000381469727,
+      0.0
+    ],
+    [
+      51.0,
+      19.0,
+      131.0
+    ]
+  ],
+  "original_source_sha256": "c738e6cb1ce082f4b9a7d64a50af9f2519522650ce1da2e7646434e12ed22c8f",
+  "original_source_unchanged": true,
+  "original_mesh_preserved": true,
+  "missing_textures": [],
+  "live_preview": "Rendered Eevee with scene lights, materials, ray-traced reflections, shadows and compositor bloom",
+  "reference_image": "design_reference.png",
+  "game_assets_changed": true,
+  "native_exported": true,
+  "native_playtested": false,
+  "limitations": [
+    "Single-image design reconstruction, not an exact image-to-mesh recovery.",
+    "Heavenly figures and stairs use a recessed reference-art surface; exterior equipment and effect ribbons are modeled geometry.",
+    "Rear and hidden surfaces extrapolate the supplied front view.",
+    "Native baked materials and all seven LODs are built and verified; game appearance, glow and transparency still await the user playtest."
+  ],
+  "master_sha256": "a9883c5d26038cfbdee82a0fed2b7deed6db58988ffb6b84f598a677aee4155e",
+  "native_build_verified": true,
+  "replaced_placements": 6,
+  "deployment": {
+    "ff_bytes": 146515200,
+    "ff_local_time": "2026-09-16T22:04:01.116327",
+    "snapshot_inputs": 165,
+    "differences": [],
+    "deployed_inputs_newer_than_ff": [],
+    "missing_assets": [],
+    "shared_portal_complete_definitions_match": true,
+    "replaced_placements": 6,
+    "game_launched": false,
+    "native_visual_verified": false
+  },
+  "build_provenance": "../../tmp/heavenly_altar_integration/build_provenance.json",
+  "portal_material_correction": {
+    "user_report": "Gray front picture; see-through back",
+    "fix": "Artwork bound to both base-color and emission slots",
+    "deployment": {
+      "ff_bytes": 146512640,
+      "ff_local_time": "2026-09-16T19:24:56.223788",
+      "snapshot_inputs": 164,
+      "differences": [],
+      "deployed_inputs_newer_than_ff": [],
+      "missing_assets": [],
+      "replaced_placements": 6,
+      "game_launched": false,
+      "native_visual_verified": false
+    },
+    "in_game_confirmed": false,
+    "user_retest_result": "Failed: screenshot at 19:37 still shows gray interior. Superseded by original inset restoration."
+  },
+  "original_inset_restoration": {
+    "donor_geometry_exact": true,
+    "donor_triangles_per_lod": 32,
+    "material": "chaos_pap_background",
+    "images": [
+      "i_chaos_pap_background_c",
+      "i_chaos_pap_background_2_c",
+      "i_chaos_pap_background_3_c"
+    ],
+    "deployment": {
+      "ff_bytes": 146544640,
+      "ff_local_time": "2026-09-16T19:54:01.729869",
+      "snapshot_inputs": 165,
+      "differences": [],
+      "deployed_inputs_newer_than_ff": [],
+      "missing_assets": [],
+      "shared_portal_complete_definitions_match": true,
+      "replaced_placements": 6,
+      "game_launched": false,
+      "native_visual_verified": false
+    },
+    "in_game_confirmed": true
+  },
+  "matte_frame": {
+    "deployment": {
+      "ff_bytes": 146514176,
+      "ff_local_time": "2026-09-16T21:15:16.689114",
+      "snapshot_inputs": 165,
+      "differences": [],
+      "deployed_inputs_newer_than_ff": [],
+      "missing_assets": [],
+      "shared_portal_complete_definitions_match": true,
+      "replaced_placements": 6,
+      "game_launched": false,
+      "native_visual_verified": false
+    },
+    "converted_settings": {
+      "specColorMap": "$black_specular",
+      "specMapEnable": 0,
+      "specAmount": 0.0,
+      "specColorTint": "0 0 0 1",
+      "glossRangeMin": 0.0,
+      "glossRangeMax": 0.0,
+      "reflectionProbeAmount": 0.0,
+      "colorMap00": "i_tod_altar_e",
+      "scaleRGB": 8.0
+    },
+    "in_game_confirmed": false,
+    "user_retest_result": "Rejected: flattened exterior in 21:54 screenshot; superseded by restoring pre-matte material."
+  },
+  "satin_restoration": {
+    "change_scope": {
+      "pre_matte_asset_setup_restored_except_one_field": true,
+      "only_adjustment_from_pre_matte": {
+        "glossRangeMax": {
+          "before": 8,
+          "after": 6
+        }
+      },
+      "pre_matte_gdt_sha256": "13b613abf2786e6b9960991c501cd93ab473e45afe283448297392374db8ab90",
+      "geometry_and_texture_files_unchanged": true,
+      "native_visual_confirmation": "Pending user retest"
+    },
+    "deployment": {
+      "ff_bytes": 146515200,
+      "ff_local_time": "2026-09-16T22:04:01.116327",
+      "snapshot_inputs": 165,
+      "differences": [],
+      "deployed_inputs_newer_than_ff": [],
+      "missing_assets": [],
+      "shared_portal_complete_definitions_match": true,
+      "replaced_placements": 6,
+      "game_launched": false,
+      "native_visual_verified": false
+    },
+    "in_game_confirmed": false
+  }
+}

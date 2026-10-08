@@ -1,0 +1,29 @@
+{
+  "id": "mvp",
+  "revision": 2,
+  "donor_geometry_weights_preserved": true,
+  "source_backup": "tmp\\cyber_finish_v1\\art\\cyber_zombie_mvp\\cyber_zombie_mvp.blend",
+  "previous_attachment_objects": 35,
+  "attachment_objects": 63,
+  "attachment_triangles": 10156,
+  "poses": [
+    {
+      "pose": "rest",
+      "max_attachment_error": 1.1757686620653107e-05
+    },
+    {
+      "pose": "head_turn",
+      "max_attachment_error": 1.5625173174107518e-05
+    },
+    {
+      "pose": "arm_flex",
+      "max_attachment_error": 1.2543627202955156e-05
+    },
+    {
+      "pose": "torso_leg",
+      "max_attachment_error": 2.288942532349966e-05
+    }
+  ],
+  "emission_scale": 6,
+  "notes": "Studio previews; native map appearance still requires user playtest."
+}

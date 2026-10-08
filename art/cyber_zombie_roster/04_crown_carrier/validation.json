@@ -1,0 +1,107 @@
+{
+  "id": "04_crown_carrier",
+  "title": "Crown Carrier",
+  "status": "Revision 4 reference reconstruction; studio pose checks passed; native visual testing remains with user",
+  "source_meshes": [
+    {
+      "asset": "c_zom_der_zombie_body2",
+      "object": "zombie2_upperbody_LOD0Shape1",
+      "vertices": 5402,
+      "triangles": 10403,
+      "position_error": 0.0,
+      "weights_preserved": true
+    },
+    {
+      "asset": "c_zom_der_zombie_body2",
+      "object": "gear_LOD0Shape1",
+      "vertices": 1767,
+      "triangles": 3242,
+      "position_error": 0.0,
+      "weights_preserved": true
+    },
+    {
+      "asset": "c_zom_der_zombie_body2",
+      "object": "gearstrap_LOD0Shape1",
+      "vertices": 112,
+      "triangles": 224,
+      "position_error": 0.0,
+      "weights_preserved": true
+    },
+    {
+      "asset": "c_zom_der_zombie_body2",
+      "object": "zombie2_lowerbody_LOD0Shape1",
+      "vertices": 3309,
+      "triangles": 6520,
+      "position_error": 0.0,
+      "weights_preserved": true
+    },
+    {
+      "asset": "c_zom_der_zombie_head1",
+      "object": "zombie_head_1_LOD0Shape1",
+      "vertices": 3312,
+      "triangles": 6518,
+      "position_error": 0.0,
+      "weights_preserved": true
+    }
+  ],
+  "base_triangles": 26907,
+  "attachment_triangles": 35012,
+  "attachment_objects": 426,
+  "bones": 118,
+  "poses": [
+    {
+      "pose": "rest",
+      "max_attachment_error": 1.2480022743513489e-05
+    },
+    {
+      "pose": "head_turn",
+      "max_attachment_error": 1.5443930378629347e-05
+    },
+    {
+      "pose": "arm_flex",
+      "max_attachment_error": 1.7110167094095735e-05
+    },
+    {
+      "pose": "leg_flex",
+      "max_attachment_error": 1.2480022743513489e-05
+    }
+  ],
+  "preview_source_rotation_degrees": 0,
+  "packed_textures": 12,
+  "revision": 4,
+  "donor_geometry_weights_preserved": true,
+  "source_backup": "tmp\\cyber_finish_v3\\art\\cyber_zombie_roster\\04_crown_carrier\\04_crown_carrier.blend",
+  "emission_scale": 6,
+  "notes": "Equipment reconstruction adapted to original donor body; not an exact 3D recovery from reference images.",
+  "fit_pass": 3,
+  "authoring_sha256": "28d6040edabb878174701bdfd6d28320c902d4ab4ffde5c5264d7cdd8820f643",
+  "reference": "CyberZombie1.png",
+  "limb_fits": [
+    {
+      "bone": "j_elbow_le",
+      "surface_samples": 495,
+      "radius_min": 1.668864905834198,
+      "radius_max": 2.701755487767514,
+      "joint_end_fraction": 0.78
+    },
+    {
+      "bone": "j_knee_le",
+      "surface_samples": 496,
+      "radius_min": 0.9806280061602592,
+      "radius_max": 4.396788120269775,
+      "joint_end_fraction": 0.83
+    }
+  ],
+  "attachment_bones": [
+    "j_elbow_le",
+    "j_head",
+    "j_hip_le",
+    "j_index_le_1",
+    "j_knee_le",
+    "j_mid_le_1",
+    "j_ring_le_1",
+    "j_shoulder_le",
+    "j_spine4",
+    "j_wrist_le"
+  ]
+}

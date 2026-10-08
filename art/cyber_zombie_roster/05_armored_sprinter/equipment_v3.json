@@ -1,0 +1,28 @@
+{
+  "id": "05_armored_sprinter",
+  "revision": 3,
+  "source_backup": "tmp\\cyber_finish_v2\\art\\cyber_zombie_roster\\05_armored_sprinter\\05_armored_sprinter.blend",
+  "donor_geometry_weights_preserved": true,
+  "forearm_fit": {},
+  "poses": [
+    {
+      "pose": "rest",
+      "max_attachment_error": 1.1449678368746367e-05
+    },
+    {
+      "pose": "head_turn",
+      "max_attachment_error": 1.537938444411291e-05
+    },
+    {
+      "pose": "arm_flex",
+      "max_attachment_error": 1.1449678368746367e-05
+    },
+    {
+      "pose": "torso_leg",
+      "max_attachment_error": 1.5451289888400697e-05
+    }
+  ],
+  "attachment_objects": 73,
+  "attachment_triangles": 5212,
+  "notes": "Actual donor-surface measurements; studio previews. Native animation/lighting remains user tested."
+}

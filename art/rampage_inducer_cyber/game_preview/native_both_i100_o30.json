@@ -1,0 +1,18 @@
+{
+  "type": "Blender render of the shipped xmodel_bin posed by the shipped XANIM_BINs (CPU skinning) with the shipped maps; back faces transparent. Not an in-game screenshot.",
+  "idle_frame": 100,
+  "on_frame": 30,
+  "hashes": {
+    "tod_inducer_cyber.xmodel_bin": "293ba87cc2abc3054dad737e9523de12ec9993982333a9c8720de51d44d15cef",
+    "tod_inducer_cyber_idle.XANIM_BIN": "712e9b832c2ffa87496c541fe35a5568e9b38d43e3d2866dd8061175a402ccf3",
+    "i_tod_icyber_c.png": "23dc2df14ea9e0fffe46feea3b3c1977584ae6cde6b5565a928c0678be3c7b94",
+    "i_tod_icyber_e.png": "4cfa49418e33fbb440bffa4393f93b78e819820675c63ef7967dc9905fe61fe7",
+    "i_tod_icyber_g.png": "f20d29488a001372fdd81f24986a6f68cb9d776e4cad9f4995d7903cfa8d78cc",
+    "i_tod_icyber_s.png": "5fdbc4076209428ea6c109ec2de1879d71c05ed2678eb47edd0b5b33c1170b03",
+    "i_tod_icyber_n.png": "93d658ce7e3ee6792ad8c29649af61fa76d61474fb388472ee54b86ce68b7b43",
+    "i_tod_icyber_plasma_c.png": "941e4c0fad0621d39c89bc76bbfcc6206c2c4d84be32902b2ac6405272df902b",
+    "i_tod_icyber_plasma_e.png": "a3d04afecbe0639f1b9b518b10c70edb37a6e2692eef53b8ed3943e0a69bae09",
+    "tod_inducer_cyber_on.XANIM_BIN": "f5e8244b52d8310e1af9c9e1127116045eb8b99e051657879de55090b36d0eaf",
+    "i_tod_icyber_eon.png": "6f213c296af1b9920f6cf97dce3eb7e2d8012560d0a625dc0ddf67da70a82a14"
+  }
+}

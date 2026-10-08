@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Heavenly Altar — reference and Blender model</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0b0d15;color:#ececf8;font:15px system-ui,sans-serif}header{padding:25px 32px;border-bottom:1px solid #333146}h1{font-size:25px;margin:0 0 8px}p{color:#b5b7ca;line-height:1.6;margin:6px 0}.bar{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}button,a{color:#e7ddff}button{background:#1f2034;border:1px solid #50446b;border-radius:7px;padding:10px 17px;cursor:pointer}button[aria-pressed=true]{background:#53397b}main{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:22px 32px}figure{margin:0;min-width:0;background:#151620;border:1px solid #303044;border-radius:10px;overflow:hidden}figcaption{padding:12px 16px;color:#c4bbdc}img{display:block;width:100%;height:76vh;object-fit:contain;background:#0c0e14;cursor:zoom-in}footer{padding:0 32px 30px;color:#aaa8ba;font-size:13px}dialog{border:1px solid #665382;background:#0b0d15;padding:0;max-width:95vw;max-height:95vh}dialog::backdrop{background:#000d}dialog img{width:auto;max-width:94vw;height:auto;max-height:94vh;cursor:zoom-out}@media(max-width:700px){main{grid-template-columns:1fr;padding:15px}img{height:auto}header{padding:20px}}
+</style>
+<header><h1>Heavenly Gift Altar</h1><p>Supplied design beside the editable Blender model. Click an image to inspect it.</p>
+<div class="bar"><button aria-pressed="true" data-view="front">Full model</button><button aria-pressed="false" data-view="detail">Crest close-up</button><button aria-pressed="false" data-view="side">Three-quarter view</button><a href="heavenly_altar_cyber.blend">Blender master</a></div></header>
+<main><figure><figcaption>Your reference</figcaption><img src="design_reference.png" alt="Supplied cyber altar design"></figure><figure><figcaption id="caption">Blender render — full model</figcaption><img id="model" src="cyber_front.png" alt="Actual Blender render of the cyber altar"></figure></main>
+<footer>The exterior structure, crest, crystals and wings are modeled geometry. Figures and stairs use recessed reference artwork. These are Blender art-master previews. The native game version now reuses the original altar interior and uses the restored textured finish with a smaller gloss adjustment. See game_preview/native_front.png for the exported model preview; in-game appearance awaits your playtest.</footer>
+<dialog id="zoom"><img alt="Enlarged comparison image"></dialog>
+<script>
+const model=document.querySelector('#model'),caption=document.querySelector('#caption'),zoom=document.querySelector('#zoom');
+document.querySelectorAll('button[data-view]').forEach(b=>b.onclick=()=>{document.querySelectorAll('button[data-view]').forEach(x=>x.setAttribute('aria-pressed',x===b));model.src='cyber_'+b.dataset.view+'.png';caption.textContent='Blender render — '+b.textContent.toLowerCase()});
+document.querySelectorAll('main img').forEach(im=>im.onclick=()=>{zoom.querySelector('img').src=im.src;zoom.showModal()});zoom.onclick=()=>zoom.close();
+</script></html>

@@ -1,0 +1,7 @@
+{
+  "view": "chest",
+  "master_sha256": "447177e28549772eeb678d6be66ef33943aabd829f3d5662870f9eef1534d07b",
+  "stage": "10_reference_refinement",
+  "equipment_objects": 1640,
+  "image_sha256": "3e2a8b0192334e480f472f029881618327d94b1087ac91b2a9ccb5d58a34f8da"
+}

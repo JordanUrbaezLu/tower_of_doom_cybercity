@@ -1,0 +1,7 @@
+{
+  "view": "leg",
+  "master_sha256": "447177e28549772eeb678d6be66ef33943aabd829f3d5662870f9eef1534d07b",
+  "stage": "10_reference_refinement",
+  "equipment_objects": 1640,
+  "image_sha256": "c7a3febde5db67b01f2e96a66893ccd6b967009f595753ebd8992f8f59a7b687"
+}

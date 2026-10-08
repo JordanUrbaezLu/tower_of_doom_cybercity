@@ -1,0 +1,80 @@
+{
+  "rev": "unique_3",
+  "target_lufs": -13.0,
+  "target_tp": -1.0,
+  "spec": {
+    "on": {
+      "semis": 3.0,
+      "ring_hz": 90.0,
+      "comb_hz": 164.81,
+      "sweep": [
+        82.41,
+        329.63
+      ],
+      "cutoff": [
+        300,
+        5200
+      ],
+      "body_end": 1.95,
+      "boot": 0.8,
+      "sub": true,
+      "stutters": [
+        0.45,
+        1.0,
+        1.5
+      ]
+    },
+    "off": {
+      "semis": -2.0,
+      "ring_hz": 70.0,
+      "comb_hz": 110.0,
+      "sweep": [
+        329.63,
+        55.0
+      ],
+      "cutoff": [
+        4200,
+        200
+      ],
+      "body_end": 2.95,
+      "decay_bits": 5,
+      "tape_from": 1.0,
+      "tape_secs": 2.0,
+      "tape_curve": 1.3,
+      "tape_end": 0.15
+    }
+  },
+  "levels_db": {
+    "metal": -9.0,
+    "hum": -12.0,
+    "sweep": -8.0,
+    "sub": -7.0,
+    "glitch": -8.0,
+    "blips": -10.0,
+    "grit": -14.0
+  },
+  "outputs": {
+    "on": {
+      "source": "art\\rampage_sfx\\source\\rampage_on_src.wav",
+      "source_sha256": "7fd351ae04f3b27ff0b510913e9f6b7d661eac936b4791b0889fc45e86cd6216",
+      "wav": "sound_assets\\tod\\sfx\\tod_rampage_on.wav",
+      "sha256": "a77ba0e83c293b3b2fe707fc50259d44b68e69edf8c45561784452c363d64573",
+      "seconds": 3.315,
+      "lead_trimmed_s": 0.151,
+      "lufs": -12.8,
+      "peak_dbfs": -0.9,
+      "recording_min_share_pct": 51.7
+    },
+    "off": {
+      "source": "art\\rampage_sfx\\source\\rampage_off_src.wav",
+      "source_sha256": "d09cc1fc18069eeb71eac706bf3df8f7283ae976ad8093475b7a77110e5434a0",
+      "wav": "sound_assets\\tod\\sfx\\tod_rampage_off.wav",
+      "sha256": "ff44c3a68d2e8a22a7e8914b86a3d2d55f6d7e7f0d545810f19360638045c5e4",
+      "seconds": 4.0,
+      "lead_trimmed_s": 0.156,
+      "lufs": -13.7,
+      "peak_dbfs": -0.8,
+      "recording_min_share_pct": 57.0
+    }
+  }
+}

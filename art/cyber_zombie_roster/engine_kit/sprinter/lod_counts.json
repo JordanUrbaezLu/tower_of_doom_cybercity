@@ -1,0 +1,65 @@
+{
+  "0": {
+    "arm": 2775,
+    "chest": 23102,
+    "head": 4782,
+    "hip_ri": 3479,
+    "rightarm": 2832,
+    "shin_le": 6835,
+    "shoulder_le": 3174
+  },
+  "1": {
+    "arm": 1444,
+    "chest": 10108,
+    "head": 2744,
+    "hip_ri": 1728,
+    "rightarm": 1448,
+    "shin_le": 3711,
+    "shoulder_le": 1740
+  },
+  "2": {
+    "arm": 878,
+    "chest": 4099,
+    "head": 2104,
+    "hip_ri": 880,
+    "rightarm": 888,
+    "shin_le": 1866,
+    "shoulder_le": 852
+  },
+  "3": {
+    "arm": 454,
+    "chest": 2628,
+    "head": 1956,
+    "hip_ri": 204,
+    "rightarm": 456,
+    "shin_le": 880,
+    "shoulder_le": 120
+  },
+  "4": {
+    "arm": 324,
+    "chest": 762,
+    "head": 1396,
+    "hip_ri": 164,
+    "rightarm": 326,
+    "shin_le": 498,
+    "shoulder_le": 24
+  },
+  "5": {
+    "arm": 218,
+    "chest": 618,
+    "head": 1236,
+    "hip_ri": 116,
+    "rightarm": 218,
+    "shin_le": 224,
+    "shoulder_le": 24
+  },
+  "6": {
+    "arm": 218,
+    "chest": 162,
+    "head": 904,
+    "hip_ri": 116,
+    "rightarm": 218,
+    "shin_le": 164,
+    "shoulder_le": 24
+  }
+}
