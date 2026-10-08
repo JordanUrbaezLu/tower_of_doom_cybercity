@@ -6241,7 +6241,7 @@
 		"noReceiveDynamicShadow" "0"
 		"normalFlattening" "1"
 		"normalHeightScale" "0.5"
-		"normalMap" "i_mtl_p7_window_glass_shard_n_x"
+		"normalMap" "i_mtl_p7_window_glass_shard_n"
 		"normalsFlowScaleMin" "0"
 		"normalVarianceScale" "1"
 		"noSteps" "0"

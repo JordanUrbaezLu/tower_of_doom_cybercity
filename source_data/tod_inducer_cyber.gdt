@@ -1,0 +1,249 @@
+{
+	"i_tod_icyber_c" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_inducer_cyber\\_images\\i_tod_icyber_c.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"i_tod_icyber_n" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_inducer_cyber\\_images\\i_tod_icyber_n.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "normalMap"
+		"compressionMethod" "compressed"
+		"streamable" "1"
+	}
+	"i_tod_icyber_g" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_inducer_cyber\\_images\\i_tod_icyber_g.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "glossMap"
+		"compressionMethod" "compressed"
+		"streamable" "1"
+	}
+	"i_tod_icyber_s" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_inducer_cyber\\_images\\i_tod_icyber_s.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "specularMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"i_tod_icyber_e" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_inducer_cyber\\_images\\i_tod_icyber_e.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"i_tod_icyber_eon" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_inducer_cyber\\_images\\i_tod_icyber_eon.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"i_tod_icyber_plasma_c" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_inducer_cyber\\_images\\i_tod_icyber_plasma_c.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"i_tod_icyber_plasma_e" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_inducer_cyber\\_images\\i_tod_icyber_plasma_e.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"i_tod_icyber_plasma_n" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_inducer_cyber\\_images\\i_tod_icyber_plasma_n.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "normalMap"
+		"compressionMethod" "compressed"
+		"streamable" "1"
+	}
+	"mtl_tod_icyber" ( "material.gdf" )
+	{
+		"surfaceType" "metal"
+		"template" "material.template"
+		"materialCategory" "Geometry Advanced"
+		"materialType" "lit_emissive_advanced_fullspec"
+		"colorMap" "i_tod_icyber_c"
+		"normalMap" "i_tod_icyber_n"
+		"cosinePowerMap" "i_tod_icyber_g"
+		"specColorMap" "i_tod_icyber_s"
+		"specMapEnable" "1"
+		"specColorTint" ".6 .6 .6 1"
+		"colorMap00" "i_tod_icyber_e"
+		"colorTint" "1 1 1 1"
+		"colorTint1" "1 1 1 1"
+		"scaleRGB" "4"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "10"
+		"specAmount" "0.5"
+		"reflectionProbeAmount" "0.3"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"waterRoughness" "0"
+	}
+	"mtl_tod_icyber_on" ( "material.gdf" )
+	{
+		"surfaceType" "metal"
+		"template" "material.template"
+		"materialCategory" "Geometry Advanced"
+		"materialType" "lit_emissive_advanced_fullspec"
+		"colorMap" "i_tod_icyber_c"
+		"normalMap" "i_tod_icyber_n"
+		"cosinePowerMap" "i_tod_icyber_g"
+		"specColorMap" "i_tod_icyber_s"
+		"specMapEnable" "1"
+		"specColorTint" ".6 .6 .6 1"
+		"colorMap00" "i_tod_icyber_eon"
+		"colorTint" "1 1 1 1"
+		"colorTint1" "1 1 1 1"
+		"scaleRGB" "12"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "10"
+		"specAmount" "0.5"
+		"reflectionProbeAmount" "0.3"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"waterRoughness" "0"
+	}
+	"mtl_tod_icyber_plasma" ( "material.gdf" )
+	{
+		"surfaceType" "metal"
+		"template" "material.template"
+		"materialCategory" "Geometry"
+		"materialType" "lit_emissive_scroll_transparent"
+		"colorMap" "i_tod_icyber_plasma_c"
+		"normalMap" "i_tod_icyber_plasma_n"
+		"colorTint" "1 1 1 1"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"heatmap" "$gray_32_one_channel"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "8"
+		"specAmount" "0.1"
+		"reflectionProbeAmount" "0.05"
+		"waterRoughness" "0"
+		"colorMap00" "i_tod_icyber_plasma_e"
+		"colorTint1" "1 1 1 1"
+		"scaleRGB" "1.4"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+		"gUVScroll02_Angle" "0.025"
+		"gUVScroll03_Angle" "-0.06"
+		"detailScaleX" "1"
+		"detailScaleY" "1"
+	}
+	"mtl_tod_icyber_plasma_on" ( "material.gdf" )
+	{
+		"surfaceType" "metal"
+		"template" "material.template"
+		"materialCategory" "Geometry"
+		"materialType" "lit_emissive_scroll_transparent"
+		"colorMap" "i_tod_icyber_plasma_c"
+		"normalMap" "i_tod_icyber_plasma_n"
+		"colorTint" "1 1 1 1"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"heatmap" "$gray_32_one_channel"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "8"
+		"specAmount" "0.1"
+		"reflectionProbeAmount" "0.05"
+		"waterRoughness" "0"
+		"colorMap00" "i_tod_icyber_plasma_e"
+		"colorTint1" "1 1 1 1"
+		"scaleRGB" "5"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+		"gUVScroll02_Angle" "0.025"
+		"gUVScroll03_Angle" "-0.06"
+		"detailScaleX" "1"
+		"detailScaleY" "1"
+	}
+	"tod_inducer_cyber" ( "xmodel.gdf" )
+	{
+		"filename" "tod_inducer_cyber\\tod_inducer_cyber.xmodel_bin"
+		"type" "animated"
+		"skinOverride" ""
+		"BulletCollisionLOD" "High"
+		"physicsPreset" ""
+		"scale" "1"
+		"highLodDist" "0"
+		"lodNormalPriority" "1"
+		"lodPositionPriority" "1"
+	}
+	"tod_inducer_cyber_on" ( "xmodel.gdf" )
+	{
+		"filename" "tod_inducer_cyber\\tod_inducer_cyber.xmodel_bin"
+		"type" "animated"
+		"skinOverride" "mtl_tod_icyber mtl_tod_icyber_on\r\nmtl_tod_icyber_plasma mtl_tod_icyber_plasma_on\r\n"
+		"BulletCollisionLOD" "High"
+		"physicsPreset" ""
+		"scale" "1"
+		"highLodDist" "0"
+		"lodNormalPriority" "1"
+		"lodPositionPriority" "1"
+	}
+	"tod_inducer_cyber_loop_idle" ( "xanim.gdf" )
+	{
+		"filename" "tod_inducer_cyber\\tod_inducer_cyber_loop_idle.XANIM_BIN"
+		"model" "tod_inducer_cyber\\tod_inducer_cyber.xmodel_bin"
+		"previewModel" "tod_inducer_cyber"
+		"type" "relative"
+		"useBones" "1"
+		"looping" "1"
+		"angleError" "0.01"
+		"translationError" "0.01"
+	}
+	"tod_inducer_cyber_loop_on" ( "xanim.gdf" )
+	{
+		"filename" "tod_inducer_cyber\\tod_inducer_cyber_loop_on.XANIM_BIN"
+		"model" "tod_inducer_cyber\\tod_inducer_cyber.xmodel_bin"
+		"previewModel" "tod_inducer_cyber"
+		"type" "relative"
+		"useBones" "1"
+		"looping" "1"
+		"angleError" "0.01"
+		"translationError" "0.01"
+	}
+}

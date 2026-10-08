@@ -1,0 +1,566 @@
+{
+	"i_tod_inducer_36ade0417853ec32_c" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_36ade0417853ec32_c.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed high color"
+		"semantic" "diffuseMap"
+		"coreSemantic" "sRGB3chAlpha"
+		"streamable" "1"
+	}
+	"i_tod_inducer_36ade0417853ec32_n" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_36ade0417853ec32_n.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed"
+		"semantic" "normalMap"
+		"streamable" "1"
+	}
+	"i_tod_inducer_36ade0417853ec32_e" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_36ade0417853ec32_e.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed high color"
+		"semantic" "diffuseMap"
+		"coreSemantic" "sRGB3chAlpha"
+		"streamable" "1"
+	}
+	"i_tod_inducer_503f0f822297b23b_c" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_503f0f822297b23b_c.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed high color"
+		"semantic" "diffuseMap"
+		"coreSemantic" "sRGB3chAlpha"
+		"streamable" "1"
+	}
+	"i_tod_inducer_503f0f822297b23b_n" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_503f0f822297b23b_n.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed"
+		"semantic" "normalMap"
+		"streamable" "1"
+	}
+	"i_tod_inducer_503f0f822297b23b_e" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_503f0f822297b23b_e.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed high color"
+		"semantic" "diffuseMap"
+		"coreSemantic" "sRGB3chAlpha"
+		"streamable" "1"
+	}
+	"i_tod_inducer_c85ade6d4063e1b_g" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_c85ade6d4063e1b_g.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed"
+		"semantic" "glossMap"
+		"streamable" "1"
+	}
+	"i_tod_inducer_c85ade6d4063e1b_c" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_c85ade6d4063e1b_c.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed high color"
+		"semantic" "diffuseMap"
+		"coreSemantic" "sRGB3chAlpha"
+		"streamable" "1"
+	}
+	"i_tod_inducer_c85ade6d4063e1b_n" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_c85ade6d4063e1b_n.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed"
+		"semantic" "normalMap"
+		"streamable" "1"
+	}
+	"i_tod_inducer_c85aee6d4063fce_g" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_c85aee6d4063fce_g.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed"
+		"semantic" "glossMap"
+		"streamable" "1"
+	}
+	"i_tod_inducer_c85aee6d4063fce_c" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_c85aee6d4063fce_c.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed high color"
+		"semantic" "diffuseMap"
+		"coreSemantic" "sRGB3chAlpha"
+		"streamable" "1"
+	}
+	"i_tod_inducer_c85aee6d4063fce_n" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_c85aee6d4063fce_n.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed"
+		"semantic" "normalMap"
+		"streamable" "1"
+	}
+	"i_tod_inducer_glass_g" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_glass_g.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed"
+		"semantic" "glossMap"
+		"streamable" "1"
+	}
+	"i_tod_inducer_glass_c" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_glass_c.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed high color"
+		"semantic" "diffuseMap"
+		"coreSemantic" "sRGB3chAlpha"
+		"streamable" "1"
+	}
+	"i_tod_inducer_glass_n" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_glass_n.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed"
+		"semantic" "normalMap"
+		"streamable" "1"
+	}
+	"i_tod_inducer_gauge_e" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_gauge_e.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed high color"
+		"semantic" "diffuseMap"
+		"coreSemantic" "sRGB3chAlpha"
+		"streamable" "1"
+	}
+	"i_tod_inducer_crystal01_g" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_crystal01_g.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed"
+		"semantic" "glossMap"
+		"streamable" "1"
+	}
+	"i_tod_inducer_crystal01_c" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_crystal01_c.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed high color"
+		"semantic" "diffuseMap"
+		"coreSemantic" "sRGB3chAlpha"
+		"streamable" "1"
+	}
+	"i_tod_inducer_crystal01_n" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_crystal01_n.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed"
+		"semantic" "normalMap"
+		"streamable" "1"
+	}
+	"i_tod_inducer_crystal01_e" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_crystal01_e.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed high color"
+		"semantic" "diffuseMap"
+		"coreSemantic" "sRGB3chAlpha"
+		"streamable" "1"
+	}
+	"i_tod_inducer_crystal03_g" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_crystal03_g.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed"
+		"semantic" "glossMap"
+		"streamable" "1"
+	}
+	"i_tod_inducer_crystal03_c" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_crystal03_c.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed high color"
+		"semantic" "diffuseMap"
+		"coreSemantic" "sRGB3chAlpha"
+		"streamable" "1"
+	}
+	"i_tod_inducer_crystal03_n" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_crystal03_n.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed"
+		"semantic" "normalMap"
+		"streamable" "1"
+	}
+	"i_tod_inducer_crystal03_e" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_bo6_inducer\\_images\\i_tod_inducer_crystal03_e.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed high color"
+		"semantic" "diffuseMap"
+		"coreSemantic" "sRGB3chAlpha"
+		"streamable" "1"
+	}
+	"mtl_tod_inducer_36ade0417853ec32" ( "material.gdf" )
+	{
+		"surfaceType" "metal"
+		"template" "material.template"
+		"materialCategory" "Geometry"
+		"materialType" "lit_emissive_scroll_transparent"
+		"colorMap" "i_tod_inducer_36ade0417853ec32_c"
+		"normalMap" "i_tod_inducer_36ade0417853ec32_n"
+		"colorTint" "1 1 1 1"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"heatmap" "$gray_32_one_channel"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "8"
+		"specAmount" "0.1"
+		"reflectionProbeAmount" "0.05"
+		"waterRoughness" "0"
+		"colorMap00" "i_tod_inducer_36ade0417853ec32_e"
+		"colorTint1" "1 1 1 1"
+		"scaleRGB" "0.9"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+		"gUVScroll02_Angle" "0.025"
+		"gUVScroll03_Angle" "-0.06"
+		"detailScaleX" "1"
+		"detailScaleY" "1"
+	}
+	"mtl_tod_inducer_36ade0417853ec32_on" ( "material.gdf" )
+	{
+		"surfaceType" "metal"
+		"template" "material.template"
+		"materialCategory" "Geometry"
+		"materialType" "lit_emissive_scroll_transparent"
+		"colorMap" "i_tod_inducer_36ade0417853ec32_c"
+		"normalMap" "i_tod_inducer_36ade0417853ec32_n"
+		"colorTint" "1 1 1 1"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"heatmap" "$gray_32_one_channel"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "8"
+		"specAmount" "0.1"
+		"reflectionProbeAmount" "0.05"
+		"waterRoughness" "0"
+		"colorMap00" "i_tod_inducer_36ade0417853ec32_e"
+		"colorTint1" "1 1 1 1"
+		"scaleRGB" "4"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+		"gUVScroll02_Angle" "0.025"
+		"gUVScroll03_Angle" "-0.06"
+		"detailScaleX" "1"
+		"detailScaleY" "1"
+	}
+	"mtl_tod_inducer_503f0f822297b23b" ( "material.gdf" )
+	{
+		"surfaceType" "metal"
+		"template" "material.template"
+		"materialCategory" "Geometry"
+		"materialType" "lit_emissive_scroll_transparent"
+		"colorMap" "i_tod_inducer_503f0f822297b23b_c"
+		"normalMap" "i_tod_inducer_503f0f822297b23b_n"
+		"colorTint" "1 1 1 1"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"heatmap" "$gray_32_one_channel"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "8"
+		"specAmount" "0.1"
+		"reflectionProbeAmount" "0.05"
+		"waterRoughness" "0"
+		"colorMap00" "i_tod_inducer_503f0f822297b23b_e"
+		"colorTint1" "1 1 1 1"
+		"scaleRGB" "0.9"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+		"gUVScroll02_Angle" "0.025"
+		"gUVScroll03_Angle" "-0.06"
+		"detailScaleX" "1"
+		"detailScaleY" "1"
+	}
+	"mtl_tod_inducer_503f0f822297b23b_on" ( "material.gdf" )
+	{
+		"surfaceType" "metal"
+		"template" "material.template"
+		"materialCategory" "Geometry"
+		"materialType" "lit_emissive_scroll_transparent"
+		"colorMap" "i_tod_inducer_503f0f822297b23b_c"
+		"normalMap" "i_tod_inducer_503f0f822297b23b_n"
+		"colorTint" "1 1 1 1"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"heatmap" "$gray_32_one_channel"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "8"
+		"specAmount" "0.1"
+		"reflectionProbeAmount" "0.05"
+		"waterRoughness" "0"
+		"colorMap00" "i_tod_inducer_503f0f822297b23b_e"
+		"colorTint1" "1 1 1 1"
+		"scaleRGB" "4"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+		"gUVScroll02_Angle" "0.025"
+		"gUVScroll03_Angle" "-0.06"
+		"detailScaleX" "1"
+		"detailScaleY" "1"
+	}
+	"mtl_tod_inducer_c85ade6d4063e1b" ( "material.gdf" )
+	{
+		"surfaceType" "metal"
+		"template" "material.template"
+		"materialCategory" "Geometry Plus"
+		"materialType" "lit_plus"
+		"colorMap" "i_tod_inducer_c85ade6d4063e1b_c"
+		"normalMap" "i_tod_inducer_c85ade6d4063e1b_n"
+		"colorTint" "1 1 1 1"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"heatmap" "$gray_32_one_channel"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "8"
+		"specAmount" "0.35"
+		"reflectionProbeAmount" "0.2"
+		"waterRoughness" "0"
+		"cosinePowerMap" "i_tod_inducer_c85ade6d4063e1b_g"
+	}
+	"mtl_tod_inducer_c85aee6d4063fce" ( "material.gdf" )
+	{
+		"surfaceType" "metal"
+		"template" "material.template"
+		"materialCategory" "Geometry Plus"
+		"materialType" "lit_plus"
+		"colorMap" "i_tod_inducer_c85aee6d4063fce_c"
+		"normalMap" "i_tod_inducer_c85aee6d4063fce_n"
+		"colorTint" "1 1 1 1"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"heatmap" "$gray_32_one_channel"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "8"
+		"specAmount" "0.35"
+		"reflectionProbeAmount" "0.2"
+		"waterRoughness" "0"
+		"cosinePowerMap" "i_tod_inducer_c85aee6d4063fce_g"
+	}
+	"mtl_tod_inducer_glass" ( "material.gdf" )
+	{
+		"surfaceType" "glass"
+		"template" "material.template"
+		"materialCategory" "Geometry"
+		"materialType" "lit_emissive_transparent"
+		"colorMap" "i_tod_inducer_glass_c"
+		"normalMap" "i_tod_inducer_glass_n"
+		"colorTint" "1 1 1 1"
+		"colorMap00" "i_tod_inducer_gauge_e"
+		"colorTint1" "1 1 1 1"
+		"scaleRGB" "1"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "1.0"
+		"glossSurfaceType" "glass"
+		"glossRangeMin" "6"
+		"glossRangeMax" "17"
+		"specAmount" "0.35"
+		"reflectionProbeAmount" "0.2"
+		"waterRoughness" "0"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"normalHeightScale" "1"
+	}
+	"mtl_tod_inducer_glass_on" ( "material.gdf" )
+	{
+		"surfaceType" "glass"
+		"template" "material.template"
+		"materialCategory" "Geometry"
+		"materialType" "lit_emissive_transparent"
+		"colorMap" "i_tod_inducer_glass_c"
+		"normalMap" "i_tod_inducer_glass_n"
+		"colorTint" "1 1 1 1"
+		"colorMap00" "i_tod_inducer_gauge_e"
+		"colorTint1" "1 1 1 1"
+		"scaleRGB" "3"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "1.0"
+		"glossSurfaceType" "glass"
+		"glossRangeMin" "6"
+		"glossRangeMax" "17"
+		"specAmount" "0.35"
+		"reflectionProbeAmount" "0.2"
+		"waterRoughness" "0"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"normalHeightScale" "1"
+	}
+	"mtl_tod_inducer_crystal01" ( "material.gdf" )
+	{
+		"surfaceType" "glass"
+		"template" "material.template"
+		"materialCategory" "Geometry Plus"
+		"materialType" "lit_emissive_plus"
+		"colorMap" "i_tod_inducer_crystal01_c"
+		"normalMap" "i_tod_inducer_crystal01_n"
+		"colorTint" "1 1 1 1"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"heatmap" "$gray_32_one_channel"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "8"
+		"specAmount" "0.35"
+		"reflectionProbeAmount" "0.2"
+		"waterRoughness" "0"
+		"colorMap00" "i_tod_inducer_crystal01_e"
+		"colorTint1" "1 0.72 0.30 1"
+		"scaleRGB" "2"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+		"cosinePowerMap" "i_tod_inducer_crystal01_g"
+	}
+	"mtl_tod_inducer_crystal01_on" ( "material.gdf" )
+	{
+		"surfaceType" "glass"
+		"template" "material.template"
+		"materialCategory" "Geometry Plus"
+		"materialType" "lit_emissive_plus"
+		"colorMap" "i_tod_inducer_crystal01_c"
+		"normalMap" "i_tod_inducer_crystal01_n"
+		"colorTint" "1 1 1 1"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"heatmap" "$gray_32_one_channel"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "8"
+		"specAmount" "0.35"
+		"reflectionProbeAmount" "0.2"
+		"waterRoughness" "0"
+		"colorMap00" "i_tod_inducer_crystal01_e"
+		"colorTint1" "1 0.50 0.12 1"
+		"scaleRGB" "8"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+		"cosinePowerMap" "i_tod_inducer_crystal01_g"
+	}
+	"mtl_tod_inducer_crystal03" ( "material.gdf" )
+	{
+		"surfaceType" "glass"
+		"template" "material.template"
+		"materialCategory" "Geometry Plus"
+		"materialType" "lit_emissive_plus"
+		"colorMap" "i_tod_inducer_crystal03_c"
+		"normalMap" "i_tod_inducer_crystal03_n"
+		"colorTint" "1 1 1 1"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"heatmap" "$gray_32_one_channel"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "8"
+		"specAmount" "0.35"
+		"reflectionProbeAmount" "0.2"
+		"waterRoughness" "0"
+		"colorMap00" "i_tod_inducer_crystal03_e"
+		"colorTint1" "1 0.72 0.30 1"
+		"scaleRGB" "2"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+		"cosinePowerMap" "i_tod_inducer_crystal03_g"
+	}
+	"mtl_tod_inducer_crystal03_on" ( "material.gdf" )
+	{
+		"surfaceType" "glass"
+		"template" "material.template"
+		"materialCategory" "Geometry Plus"
+		"materialType" "lit_emissive_plus"
+		"colorMap" "i_tod_inducer_crystal03_c"
+		"normalMap" "i_tod_inducer_crystal03_n"
+		"colorTint" "1 1 1 1"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"heatmap" "$gray_32_one_channel"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "8"
+		"specAmount" "0.35"
+		"reflectionProbeAmount" "0.2"
+		"waterRoughness" "0"
+		"colorMap00" "i_tod_inducer_crystal03_e"
+		"colorTint1" "1 0.50 0.12 1"
+		"scaleRGB" "8"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+		"cosinePowerMap" "i_tod_inducer_crystal03_g"
+	}
+	"tod_inducer" ( "xmodel.gdf" )
+	{
+		"filename" "tod_bo6_inducer\\tod_inducer.xmodel_bin"
+		"type" "rigid"
+		"skinOverride" ""
+		"BulletCollisionLOD" "High"
+		"physicsPreset" ""
+		"scale" "1"
+		"highLodDist" "0"
+		"lodNormalPriority" "1"
+		"lodPositionPriority" "1"
+	}
+	"tod_inducer_on" ( "xmodel.gdf" )
+	{
+		"filename" "tod_bo6_inducer\\tod_inducer.xmodel_bin"
+		"type" "rigid"
+		"skinOverride" "mtl_tod_inducer_36ade0417853ec32 mtl_tod_inducer_36ade0417853ec32_on\r\nmtl_tod_inducer_503f0f822297b23b mtl_tod_inducer_503f0f822297b23b_on\r\nmtl_tod_inducer_glass mtl_tod_inducer_glass_on\r\nmtl_tod_inducer_crystal01 mtl_tod_inducer_crystal01_on\r\nmtl_tod_inducer_crystal03 mtl_tod_inducer_crystal03_on\r\n"
+		"BulletCollisionLOD" "High"
+		"physicsPreset" ""
+		"scale" "1"
+		"highLodDist" "0"
+		"lodNormalPriority" "1"
+		"lodPositionPriority" "1"
+	}
+}
