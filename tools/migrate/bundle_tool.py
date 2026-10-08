@@ -213,6 +213,20 @@ def summary(sel, depth=2, limit=40):
                                                      sum(v[0] for _, v in rest), len(rest)))
 
 
+def copy_direct(src, dst):
+    """Export-side copy: straight to the final name, hashing on the way, nothing else. Over SMB
+    every extra step (a .part rename, a set-time) is more round trips per file, and the export
+    needs neither: an interrupted file has no progress record (so the resume recopies it), the
+    import re-hashes every file against the manifest, and the import sets the real mtime."""
+    os.makedirs(lp(os.path.dirname(dst)), exist_ok=True)
+    h = hashlib.sha1()
+    with open(lp(src), 'rb') as fi, open(lp(dst), 'wb') as fo:
+        for chunk in iter(lambda: fi.read(CHUNK), b''):
+            h.update(chunk)
+            fo.write(chunk)
+    return h.hexdigest()
+
+
 def copy_hash(src, dst, mtime, expect=None):
     """Copy src -> dst through a .part file, hashing on the way. With `expect`, a mismatch
     deletes the .part and leaves dst untouched. Returns the sha1 hex of what was read."""
@@ -294,7 +308,7 @@ def overlay_export(a):
 
     def work(item):
         rel, size, mtime, kind = item
-        sha = copy_hash(os.path.join(tools, rel), os.path.join(a.dest, 'files', rel), mtime)
+        sha = copy_direct(os.path.join(tools, rel), os.path.join(a.dest, 'files', rel))
         return {'p': rel, 'size': size, 'mtime': mtime, 'sha1': sha, 'kind': kind}
 
     # Several files in flight at once: over SMB each file costs round trips (create, write, rename,
@@ -561,7 +575,7 @@ def main():
     e.add_argument('--stock-manifest')
     e.add_argument('--dry-run', action='store_true')
     e.add_argument('--all-usermaps', action='store_true', help="also keep the other maps' build output")
-    e.add_argument('--workers', type=int, default=8, help='files copied at once (default 8)')
+    e.add_argument('--workers', type=int, default=32, help='files copied at once (default 32: Wi-Fi SMB is latency-bound)')
     i = sub.add_parser('overlay-import')
     i.add_argument('--src', required=True)
     i.add_argument('--tools')
@@ -580,7 +594,7 @@ def main():
     g.add_argument('--git-untracked', action='store_true', help='copy every path git does not track in --src')
     c.add_argument('--save-list', help='with --git-untracked: also write the list here')
     c.add_argument('--no-overwrite', action='store_true', help='never replace a file already at the destination')
-    c.add_argument('--workers', type=int, default=8, help='files copied at once (default 8)')
+    c.add_argument('--workers', type=int, default=32, help='files copied at once (default 32)')
     c.add_argument('--dry-run', action='store_true')
     d = sub.add_parser('du')
     d.add_argument('paths', nargs='+')
