@@ -1,0 +1,312 @@
+{
+  "scope": "Source Cast notification cues only; no FX export or BO3 playback claimed",
+  "events": {
+    "AudioOneShot@fly_ice_staff_alt_inspect_plr": [
+      {
+        "clip": "t10_vm_ww_staff_altmode_inspect",
+        "frames": [
+          19
+        ],
+        "fps": 30.0
+      }
+    ],
+    "AudioOneShot@fly_ice_staff_pullout_quick_plr": [
+      {
+        "clip": "t10_vm_ww_staff_altmode_inspect",
+        "frames": [
+          158
+        ],
+        "fps": 30.0
+      },
+      {
+        "clip": "t10_vm_ww_staff_altmode_pullout_quick",
+        "frames": [
+          0
+        ],
+        "fps": 30.0
+      },
+      {
+        "clip": "t10_vm_ww_staff_pullout_quick",
+        "frames": [
+          0
+        ],
+        "fps": 30.0
+      }
+    ],
+    "AudioOneShot@fly_ice_staff_putaway_quick_plr": [
+      {
+        "clip": "t10_vm_ww_staff_altmode_inspect",
+        "frames": [
+          135
+        ],
+        "fps": 30.0
+      },
+      {
+        "clip": "t10_vm_ww_staff_altmode_putaway_quick",
+        "frames": [
+          0
+        ],
+        "fps": 30.0
+      },
+      {
+        "clip": "t10_vm_ww_staff_putaway_quick",
+        "frames": [
+          0
+        ],
+        "fps": 30.0
+      }
+    ],
+    "FxOnObject@vfx_t10_gameplay_zm_weapons_ww_staff_ice_inspect_top@Stop": [
+      {
+        "clip": "t10_vm_ww_staff_altmode_inspect",
+        "frames": [
+          37
+        ],
+        "fps": 30.0
+      }
+    ],
+    "FxOnObject@vfx_t10_gameplay_zm_weapons_ww_staff_ice_inspect_top@Stop@End": [
+      {
+        "clip": "t10_vm_ww_staff_altmode_inspect",
+        "frames": [
+          109
+        ],
+        "fps": 30.0
+      }
+    ],
+    "AudioOneShot@fly_ice_staff_first_raise_plr": [
+      {
+        "clip": "t10_vm_ww_staff_first_raise",
+        "frames": [
+          1
+        ],
+        "fps": 30.0
+      },
+      {
+        "clip": "t10_vm_ww_staff_upg_first_raise",
+        "frames": [
+          1
+        ],
+        "fps": 30.0
+      }
+    ],
+    "FxOnObject@vfx_t10_gameplay_zm_weapons_ww_staff_ice_first_raise_top@Stop": [
+      {
+        "clip": "t10_vm_ww_staff_first_raise",
+        "frames": [
+          22
+        ],
+        "fps": 30.0
+      },
+      {
+        "clip": "t10_vm_ww_staff_upg_first_raise",
+        "frames": [
+          22
+        ],
+        "fps": 30.0
+      }
+    ],
+    "FxOnObject@vfx_t10_gameplay_zm_weapons_ww_staff_ice_first_raise_top@Stop@End": [
+      {
+        "clip": "t10_vm_ww_staff_first_raise",
+        "frames": [
+          43
+        ],
+        "fps": 30.0
+      },
+      {
+        "clip": "t10_vm_ww_staff_upg_first_raise",
+        "frames": [
+          43
+        ],
+        "fps": 30.0
+      }
+    ],
+    "AudioOneShot@fly_ice_staff_inspect_plr": [
+      {
+        "clip": "t10_vm_ww_staff_inspect",
+        "frames": [
+          1
+        ],
+        "fps": 30.0
+      },
+      {
+        "clip": "t10_vm_ww_staff_upg_inspect",
+        "frames": [
+          1
+        ],
+        "fps": 30.0
+      }
+    ],
+    "FxOnObject@vfx_t10_gameplay_zm_weapons_ww_staff_ice_inspect_mid@Stop": [
+      {
+        "clip": "t10_vm_ww_staff_inspect",
+        "frames": [
+          150
+        ],
+        "fps": 30.0
+      },
+      {
+        "clip": "t10_vm_ww_staff_upg_inspect",
+        "frames": [
+          150
+        ],
+        "fps": 30.0
+      }
+    ],
+    "FxOnObject@vfx_t10_gameplay_zm_weapons_ww_staff_ice_inspect_mid@Stop@End": [
+      {
+        "clip": "t10_vm_ww_staff_inspect",
+        "frames": [
+          196
+        ],
+        "fps": 30.0
+      },
+      {
+        "clip": "t10_vm_ww_staff_upg_inspect",
+        "frames": [
+          196
+        ],
+        "fps": 30.0
+      }
+    ],
+    "FxOnObjectNoStop@vfx_t10_gameplay_zm_weapons_ww_staff_ice_inspect_top": [
+      {
+        "clip": "t10_vm_ww_staff_inspect",
+        "frames": [
+          210
+        ],
+        "fps": 30.0
+      },
+      {
+        "clip": "t10_vm_ww_staff_upg_inspect",
+        "frames": [
+          210
+        ],
+        "fps": 30.0
+      }
+    ],
+    "AudioOneShotInterruptible@fly_ice_staff_reload_plr": [
+      {
+        "clip": "t10_vm_ww_staff_reload",
+        "frames": [
+          0
+        ],
+        "fps": 30.0
+      },
+      {
+        "clip": "t10_vm_ww_staff_upg_reload",
+        "frames": [
+          0
+        ],
+        "fps": 30.0
+      }
+    ],
+    "AudioOneShotInterruptible@fly_ice_staff_reload_plr@End": [
+      {
+        "clip": "t10_vm_ww_staff_reload",
+        "frames": [
+          122
+        ],
+        "fps": 30.0
+      },
+      {
+        "clip": "t10_vm_ww_staff_upg_reload",
+        "frames": [
+          122
+        ],
+        "fps": 30.0
+      }
+    ],
+    "FxOnObject@vfx_t10_gameplay_zm_weapons_ww_staff_ice_reload_center@Stop": [
+      {
+        "clip": "t10_vm_ww_staff_reload",
+        "frames": [
+          12
+        ],
+        "fps": 30.0
+      },
+      {
+        "clip": "t10_vm_ww_staff_upg_reload",
+        "frames": [
+          12
+        ],
+        "fps": 30.0
+      }
+    ],
+    "FxOnObject@vfx_t10_gameplay_zm_weapons_ww_staff_ice_reload_center@Stop@End": [
+      {
+        "clip": "t10_vm_ww_staff_reload",
+        "frames": [
+          74
+        ],
+        "fps": 30.0
+      },
+      {
+        "clip": "t10_vm_ww_staff_upg_reload",
+        "frames": [
+          74
+        ],
+        "fps": 30.0
+      }
+    ],
+    "FxOnObjectNoStop@vfx_t10_gameplay_zm_weapons_ww_staff_ice_reload": [
+      {
+        "clip": "t10_vm_ww_staff_reload",
+        "frames": [
+          14,
+          16,
+          18,
+          18,
+          24,
+          29,
+          35,
+          40,
+          45,
+          46,
+          52,
+          57,
+          58
+        ],
+        "fps": 30.0
+      },
+      {
+        "clip": "t10_vm_ww_staff_upg_reload",
+        "frames": [
+          14,
+          16,
+          18,
+          18,
+          24,
+          29,
+          35,
+          40,
+          45,
+          46,
+          52,
+          57,
+          58
+        ],
+        "fps": 30.0
+      }
+    ],
+    "AudioOneShot@fly_ice_staff_alt_switch_out_plr": [
+      {
+        "clip": "t10_vm_ww_staff_upg_from_altmode",
+        "frames": [
+          0
+        ],
+        "fps": 30.0
+      }
+    ],
+    "AudioOneShot@fly_ice_staff_alt_switch_in_plr": [
+      {
+        "clip": "t10_vm_ww_staff_upg_to_altmode",
+        "frames": [
+          0
+        ],
+        "fps": 30.0
+      }
+    ]
+  }
+}

@@ -1,0 +1,934 @@
+{
+  "c_zom_der_zombie_body1": {
+    "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\t7_characters\\zombies\\zombies\\c_zom_der_zombie_body1_LOD0.XMODEL_BIN",
+    "sha256": "32b8f49e60f9c84b092a21919c62d80451c7d834289e3ffe908a3d19976426e1",
+    "meshes": [
+      {
+        "name": "zombie1_upperbody_LOD0Shape1",
+        "triangles": 10637
+      },
+      {
+        "name": "mp40pouch_1_LOD0Shape1",
+        "triangles": 1392
+      },
+      {
+        "name": "mp40pouch_2_LOD0Shape1",
+        "triangles": 1392
+      },
+      {
+        "name": "zombie1_lowerbody_LOD0Shape1",
+        "triangles": 5474
+      }
+    ],
+    "triangles": 18895,
+    "bones": 78,
+    "materials": [
+      {
+        "name": "mtl_c_zom_der_zombie_body1",
+        "images": {
+          "color": "c_zom_der_zombie_body1_c.tif"
+        }
+      },
+      {
+        "name": "mtl_c_zom_der_zombie_body1_chest",
+        "images": {
+          "color": "c_zom_der_zombie_body1_chest_c.tif"
+        }
+      },
+      {
+        "name": "mtl_c_zom_der_zombie_gear_mp40pouch",
+        "images": {
+          "color": "c_zom_der_mp40pouch_c.TIF"
+        }
+      }
+    ],
+    "key_bones": {
+      "J_Knee_LE": {
+        "offset": [
+          5.001461982727051,
+          1.5793145895004272,
+          20.872194290161133
+        ],
+        "matrix": [
+          [
+            0.0,
+            0.16928617206335642,
+            -0.9855647450178533
+          ],
+          [
+            0.0,
+            -0.9855647450178533,
+            -0.16928617206335642
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        ]
+      },
+      "J_Knee_RI": {
+        "offset": [
+          -5.001461982727051,
+          1.5793145895004272,
+          20.872194290161133
+        ],
+        "matrix": [
+          [
+            0.0,
+            -0.16928617206335642,
+            0.9855647450178533
+          ],
+          [
+            0.0,
+            0.9855647450178533,
+            0.16928617206335642
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        ]
+      },
+      "J_Spine4": {
+        "offset": [
+          0.0001186528752441518,
+          0.7520144581794739,
+          49.172367095947266
+        ],
+        "matrix": [
+          [
+            0.0,
+            -0.05069124423963134,
+            0.9987182226020082
+          ],
+          [
+            0.0,
+            -0.9987182226020082,
+            -0.05069124423963134
+          ],
+          [
+            1.0,
+            0.0,
+            0.0
+          ]
+        ]
+      },
+      "J_Elbow_LE": {
+        "offset": [
+          15.17677116394043,
+          -1.9629878997802734,
+          48.35539245605469
+        ],
+        "matrix": [
+          [
+            0.3127536851100192,
+            -0.8784142582476272,
+            -0.36133915219580676
+          ],
+          [
+            0.6343577379680776,
+            0.4763328959013642,
+            -0.60887478255562
+          ],
+          [
+            0.706961272011475,
+            -0.03878902554399243,
+            0.706198309274575
+          ]
+        ]
+      },
+      "J_Elbow_RI": {
+        "offset": [
+          -15.17677116394043,
+          -1.9629878997802734,
+          48.35539245605469
+        ],
+        "matrix": [
+          [
+            0.3127536851100192,
+            0.8784142582476272,
+            0.36133915219580676
+          ],
+          [
+            0.6343577379680776,
+            -0.4763328959013642,
+            0.60887478255562
+          ],
+          [
+            0.706961272011475,
+            0.03878902554399243,
+            -0.706198309274575
+          ]
+        ]
+      },
+      "J_Head": {
+        "offset": [
+          3.538827149895951e-05,
+          -0.26451557874679565,
+          64.5334243774414
+        ],
+        "matrix": [
+          [
+            0.0,
+            -0.13180944242683187,
+            0.9912717062898648
+          ],
+          [
+            0.0,
+            -0.9912717062898648,
+            -0.13180944242683187
+          ],
+          [
+            1.0,
+            0.0,
+            0.0
+          ]
+        ]
+      }
+    }
+  },
+  "c_zom_der_zombie_body2": {
+    "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\t7_characters\\zombies\\zombies\\c_zom_der_zombie_body2_LOD0.XMODEL_BIN",
+    "sha256": "b8077d84935f08c83070e893d6eec7440612ceeda43e68bc1f4159a524f3f797",
+    "meshes": [
+      {
+        "name": "zombie2_upperbody_LOD0Shape1",
+        "triangles": 10403
+      },
+      {
+        "name": "gear_LOD0Shape1",
+        "triangles": 3242
+      },
+      {
+        "name": "gearstrap_LOD0Shape1",
+        "triangles": 224
+      },
+      {
+        "name": "zombie2_lowerbody_LOD0Shape1",
+        "triangles": 6520
+      }
+    ],
+    "triangles": 20389,
+    "bones": 105,
+    "materials": [
+      {
+        "name": "mtl_c_zom_der_zombie_body2",
+        "images": {
+          "color": "c_zom_der_zombie_body2_c.tif"
+        }
+      },
+      {
+        "name": "mtl_c_zom_der_zombie_body2_skin",
+        "images": {
+          "color": "c_zom_der_zombie_body2_skin_c.tif"
+        }
+      },
+      {
+        "name": "mtl_c_zom_der_zombie_gear_k98pouch",
+        "images": {
+          "color": "c_zom_der_k98triplepouch_c.tif"
+        }
+      },
+      {
+        "name": "mtl_c_zom_der_zombie_gear_g43pouch",
+        "images": {
+          "color": "c_zom_der_g43ammopouch_c.tif"
+        }
+      },
+      {
+        "name": "mtl_c_zom_der_zombie_gear_knife",
+        "images": {
+          "color": "c_zom_der_knifesheath_c.TIF"
+        }
+      }
+    ],
+    "key_bones": {
+      "J_Knee_LE": {
+        "offset": [
+          5.001461982727051,
+          1.5793145895004272,
+          20.872194290161133
+        ],
+        "matrix": [
+          [
+            0.0,
+            0.16928617206335642,
+            -0.9855647450178533
+          ],
+          [
+            0.0,
+            -0.9855647450178533,
+            -0.16928617206335642
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        ]
+      },
+      "J_Knee_RI": {
+        "offset": [
+          -5.001461982727051,
+          1.5793145895004272,
+          20.872194290161133
+        ],
+        "matrix": [
+          [
+            0.0,
+            -0.16928617206335642,
+            0.9855647450178533
+          ],
+          [
+            0.0,
+            0.9855647450178533,
+            0.16928617206335642
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        ]
+      },
+      "J_Spine4": {
+        "offset": [
+          0.0001186528752441518,
+          0.7520144581794739,
+          49.172367095947266
+        ],
+        "matrix": [
+          [
+            0.0,
+            -0.05069124423963134,
+            0.9987182226020082
+          ],
+          [
+            0.0,
+            -0.9987182226020082,
+            -0.05069124423963134
+          ],
+          [
+            1.0,
+            0.0,
+            0.0
+          ]
+        ]
+      },
+      "J_Elbow_LE": {
+        "offset": [
+          15.17677116394043,
+          -1.9629878997802734,
+          48.35539245605469
+        ],
+        "matrix": [
+          [
+            0.3127536851100192,
+            -0.8784142582476272,
+            -0.36133915219580676
+          ],
+          [
+            0.6343577379680776,
+            0.4763328959013642,
+            -0.60887478255562
+          ],
+          [
+            0.706961272011475,
+            -0.03878902554399243,
+            0.706198309274575
+          ]
+        ]
+      },
+      "J_Elbow_RI": {
+        "offset": [
+          -15.17677116394043,
+          -1.9629878997802734,
+          48.35539245605469
+        ],
+        "matrix": [
+          [
+            0.3127536851100192,
+            0.8784142582476272,
+            0.36133915219580676
+          ],
+          [
+            0.6343577379680776,
+            -0.4763328959013642,
+            0.60887478255562
+          ],
+          [
+            0.706961272011475,
+            0.03878902554399243,
+            -0.706198309274575
+          ]
+        ]
+      },
+      "J_Head": {
+        "offset": [
+          3.538827149895951e-05,
+          -0.26451557874679565,
+          64.5334243774414
+        ],
+        "matrix": [
+          [
+            0.0,
+            -0.13180944242683187,
+            0.9912717062898648
+          ],
+          [
+            0.0,
+            -0.9912717062898648,
+            -0.13180944242683187
+          ],
+          [
+            1.0,
+            0.0,
+            0.0
+          ]
+        ]
+      }
+    }
+  },
+  "c_zom_der_zombie_head1": {
+    "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\t7_characters\\zombies\\zombies\\c_zom_der_head_1_LOD0.XMODEL_BIN",
+    "sha256": "57917b60e9ccaa99d8e51db509eb72d57f0a085ce04c24e7f0df320e182ea1d5",
+    "meshes": [
+      {
+        "name": "zombie_head_1_LOD0Shape1",
+        "triangles": 6518
+      }
+    ],
+    "triangles": 6518,
+    "bones": 28,
+    "materials": [
+      {
+        "name": "mtl_c_zom_der_zombie_head1",
+        "images": {
+          "color": "c_zom_der_zombie_head_1_c.tif"
+        }
+      },
+      {
+        "name": "mtl_c_zom_der_zombie_head1u",
+        "images": {
+          "color": "c_zom_der_zombie_head_1_c.tif"
+        }
+      }
+    ],
+    "key_bones": {
+      "J_Spine4": {
+        "offset": [
+          0.0001186528752441518,
+          0.7520144581794739,
+          49.172367095947266
+        ],
+        "matrix": [
+          [
+            0.0,
+            -0.05069124423963134,
+            0.9987182226020082
+          ],
+          [
+            0.0,
+            -0.9987182226020082,
+            -0.05069124423963134
+          ],
+          [
+            1.0,
+            0.0,
+            0.0
+          ]
+        ]
+      },
+      "J_Head": {
+        "offset": [
+          3.538827149895951e-05,
+          -0.26451557874679565,
+          64.5334243774414
+        ],
+        "matrix": [
+          [
+            0.0,
+            -0.13180944242683187,
+            0.9912717062898648
+          ],
+          [
+            0.0,
+            -0.9912717062898648,
+            -0.13180944242683187
+          ],
+          [
+            1.0,
+            0.0,
+            0.0
+          ]
+        ]
+      }
+    }
+  },
+  "c_zom_der_zombie_head2": {
+    "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\t7_characters\\zombies\\zombies\\c_zom_der_head_2_LOD0.XMODEL_BIN",
+    "sha256": "f0f1c392cdee95d5ff6bf0bf8f079123ae7c5f1f9c717ea48abab344b61a5734",
+    "meshes": [
+      {
+        "name": "zombie_head_2_LOD0Shape1",
+        "triangles": 6674
+      }
+    ],
+    "triangles": 6674,
+    "bones": 28,
+    "materials": [
+      {
+        "name": "mtl_c_zom_der_zombie_head2",
+        "images": {
+          "color": "c_zom_der_zombie_head_2_c.tif"
+        }
+      },
+      {
+        "name": "mtl_c_zom_der_zombie_head2u",
+        "images": {
+          "color": "c_zom_der_zombie_head_2_c.tif"
+        }
+      }
+    ],
+    "key_bones": {
+      "J_Spine4": {
+        "offset": [
+          0.0001186528752441518,
+          0.7520144581794739,
+          49.172367095947266
+        ],
+        "matrix": [
+          [
+            0.0,
+            -0.05069124423963134,
+            0.9987182226020082
+          ],
+          [
+            0.0,
+            -0.9987182226020082,
+            -0.05069124423963134
+          ],
+          [
+            1.0,
+            0.0,
+            0.0
+          ]
+        ]
+      },
+      "J_Head": {
+        "offset": [
+          3.538827149895951e-05,
+          -0.26451557874679565,
+          64.5334243774414
+        ],
+        "matrix": [
+          [
+            0.0,
+            -0.13180944242683187,
+            0.9912717062898648
+          ],
+          [
+            0.0,
+            -0.9912717062898648,
+            -0.13180944242683187
+          ],
+          [
+            1.0,
+            0.0,
+            0.0
+          ]
+        ]
+      }
+    }
+  },
+  "c_zom_der_zombie_head3": {
+    "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\t7_characters\\zombies\\zombies\\c_zom_der_head_3_LOD0.XMODEL_BIN",
+    "sha256": "0bc89327670549632221adcfb76c4abce93496aa8821e3638132ef33611f51e7",
+    "meshes": [
+      {
+        "name": "zombie_head_3_LOD0Shape1",
+        "triangles": 7623
+      }
+    ],
+    "triangles": 7623,
+    "bones": 28,
+    "materials": [
+      {
+        "name": "mtl_c_zom_der_zombie_head3",
+        "images": {
+          "color": "c_zom_der_zombie_head_3_c.tif"
+        }
+      },
+      {
+        "name": "mtl_c_zom_der_zombie_head3u",
+        "images": {
+          "color": "c_zom_der_zombie_head_3_c.tif"
+        }
+      }
+    ],
+    "key_bones": {
+      "J_Spine4": {
+        "offset": [
+          0.0001186528752441518,
+          0.7520144581794739,
+          49.172367095947266
+        ],
+        "matrix": [
+          [
+            0.0,
+            -0.05069124423963134,
+            0.9987182226020082
+          ],
+          [
+            0.0,
+            -0.9987182226020082,
+            -0.05069124423963134
+          ],
+          [
+            1.0,
+            0.0,
+            0.0
+          ]
+        ]
+      },
+      "J_Head": {
+        "offset": [
+          3.538827149895951e-05,
+          -0.26451557874679565,
+          64.5334243774414
+        ],
+        "matrix": [
+          [
+            0.0,
+            -0.13180944242683187,
+            0.9912717062898648
+          ],
+          [
+            0.0,
+            -0.9912717062898648,
+            -0.13180944242683187
+          ],
+          [
+            1.0,
+            0.0,
+            0.0
+          ]
+        ]
+      }
+    }
+  },
+  "c_zom_der_zombie_helmet1": {
+    "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\t7_characters\\zombies\\zombies\\c_zom_der_helmet_1_LOD0.XMODEL_BIN",
+    "sha256": "5adcb8383dcd3d99a58c844e0ad030367f9717929b394bc9cdb9c0e5884dc743",
+    "meshes": [
+      {
+        "name": "helmet_LOD0Shape1",
+        "triangles": 1550
+      }
+    ],
+    "triangles": 1550,
+    "bones": 1,
+    "materials": [
+      {
+        "name": "mtl_c_zom_der_zombie_helmet1",
+        "images": {
+          "color": "c_zom_der_zombie_helmet1_c.tif"
+        }
+      }
+    ],
+    "key_bones": {
+      "J_Head": {
+        "offset": [
+          3.538827149895951e-05,
+          -0.26451557874679565,
+          64.5334243774414
+        ],
+        "matrix": [
+          [
+            0.0,
+            -0.13180944242683187,
+            0.9912717062898648
+          ],
+          [
+            0.0,
+            -0.9912717062898648,
+            -0.13180944242683187
+          ],
+          [
+            1.0,
+            0.0,
+            0.0
+          ]
+        ]
+      }
+    }
+  },
+  "c_t8_zmb_mob_zombie_body3": {
+    "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\kingslayer_kyle\\characters\\t8\\c_t8_zmb_mob_zombie\\c_t8_zmb_mob_zombie_body3_LOD0.XMODEL_BIN",
+    "sha256": "fe53be0913bc7d560ed36237c5310e9b80b823b26b25ab3f38cf359cf29d0535",
+    "meshes": [
+      {
+        "name": "WraithMesh_0",
+        "triangles": 700
+      },
+      {
+        "name": "WraithMesh_1",
+        "triangles": 1057
+      },
+      {
+        "name": "WraithMesh_2",
+        "triangles": 1273
+      },
+      {
+        "name": "WraithMesh_3",
+        "triangles": 1731
+      },
+      {
+        "name": "WraithMesh_4",
+        "triangles": 1121
+      },
+      {
+        "name": "WraithMesh_5",
+        "triangles": 604
+      },
+      {
+        "name": "WraithMesh_6",
+        "triangles": 730
+      },
+      {
+        "name": "WraithMesh_7",
+        "triangles": 850
+      },
+      {
+        "name": "WraithMesh_8",
+        "triangles": 132
+      },
+      {
+        "name": "WraithMesh_9",
+        "triangles": 134
+      },
+      {
+        "name": "WraithMesh_10",
+        "triangles": 126
+      }
+    ],
+    "triangles": 8458,
+    "bones": 90,
+    "materials": [
+      {
+        "name": "mtl_c_t8_zmb_mob_zombie_body3_belt",
+        "images": {
+          "color": "_images\\\\i_c_t8_zmb_mob_zombie_body3_belt_c.png"
+        }
+      },
+      {
+        "name": "mtl_c_t8_zmb_mob_zombie_body3_rightleg",
+        "images": {
+          "color": "_images\\\\i_c_t8_zmb_mob_zombie_body3_rightleg_c.png"
+        }
+      },
+      {
+        "name": "mtl_c_t8_zmb_mob_zombie_body3_sleeves",
+        "images": {
+          "color": "_images\\\\i_c_t8_zmb_mob_zombie_body3_sleeves_c.png"
+        }
+      },
+      {
+        "name": "mtl_c_t8_zmb_mob_zombie_body3_torso",
+        "images": {
+          "color": "_images\\\\i_c_t8_zmb_mob_zombie_body3_torso_c.png"
+        }
+      },
+      {
+        "name": "mtl_c_t8_zmb_mob_zombie_body3_leftleg",
+        "images": {
+          "color": "_images\\\\i_c_t8_zmb_mob_zombie_body3_leftleg_c.png"
+        }
+      },
+      {
+        "name": "mtl_c_t8_zmb_mob_zombie_body3_shoes",
+        "images": {
+          "color": "_images\\\\i_c_t8_zmb_mob_zombie_body3_shoes_c.png"
+        }
+      },
+      {
+        "name": "mtl_c_t8_zmb_mob_zombie_body3_gloves",
+        "images": {
+          "color": "_images\\\\i_c_t8_zmb_mob_zombie_body3_gloves_c.png"
+        }
+      },
+      {
+        "name": "xmaterial_1de0fbac2e7c83",
+        "images": {
+          "color": "_images\\\\ximage_5ab82cb97ad5348.png"
+        }
+      },
+      {
+        "name": "xmaterial_fa22cefd77459dc",
+        "images": {
+          "color": "_images\\\\i_c_t8_zmb_mob_zombie_body3_leftleg_c.png"
+        }
+      },
+      {
+        "name": "xmaterial_669624826d035e9",
+        "images": {
+          "color": "_images\\\\i_c_t8_zmb_mob_zombie_body3_rightleg_c.png"
+        }
+      },
+      {
+        "name": "xmaterial_f3beddd79ea782d",
+        "images": {
+          "color": "_images\\\\i_c_t8_zmb_mob_zombie_body3_torso_c.png"
+        }
+      }
+    ],
+    "key_bones": {
+      "j_knee_le": {
+        "offset": [
+          -1.5792924165725708,
+          5.001477241516113,
+          20.872194290161133
+        ],
+        "matrix": [
+          [
+            -0.16928617206335642,
+            0.0,
+            -0.9855647450178533
+          ],
+          [
+            0.9855647450178533,
+            0.0,
+            -0.16928617206335642
+          ],
+          [
+            0.0,
+            -1.0,
+            0.0
+          ]
+        ]
+      },
+      "j_knee_ri": {
+        "offset": [
+          -1.5792896747589111,
+          -5.001446723937988,
+          20.872190475463867
+        ],
+        "matrix": [
+          [
+            0.16928617206335642,
+            0.0,
+            0.9855647450178533
+          ],
+          [
+            -0.9855647450178533,
+            0.0,
+            0.16928617206335642
+          ],
+          [
+            0.0,
+            -1.0,
+            0.0
+          ]
+        ]
+      },
+      "j_spine4": {
+        "offset": [
+          -0.7520396113395691,
+          0.00010470426786923781,
+          49.172367095947266
+        ],
+        "matrix": [
+          [
+            0.05069124423963134,
+            0.0,
+            0.9986877040925322
+          ],
+          [
+            0.9986877040925322,
+            0.0,
+            -0.05069124423963134
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ]
+        ]
+      },
+      "j_elbow_le": {
+        "offset": [
+          1.962946891784668,
+          15.176745414733887,
+          48.355384826660156
+        ],
+        "matrix": [
+          [
+            0.8784142582476272,
+            0.3127231666005432,
+            -0.36133915219580676
+          ],
+          [
+            -0.4763023773918882,
+            0.6343272194586016,
+            -0.608844264046144
+          ],
+          [
+            0.03878902554399243,
+            0.706961272011475,
+            0.7061677907650991
+          ]
+        ]
+      },
+      "j_elbow_ri": {
+        "offset": [
+          1.9629642963409424,
+          -15.176778793334961,
+          48.35538101196289
+        ],
+        "matrix": [
+          [
+            -0.8784142582476272,
+            0.3127231666005432,
+            0.36133915219580676
+          ],
+          [
+            0.4763023773918882,
+            0.6343272194586016,
+            0.60887478255562
+          ],
+          [
+            -0.03878902554399243,
+            0.706961272011475,
+            -0.7061677907650991
+          ]
+        ]
+      },
+      "j_head": {
+        "offset": [
+          0.264451801776886,
+          1.2670730939134955e-05,
+          64.5334243774414
+        ],
+        "matrix": [
+          [
+            0.13177892391735588,
+            0.0,
+            0.9912717062898648
+          ],
+          [
+            0.9912717062898648,
+            0.0,
+            -0.13177892391735588
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ]
+        ]
+      }
+    }
+  }
+}

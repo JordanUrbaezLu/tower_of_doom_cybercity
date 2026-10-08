@@ -22,7 +22,11 @@ if ($buildProcs) {
     exit 1
 }
 
-$gameArgs = "+set fs_game zm_tower_of_doom +set_gametype zclassic +devmap zm_tower_of_doom +set developer 1 +set logfile 2"
+$gameArgs = "+set fs_game zm_tower_of_doom +set_gametype zclassic +set developer 1 +set logfile 2 +set scr_mod_enable_devblock 1 +devmap zm_tower_of_doom"
+
+# The next launch can truncate console_mp.log. Archive it before handing off.
+& (Join-Path $PSScriptRoot 'capture_ai_logs.ps1')
+if (-not $?) { throw 'Previous console log could not be preserved; launch stopped.' }
 
 Write-Host "launching BO3 through Steam (DRM-safe): steam://run/311210"
 Write-Host "args: $gameArgs"

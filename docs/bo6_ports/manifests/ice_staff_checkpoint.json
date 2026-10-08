@@ -1,0 +1,664 @@
+{
+  "staging_only": true,
+  "native_verified": false,
+  "body_output_hashes_verified": [
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\tod_bo6_ice_body.XMODEL_EXPORT",
+      "sha256": "c2ecb04e42a1855873a0f8fa9378dd24ac92031d3b82f9757d77eab8dce76e21"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\tod_bo6_ice_body.XMODEL_BIN",
+      "sha256": "92baf9d8455ab769b0ac1a7a29a0fd79a9dd7e42c14c83b748b5c3314c9fbff3"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_5cca21b19874c8d9_c.png",
+      "sha256": "7872283b115f170093cbb9107090be559d84ba74ac12178473a6857035502ddc"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_5cca21b19874c8d9_n.png",
+      "sha256": "602ff448f4586c2c036c3b6815527e7ab70fe3abd09776863341f28187eeb6e0"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_5cca21b19874c8d9_g.png",
+      "sha256": "a691a2e5a05760eb8d551d5a36c67cc7b6a4edf086fb1397340bad0f50f61f35"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_5cca21b19874c8d9_o.png",
+      "sha256": "3e54e7eaf4a3af82307f3a0a9a35442dda186cbf0d1c34d1160c1d26d4696a20"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_6394a6b54d0b53ec_c.png",
+      "sha256": "207b9415b95f3b8485564085a5122b7f5c2168fed68b0fc5a0ccb8c6dca37b1d"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_6394a6b54d0b53ec_n.png",
+      "sha256": "9ec396053a88ba1367b2251246629543a74ed193d6fe2289486a0d4bde792548"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_6394a6b54d0b53ec_g.png",
+      "sha256": "9139240a159f15eacfca2861e673d2409613c2f3ebe83d49663df03abe3cd45f"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_6394a6b54d0b53ec_o.png",
+      "sha256": "d7b0e4e8296dbef03b4bd1698aee916f94d012bdbf7cfd57bbb73ed39c18d7bc"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_181e47b523024669_c.png",
+      "sha256": "9e9555395d61cd2ec694e2ba4098cc8abee554375159d6d23df79883457bcd36"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_181e47b523024669_n.png",
+      "sha256": "b55ac9c0e2045da62dc1f80e9351d16395df3d38fa74fe072e66c4f9c648fd5b"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_181e47b523024669_g.png",
+      "sha256": "ac72c57dad91704a85aaa0418c8af6644e415bea297cefd8ddeb15799ad6f8e8"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_181e47b523024669_o.png",
+      "sha256": "03d69f3280d9d520298108ba71f4fa5aa26ca3276090d175b7b278802661ee0a"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_3587ccc715838fe3_c.png",
+      "sha256": "19c23d3b4ec0eca3f1c946ba9187e43dabbe3fb9ca674edd189c0b7da8ee4c50"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_3587ccc715838fe3_n.png",
+      "sha256": "3d41646de11179347cba387d740809ba54bfe4bd35bc65fd6c1bbc606eb05aff"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_3587ccc715838fe3_g.png",
+      "sha256": "a3f3fb4dece7f8b3794b4646cd003f48ec1722b4e2225eb6bbe671d5e0d0234d"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_3587ccc715838fe3_o.png",
+      "sha256": "5d83d313422584700dab9a54b26d268a3422b08845bd27cb93287b09c7478495"
+    }
+  ],
+  "existing_staff_sources_unchanged": [
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_generic_lookup.png",
+      "sha256": "4b7b83dccad1674a384fcfcac8ae79570d704e58ec3e53a0bcd9a0b31aa3cc81"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_camo_ice_e.png",
+      "sha256": "beaf95f98775641222aabd7d8da6beef7a42f9063898f77d5b840d9958f0b329"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_crystals_n.png",
+      "sha256": "30abc092ff31611fe6c484e91b8b11944983f81caffc1d0e8c9b0d92d7bd893b"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_crystals_o.png",
+      "sha256": "5cc40df858f0787f3c711ed25b3ecbd019405dc2afcfd137f52aea3840c7efde"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_down_c.png",
+      "sha256": "ac54e691aca6105e9468199d816bd8009b768553b9e7b83849a3edeeebc89523"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_down_g.png",
+      "sha256": "bc0a98dae201ef5c57ec4c204a72cfb9fbae756d73bca38d9f6c4acbb5af62b0"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_down_n.png",
+      "sha256": "e87fd7e4f78b1139b2ff6ec5d7b8369b6adf99c74c0e33163cdce087e5e832e6"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_down_o.png",
+      "sha256": "6fba79bb22004f981225b55863f3a4d0984b48dea9d28d61367043c399246b24"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_down_s.png",
+      "sha256": "31f2ff7d5928f2a251df2909382239b25ff57614abb803368027f62d5012f14a"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_revive_c.png",
+      "sha256": "75e8186f6032d0ebb3267104f4db0cf39a80216f1a9d446f77257c5cd24077fc"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_revive_g.png",
+      "sha256": "2e76c03cac3a35684882581303e222318aa20aa3cee19c215746e864bbcc1428"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_revive_n.png",
+      "sha256": "5be25e480ede4715514793d8d8dcd642e0a2991b47b0ffa01ae6e86dcf232373"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_revive_o.png",
+      "sha256": "2ad7d388c67af250e1821591ebf57e8279179ccfe11b94449477d9fb3ec004bd"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_revive_s.png",
+      "sha256": "a4ddf60e5fbac81a7ee584f5cb46f088b15b8aa98bbef2cbd0ecc3f23ffbee28"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_tip_fire_c.png",
+      "sha256": "81524a766303f0c310d0998f3eb4ddf49f3410576be5bbeb73bb9568ca88ea05"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_tip_fire_g.png",
+      "sha256": "3b8ae810150120a1997659b183d510057afb8340639ae1e1d53bf3419f102202"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_tip_fire_n.png",
+      "sha256": "fa8d561d0771183c8b86dbaaa6fd175143d9263980fc7137f83ae1b2aba9fff9"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_tip_fire_o.png",
+      "sha256": "db7177d24e54b5a0f5756e539c45ca2d479e5ad3cf59c9d8cc8d3c80b7b2027b"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_tip_fire_s.png",
+      "sha256": "720d9cb91437cf554ce9bf26b03519f1e60bd6345b54d5fa5cee8c245e2dad61"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_tip_lightning_c.png",
+      "sha256": "9b26e1c53fd968c6a41779931e360ddf9d40291ed57471b0be148f9bd2c35490"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_tip_lightning_g.png",
+      "sha256": "9153d56e8605d4fbe1c85531ccc8e124fd2651179b3364876b7871dbe9c0e3f8"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_tip_lightning_n.png",
+      "sha256": "7a2ed236b2ae0f8bfeaac9b30453df48fa7f510d4acdd69620517df38c399e10"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_tip_lightning_o.png",
+      "sha256": "a35f2064a5755c817ffea336092731604dd7001c28be11516effa143d9a1bbaa"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_tip_lightning_s.png",
+      "sha256": "efaa51f94617efc12229d3c766586f00b3e09aaf0f0f97a3c0e27b87be3f7f53"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_tip_water_c.png",
+      "sha256": "f09e3d234476b8a9c344ffa2785d5286b34087257301616c1d1f8541758f67b1"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_tip_water_g.png",
+      "sha256": "f651bdbfae9500cd2fbccb8ea76e6270b1bbb3efd1029a6705da6e3f05479d66"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_tip_water_n.png",
+      "sha256": "6293f706c224ba5cc4a2bc4e4b4e825d88aa6e87050f32d72914ddd417728215"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_tip_water_o.png",
+      "sha256": "2644330cdb9a1a3191747e90b1a245231409e1d164b7ca66e5bc2e0834d89211"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_tip_water_s.png",
+      "sha256": "38b9dd0d245410401d9644319cb44f5fbe441f95df4d2786317d1d97921f1831"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_up_c.png",
+      "sha256": "7c3784bb97fbd2bc41c64ba8e3020e7e944b00c06dc4aaa3caaf1208ef554aab"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_up_g.png",
+      "sha256": "6af9907c3d2878303d31bab03c9223fc58965b5e4582d3d36493fa6ee56eca76"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_up_n.png",
+      "sha256": "5925cd8a1b5d977cd81946bee74597a79b0b80d0f2a372f06575b0d0896c6efa"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_up_o.png",
+      "sha256": "2fb6a89d97508c4a2b0d50fde9a636fdadf633554841a11eb239f95416122830"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\_images\\i_wpn_t7_zmb_hd_staff_up_s.png",
+      "sha256": "af589577c981989a0b4680f34acf448be641eb3652ddb650095410744d68a4f3"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\sla_staff_elements_skeleton.XMODEL_BIN",
+      "sha256": "3d8cd158cece9793e2cb28c4413db0b6d36cb088d4869ff4eccfad3546973ca8"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\sla_staff_elements_skeleton.XMODEL_EXPORT",
+      "sha256": "50522d3e19eb9b59c1fdeb0a07807a6a8e01f9f44242406f6260c0f7bcab6e52"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\sla_staff_ice_skeleton.XMODEL_BIN",
+      "sha256": "2a3ad92c9ff53866aa17b06df0bc5356cdcd41a972c43baaec5208b627583337"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\sla_staff_ice_skeleton.XMODEL_EXPORT",
+      "sha256": "1559b17a09623335d068fb4e3e002121956384458383a2b57a6d3607f0a7a2e5"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\sla_staff_r4_skeleton.XMODEL_BIN",
+      "sha256": "92a14c9a3b6f34bcf263d4f3433f01c507f478150c366a833dbda550420e5080"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\sla_staff_r4_skeleton.XMODEL_EXPORT",
+      "sha256": "6770014c910980b929d7ed0b90fe878bce10a620de213e6aec55003b423cfa10"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\sla_staff_r6_complete_view.XMODEL_BIN",
+      "sha256": "3414b49604a3fe422a3021b31f1348bc1783e55fab5d2f9d7b4a7f399f14b34a"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\sla_staff_r6_complete_view.XMODEL_EXPORT",
+      "sha256": "fcdcca069d0828e502bce1e95365297a53b6a9ad6a4bd3da89a578bbd3100083"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\tod_staff_crystal_fire_view.xmodel_bin",
+      "sha256": "671196310156ff739228ff16f2879878d02b025af7800cd8a0c69b817fb7a1df"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\tod_staff_crystal_fire_world.xmodel_bin",
+      "sha256": "671196310156ff739228ff16f2879878d02b025af7800cd8a0c69b817fb7a1df"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\tod_staff_skeleton.XMODEL_EXPORT",
+      "sha256": "18c5912cb9818f4458931e91ee0bbb0f4146e4e8501210e5b6bc659fc55cf9e5"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\tod_staff_skeleton.xmodel_bin",
+      "sha256": "9098ae5c56a9ed5ca1f8201eb7fb6206212def4534f87142c62dd4e8eea541e3"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\tod_staff_tip_fire_view.xmodel_bin",
+      "sha256": "08be4b1796003d502a1d2b9dd5719bc9ea8dafde360c4af0b334c981bbdf8f97"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\tod_staff_tip_fire_world.xmodel_bin",
+      "sha256": "7ff75e04ee67f622a9653b5d5da5a56962a4aa19dda36530a47da666cc6dfa15"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\tod_staff_tip_lightning_view.xmodel_bin",
+      "sha256": "bc80fc42a5deb08154ff798285535d3ca1dd8ba77e4d7d8f2fb33610b8696fe9"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\tod_staff_tip_lightning_world.xmodel_bin",
+      "sha256": "d0328dd2d10949ae06fbe3f6e149ec0f4682f951025dfdcc8e1cd7db3b8c576c"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\tod_staff_tip_water_view.xmodel_bin",
+      "sha256": "09950c580efefb6db1208cd6402f849b59fda6aa9e2e7e5d2750ca95bece5b93"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\tod_staff_tip_water_world.xmodel_bin",
+      "sha256": "aef5fda54e196d236f8270a4e4ec65a7dd5ef9217783c592c6ecabd498758ced"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\tod_staff_view.xmodel_bin",
+      "sha256": "b9f183ff8f1d7ec51fd985140cea4a118e9a43499d3018e3e03d5e55bad34c75"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\tod_staff_world.xmodel_bin",
+      "sha256": "4bb2c1546f82bbbea6e2e7ed7cfc34629e02e5aa4109433a9e34e2c122ca6d5e"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\docs\\staff_approved_manifest.json",
+      "sha256": "26df6545cfde01600b24cf4a3d1c0eecc838850f11506c8776ee240ddf36d9ff"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\model_export\\tod_staff_anim\\tod_vm_staff_elements_skeleton.XMODEL_BIN",
+      "sha256": "222fbc7d35921d4003a52734286ec3e7017f0f50c2d02cc41684b0041c1661fd"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\model_export\\tod_staff_anim\\tod_vm_staff_ice_skeleton.XMODEL_BIN",
+      "sha256": "2a3ad92c9ff53866aa17b06df0bc5356cdcd41a972c43baaec5208b627583337"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\scripts\\zm\\zm_tower_of_doom\\_tod_mage_elements.csc",
+      "sha256": "6f2b6e60f6a9007b9ba71f47d43a8fa1a986e147f3bbe1d21916d5225ba260ce"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\scripts\\zm\\zm_tower_of_doom\\_tod_mage_elements.gsc",
+      "sha256": "69bc0910f1a70768cf9c8122c56a305cb2593b1b13f9e1b77a23d0ff182af9e9"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\source_data\\tod_staff.gdt",
+      "sha256": "df3961d08a38419a91126ab862632bea5809eb6528ba843374acb3d444b35290"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\source_data\\tod_staff_anims.gdt",
+      "sha256": "f46deb9696b939554a7215f071774f4f1dd563e52d639e6c7e6de14db297e234"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\source_data\\tod_staff_approved_anims.gdt",
+      "sha256": "33b6757c2f17723373ff70a72335564f373da26b42dafe5ee0014e7c87f1486f"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\source_data\\tod_staff_origins.gdt",
+      "sha256": "196f20554a09b8a69d2f95a92cb2bb4c5d26a6a9abcd7c6584b9089f28f12d2c"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_crawl_b.XANIM_BIN",
+      "sha256": "3df91852baa42df7c22c065b9e580d15f3aa7616efda78db8df4c6a2c0f92dac"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_crawl_f.XANIM_BIN",
+      "sha256": "4c09d9cfe461ad739c2edd672d77c0b4883e403ea5654253c0f725882c8d2b3a"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_crawl_in.XANIM_BIN",
+      "sha256": "43de26cbcb3ec05970ec56e7de79fd65f5b109d007374bfcd1c987aeb951a34c"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_crawl_l.XANIM_BIN",
+      "sha256": "0868c00913957dcf81513e1380ee50d9078d2e4229344e4407200862983815de"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_crawl_out.XANIM_BIN",
+      "sha256": "28e894107acf20efe93b609d5b3b2e26352870fb7ea3fbd12b8b0a5f99528b27"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_crawl_r.XANIM_BIN",
+      "sha256": "7168d1ec5047a4a532f690a5b6aba399bb9d059e35c9ff0808b195b7b0e40b3a"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_idle.XANIM_BIN",
+      "sha256": "bbb5efe195ed231053a37034032d949561bc73fff4508866e23b7cbe661bd562"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_slide_air_in.XANIM_BIN",
+      "sha256": "cccde15fc39b6a49a51593ccfdf41bb50876f5c41863895fb376bf51f087abb2"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_slide_in.XANIM_BIN",
+      "sha256": "52fc3224cc1cc52514642db1b4f0b8f3874fea71f5b78999e28fb62ee9bf6532"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_slide_loop.XANIM_BIN",
+      "sha256": "fb8709d1df5c68782916a6b5adf91a6390c37f40d60ba937d196559a4f3f4d7a"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_slide_out.XANIM_BIN",
+      "sha256": "922279f46ba271fb2ba295c2d773f253b09c18f479e78a88eb59107bdd8604af"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_t7_ads_fire.XANIM_BIN",
+      "sha256": "e0dfe1683af36849c40d99bfa74e950241ed6f0e3637578be0c1e29b5b336025"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_t7_fire.XANIM_BIN",
+      "sha256": "b58067ca7a0047ad221fd323005ea59c3742b6a002fdc7d1d43a117c3d7089f1"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_t7_fire_first_raise.XANIM_BIN",
+      "sha256": "82fd716f76acbb238239f53a44132e63da4fa70c1058af5696f2f6495acb9330"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_t7_hold_fire.XANIM_BIN",
+      "sha256": "6f78a863818c61ecd9feb5cdd3a46147e81d88a146697dc60d0c417752c13556"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_t7_melee_slash.XANIM_BIN",
+      "sha256": "3b544e087cc8d7d84d6a020b0896b6c64a1b296bc0920298a4d880ae817ee889"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_t7_pullout.XANIM_BIN",
+      "sha256": "d4344d0b19cd28fb1f730e1427b758a0b4071639b588cd7ebecb25a193ff05b4"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_t7_pullout_quick.XANIM_BIN",
+      "sha256": "542e08f0cdb3c9e63c3f457cb0b7ceac91e0f0f8ba27e5bc39fe5d018759f76a"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_t7_putaway.XANIM_BIN",
+      "sha256": "53b795669acd1251cee3bad8b6cbd3cbf1595687f8cd3fda915f760a9973c137"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_t7_putaway_quick.XANIM_BIN",
+      "sha256": "7553dab9fb156308babb0acc0dc68e6f11d7326aec4dd7620f0c466bda74f0c8"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_t7_reload_fire.XANIM_BIN",
+      "sha256": "95192c645a816a730033ad1676a37af846fe7d2021c115f7df1450abd23da773"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_t7_sprint_in.XANIM_BIN",
+      "sha256": "f56fe6fb4af059d4a1877d76c4469b3e486973e0cd3aeb64fc0a4fdc25329a8d"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_t7_sprint_loop.XANIM_BIN",
+      "sha256": "8a12a8d77aa6e610937a9fc4e4d9c994dee44c5e36dc033cc6d7ac783718bc51"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_fire_fit_t7_sprint_out.XANIM_BIN",
+      "sha256": "a0041323eaf41487a3566755fc6c22d336ef323332a82b6459334db1b72025d2"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_crawl_b.XANIM_BIN",
+      "sha256": "d9b3a642915851f35fb263d68f8f5914b326e52beeabb5578f4a38e289c00e1d"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_crawl_f.XANIM_BIN",
+      "sha256": "0cd589d70ecb04843f915162e05cd063032046becebde8a4cf15f6f8d93925dc"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_crawl_in.XANIM_BIN",
+      "sha256": "97760f4a67da4b34a82d0906b5df7d8c2dbe9c2c1cacf58c57574d5a411ed96f"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_crawl_l.XANIM_BIN",
+      "sha256": "c3195a2e73fc401a572622b74b1d6074b58a405a5f8a5c81d1cae349f548e45c"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_crawl_out.XANIM_BIN",
+      "sha256": "f88de9d576d00a90f5a7dfb32a5392da503d7d365a3af7fb551369a023b10760"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_crawl_r.XANIM_BIN",
+      "sha256": "0a30b4124d1abd1d302fd8a4c1a2b01b8e42e31e51a8ac165e717021e1ad720b"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_idle.XANIM_BIN",
+      "sha256": "0d7b4ef5f8fecbc56a397c641e0cbf1b24b7c54e8d1619060df2c6b6c562ecaf"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_slide_air_in.XANIM_BIN",
+      "sha256": "8f486ee726eba4b564bb959e5bcf25986a8f8534fdafc5f76ea3ae319546e1ca"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_slide_in.XANIM_BIN",
+      "sha256": "ffb1415ce8de3e336a09b2400ad1a5c04b4ff959a9962807e579ec92269a03c2"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_slide_loop.XANIM_BIN",
+      "sha256": "9fcfbbc178ab360efb4b6623287c9eb176317606c38ea391f3e0f0e626ceda46"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_slide_out.XANIM_BIN",
+      "sha256": "6ba26fc915ab89339d997757d4572093ac70ab665b7a92b8ef8fca0314d5a98e"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_t7_ads_fire.XANIM_BIN",
+      "sha256": "c9ee49615f9a9de28ecc48e25473a68179c12908bbe0d743948e209b1bd17734"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_t7_fire.XANIM_BIN",
+      "sha256": "27e064467fe8eba9e32a2cb3674a79dfc456d436de2f5d7384f7223910bcc8f3"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_t7_hold_fire.XANIM_BIN",
+      "sha256": "7c1e6b37389dff8fb1512ffcfb055464502265435cf255aa63db56f7762c8f70"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_t7_melee_slash.XANIM_BIN",
+      "sha256": "b20bbd7cb23cedbe6a40e07292eff3cf6518586c8aa77a35eebfc5edad7765fe"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_t7_pullout.XANIM_BIN",
+      "sha256": "c3388164b4e74368bc07e58fd2eb508c5ce8d36e20003d9b5aa7cf7cdb0ba9d3"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_t7_pullout_quick.XANIM_BIN",
+      "sha256": "367571ab03fd8bd0c7d58076a006bd7406c57ff444e3e502f68a9d9d1500b823"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_t7_putaway.XANIM_BIN",
+      "sha256": "a11199d2335e31d1b1fa08397bb3fbd9f8f7e15c106219d27b4e20f6420b0e95"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_t7_putaway_quick.XANIM_BIN",
+      "sha256": "9801243a7c3e951d353a5ae6e52fa68b675d1ce0b4948eb3c852e194ec7ebb0d"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_t7_reload_ice.XANIM_BIN",
+      "sha256": "eb2488c67cccd9d5099221c6e2aea986eaf0cd92e21d822f91a1d0ab267a231a"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_t7_sprint_in.XANIM_BIN",
+      "sha256": "4efddf8a70c27cc545aa4ad05bd4922466b474b9e72270e9c1a7970226ece754"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_t7_sprint_loop.XANIM_BIN",
+      "sha256": "f9f65fa95b5872560bcd13fb01bc997b4f8a14cbc4302a2eb24e11ae14d83f42"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_t7_sprint_out.XANIM_BIN",
+      "sha256": "9d5a5656a3e7b052227a7e66f05b3a914d31b2a48c206dffcc28327f621409e1"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_t7_water_first_raise.XANIM_BIN",
+      "sha256": "8c9c052347357425fc19cbf751c6f7e836704b132b0c3a1d32f8c518d3ebe8f6"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_t7_ads_down.XANIM_BIN",
+      "sha256": "7f62c702a5be1451637aabce41090d1524eb973ad6a393440a4699933f22dacd"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_t7_ads_up.XANIM_BIN",
+      "sha256": "baf68088890aed26c3a249a3087b81fb7e4d314650d2b99c8eaff1598f3e13b3"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_t7_fall.XANIM_BIN",
+      "sha256": "a97fd63df729087a4d1d103064423337f1b2ad57ba77eb865e21dc424467ac83"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_t7_jump.XANIM_BIN",
+      "sha256": "7b088e8188438843392bb436d8b154d68d1a372b484b31448ff89b65ad96f877"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_t7_jump_land.XANIM_BIN",
+      "sha256": "c5ecab742a945771daecd0b2235e3b18bbfb46d0036ef1ca79143907f94e5f48"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_t7_walk_f.XANIM_BIN",
+      "sha256": "52ccc293fb42893be72a047c23078c36df6e4b5289e0cba06eeea11c33cb6ba4"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_crawl_b.XANIM_BIN",
+      "sha256": "7cfadf88e1439157a923d69ca24514ad85ab575e428447185746ad2518093dac"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_crawl_f.XANIM_BIN",
+      "sha256": "82e796611c256577c42cc13e7e712272f18832dcb831c03137935a932f08ed20"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_crawl_in.XANIM_BIN",
+      "sha256": "6e82473de8c43f872e246cb94d908e8aaa7f11ac0b9646e6fc19882ac4f72908"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_crawl_l.XANIM_BIN",
+      "sha256": "91914c2563afe51bb7ac715d6f19249819b1fd62f298d53947b1ec5a602a9b01"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_crawl_out.XANIM_BIN",
+      "sha256": "292a935b6cf19f27aa04bd44f07c15690dd56c87855a7e8af3f07ef5d385c39d"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_crawl_r.XANIM_BIN",
+      "sha256": "0b3b132598cba280597cab0cde0544bb3ed8781bcf444f0bea2b8f293df1c9e6"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_idle.XANIM_BIN",
+      "sha256": "367e7aaeaf3ca32a1abb8165b26e2c6042aa7f341057e799b25ca68583502afa"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_slide_air_in.XANIM_BIN",
+      "sha256": "2941d7deb9c0a00001b3e6b01aca70398b13063c1249ea747aa88ba14199ce82"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_slide_in.XANIM_BIN",
+      "sha256": "13327ad9caa15964acaa055f247eea1c8a12dd7ec8346660d5792b0a9ed73520"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_slide_loop.XANIM_BIN",
+      "sha256": "7ca365fba5cd5f6c7aa95a63d86c5ef1171ce6fcb7e62224ea55d4d8ee7f6108"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_slide_out.XANIM_BIN",
+      "sha256": "c44b036a23f8e1c605a7d88402a247c7fb512963a86b2fe7aa5bcade664c9067"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_t7_ads_fire.XANIM_BIN",
+      "sha256": "959dbb3fd1345aceb015284c00f151fb4a53bffaa942131455f4f960bd2075f3"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_t7_fire.XANIM_BIN",
+      "sha256": "21ffbd5d8c3f6a977ba11bb3617247bf72e4f9d5baa3c049eec76ba283d4989b"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_t7_hold_fire.XANIM_BIN",
+      "sha256": "4ecc7165cb5568c6fbd3c26dea2a7a16677d0a88466e4f44ea9917ae986850e2"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_t7_lightning_first_raise.XANIM_BIN",
+      "sha256": "af0c79fbbf70e47ae8829d5a9102f1a91357f96c4943f55347676e476c803604"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_t7_melee_slash.XANIM_BIN",
+      "sha256": "8d9d3b6ca5abc8e8ececca5fad331604dbbb45d75bb07773e5f37e8c3cedbbaa"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_t7_pullout.XANIM_BIN",
+      "sha256": "7c75cb3f3854785b9582c237c09fcd398b6b6221e0357d69c26ed737901a8563"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_t7_pullout_quick.XANIM_BIN",
+      "sha256": "38bf897d12acfb1ad1f8b74e1a805653cefee4a968b81dc9d12457c0bcf8aa6a"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_t7_putaway.XANIM_BIN",
+      "sha256": "382f36c22ec39f7b8cbd7af27c3c16ab7d751d5c395febb2c1a777c273008ca5"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_t7_putaway_quick.XANIM_BIN",
+      "sha256": "0c0000c0a7c10260a339cd128c4706856f24103816d4dd28d2bdc87fefc9457d"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_t7_reload_elec.XANIM_BIN",
+      "sha256": "d137472fc028eca20b8a505b4ffc1cc69f39765fc199a3274c960fb10caac150"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_t7_sprint_in.XANIM_BIN",
+      "sha256": "631768297234e78dd81f997a6de112fa5b63767ea330cb885e2c5b698f26c136"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_t7_sprint_loop.XANIM_BIN",
+      "sha256": "72eb062f54a7012c20d5e5208e3f35ed77a126deffb3bd9f12e86e6cf6d69c53"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_lightning_fit_t7_sprint_out.XANIM_BIN",
+      "sha256": "c7ab18adcc04ecd6dba1cab624f9d6773eb1d72a96091dec68c3a0f32ce2f6c2"
+    }
+  ],
+  "reference_provenance": [
+    {
+      "copy": "tools/bo6_extraction/port_gate.py",
+      "original": "C:\\Users\\jorda\\Repositories\\tower_of_doom_II_hellbound\\tools\\bo6_extraction\\port_gate.py",
+      "sha256": "2dc7c218f7c7026e9af4ddec6e6e3c07e45d70b0f4e4886fd75aaaf1f8354991"
+    },
+    {
+      "copy": "tools/bo6_extraction/inspect_cast.py",
+      "original": "C:\\Users\\jorda\\Repositories\\tower_of_doom_II_hellbound\\tools\\bo6_extraction\\inspect_cast.py",
+      "sha256": "926ec8186d0ee0978c6ef4907cdcfbac9152e1d511dfac11a1a982a288eebfe6"
+    },
+    {
+      "copy": "docs/bo6_ports/reference/BO6_COMPLETE_MIGRATION.md",
+      "original": "C:\\Users\\jorda\\Repositories\\tower_of_doom_II_hellbound\\docs\\BO6_COMPLETE_MIGRATION.md",
+      "sha256": "bc035963e5498bf7f2d9637c8268ecd0f05cf5f59cb269def21c7357a0e7091a"
+    }
+  ],
+  "source_cast_hashes_verified": 119,
+  "source_wav_hashes_verified": 10,
+  "baseline": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\20260913_005833"
+}

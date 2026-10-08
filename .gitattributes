@@ -1,10 +1,41 @@
-# Line-ending policy: LF in the repo, LF on checkout, machine-independent.
-# Same policy as abandoned_cyber_city_zombies (proven there 2026-06):
-# Radiant/GSC/linker all accept LF; Radiant re-saves CRLF on Windows and a
-# commit normalizes back, so the repo never churns line endings.
-* text=auto eol=lf
+# Line-ending policy (2026-10-08, docs/174): STORE EVERY FILE BYTE-FOR-BYTE, no conversion.
+# Was `* text=auto eol=lf` (map 1's policy: normalize to LF so Radiant's CRLF re-saves never
+# churn). It broke fresh clones: ~389 working files are CRLF on disk (written by Windows tools)
+# and many build gates pin sha256s / string-compare those exact bytes - gen_tod_amp63.js
+# --check (every build, even -GscOnly), the staff, roster, altar, inducer, perk, Thunder Smash
+# and sign manifests, the size-pass state. A clone checked them out as LF and the FIRST gate
+# failed. `-text` also overrides Git for Windows' system core.autocrlf=true. Cost: a tool that
+# flips a file's line endings now shows as a whole-file change - commit it as written.
+* -text
 
 # Binaries - never touch.
 *.png binary
 *.jpg binary
 *.jpeg binary
+*.gif binary
+*.webp binary
+*.wav binary
+*.mp3 binary
+*.flac binary
+*.ogg binary
+*.exr binary
+*.tif binary
+*.tiff binary
+*.tga binary
+*.dds binary
+*.psd binary
+*.iwi binary
+*.xmodel_bin binary
+*.xanim_bin binary
+*.cast binary
+*.ttf binary
+*.otf binary
+*.zip binary
+*.7z binary
+*.rar binary
+
+# Blender masters and the fan FBX sources ride Git LFS (docs/174, 2026-10-08): GitHub refuses any
+# file over 100 MB (reference_two.blend is 128 MB) and every re-save of a master is a full copy.
+# Free tier = 10 GiB storage + 10 GiB download / month; the 22 files were ~1.0 GB when added.
+*.blend filter=lfs diff=lfs merge=lfs -text
+*.fbx filter=lfs diff=lfs merge=lfs -text

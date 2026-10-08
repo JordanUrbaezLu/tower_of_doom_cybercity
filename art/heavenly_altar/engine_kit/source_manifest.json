@@ -1,0 +1,62 @@
+{
+  "master": "art\\heavenly_altar\\heavenly_altar_cyber.blend",
+  "master_sha256": "a9883c5d26038cfbdee82a0fed2b7deed6db58988ffb6b84f598a677aee4155e",
+  "emission_scale": 8,
+  "normal_convention": "DirectX -Y",
+  "groups": {
+    "solid": "mtl_tod_altar",
+    "portal": "mtl_tod_altar_portal",
+    "wings": "mtl_tod_altar_wings"
+  },
+  "textures": {
+    "i_tod_altar_c.png": "9d6458fc895c7c7b2335534b1be8b74b5cac8133c8e28927c66bed0fdf5b42a8",
+    "i_tod_altar_e.png": "091848dd4dca590f39a04564fa8c13be8dfc4547f02b976d4aa4d72a58ee96f9",
+    "i_tod_altar_g.png": "5859502d1b6d28f8f7ddbaac1a753fb1dd290a874cbf7ea58740c95500c2c2e9",
+    "i_tod_altar_n.png": "568136c8879b67cff4531469debd9f3f3fd31b4a64a921967c44940e35236a3d",
+    "i_tod_altar_portal_e.png": "71944597bdc80da22e4bf524e000fc536a45579eb859d16416d4649c898d3fe1",
+    "i_tod_altar_s.png": "8ab1895f3f5379429b3b9ac8d31e372fd1df136ed046c2f75de1b4b305a719b7",
+    "i_tod_altar_wings_c.png": "7fbfb645da8ae885d945e081fdc8af1a19839c9a43515262c7f0873b5bfe19ef",
+    "i_tod_altar_wings_e.png": "6fbdfa4d6bd2faa96818864380e8e5c2f43fe8d5ade313439fa174b6a02cc179"
+  },
+  "lod_counts": {
+    "0": {
+      "solid": 81900,
+      "portal": 6,
+      "wings": 644
+    },
+    "1": {
+      "solid": 50610,
+      "portal": 6,
+      "wings": 350
+    },
+    "2": {
+      "solid": 34750,
+      "portal": 6,
+      "wings": 336
+    },
+    "3": {
+      "solid": 25933,
+      "portal": 6,
+      "wings": 336
+    },
+    "4": {
+      "solid": 21072,
+      "portal": 6,
+      "wings": 336
+    },
+    "5": {
+      "solid": 17405,
+      "portal": 6,
+      "wings": 336
+    },
+    "6": {
+      "solid": 14743,
+      "portal": 6,
+      "wings": 336
+    }
+  },
+  "solid_atlas": 4096,
+  "portal_atlas": 1024,
+  "wing_atlas": 32,
+  "wing_color_space": "linear authoring color encoded to sRGB PNG"
+}

@@ -28,8 +28,14 @@ CoD.AetheriumMenuButton.new = function(menu, controller)
 	self.ButtonHover:setAlpha(0)
 	self:addElement(self.ButtonHover)
 
-	-- Button text
-	self.ButtonText = LUI.UIText.new()
+	-- Button text. [tod v19.58] In the map's typeface (TodGlyphText.Label is a
+	-- drop-in for UIText); falls back to engine text if the widget is absent.
+	pcall(require, "ui.uieditor.widgets.HUD.AetheriumWidgets.TodGlyphText")
+	local okLabel, label = false, nil
+	if CoD.TodGlyphText and CoD.TodGlyphText.Label then
+		okLabel, label = pcall(CoD.TodGlyphText.Label)
+	end
+	self.ButtonText = (okLabel and label) or LUI.UIText.new()
 	self.ButtonText:setLeftRight(true, false, 34, 300)
 	self.ButtonText:setTopBottom(true, false, 14, 25)
 	self.ButtonText:setTTF("fonts/orbitron.ttf")

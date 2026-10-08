@@ -1,0 +1,4296 @@
+{
+ "gdt": "source_data\\tod_ui_images.gdt",
+ "method": "compressed high color",
+ "from": "uncompressed",
+ "count": 536,
+ "touched": [
+  {
+   "name": "i_tod_hud_off_blink",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 128,
+   "bytes": 65536
+  },
+  {
+   "name": "i_tod_hud_off_heal",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 128,
+   "bytes": 65536
+  },
+  {
+   "name": "i_tod_hud_mana_arch",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 576,
+   "h": 96,
+   "bytes": 221184
+  },
+  {
+   "name": "i_tod_hud_mana_fill",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 576,
+   "h": 96,
+   "bytes": 221184
+  },
+  {
+   "name": "i_tod_hud_mage_panel",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 296,
+   "bytes": 1212416
+  },
+  {
+   "name": "i_tod_pause_r55",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r56",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_mystical_hands_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_pause_r54",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r53",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_mage_blink_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_blink_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_blink_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_arch_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_arch_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_arch_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_bolt_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_bolt_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_bolt_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_pause_r52",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r51",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r50",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r49",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r48",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_mage_ice_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_ice_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_ice_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_fire_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_fire_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_fire_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_air_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_air_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_air_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_attunement_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_attunement_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_attunement_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_hud_gun_staff3",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_staff2",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_staff1",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_class_medallion_mage",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 512,
+   "h": 512,
+   "bytes": 1048576
+  },
+  {
+   "name": "i_tod_class_mage",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_card_mage_blink_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_arch_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_ice_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_fire_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_bolt_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_heal_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_heal_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_heal_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mage_heal_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_tier_mage_3",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_tier_mage_2",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_class_mage",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_knife_speed_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_recoil_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_handling_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mag_size_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_pause_r46_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r45_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r44_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r43_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r42_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r39_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r38_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r37_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r36_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r35_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r26_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r25_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r23_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r20_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r14_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r13_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r10_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r08_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r06_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r05_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r04_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r03_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r02_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r55_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r54_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r53_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r52_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r50_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r49_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r01_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_trailblazer_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_riot_shield_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_gunslinger_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_athlete_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_full_steam_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_recovery_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_vitality_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_march_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_back_armor_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_giant_slayer_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_overdrive_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_adrenaline_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_run_and_gun_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_thors_thunder_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_cleave_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_leech_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_bullet_feed_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_reserve_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_headshot_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_sprint_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_luck_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_bounty_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_dmg_reduction_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_damage_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_hud_off_spider_phd",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 128,
+   "bytes": 65536
+  },
+  {
+   "name": "i_tod_hud_off_spider",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 128,
+   "bytes": 65536
+  },
+  {
+   "name": "i_tod_hud_gun_katana",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_gift",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_weapon_panel",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 296,
+   "bytes": 1212416
+  },
+  {
+   "name": "i_tod_hud_pap_tile",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 276,
+   "h": 192,
+   "bytes": 211968
+  },
+  {
+   "name": "i_tod_hud_pap_3",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 128,
+   "bytes": 65536
+  },
+  {
+   "name": "i_tod_hud_pap_2",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 128,
+   "bytes": 65536
+  },
+  {
+   "name": "i_tod_hud_pap_1",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 128,
+   "bytes": 65536
+  },
+  {
+   "name": "i_tod_hud_offhand_tile",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 276,
+   "h": 192,
+   "bytes": 211968
+  },
+  {
+   "name": "i_tod_hud_off_monkey",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 128,
+   "bytes": 65536
+  },
+  {
+   "name": "i_tod_hud_off_frag",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 128,
+   "bytes": 65536
+  },
+  {
+   "name": "i_tod_hud_lz",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_ly",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lx",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lw",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lv",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lu",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lt",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_ls",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lr",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lq",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lp",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lo",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_ln",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lm",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_ll",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lk",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lj",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_li",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lhyphen",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lh",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lg",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lf",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_le",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lmoney",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_ldot",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_ld",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lc",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lb",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_lapos",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_la",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 80,
+   "h": 112,
+   "bytes": 35840
+  },
+  {
+   "name": "i_tod_hud_gun_shield",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_amp63_akimbo",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_executioner_akimbo",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_rk7",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_udm",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_amp63",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_mr6",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_executioner",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_mog12",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_magnum",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_spas12",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_sg12",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_bulldog",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_hk21",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_stoner63",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_ak47",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_krig6",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_enfield",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_mp7",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_mp5",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_mac10",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_nailgun",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_minigun",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_launcher",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_blade",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_gun_axe",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 288,
+   "h": 132,
+   "bytes": 152064
+  },
+  {
+   "name": "i_tod_hud_dslash",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 160,
+   "bytes": 81920
+  },
+  {
+   "name": "i_tod_hud_dplus",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 160,
+   "bytes": 81920
+  },
+  {
+   "name": "i_tod_hud_ddash",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 160,
+   "bytes": 81920
+  },
+  {
+   "name": "i_tod_hud_d9",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 160,
+   "bytes": 81920
+  },
+  {
+   "name": "i_tod_hud_d8",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 160,
+   "bytes": 81920
+  },
+  {
+   "name": "i_tod_hud_d7",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 160,
+   "bytes": 81920
+  },
+  {
+   "name": "i_tod_hud_d6",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 160,
+   "bytes": 81920
+  },
+  {
+   "name": "i_tod_hud_d5",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 160,
+   "bytes": 81920
+  },
+  {
+   "name": "i_tod_hud_d4",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 160,
+   "bytes": 81920
+  },
+  {
+   "name": "i_tod_hud_d3",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 160,
+   "bytes": 81920
+  },
+  {
+   "name": "i_tod_hud_d2",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 160,
+   "bytes": 81920
+  },
+  {
+   "name": "i_tod_hud_d1",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 160,
+   "bytes": 81920
+  },
+  {
+   "name": "i_tod_hud_d0",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 160,
+   "bytes": 81920
+  },
+  {
+   "name": "i_tod_hud_player_plate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1536,
+   "h": 512,
+   "bytes": 3145728
+  },
+  {
+   "name": "i_tod_hud_health_fill",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1016,
+   "h": 80,
+   "bytes": 325120
+  },
+  {
+   "name": "i_tod_hud_health_frame",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1032,
+   "h": 96,
+   "bytes": 396288
+  },
+  {
+   "name": "i_tod_hud_points_icon",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_pause_r47",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r46",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_trailblazer_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_trailblazer_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_trailblazer_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_pause_r45",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_riot_shield_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_riot_shield_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_riot_shield_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_pause_r44",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_deadshot_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_gunslinger_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_gunslinger_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_gunslinger_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_pause_r41",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_distraction_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_distraction_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_distraction_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_up_full_steam",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_pause_r42",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_full_steam_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_full_steam_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_pause_r43",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_athlete_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_athlete_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_athlete_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_full_steam_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_spire_emblem",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 1024,
+   "bytes": 4194304
+  },
+  {
+   "name": "i_tod_spire_win_banner",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 2048,
+   "h": 512,
+   "bytes": 4194304
+  },
+  {
+   "name": "i_tod_spire_over_banner",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 2048,
+   "h": 512,
+   "bytes": 4194304
+  },
+  {
+   "name": "i_tod_king_dead",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 2048,
+   "h": 512,
+   "bytes": 4194304
+  },
+  {
+   "name": "i_tod_king_banner",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 2048,
+   "h": 512,
+   "bytes": 4194304
+  },
+  {
+   "name": "i_tod_trial_7",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 2048,
+   "h": 512,
+   "bytes": 4194304
+  },
+  {
+   "name": "i_tod_trial_6",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 2048,
+   "h": 512,
+   "bytes": 4194304
+  },
+  {
+   "name": "i_tod_trial_5",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 2048,
+   "h": 512,
+   "bytes": 4194304
+  },
+  {
+   "name": "i_tod_trial_4",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 2048,
+   "h": 512,
+   "bytes": 4194304
+  },
+  {
+   "name": "i_tod_trial_3",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 2048,
+   "h": 512,
+   "bytes": 4194304
+  },
+  {
+   "name": "i_tod_trial_2",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 2048,
+   "h": 512,
+   "bytes": 4194304
+  },
+  {
+   "name": "i_tod_trial_won",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 2048,
+   "h": 512,
+   "bytes": 4194304
+  },
+  {
+   "name": "i_tod_trial_1",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 2048,
+   "h": 512,
+   "bytes": 4194304
+  },
+  {
+   "name": "i_tod_spire_banner",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 2048,
+   "h": 512,
+   "bytes": 4194304
+  },
+  {
+   "name": "i_tod_choice_banner",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 2048,
+   "h": 512,
+   "bytes": 4194304
+  },
+  {
+   "name": "i_tod_pause_r37",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r39",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r38",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_recovery_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_recovery_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_recovery_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_vitality_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_vitality_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_vitality_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_pause_r40",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_perkslots_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_perkslots_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_perkslots_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_march_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_march_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_march_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_pause_r36",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r35",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_back_armor_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_back_armor_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_back_armor_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_giant_slayer_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_giant_slayer_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_giant_slayer_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_pause_r34",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r33",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_momentum_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_momentum_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_momentum_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_second_wind_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_second_wind_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_second_wind_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_pause_r32",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_sprint_armor_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_sprint_armor_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_sprint_armor_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_pause_r31",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r30",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r29",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r28",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r27",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r26",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r25",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r24",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_draw_cut_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_draw_cut_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_draw_cut_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_meat_grinder_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_meat_grinder_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_meat_grinder_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_suppressing_fire_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_suppressing_fire_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_suppressing_fire_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_impact_rounds_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_impact_rounds_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_impact_rounds_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_kill_reload_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_kill_reload_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_kill_reload_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_overdrive_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_overdrive_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_overdrive_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_adrenaline_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_adrenaline_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_adrenaline_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_tier_slasher_3",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_tier_slasher_2",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_tier_heavy_3",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_tier_heavy_2",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_tier_assault_3",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_tier_assault_2",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_tier_skirmisher_3",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_tier_skirmisher_2",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_pause_r23",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_run_and_gun_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_run_and_gun_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_run_and_gun_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_pause_r22",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_chain_lunge_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_chain_lunge_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_chain_lunge_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_pause_r21",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_sprint_fire_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_sprint_fire_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_sprint_fire_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_pu2_zombie_blood",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_pause_r20",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_thors_thunder_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_thors_thunder_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_thors_thunder_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_pause_r19",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_card_penetration_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_penetration_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_penetration_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_spire_base",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 180,
+   "h": 100,
+   "bytes": 72000
+  },
+  {
+   "name": "i_tod_spire_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 180,
+   "h": 1440,
+   "bytes": 1036800
+  },
+  {
+   "name": "i_tod_gauge_base",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 180,
+   "h": 100,
+   "bytes": 72000
+  },
+  {
+   "name": "i_tod_gauge_down",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 120,
+   "h": 36,
+   "bytes": 17280
+  },
+  {
+   "name": "i_tod_gauge_marker",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 140,
+   "h": 44,
+   "bytes": 24640
+  },
+  {
+   "name": "i_tod_gauge_breather",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 120,
+   "h": 36,
+   "bytes": 17280
+  },
+  {
+   "name": "i_tod_gauge_rung",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 120,
+   "h": 36,
+   "bytes": 17280
+  },
+  {
+   "name": "i_tod_gauge_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 180,
+   "h": 1440,
+   "bytes": 1036800
+  },
+  {
+   "name": "i_tod_perk_phd",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_perk_mulekick",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_perk_deathperception",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_perk_elemental",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_perk_widows",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_perk_deadshot",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_perk_wisptea",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_perk_staminup",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_perk_doubletap",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_perk_speed",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_perk_revive",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_perk_jugg",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_perk_cherry",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_pause_pip_empty",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 24,
+   "h": 24,
+   "bytes": 2304
+  },
+  {
+   "name": "i_tod_pause_pip",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 24,
+   "h": 24,
+   "bytes": 2304
+  },
+  {
+   "name": "i_tod_pause_legend_reset",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 760,
+   "h": 56,
+   "bytes": 170240
+  },
+  {
+   "name": "i_tod_pause_ctl_header",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 760,
+   "h": 56,
+   "bytes": 170240
+  },
+  {
+   "name": "i_tod_pause_reset_mark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 128,
+   "bytes": 65536
+  },
+  {
+   "name": "i_tod_pause_r18_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r18",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r17_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r17",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r16_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r16",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r15",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r14",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r13",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r12",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r11",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r10",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r09",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r08",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r07_dark",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r07",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r06",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r05",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r04",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r03",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r02",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pause_r01",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 300,
+   "h": 44,
+   "bytes": 52800
+  },
+  {
+   "name": "i_tod_pu2_timewarp",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_pu2_nuke",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_pu2_max_ammo",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_pu2_insta",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_pu2_infinite_ammo",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_pu2_gift_of_death",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_pu2_free_pap",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 128,
+   "bytes": 65536
+  },
+  {
+   "name": "i_tod_pu2_fire_sale",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 128,
+   "bytes": 65536
+  },
+  {
+   "name": "i_tod_pu2_double_points",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_pu2_carpenter",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 128,
+   "h": 128,
+   "bytes": 65536
+  },
+  {
+   "name": "i_tod_timer_fill",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 460,
+   "h": 24,
+   "bytes": 44160
+  },
+  {
+   "name": "i_tod_timer_track",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 460,
+   "h": 24,
+   "bytes": 44160
+  },
+  {
+   "name": "i_tod_prompt_chassis",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 924,
+   "h": 304,
+   "bytes": 1123584
+  },
+  {
+   "name": "i_tod_prompt_icon_perk",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_prompt_icon_pap",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_prompt_icon_crown",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_prompt_icon_rampage",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_prompt_icon_door",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_prompt_icon_crate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_prompt_icon_altar",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_prompt_icon_teleporter",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_prompt_icon_power",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_prompt_icon_extract",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_key_blank_wide",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 384,
+   "h": 192,
+   "bytes": 294912
+  },
+  {
+   "name": "i_tod_key_blank",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 192,
+   "h": 192,
+   "bytes": 147456
+  },
+  {
+   "name": "i_tod_pad_button_a",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_pad_dpad_right",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_pad_dpad_left",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_win_emblem",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 1024,
+   "bytes": 4194304
+  },
+  {
+   "name": "i_tod_win_banner",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 2048,
+   "h": 512,
+   "bytes": 4194304
+  },
+  {
+   "name": "i_tod_banner_finale",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_banner_rampage_sealed",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 512,
+   "bytes": 2097152
+  },
+  {
+   "name": "i_tod_banner_upgrade",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 900,
+   "h": 140,
+   "bytes": 504000
+  },
+  {
+   "name": "i_tod_banner_protectors",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 900,
+   "h": 140,
+   "bytes": 504000
+  },
+  {
+   "name": "i_tod_banner_panzer",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 900,
+   "h": 140,
+   "bytes": 504000
+  },
+  {
+   "name": "i_tod_banner_choose_class",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 900,
+   "h": 140,
+   "bytes": 504000
+  },
+  {
+   "name": "i_tod_card_sprint_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_sprint_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_sprint_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_reserve_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_reserve_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_reserve_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_regen_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_regen_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_regen_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_recoil_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_recoil_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_recoil_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mobility_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mobility_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mobility_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mag_size_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mag_size_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_mag_size_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_luck_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_luck_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_luck_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_leech_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_leech_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_leech_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_knife_speed_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_knife_speed_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_knife_speed_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_headshot_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_headshot_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_headshot_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_handling_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_handling_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_handling_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_fire_rate_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_fire_rate_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_fire_rate_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_echo_rounds_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_echo_rounds_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_echo_rounds_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_dmg_reduction_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_dmg_reduction_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_dmg_reduction_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_damage_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_damage_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_damage_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_cleave_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_cleave_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_cleave_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_class_slasher",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_class_skirmisher",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_class_heavy",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_class_assault",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_bullet_feed_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_bullet_feed_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_bullet_feed_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_bounty_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_bounty_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_card_bounty_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 768,
+   "h": 1152,
+   "bytes": 3538944
+  },
+  {
+   "name": "i_tod_up_knifespeed",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_up_recoil",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_up_handling",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_up_firerate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_up_cleave",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_up_leech",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_up_regen",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_up_bulletfeed",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_up_mobility",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_up_reserve",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_up_headshot",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_up_sprint",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_up_luck",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_up_bounty",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_up_dr",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_class_medallion_slasher",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 512,
+   "h": 512,
+   "bytes": 1048576
+  },
+  {
+   "name": "i_tod_class_medallion_heavy",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 512,
+   "h": 512,
+   "bytes": 1048576
+  },
+  {
+   "name": "i_tod_class_medallion_assault",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 512,
+   "h": 512,
+   "bytes": 1048576
+  },
+  {
+   "name": "i_tod_class_medallion_skirmisher",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 512,
+   "h": 512,
+   "bytes": 1048576
+  },
+  {
+   "name": "i_tod_class_slasher",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_class_heavy",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_class_assault",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_class_skirmisher",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 224,
+   "h": 196,
+   "bytes": 175616
+  },
+  {
+   "name": "i_tod_luck_max_04",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_max_03",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_max_02",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_max_01",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_rmp_max_04",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_rmp_max_03",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_rmp_max_02",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_rmp_max_01",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_rmp_10",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_rmp_09",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_rmp_08",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_rmp_07",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_rmp_06",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_rmp_05",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_rmp_04",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_rmp_03",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_rmp_02",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_rmp_01",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_rmp_00",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_10",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_09",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_08",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_07",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_06",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_05",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_04",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_03",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_02",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_01",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_00",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_luck_frame",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_title_plate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 128,
+   "bytes": 524288
+  },
+  {
+   "name": "i_tod_icon_magsize",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_icon_firerate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_icon_damage",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 256,
+   "h": 256,
+   "bytes": 262144
+  },
+  {
+   "name": "i_tod_card_base",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 512,
+   "bytes": 2097152
+  },
+  {
+   "name": "i_tod_frame_ultimate",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 512,
+   "bytes": 2097152
+  },
+  {
+   "name": "i_tod_frame_super",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 512,
+   "bytes": 2097152
+  },
+  {
+   "name": "i_tod_frame_regular",
+   "from": "uncompressed",
+   "to": "compressed high color",
+   "w": 1024,
+   "h": 512,
+   "bytes": 2097152
+  }
+ ]
+}

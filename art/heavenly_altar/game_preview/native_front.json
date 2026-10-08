@@ -1,0 +1,16 @@
+{
+  "type": "Blender render of native source geometry; approximate satin shading and static original portal first layer; not an in-game screenshot",
+  "hashes": {
+    "tod_heavenly_altar.gdt": "88f64ca8a92c7baa971b55febd44b55518607e29f95d3ea208ce41a348ec8e0d",
+    "i_tod_altar_c.png": "9d6458fc895c7c7b2335534b1be8b74b5cac8133c8e28927c66bed0fdf5b42a8",
+    "i_tod_altar_e.png": "091848dd4dca590f39a04564fa8c13be8dfc4547f02b976d4aa4d72a58ee96f9",
+    "i_tod_altar_g.png": "5859502d1b6d28f8f7ddbaac1a753fb1dd290a874cbf7ea58740c95500c2c2e9",
+    "i_tod_altar_n.png": "568136c8879b67cff4531469debd9f3f3fd31b4a64a921967c44940e35236a3d",
+    "chaos_pack_a_punch.gdt": "fc046687c213a62f692c3a80af0916839226ebe6957a6172869ee4ac0a325282",
+    "ximage_82866058cebdb67.png": "43bb297d7c90f708460ab0557da5d206bad3219c6bab3613df60cdcf69f7eae7",
+    "i_tod_altar_wings_c.png": "7fbfb645da8ae885d945e081fdc8af1a19839c9a43515262c7f0873b5bfe19ef",
+    "i_tod_altar_wings_e.png": "6fbdfa4d6bd2faa96818864380e8e5c2f43fe8d5ade313439fa174b6a02cc179",
+    "tod_heavenly_altar_lod0.xmodel_bin": "30f01d2ca84e678baae618494da5c9a4acefd733bbc2bc5ba2a90f4ee191e95d"
+  },
+  "lod": 0
+}

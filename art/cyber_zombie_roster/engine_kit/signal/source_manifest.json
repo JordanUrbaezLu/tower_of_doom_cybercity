@@ -1,0 +1,27 @@
+{
+  "master": "art\\cyber_zombie_roster\\02_signal_trooper\\02_signal_trooper.blend",
+  "master_sha256": "5eb1077ace1c29b9f15530e37da94f49b0e3b4ed9293160e67f2124ad1f7ca87",
+  "revision": 4,
+  "fit_pass": 3,
+  "textures": {
+    "i_tod_roster_signal_c.png": "6aee520b85596635115ccfea79eecfb09a457d2f142602dcfee4ff21e6726f32",
+    "i_tod_roster_signal_e.png": "74b1d64cf5fd1d28b733039e87ed26789e3a0aa2cdfbc73138bbbdb199fc55f8",
+    "i_tod_roster_signal_g.png": "769d7329f8695ed952024e8847c2bd4267ffed322d7c78a098bda34b8a10393b",
+    "i_tod_roster_signal_n.png": "11d3681ed591ca86511c153c30f00e8a8a99506c412a5ec6cdcbbe6779bdc22f",
+    "i_tod_roster_signal_s.png": "0253a3be5dd6f90524088a51518a46c95f819ad0f5ef42f710f34781e274e71e"
+  },
+  "groups": [
+    "arm",
+    "chest",
+    "finger_index_le",
+    "finger_mid_le",
+    "finger_ring_le",
+    "hand_le",
+    "head",
+    "helmet",
+    "hip_le",
+    "shin_le",
+    "shoulder_le"
+  ],
+  "atlas_size": 2048
+}

@@ -1,0 +1,58 @@
+{
+  "id": "02_signal_trooper",
+  "revision": 4,
+  "fit_pass": 3,
+  "authoring_sha256": "28d6040edabb878174701bdfd6d28320c902d4ab4ffde5c5264d7cdd8820f643",
+  "reference": "CyberZombie1.png",
+  "source_backup": "tmp\\cyber_finish_v3\\art\\cyber_zombie_roster\\02_signal_trooper\\02_signal_trooper.blend",
+  "donor_geometry_weights_preserved": true,
+  "limb_fits": [
+    {
+      "bone": "j_elbow_le",
+      "surface_samples": 495,
+      "radius_min": 1.668864905834198,
+      "radius_max": 2.701755487767514,
+      "joint_end_fraction": 0.78
+    },
+    {
+      "bone": "j_knee_le",
+      "surface_samples": 496,
+      "radius_min": 0.9806280061602592,
+      "radius_max": 4.396788120269775,
+      "joint_end_fraction": 0.83
+    }
+  ],
+  "poses": [
+    {
+      "pose": "rest",
+      "max_attachment_error": 1.2480022743513489e-05
+    },
+    {
+      "pose": "head_turn",
+      "max_attachment_error": 1.5443930378629347e-05
+    },
+    {
+      "pose": "arm_flex",
+      "max_attachment_error": 1.7110167094095735e-05
+    },
+    {
+      "pose": "leg_flex",
+      "max_attachment_error": 1.2480022743513489e-05
+    }
+  ],
+  "attachment_objects": 452,
+  "attachment_triangles": 36924,
+  "attachment_bones": [
+    "j_elbow_le",
+    "j_head",
+    "j_hip_le",
+    "j_index_le_1",
+    "j_knee_le",
+    "j_mid_le_1",
+    "j_ring_le_1",
+    "j_shoulder_le",
+    "j_spine4",
+    "j_wrist_le"
+  ],
+  "notes": "Equipment reconstruction adapted to original donor body; not an exact 3D recovery from reference images."
+}

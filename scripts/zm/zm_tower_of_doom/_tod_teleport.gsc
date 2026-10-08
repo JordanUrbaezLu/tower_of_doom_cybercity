@@ -40,7 +40,10 @@
 #using scripts\shared\flag_shared;
 #using scripts\shared\util_shared;
 #using scripts\zm\_zm_utility;
+#using scripts\zm\zm_tower_of_doom\_tod_breather_data;  // GENERATED — spur pad + arrival anchors (v13)
+#using scripts\zm\zm_tower_of_doom\_tod_doors;          // v13.9: a down-ride opens the bay from the inside (force_open_by_flag)
 #using scripts\zm\zm_tower_of_doom\_tod_perk_scatter;   // derez_burst / play_sound_at_origin (host-based, proven)
+#using scripts\zm\zm_tower_of_doom\_tod_zombie_speed;   // slow() — the ONE writer for a timed anim-rate cut (v15 item 14)
 
 #insert scripts\shared\shared.gsh;
 
@@ -56,12 +59,14 @@
 #precache( "fx", "dlc1/castle/fx_elec_teleport_flash_lg" );
 #precache( "fx", "dlc5/theater/fx_teleport_flashback_kino" );
 
+#precache( "eventstring", "tod_tp_recharge" );
+
 #namespace tod_teleport;
 
 // v10.3 (playtest 2026-08-23: "teleporters take way too long to activate"):
 // charge 2.2 -> 0.8s and cooldown 60 -> 30s. The 2.2s Kino wind-up was pure
 // theatre inherited from map 1; at 0.8 the flash/derez still read.
-#define TOD_TP_COOLDOWN_SEC   30
+#define TOD_TP_COOLDOWN_SEC   60   // 30 -> 45 -> 60, both 2026-08-29 (final: "Make the recharge on teleporters 1 minute")
 #define TOD_TP_CHARGE_SEC     0.8
 #define TOD_TP_TRIG_RADIUS    110     // the assembled pad is ~167 wide — stand in the ring
 #define TOD_TP_TRIG_HEIGHT    96
@@ -74,6 +79,16 @@
 #define TOD_TP_GATHER         120     // riders within this (2D) at FIRE time — v10.4: must be >= TOD_TP_TRIG_RADIUS (110), else a player who ACTIVATED from the trigger rim is excluded by his own ride (audit find)
 #define TOD_TP_GATHER_Z       80      // ...and on the pad's floor (the balcony below shares no x/y, this is belt-and-braces)
 #define TOD_TP_RING           48      // fan-out ring at the arrival pad (no capsule stack)
+// THE DEPARTURE SLOW (v15 item 14, user 2026-08-31: "Teleporters should slow
+// zombies in the radius as its being used"). Applied at the DEPARTURE pad only,
+// the instant the charge starts — the arrival side is meant to be a clean exit,
+// and slowing there would blunt the one moment the map wants to feel dangerous.
+// Duration outlasts the 0.8s charge deliberately: the value of the slow is the
+// half-second AFTER you rematerialize somewhere else, when the horde that was on
+// you is still untangling itself.
+#define TOD_TP_SLOW_RADIUS    256     // 2D, generous vs the 110 trigger ring — this is the crowd pressing in, not the pad itself
+#define TOD_TP_SLOW_RATE      0.5     // half playback rate; composes with the round curve via slow_mult()
+#define TOD_TP_SLOW_MS        3000    // 3s, vs TOD_TP_CHARGE_SEC 0.8
 #define TOD_TP_PAD_SCALE      2.5     // Program115 assembly scale
 #define TOD_TP_PAD_ZOFF       -52     // map 1's sink: rim ~11u proud of the floor
 // ARRIVAL — inside the TELEPORT BAY, between the door and the row of pads.
@@ -109,14 +124,16 @@
 // the stock no-purchase sound and the pad's beam stays off, and walking down
 // was always available.
 #define TOD_TP_BAY_FLAG       "enter_tpbay"
-// SOURCE pads: one per breather. Laps 10/20/30/40 are all even = every
-// balcony is the mirrored SW one: floor x[-800,-256] y[-992,-416] after the
-// v9.37 expansion. The SE quarter is free — perks back the S wall at y -959
-// (x -360/-536), the station backs the W wall at x -760 (y -600), the PaP sits
-// on the N edge at (-320,-470). Ring x[-723,-557] y[-883,-717] clears every
-// wall by 77u+ and every other trigger by 190u+. Mid z = (lap-1)*384 + 192.
-#define TOD_TP_PAD_X          -640
-#define TOD_TP_PAD_Y          -800
+// SOURCE pads: one per breather — and since v13 the pad is OFF the room floor
+// entirely, out on the SPUR: through the doorway in the lounge's outer (S)
+// wall, down a 320-long open-air gantry, onto a 288x288 platform floating in
+// the void, porter at its centre. Coordinates come from GENERATED
+// _tod_breather_data.gsc (tp_pad_org / tp_arrival_org — the door-data
+// no-drift contract; the generator asserts the pad's 110u trigger against
+// every other lounge trigger and against the platform rails). Up-riders land
+// on the GANTRY, 160u toward the room: outside the pad's 120u gather, so an
+// arrival is never swept along by the next departure (the v10.4 rule — the
+// offset now rides in the generated data, not in a define here).
 
 function init()
 {
@@ -125,6 +142,7 @@ function init()
 
 	fx_register();
 	level.tod_tp_trigs = [];
+	level thread recharge_hud_watch();
 
 	// v10.3 — TWO-WAY (user: "They should be two way as well. Which means we
 	// need 5 different porters at spawn"). The base arena now carries FIVE
@@ -144,14 +162,19 @@ function init()
 	// trigger-less decoration that read as a broken pad. Riders now land in
 	// front of the bay, which is its own landmark.)
 
-	zs = array( 3648, 7488, 11328, 15168 );
+	zs = tod_breather_data::breather_zs();
 	for ( i = 0; i < zs.size; i++ )
-		level thread spawn_pad( ( TOD_TP_PAD_X, TOD_TP_PAD_Y, zs[ i ] ), 0, TOD_TP_BASE_ORG, TOD_TP_BASE_YAW,
+		level thread spawn_pad( tod_breather_data::tp_pad_org( zs[ i ] ), 0, TOD_TP_BASE_ORG, TOD_TP_BASE_YAW,
 			// LEADS WITH THE NOUN. PromptDefault strips "Hold [{+activate}]" before
 			// drawing, so the old line reached the screen as the fragment
 			// "to teleport to the base" — the same dangling-preposition bug the
 			// altar copy was rewritten to fix in v10.x (audit 2026-08-25).
-			"Hold ^3[{+activate}]^7 ^5TELEPORTER^7 - down to the BASE", TOD_TP_BAY_FLAG );
+			// v13.6: bay-door gate REMOVED (user: "The teleporters are blocked if
+			// the main door on floor one is not opened. Lets remove that check.")
+			// — undefined lock flag = power is the only gate on the DOWN ride.
+			// CONSEQUENCE, accepted by the user: porting down pre-bay-door lands
+			// you inside the sealed bay; the door buys from both sides (750).
+			"Hold ^3[{+activate}]^7 ^5TELEPORTER^7 - down to the BASE", undefined );
 
 	// THE TELEPORTER BAY (v10.25) — four up-pads in a 2x2 block, read like a
 	// keypad: front row floors 10 / 20, back row 30 / 40, left to right.
@@ -163,31 +186,39 @@ function init()
 	// a square it is 388 x 388, and the room came down from 960x640 to 480x560.
 	//
 	// Clearances, all measured against the room (tools/gen_tower_map.js TPB_*):
-	//   room interior      x[-240,240]  y[-1120,-560]
+	//   room interior      x[-240,240]  y[-1280,-560]   (deepened 2026-08-27)
 	//   pad half-extent    84 (the assembly is ~167 across)
 	//   pads x -+110       -> 26..194, so 46u of floor to each side wall
 	//   trigger rim x -+220 -> 20u short of the wall
 	//   the two rows       52u apart at the pad edges — still walkable between
-	//   back row to the south wall  56u
-	//   arrival (0,-620) to the nearest pad (-+110,-760) = 178u, comfortably past
-	//     the 120u gather (the arena bay managed 164u, and its first cut shipped
-	//     at 116u — INSIDE the gather — which was a live bug)
-	//   risers (-+205,-600) to the nearest pad = 186u, past the ~165u at which a
-	//     zombie climbs out on top of somebody mid-teleport
+	//   back row to the south wall  132u   (was 56u)
+	//   arrival (0,-620) to the nearest pad (-+110,-840) = 246u (was 178u),
+	//     comfortably past the 120u gather (the arena bay managed 164u, and its
+	//     first cut shipped at 116u — INSIDE the gather — which was a live bug)
+	//   risers (-+205,-600) to the nearest pad = 258u (was 186u), past the ~165u
+	//     at which a zombie climbs out on top of somebody mid-teleport
+	//
+	// ROWS MOVED 80 SOUTH 2026-08-27 to stop the ARRIVAL DECAL from drawing
+	// through the front-row pad decals — they overlapped by 66 x 36 units. Purely
+	// visual: the centres were already 178u apart, so nothing ever malfunctioned.
+	// THESE FOUR COORDINATES ARE HARDCODED AND MIRROR gen_tower_map.js
+	// TPB_PAD_YN / TPB_PAD_YS. There is no generated bridge — change one without
+	// the other and the trigger stops sitting on the pad you can see.
 	// The risers are in the ZONE, not here — tpbay_zone in the generator. They
 	// exist because the user asked for spawns in the room, and they are safe to
 	// have (unlike in the power hallway) precisely because this room is its own
 	// zone: nothing spawns here until the door is bought.
 	up_orgs = [];
-	up_orgs[ 0 ] = ( -110, -760, 0 );   // FLOOR 10  front-left
-	up_orgs[ 1 ] = (  110, -760, 0 );   // FLOOR 20  front-right
-	up_orgs[ 2 ] = ( -110, -980, 0 );   // FLOOR 30  back-left
-	up_orgs[ 3 ] = (  110, -980, 0 );   // FLOOR 40  back-right
+	up_orgs[ 0 ] = ( -110, -840, 0 );   // FLOOR 10  front-left
+	up_orgs[ 1 ] = (  110, -840, 0 );   // FLOOR 20  front-right
+	up_orgs[ 2 ] = ( -110, -1060, 0 );  // FLOOR 30  back-left
+	up_orgs[ 3 ] = (  110, -1060, 0 );  // FLOOR 40  back-right
 	// v10.4 (audit find): up-riders used to land ring-fanned around the
 	// breather DOWN pad's own centre — inside its gather, so if that pad was
-	// mid-charge the arrivals were instantly warped straight back down. Land
-	// them OFFSET toward the balcony interior instead (y +140 clears the new
-	// 120u gather).
+	// mid-charge the arrivals were instantly warped straight back down. They
+	// land OFFSET instead — since v13 on the spur GANTRY, 160u toward the room
+	// (tod_breather_data::tp_arrival_org; the generator asserts the offset
+	// clears the 120u gather).
 	up_flags = array( "enter_lap10", "enter_lap20", "enter_lap30", "enter_lap40" );
 	up_hints = [];
 	// LEAD WITH THE NOUN — PromptDefault strips "Hold [{+activate}]", so these
@@ -203,18 +234,22 @@ function init()
 	// No trig_r argument any more — spawn_pad's default TOD_TP_TRIG_RADIUS (110)
 	// is what the room was sized for.
 	for ( i = 0; i < 4; i++ )
-		level thread spawn_pad( up_orgs[ i ], 90, ( TOD_TP_PAD_X, TOD_TP_PAD_Y + 140, zs[ i ] ), 90,
+		level thread spawn_pad( up_orgs[ i ], 90, tod_breather_data::tp_arrival_org( zs[ i ] ), 90,
 			up_hints[ i ], up_flags[ i ] );
 }
 
-// -> true while a lock flag exists and is still unset (the door unbought).
+// Shared by activation and displayed status: 0 available, 1 power, 2 floor.
+function pad_lock_reason( lock_flag )
+{
+	if ( !( level flag::exists( "power_on" ) && level flag::get( "power_on" ) ) ) return 1;
+	if ( !isdefined( lock_flag ) || !level flag::exists( lock_flag ) ) return 0;
+	if ( !level flag::get( lock_flag ) ) return 2;
+	return 0;
+}
+
 function pad_locked( lock_flag )
 {
-	if ( !isdefined( lock_flag ) )
-		return false;
-	if ( !( level flag::exists( lock_flag ) ) )
-		return false;   // flags register at _tod_doors init — treat early reads as open
-	return !( level flag::get( lock_flag ) );
+	return pad_lock_reason( lock_flag ) != 0;
 }
 
 function fx_register()
@@ -288,6 +323,7 @@ function spawn_pad( src, src_yaw, dst, dst_yaw, hint_ready, lock_flag, trig_r = 
 	t TriggerIgnoreTeam();
 	t SetCursorHint( "HINT_NOICON" );
 	t.tod_tp_src = src;
+	t.tod_tp_radius = trig_r;
 	t.tod_tp_hint_ready = hint_ready;
 	t.tod_tp_lock_flag = lock_flag;
 	t.tod_tp_cooldown_until = 0;
@@ -373,36 +409,47 @@ function refresh( t )
 {
 	if ( !isdefined( t ) )
 		return;
-	// Three states now (constant strings only — the triggerstring cache):
-	// locked (door unbought) / recharging / ready.
+	// Four fixed hints; countdown numbers travel through LUI, not SetHintString.
 	state = "ready";
-	if ( pad_locked( t.tod_tp_lock_flag ) )
-		state = "locked";
+	reason = pad_lock_reason( t.tod_tp_lock_flag );
+	if ( reason == 1 )
+		state = "power";
+	else if ( reason == 2 )
+		state = "destination";
 	else if ( GetTime() < t.tod_tp_cooldown_until )
 		state = "recharge";
 	if ( isdefined( t.tod_tp_state ) && t.tod_tp_state == state )
 		return;
+	prev = t.tod_tp_state;   // undefined on the very first call (spawn_pad init)
 	t.tod_tp_state = state;
 	if ( state == "ready" )
 	{
 		if ( !isdefined( t.tod_tp_beam ) )
 			t.tod_tp_beam = spawn_beam( t.tod_tp_src );
 		t SetHintString( t.tod_tp_hint_ready );
+		// RECHARGE-COMPLETE cue (2026-08-29, docs/43) — the beam snapping back on
+		// was the map's one state change with a visual and no sound at all.
+		//
+		// GATED ON prev == "recharge" AND NOTHING ELSE, which is the whole trick:
+		// refresh() also runs once per pad from spawn_pad (:320) with prev
+		// undefined, so an ungated call here would fire every teleporter in the
+		// map simultaneously at level start. The locked -> ready edge is excluded
+		// too: that is a breather door being bought, which already has its own
+		// purchase feedback, and it would double up on it.
+		if ( isdefined( prev ) && prev == "recharge" )
+			tod_perk_scatter::play_sound_at_origin( t.tod_tp_src, "tod_teleport_ready", 4 );
 	}
 	else
 	{
 		if ( isdefined( t.tod_tp_beam ) )
 			t.tod_tp_beam Delete();
 		t.tod_tp_beam = undefined;
-		if ( state == "locked" )
-			// user 2026-08-24: "Teleporter text should be more specific when you
-			// havent unlocked the area. Something like this teleporter is offline.
-			// And no cost text." Was "^1LINK OFFLINE^7 - open this floor's breather
-			// door" — "LINK OFFLINE" read as jargon and the trailing clause read as
-			// a price/requirement. Plain sentence, nothing that looks like a cost.
-			t SetHintString( "^1This teleporter is offline" );
+		if ( state == "power" )
+			t SetHintString( "^5TELEPORTER^7 - ^1power required" );
+		else if ( state == "destination" )
+			t SetHintString( "^5TELEPORTER^7 - ^1destination locked" );
 		else
-			t SetHintString( "^1Teleporter recharging..." );
+			t SetHintString( "^5TELEPORTER^7 - ^1recharging..." );
 	}
 }
 
@@ -419,6 +466,67 @@ function state_ticker( t )
 	}
 }
 
+// Only the pad whose use radius contains this player supplies the countdown.
+// The eight use radii do not overlap; height excludes other floors.
+function recharge_pad_for( player )
+{
+	if ( !IsAlive( player ) ) return -1;
+	best = -1;
+	nearest = 999999;
+	for ( i = 0; i < level.tod_tp_trigs.size; i++ )
+	{
+		t = level.tod_tp_trigs[ i ];
+		if ( !isdefined( t ) ) continue;
+		if ( abs( player.origin[2] - t.tod_tp_src[2] ) > TOD_TP_TRIG_HEIGHT ) continue;
+		d = Distance2D( player.origin, t.tod_tp_src );
+		if ( d > t.tod_tp_radius || d >= nearest ) continue;
+		nearest = d;
+		best = i;
+	}
+	return best;
+}
+
+function recharge_seconds( until )
+{
+	left = until - GetTime();
+	if ( left <= 0 ) return 0;
+	return int( ( left + 999 ) / 1000 );
+}
+
+function recharge_hud_watch()
+{
+	level endon( "end_game" );
+	tick = 0;
+	for ( ;; )
+	{
+		foreach ( p in GetPlayers() )
+		{
+			pad = recharge_pad_for( p );
+			secs = 0;
+			pct = 0;
+			if ( pad >= 0 )
+			{
+				t = level.tod_tp_trigs[ pad ];
+				if ( !pad_locked( t.tod_tp_lock_flag ) )
+					secs = recharge_seconds( t.tod_tp_cooldown_until );
+				if ( secs > 0 )
+					pct = int( 100.0 * ( TOD_TP_COOLDOWN_SEC - secs ) / TOD_TP_COOLDOWN_SEC );
+			}
+			// Changes only, plus a five-second refresh for recreated HUD widgets.
+			if ( tick == 0 || !isdefined( p.tod_tp_hud_seconds ) || p.tod_tp_hud_seconds != secs
+			  || !isdefined( p.tod_tp_hud_pad ) || p.tod_tp_hud_pad != pad )
+			{
+				p.tod_tp_hud_seconds = secs;
+				p.tod_tp_hud_pad = pad;
+				p LuiNotifyEvent( &"tod_tp_recharge", 2, secs, pct );
+			}
+		}
+		wait 0.25;
+		tick++;
+		if ( tick >= 20 ) tick = 0;
+	}
+}
+
 // Throwaway FX host: PlayFxOnTag on a tag_origin for `secs`, then delete. NO
 // endon — a thread killed mid-wait would orphan the host with a looping FX
 // playing (map 1 review).
@@ -426,12 +534,35 @@ function fx_burst( key, origin, secs )
 {
 	h = Spawn( "script_model", origin );
 	if ( !isdefined( h ) )
+	{
+		fx_dev_log( key, "host_failed", origin );
 		return;
+	}
 	h SetModel( "tag_origin" );
+	// Arrival's existing delay settles the rider. This separate delay gives
+	// the newly created host time to replicate before its one-shot FX event.
+	WAIT_SERVER_FRAME;
+	WAIT_SERVER_FRAME;
+	if ( !isdefined( h ) )
+	{
+		fx_dev_log( key, "host_lost", origin );
+		return;
+	}
 	PlayFxOnTag( level._effect[ key ], h, "tag_origin" );
+	fx_dev_log( key, "emitted", origin );
 	wait secs;
 	if ( isdefined( h ) )
 		h Delete();
+}
+
+function fx_dev_log( key, state, origin )
+{
+	if ( !IS_TRUE( level.tod_dev ) )
+		return;
+	line = "[TOD_TELEPORT_FX] ms=" + GetTime() + " key=" + key + " state=" + state + " origin=" + origin;
+	/#
+	PrintLn( line );
+	#/
 }
 
 // The bright DISCHARGE at a pad: flash + the de-rez burst (numbers + zap) +
@@ -443,23 +574,89 @@ function discharge( origin )
 	tod_perk_scatter::play_sound_at_origin( origin, "tod_warp", 3 );
 }
 
+// THE DEPARTURE SLOW (v15 item 14). Every trash zombie within
+// TOD_TP_SLOW_RADIUS of the departing pad drops to TOD_TP_SLOW_RATE playback
+// for TOD_TP_SLOW_MS.
+//
+// GOES THROUGH tod_zombie_speed::slow(), NEVER a raw ASMSetAnimationRate. The
+// speed module runs a 1.5s keep-alive sweep that RE-ASSERTS gait+rate from the
+// round curve (one-shot overrides decay — the map-1 lesson), so a hand-written
+// rate here would be silently stomped within 1.5s and the feature would look
+// like it half-worked. slow() is the supported lane: the sweep multiplies
+// slow_mult() back in, so a live slow survives every re-assert and an expired
+// one restores itself.
+//
+// slow() also brings three exclusions we want for free and should not
+// re-implement: bosses and custom-speed enemies are skipped (their ASMs freeze
+// if stomped), anything already under another system's anim slow (Widow's Wine
+// cocoon, Time Warp) is left alone, and a stronger live slow is never weakened.
+// So ELITES ARE IMMUNE BY CONSTRUCTION — a Panzer walks through the field at
+// full speed, which is the correct read for a boss.
+function slow_the_crowd( org )
+{
+	if ( !isdefined( org ) )
+		return;
+	ai = GetAISpeciesArray( "all" );
+	for ( i = 0; i < ai.size; i++ )
+	{
+		z = ai[ i ];
+		if ( !isdefined( z ) || !isalive( z ) )
+			continue;
+		if ( Distance2D( z.origin, org ) > TOD_TP_SLOW_RADIUS )
+			continue;
+		z tod_zombie_speed::slow( TOD_TP_SLOW_RATE, TOD_TP_SLOW_MS );
+	}
+}
+
 // Kino teleport, no player lock: CHARGE (FX at torso height + hum) -> fire.
 function do_teleport( src, dst, dst_yaw )
 {
+	slow_the_crowd( src );   // v15 item 14 — fires WITH the charge, not after it
 	level thread fx_burst( "tod_tp_charge", src + ( 0, 0, 40 ), TOD_TP_CHARGE_SEC + 0.5 );
-	tod_perk_scatter::play_sound_at_origin( src, "tod_teleport_charge", 4 );
+	// tod_teleport_fire (2026-08-29, docs/43): the map's own 2.2s time-distortion
+	// warp, replacing the ported acc hum. Emitted at SRC, so what each side hears
+	// differs and that is correct:
+	//   * the RIDER hears its first TOD_TP_CHARGE_SEC (0.8s) — the wind-up — and
+	//     then leaves, so it is cut off mid-sweep by the arrival discharge at dst.
+	//     The cut IS the translocation; do not "fix" it by re-playing the full
+	//     asset at dst, which would read as two teleports.
+	//   * anyone LEFT BEHIND near the pad hears the whole 2.2s.
+	// Side effect worth keeping: tod_warp now only marks the two DISCHARGES, so
+	// departure and arrival no longer open with the identical cue.
+	tod_perk_scatter::play_sound_at_origin( src, "tod_teleport_fire", 4 );
 	wait TOD_TP_CHARGE_SEC;
 
 	discharge( src );   // departure flash + boom
 
-	// Gather at FIRE time: whoever is standing on the pad NOW rides. Valid
-	// players only — a downer mid-charge simply doesn't warp.
+	// Gather at FIRE time: whoever is standing on the pad NOW rides.
+	//
+	// A CRAWLER RIDES ALONG (v15, user 2026-08-31: "If you are down on a
+	// teleporter it should still teleport you"). The third arg of stock
+	// is_player_valid is `ignore_laststand_players` (_zm_utility.gsc), so this
+	// keeps every other exclusion intact — dead, spectating, intermission and
+	// is_zombie all still fail — and lifts ONLY the last-stand clause. Note
+	// IsAlive() is TRUE in last stand, so the laststand clause really was the
+	// whole gate.
+	//
+	// RIDE-ALONG ONLY, NOT SELF-ACTIVATION: the trigger's own gates upstream
+	// (:328 is_player_valid, and in_revive_trigger at :338) are UNCHANGED, so a
+	// crawler still cannot fire the pad themselves. That asymmetry is the point
+	// — a downed player yanking their own body out from under the teammate who
+	// is mid-revive is a worse outcome than not riding at all. They ride when
+	// somebody standing decides to take them.
+	//
+	// ⚠️ UNPROVEN LINK, TEST IN GAME BEFORE TRUSTING: the revive trigger is
+	// LinkTo'd to the player (_zm_laststand.gsc:849-852), which SHOULD track a
+	// hard SetOrigin — but that cannot be proven from source. If it does not
+	// follow, the teleported crawler is unrevivable at the destination, which is
+	// strictly worse than the bug this fixes. Discriminator: crawler on a pad ->
+	// teammate rides them -> teammate revives at arrival.
 	riders = [];
 	players = GetPlayers();
 	for ( i = 0; i < players.size; i++ )
 	{
 		p = players[ i ];
-		if ( !isdefined( p ) || !isplayer( p ) || !zm_utility::is_player_valid( p ) )
+		if ( !isdefined( p ) || !isplayer( p ) || !zm_utility::is_player_valid( p, false, true ) )
 			continue;
 		if ( Distance2D( p.origin, src ) > TOD_TP_GATHER )
 			continue;
@@ -475,6 +672,75 @@ function do_teleport( src, dst, dst_yaw )
 		riders[ i ] SetOrigin( dst + off );
 		riders[ i ] SetPlayerAngles( ( 0, dst_yaw, 0 ) );
 	}
+
+	// v13.9 (user live report: ported down pre-door, "went to 1 health and
+	// hear the teddy bear like I was out of bounds" — exactly what it was:
+	// the sealed bay's zone was INACTIVE, and stock's playable-area monitor
+	// punished them for standing in it). A DOWN ride now opens the bay door
+	// from the inside, free: zone live, monitor satisfied, risers wake,
+	// zombies path in through the open doorway — no invulnerable camp room,
+	// no stranded actors, and the user's "power is the only gate going down"
+	// rule carried to its conclusion. dst z < 100 discriminates the base bay
+	// (z 0) from the breather gantry arrivals (z 3648+); empty rides skip.
+	if ( riders.size > 0 && dst[ 2 ] < 100 )
+		tod_doors::force_open_by_flag( "enter_tpbay" );
+
+	// A ride moves players thousands of units in ONE FRAME, which every
+	// distance-watching system reads as "the thing I am watching just stalled".
+	// tod_bosses::tod_boss_stuck_watch resets its no-progress accumulator on this
+	// counter — without it, a breather ride makes `best` unbeatable and the
+	// watchdog relocates a boss that was never stuck, which is exactly the
+	// "elites randomly spawn at you when you are too far away" report.
+	if ( riders.size > 0 )
+	{
+		level.tod_tp_stamp = ( ( isdefined( level.tod_tp_stamp ) ) ? level.tod_tp_stamp + 1 : 1 );
+		// The ride is the ONE moment we know for certain a party just abandoned a
+		// floor. _tod_stray waits out the zone manager's riser rebuild, then runs
+		// hot for 6s so the horde arrives instead of walking forty floors down.
+		// NOTIFY ONLY — no import in either direction, so _tod_stray can be
+		// deleted without touching this file and this line becomes a no-op.
+		level notify( "tod_stray_pump" );
+	}
+
+	// TWO FRAMES BETWEEN THE RIDE AND THE ARRIVAL FX (v17.31, user 2026-09-04:
+	// "occasionally the teleporter fx wont trigger. The sfx always does but
+	// sometimes you will use it and not see any teleporter lightning fx").
+	//
+	// WHAT THE REPORT RULES OUT, and this is the useful half. The obvious suspect
+	// was the gentity pool — fx_burst opens with `h = Spawn(...); if (!isdefined(h))
+	// return;` and drops the effect silently when the pool is full, which would be
+	// exactly this intermittent. It is NOT that: play_sound_at_origin
+	// (_tod_perk_scatter.gsc:929) spawns a script_origin and carries the SAME
+	// "entity pool full — drop the sound" guard, so an exhausted pool would take
+	// the sound with it. The sound ALWAYS plays. One observation, one suspect
+	// eliminated.
+	//
+	// WHAT IS LEFT is the asymmetry between the two lanes at the moment of a ride.
+	// The riders were SetOrigin'd thousands of units away in the loop above and
+	// this ran in the SAME server frame. A sound is emitted by an entity that then
+	// lives 3-4 s, so a client has a long window to resolve it; PlayFxOnTag is a
+	// ONE-SHOT event on a host spawned that same frame, with no replay — a client
+	// whose snapshot has not yet caught up with where its player now IS misses it
+	// outright and there is no second chance. That is the shape of the bug:
+	// intermittent, FX-only, and only on the lane that moves the viewer.
+	//
+	// ⚠️ HONEST STATUS: the elimination above is SOUND; the replacement mechanism
+	// is INFERRED, not proven from source — nothing here can observe a client's
+	// snapshot. What is certain is that a same-frame teleport-then-effect is the
+	// one thing this lane does that the sound lane does not care about, and that
+	// two frames is the cheapest way to stop doing it. If the report survives this
+	// build, the next suspect is the FX host itself (spawn it BEFORE the ride so
+	// it is already replicating, and only then PlayFxOnTag) — do NOT re-open the
+	// entity-pool theory, it is dead on the evidence above.
+	//
+	// COST: ~0.1 s of extra `tod_tp_busy` on a pad whose cooldown is already armed
+	// (TOD_TP_COOLDOWN_SEC, set before this function was called), so nothing the
+	// player can reach is gated on it. The departure flash is deliberately NOT
+	// delayed — the rider is meant to miss that one (the sound comment above says
+	// why: "the cut IS the translocation"), and the bystanders who do see it never
+	// moved, so their snapshot was never stale.
+	WAIT_SERVER_FRAME;
+	WAIT_SERVER_FRAME;
 
 	// ARRIVAL: materialize beam + flash + boom at the base pad (fires even
 	// for an empty ride — the device still discharged).

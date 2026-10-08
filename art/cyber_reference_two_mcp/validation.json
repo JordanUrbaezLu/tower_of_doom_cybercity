@@ -1,0 +1,74 @@
+{
+  "reference": 2,
+  "assignment": "regular zombies only",
+  "authoring_transport": "upstream Blender MCP execute_blender_code; localhost:9877",
+  "equipment_objects": 1933,
+  "evaluated_equipment_triangles": 592956,
+  "attachment_bones": {
+    "j_spine4": 1251,
+    "j_shoulder_ri": 39,
+    "j_shoulder_le": 32,
+    "j_elbow_le": 101,
+    "j_elbow_ri": 101,
+    "j_knee_le": 86,
+    "j_knee_ri": 86,
+    "j_hip_le": 50,
+    "j_hip_ri": 50,
+    "j_head": 137
+  },
+  "stock_geometry_and_weights_unchanged": true,
+  "donor_signatures": {
+    "c_zom_der_zombie_body1 | zombie1_upperbody_LOD0Shape1": "459fefe2a7cce7f530da3fbbff0f9730d1fbc076e47b49c1568235e17902898f",
+    "c_zom_der_zombie_body1 | mp40pouch_1_LOD0Shape1": "2ce643515f170a0d125c8ac9b8619e15986d70f05d604cc8eb259f65bd793b9b",
+    "c_zom_der_zombie_body1 | mp40pouch_2_LOD0Shape1": "4d177129219d341bfcf97ada9540049806ffba2c909ebca1f7fd16d017d4ef8a",
+    "c_zom_der_zombie_body1 | zombie1_lowerbody_LOD0Shape1": "3fe38c288bf9a22010563b0cea3a2841322fbe7bc88f74dcc734202cd9b958d5",
+    "c_zom_der_zombie_head1 | zombie_head_1_LOD0Shape1": "7a50c1826578110d1cf9da3b758f5514fb81213d8ed3ad1d603c468234242c09",
+    "c_zom_der_zombie_helmet1 | helmet_LOD0Shape1": "28e7a3237147db3ab3d3ec2de3831e19b2a526bc3f6bb48ddc827e0300c83245"
+  },
+  "pose_checks": [
+    {
+      "pose": "head_turn",
+      "maximum_attachment_error": 1.5570394389396377e-05
+    },
+    {
+      "pose": "left_arm",
+      "maximum_attachment_error": 1.590494969452311e-05
+    },
+    {
+      "pose": "right_arm",
+      "maximum_attachment_error": 1.1523290608973095e-05
+    },
+    {
+      "pose": "knees",
+      "maximum_attachment_error": 7.820710881641735e-06
+    }
+  ],
+  "master_sha256": "a4ecb46acbf81126671737facfc485c12c25aa7e1d5cd224710adc2a60f1b13e",
+  "magenta_emission_strength": 2.5999999046325684,
+  "native_exported": true,
+  "native_playtested": false,
+  "limitations": [
+    "Equipment reconstructed from reference images and adapted to original donor proportions.",
+    "Pose checks verify attachment motion, not full animation collision clearance."
+  ],
+  "equipment_lod_triangles": [
+    46433,
+    32296,
+    18631,
+    7654,
+    5120,
+    3392,
+    1692
+  ],
+  "game_integration": {
+    "ff_bytes": 149684992,
+    "ff_local_time": "2026-09-16T14:54:25.573552",
+    "snapshot_inputs": 431,
+    "differences": [],
+    "deployed_inputs_newer_than_ff": [],
+    "missing_assets": [],
+    "native_visual_verified": false,
+    "game_launched": false
+  },
+  "back_machine_revision": "asymmetric paired supply / flank return / regulator / layered spine / supported upper cell"
+}

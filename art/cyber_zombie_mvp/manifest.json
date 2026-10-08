@@ -1,0 +1,44 @@
+{
+  "status": "Revision 4 reference equipment; native build and playtest status in docs/146",
+  "sources": [
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\t7_characters\\zombies\\zombies\\c_zom_der_zombie_body2_lod0.xmodel_bin",
+      "sha256": "b8077d84935f08c83070e893d6eec7440612ceeda43e68bc1f4159a524f3f797"
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\t7_characters\\zombies\\zombies\\c_zom_der_head_1_lod0.xmodel_bin",
+      "sha256": "57917b60e9ccaa99d8e51db509eb72d57f0a085ce04c24e7f0df320e182ea1d5"
+    }
+  ],
+  "base_triangles": 26907,
+  "attachment_triangles": 35012,
+  "attachment_objects": 426,
+  "original_bones": 118,
+  "design": "Reference 1: fractured optic, chest monitor, spinal cell, asymmetric shoulder and limb armor.",
+  "limitations": [
+    "Blender studio lighting differs from map lighting.",
+    "Native visual/dismemberment/animation retest remains with the user."
+  ],
+  "revision": 4,
+  "fit_pass": 3,
+  "reference": "CyberZombie1.png",
+  "poses": [
+    {
+      "pose": "rest",
+      "max_attachment_error": 1.2480022743513489e-05
+    },
+    {
+      "pose": "head_turn",
+      "max_attachment_error": 1.5443930378629347e-05
+    },
+    {
+      "pose": "arm_flex",
+      "max_attachment_error": 1.7110167094095735e-05
+    },
+    {
+      "pose": "leg_flex",
+      "max_attachment_error": 1.2480022743513489e-05
+    }
+  ],
+  "donor_geometry_weights_preserved": true
+}

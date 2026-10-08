@@ -93,100 +93,35 @@ CoD.ZMCursorHintNew.new = function ( menu, controller )
 		return false
 	end
 	
-	-- Helper function to get cursorHintImage model value
-	local function getCursorHintImage()
-		local imageModel = Engine.GetModel(Engine.GetModelForController(controller), "hudItems.cursorHintImage")
-		if imageModel then
-			return Engine.GetModelValue(imageModel) or ""
-		end
-		return ""
-	end
-	
-	-- Helper function to get cursorHintIconRatio model value
-	local function getCursorHintIconRatio()
-		local ratioModel = Engine.GetModel(Engine.GetModelForController(controller), "hudItems.cursorHintIconRatio")
-		if ratioModel then
-			return Engine.GetModelValue(ratioModel) or 0
-		end
-		return 0
-	end
-	
-	-- Helper function to detect WALL BUY hints
-	-- Actual format: "Hold F for weapon_name [Cost: 1400]"
-	local function isWallBuyHint(hintText)
-		if not hintText or hintText == "" then
-			return false
-		end
-		
-		local lowerHint = string.lower(hintText)
-		local hasImage = getCursorHintImage() ~= ""
-		
-		-- Wall buy pattern: has "[Cost: number]" in the text
-		local hasCostBracket = string.find(lowerHint, "%[cost:")
-		
-		-- Exclude mystery box (cost 950)
-		-- 2026-08-25: the "950" arm was removed here too. It matched any cost
-		-- CONTAINING 950 — the lap-21 door costs 1950 — and this map has no
-		-- mystery box for it to ever match correctly.
-		local isMysteryBox = string.find(lowerHint, "mystery")
-		
-		-- Exclude doors and debris (CRITICAL FIX)
-		local isDoor = string.find(lowerHint, "door") or string.find(lowerHint, "open")
-		local isDebris = string.find(lowerHint, "debris") or string.find(lowerHint, "clear") or string.find(lowerHint, "remove")
-		
-		local result = hasCostBracket and not isMysteryBox and not isDoor and not isDebris
-		
-		-- FIXED: Don't check iconRatio > 0, just check if image exists
-		return hasImage and result
-	end
-	
-	-- Helper function to check if hint is power switch
-	local function isPowerSwitchHint(hintText)
-		if not hintText or hintText == "" then
-			return false
-		end
-		local lowerHint = string.lower(hintText)
-		-- Exclude "you must turn on the power first" (that's PowerRequired)
-		if string.find(lowerHint, "you must") then
-			return false
-		end
-		return string.find(lowerHint, "turn on the power") or 
-		       string.find(lowerHint, "activate power") or 
-		       string.find(lowerHint, "activate the power")
-	end
-	
-	-- Helper function to check if hint is power required warning
-	local function isPowerRequiredHint(hintText)
-		if not hintText or hintText == "" then
-			return false
-		end
-		local lowerHint = string.lower(hintText)
-		return string.find(lowerHint, "you must turn on the power first")
-	end
-	
+	-- [tod 2026-08-31] getCursorHintImage() and getCursorHintIconRatio() were
+	-- deleted here. Their ONLY consumer was isWallBuyHint's image guard, and that
+	-- guard is exactly the thing that did not work (see the classifier below).
+	-- The model SUBSCRIPTIONS further down stay: they still force a state
+	-- re-evaluation when the engine swaps hint art mid-look.
+
 	-- Helper function to detect and return perk data from hint
 	local function getPerkFromHint(hintText)
 		if not hintText or hintText == "" then
 			return nil
 		end
-		
+
 		local lowerHint = string.lower(hintText)
-		
+
 		-- Check if it's a perk prompt (Hold F for...)
 		if not string.find(lowerHint, "hold") or not string.find(lowerHint, "for") then
 			return nil
 		end
-		
+
 		-- Loop through perks table and check for perk name matches
 		for i = 1, #CoD.AetheriumPerks do
 			local perkName = string.lower(CoD.AetheriumPerks[i].name)
-			
+
 			-- Check if hint contains any part of the perk name
 			-- Split perk name by spaces/dashes and check each part
 			if string.find(lowerHint, perkName) then
 				return CoD.AetheriumPerks[i]
 			end
-			
+
 			-- Also check for partial matches (e.g., "revive" in "QUICK REVIVE")
 			for word in string.gmatch(perkName, "[^%s%-]+") do
 				if string.len(word) > 3 and string.find(lowerHint, word) then
@@ -194,50 +129,50 @@ CoD.ZMCursorHintNew.new = function ( menu, controller )
 				end
 			end
 		end
-		
+
 		return nil
 	end
-	
+
 	-- Helper function to detect Pack-a-Punch hints
 	local function isPAPHint(hintText)
 		if not hintText or hintText == "" then
 			return false
 		end
-		
+
 		local lowerHint = string.lower(hintText)
-		
+
 		-- Check for PAP-specific keywords (explicit boolean conversion)
 		local hasPack = string.find(lowerHint, "pack") ~= nil
 		local hasPunch = string.find(lowerHint, "punch") ~= nil
 		local hasWeapon = string.find(lowerHint, "weapon") ~= nil
 		local hasUpgrade = string.find(lowerHint, "upgrade") ~= nil
-		
+
 		-- Pack-a-Punch: "pack" + "punch"
 		if hasPack and hasPunch then
 			return true
 		end
-		
+
 		-- Re-pack weapon: "pack" + "weapon"
 		if hasPack and hasWeapon then
 			return true
 		end
-		
+
 		-- Upgrade weapon: "upgrade" + "weapon"
 		if hasUpgrade and hasWeapon then
 			return true
 		end
-		
+
 		return false
 	end
-	
+
 	-- Helper function to detect if it's re-pack (vs regular pack)
 	local function isRepackHint(hintText)
 		if not hintText or hintText == "" then
 			return false
 		end
-		
+
 		local lowerHint = string.lower(hintText)
-		
+
 		-- Check for re-pack specific text (multiple patterns)
 		if string.find(lowerHint, "re%-pack") then
 			return true
@@ -249,326 +184,167 @@ CoD.ZMCursorHintNew.new = function ( menu, controller )
 		if string.find(lowerHint, "2500") then
 			return true
 		end
-		
+
 		return false
 	end
-	
-	-- Helper function to detect Mystery Box hints
-	local function isMysteryBoxHint(hintText)
-		if not hintText or hintText == "" then
-			return false
-		end
-		
-		local lowerHint = string.lower(hintText)
-		
-		-- Check for mystery box keywords
-		local hasMystery = string.find(lowerHint, "mystery") ~= nil
-		local hasBox = string.find(lowerHint, "box") ~= nil
-		
-		if hasMystery and hasBox then
-			return true
-		end
-		
-		-- FALLBACK REMOVED (audit 2026-08-25). It was:
-		--     if string.find(lowerHint, "950") then return true end
-		-- a substring match for the stock mystery box 950 spin price, which also
-		-- matches ANY hint whose cost merely CONTAINS "950". The lap-21 buyable
-		-- door costs exactly 1950, so standing at it rendered the MYSTERY BOX card
-		-- instead of a door card. This map ships NO mystery box (deliberately, see
-		-- CLAUDE.md), so the heuristic had nothing correct to detect and could only
-		-- misfire. The "mystery" + "box" keyword test above is the real check.
-		
-		return false
-	end
-	
-	-- Helper function to detect GobbleGum machine hints
-	-- Uses CoD.IsGobbleGumHint from AetheriumBBG mapping
-	local function isGobbleGumHint(hintText)
-		return CoD.IsGobbleGumHint(hintText)
-	end
-	
-	-- Helper function to detect Door/Debris hints
-	local function isDoorDebrisHint(hintText)
-		if not hintText or hintText == "" then
-			return false
-		end
-		
-		local lowerHint = string.lower(hintText)
-		
-		-- Check for door keywords
-		local hasDoor = string.find(lowerHint, "door") ~= nil
-		local hasOpen = string.find(lowerHint, "open") ~= nil
-		
-		-- Check for debris keywords
-		local hasDebris = string.find(lowerHint, "debris") ~= nil
-		local hasClear = string.find(lowerHint, "clear") ~= nil
-		local hasRemove = string.find(lowerHint, "remove") ~= nil
-		
-		-- Door: "door" OR "open" (but not wall buy)
-		-- Debris: "debris" OR ("clear"/"remove")
-		if hasDoor or hasDebris then
-			return true
-		end
-		
-		-- Also check for "open" or "clear" with cost (buyable doors/debris)
-		if (hasOpen or hasClear or hasRemove) and string.find(lowerHint, "cost") then
-			return true
-		end
-		
-		return false
-	end
-	
-	-- Helper function to detect Mystery Box weapon pickup hints
-	local function isMysteryBoxWeapon(hintText)
-		if not hintText or hintText == "" then
-			return false
-		end
-		
-		local lowerHint = string.lower(hintText)
-		
-		-- Check for "hold f for" pattern (weapon pickup from mystery box)
-		-- Mystery box weapons don't have "buy" or "cost" keywords
-		if string.find(lowerHint, "hold") and string.find(lowerHint, "for") and not string.find(lowerHint, "mystery") then
-			-- Exclude if it has buy/purchase/cost keywords (those are wall buys)
-			if not string.find(lowerHint, "buy") and not string.find(lowerHint, "purchase") and not string.find(lowerHint, "cost") then
-				return true
-			end
-		end
-		
-		return false
-	end
-	
-	-- Helper function to extract weapon name from hint
-	local function getWeaponFromHint(hintText)
+
+	-- =====================================================================
+	-- [tod 2026-08-31] THE CLASSIFIER -- ONE function, ONE answer.
+	--
+	-- WHAT WAS WRONG. Routing used to be nine independent predicates spread
+	-- across nine mergeStateConditions arms. Several matched the same hint at
+	-- once, so the winner depended on arm order; and two of them could never
+	-- be right on this map, yet were wrong constantly:
+	--
+	--   * isWallBuyHint() = "the text contains [Cost:" AND
+	--     getCursorHintImage() ~= "". The image guard was believed to make it
+	--     safe for our HINT_NOICON triggers -- _tod_ammo_crate.gsc:155 and
+	--     _tod_upgrades.gsc::station_hint_loop both reason explicitly from
+	--     that premise. THE PREMISE IS FALSE: hudItems.cursorHintImage does
+	--     not read back as the empty string for an icon-less hint, so
+	--     '~= ""' was effectively always true and the guard never fired.
+	--     Every PRICED NON-DOOR interactable in the map therefore drew
+	--     PromptWallBuy, whose hardcoded description is the literal text
+	--     "Wall Weapon" -- exactly the user's report, at the ammo crates and
+	--     at the Heavenly Gift Altar, and equally at CALL EXTRACTION and at
+	--     every spire buy. THIS MAP HAS NO WALL WEAPONS (CLAUDE.md: "NO
+	--     wallbuys -- user: I never asked for those"), so that route had
+	--     nothing correct to detect and could only misfire.
+	--   * isMysteryBoxHint / isMysteryBoxWeapon / isGobbleGumHint: same story
+	--     -- no mystery box and no gobblegum machine exists here.
+	--     isMysteryBoxWeapon was the worst of them, claiming ANY hint that
+	--     contains "hold" and the substring "for" and no cost: a trap armed
+	--     for whoever wrote the next hint string.
+	--
+	-- Those three cards are now UNREACHABLE. The widgets stay constructed so
+	-- close() and clipsPerState keep working untouched, but no arm selects
+	-- them. If this map ever grows a real wallbuy, give it its own noun test
+	-- here -- do not restore a guard that was never load-bearing.
+	--
+	-- WHAT REPLACED IT: classifyHint() returns EXACTLY ONE state name, most
+	-- specific test first. Every arm below is a single equality against it,
+	-- so arm order stops mattering and a hint cannot be claimed twice.
+	--
+	-- TOD_NOUNS IS THE LOAD-BEARING PART. These are the nouns this map's own
+	-- SetHintString literals lead with (grep SetHintString under
+	-- scripts/zm/zm_tower_of_doom/). Claiming them BEFORE the generic keyword
+	-- tests is what lets the ammo crate say "Pack a Punch $5000" without
+	-- isPAPHint's "pack"+"punch" test dragging it onto the PaP card.
+	-- ANY NEW INTERACTABLE WITH A CUSTOM PROMPT ADDS ITS NOUN HERE.
+	-- Matching is PLAIN (the 4th arg to string.find), never pattern matching,
+	-- so a noun containing a magic character can never misbehave.
+	-- =====================================================================
+	local TOD_NOUNS = {
+		"ammo crate",
+		"heavenly gift altar", "altar spent", "all upgrades maxed",
+		"teleporter",
+		"extract",                      -- covers CALL EXTRACTION / EXTRACTING / EXTRACTION INBOUND
+		"rampage",
+		"ascend", "endless spire",
+		"sealed",
+		"defend the crown", "run for the crown", "reach the crown",
+		"uplink",
+		"already packed",               -- the Pack-a-Punch's packed-state status line (zm_cwpap.gsc, v16.27)
+		-- v17.33 — the spire's PACK II / PACK III re-packs (zm_cwpap.gsc
+		-- tod_set_tier_hint). The copy already avoids the second half of the
+		-- Pack-a-Punch keyword pair so isPAPHint cannot claim it, but these
+		-- nouns are matched at step 3 and isPAPHint runs at step 5, so the
+		-- routing holds even if the wording is later changed by someone who
+		-- has not read that function.
+		--
+		-- NEVER PUT A QUOTED WORD IN A COMMENT INSIDE THIS TABLE. The first
+		-- draft of this note quoted the keyword it was discussing, and
+		-- tools/lint_tod_hints.js — which reads the nouns by scanning this
+		-- block for quoted strings, as any reader would — took that word as a
+		-- NOUN. It matches stock's own &ZOMBIE_PERK_PACKAPUNCH, so every
+		-- Pack-a-Punch prompt in the map would have been dragged onto the
+		-- DefaultHint card by a COMMENT. The lint caught it; nothing else
+		-- would have until someone walked up to a machine.
+		"pack ii", "pack iii",
+	}
+
+	local function classifyHint(hintText)
 		if not hintText or hintText == "" then
 			return nil
 		end
-		
-		-- Try different patterns (case-insensitive)
-		local lowerHint = string.lower(hintText)
-		
-		-- Pattern 1: "Hold F For weapon_name" or "Hold &&1 For weapon_name"
-		local forPos = string.find(lowerHint, " for ")
-		if forPos then
-			local weaponName = string.sub(hintText, forPos + 5) -- Skip " for "
-			return weaponName
+		local h = string.lower(hintText)
+
+		-- 1. POWER. The "you must" line is a strict subset of the switch line,
+		-- so it has to be tested first.
+		if string.find(h, "you must turn on the power first", 1, true) then
+			return "PowerRequired"
 		end
-		
-		-- Pattern 2: Try without space "For weapon_name"
-		forPos = string.find(lowerHint, "for ")
-		if forPos then
-			local weaponName = string.sub(hintText, forPos + 4) -- Skip "for "
-			return weaponName
+		if string.find(h, "turn on the power", 1, true)
+			or string.find(h, "activate power", 1, true)
+			or string.find(h, "activate the power", 1, true) then
+			return "PowerSwitch"
 		end
-		
-		-- Pattern 3: "Hold &&1 weapon_name" (no "for")
-		local holdPos = string.find(lowerHint, "hold ")
-		if holdPos then
-			-- Extract everything after "hold &&1 " or "hold f "
-			local afterHold = string.sub(hintText, holdPos + 5)
-			-- Skip button text (F or &&1)
-			local spacePos = string.find(afterHold, " ")
-			if spacePos then
-				local weaponName = string.sub(afterHold, spacePos + 1)
-				return weaponName
+
+		-- 2. DOORS AND DEBRIS -- tested BEFORE TOD_NOUNS because a door hint
+		-- carries an authored DESTINATION NAME ("Open Door to the Crown",
+		-- "... to the Teleport Bay"), and a destination is free to contain any
+		-- word at all. "open door" is the map's own literal in
+		-- _tod_doors.gsc:183 and _tod_spire.gsc::spire_door_hint.
+		if string.find(h, "open door", 1, true) or string.find(h, "debris", 1, true) then
+			return "Doors"
+		end
+
+		-- 3. THE MAP'S OWN NOUNS -> the structured default card.
+		for i = 1, #TOD_NOUNS do
+			if string.find(h, TOD_NOUNS[i], 1, true) then
+				return "DefaultHint"
 			end
 		end
-		
-		return nil
+
+		-- 4. PERK MACHINES (stock + vendored: "Hold [key] for <Perk> [Cost: N]").
+		if getPerkFromHint(hintText) then
+			return "Perks"
+		end
+
+		-- 5. PACK-A-PUNCH (zm_cwpap's &"ZOMBIE_PERK_PACKAPUNCH").
+		if isPAPHint(hintText) then
+			return "PAP"
+		end
+
+		return "DefaultHint"
 	end
-	
-	-- OFFICIAL PATTERN: Use state conditions on PARENT widget
+
+	-- OFFICIAL PATTERN: Use state conditions on PARENT widget.
+	-- Every arm is now the same closure over one state name, so the arms
+	-- cannot disagree and their evaluation order cannot decide the outcome.
+	local function hintIs(stateName)
+		return function ( menu, element, event )
+			if not IsCursorHintActive() then
+				return false
+			end
+			local model = Engine.GetModel( Engine.GetModelForController( controller ), "hudItems.cursorHintText" )
+			if not model then
+				return false
+			end
+			local hintText = Engine.GetModelValue( model )
+			if classifyHint(hintText) ~= stateName then
+				return false
+			end
+			-- Stash the perk row for the text subscription, as before.
+			if stateName == "Perks" then
+				element.currentPerkData = getPerkFromHint(hintText)
+			end
+			return true
+		end
+	end
+
 	self:mergeStateConditions( {
-		{
-			stateName = "PowerSwitch",
-			condition = function ( menu, element, event )
-				if not IsCursorHintActive() then
-					return false
-				end
-				
-				local cursorHintTextModel = Engine.GetModel( Engine.GetModelForController( controller ), "hudItems.cursorHintText" )
-				if cursorHintTextModel then
-					local cursorHintText = Engine.GetModelValue( cursorHintTextModel )
-					return isPowerSwitchHint(cursorHintText)
-				end
-				return false
-			end
-		},
-		{
-			stateName = "Perks",
-			condition = function ( menu, element, event )
-				if not IsCursorHintActive() then
-					return false
-				end
-				
-				local cursorHintTextModel = Engine.GetModel( Engine.GetModelForController( controller ), "hudItems.cursorHintText" )
-				if cursorHintTextModel then
-					local cursorHintText = Engine.GetModelValue( cursorHintTextModel )
-					local perkData = getPerkFromHint(cursorHintText)
-					
-					-- Store perk data for use in text update subscription
-					if perkData then
-						element.currentPerkData = perkData
-						return true
-					end
-				end
-				return false
-			end
-		},
-		{
-			stateName = "PAP",
-			condition = function ( menu, element, event )
-				if not IsCursorHintActive() then
-					return false
-				end
-				
-				local cursorHintTextModel = Engine.GetModel( Engine.GetModelForController( controller ), "hudItems.cursorHintText" )
-				if cursorHintTextModel then
-					local cursorHintText = Engine.GetModelValue( cursorHintTextModel )
-					return isPAPHint(cursorHintText)
-				end
-				
-				return false
-			end
-		},
-		{
-			stateName = "GobbleGum",
-			condition = function ( menu, element, event )
-				if not IsCursorHintActive() then
-					return false
-				end
-				
-				local cursorHintTextModel = Engine.GetModel( Engine.GetModelForController( controller ), "hudItems.cursorHintText" )
-				if cursorHintTextModel then
-					local cursorHintText = Engine.GetModelValue( cursorHintTextModel )
-					local isGGHint = isGobbleGumHint(cursorHintText)
-					
-					if isGGHint then
-						-- Update the prompt mode based on whether it's machine or pickup
-						if element.promptBBG and CoD.PromptBBG.SetMode then
-							local ggData = CoD.GetGobbleGumFromHint(cursorHintText)
-							if ggData then
-								-- Pickup mode - specific gobblegum
-								CoD.PromptBBG.SetMode( element.promptBBG, "pickup", ggData )
-							else
-								-- Machine mode - dispense prompt
-								CoD.PromptBBG.SetMode( element.promptBBG, "machine" )
-							end
-						end
-						return true
-					end
-				end
-				
-				return false
-			end
-		},
-		{
-			stateName = "WallBuy",
-			condition = function ( menu, element, event )
-				if not IsCursorHintActive() then
-					return false
-				end
-				
-				local cursorHintTextModel = Engine.GetModel( Engine.GetModelForController( controller ), "hudItems.cursorHintText" )
-				if cursorHintTextModel then
-					local cursorHintText = Engine.GetModelValue( cursorHintTextModel )
-					return isWallBuyHint(cursorHintText)
-				end
-				
-				return false
-			end
-		},
-		{
-			stateName = "MysteryBox",
-			condition = function ( menu, element, event )
-				if not IsCursorHintActive() then
-					return false
-				end
-				
-				local cursorHintTextModel = Engine.GetModel( Engine.GetModelForController( controller ), "hudItems.cursorHintText" )
-				if cursorHintTextModel then
-					local cursorHintText = Engine.GetModelValue( cursorHintTextModel )
-					local isBoxHint = isMysteryBoxHint(cursorHintText)
-					local isWeaponHint = isMysteryBoxWeapon(cursorHintText)
-					
-					if isBoxHint or isWeaponHint then
-						-- Update the prompt mode INSIDE state condition
-						if element.promptMysteryBox and CoD.PromptMysteryBox.SetMode then
-							if isWeaponHint then
-								-- Weapon mode
-								local weaponName = getWeaponFromHint(cursorHintText)
-								CoD.PromptMysteryBox.SetMode( element.promptMysteryBox, "weapon", weaponName )
-							else
-								-- Spin mode
-								CoD.PromptMysteryBox.SetMode( element.promptMysteryBox, "spin" )
-							end
-						end
-						return true
-					end
-				end
-				
-				return false
-			end
-		},
-		{
-			stateName = "Doors",
-			condition = function ( menu, element, event )
-				if not IsCursorHintActive() then
-					return false
-				end
-				
-				local cursorHintTextModel = Engine.GetModel( Engine.GetModelForController( controller ), "hudItems.cursorHintText" )
-				if cursorHintTextModel then
-					local cursorHintText = Engine.GetModelValue( cursorHintTextModel )
-					return isDoorDebrisHint(cursorHintText)
-				end
-				
-				return false
-			end
-		},
-		{
-			stateName = "PowerRequired",
-			condition = function ( menu, element, event )
-				if not IsCursorHintActive() then
-					return false
-				end
-				
-				local cursorHintTextModel = Engine.GetModel( Engine.GetModelForController( controller ), "hudItems.cursorHintText" )
-				if cursorHintTextModel then
-					local cursorHintText = Engine.GetModelValue( cursorHintTextModel )
-					return isPowerRequiredHint(cursorHintText)
-				end
-				return false
-			end
-		},
-		{
-			stateName = "DefaultHint",
-			condition = function ( menu, element, event )
-				if not IsCursorHintActive() then
-					return false
-				end
-				
-				local cursorHintTextModel = Engine.GetModel( Engine.GetModelForController( controller ), "hudItems.cursorHintText" )
-				if cursorHintTextModel then
-					local cursorHintText = Engine.GetModelValue( cursorHintTextModel )
-				-- Has a hint but not power switch, power required, perks, PAP, gobblegum, mystery box, wall buy, or doors
-				if cursorHintText and cursorHintText ~= "" then
-					return not isPowerSwitchHint(cursorHintText) and 
-					       not isPowerRequiredHint(cursorHintText) and 
-				       not getPerkFromHint(cursorHintText) and
-				       not isPAPHint(cursorHintText) and
-				       not isGobbleGumHint(cursorHintText) and
-			       not isMysteryBoxHint(cursorHintText) and
-			       not isMysteryBoxWeapon(cursorHintText) and
-			       not isWallBuyHint(cursorHintText) and
-			       not isDoorDebrisHint(cursorHintText)
-					end
-				end
-				return false
-			end
-		}
+		{ stateName = "PowerSwitch",   condition = hintIs( "PowerSwitch" ) },
+		{ stateName = "PowerRequired", condition = hintIs( "PowerRequired" ) },
+		{ stateName = "Doors",         condition = hintIs( "Doors" ) },
+		{ stateName = "Perks",         condition = hintIs( "Perks" ) },
+		{ stateName = "PAP",           condition = hintIs( "PAP" ) },
+		{ stateName = "DefaultHint",   condition = hintIs( "DefaultHint" ) }
+		-- WallBuy / MysteryBox / GobbleGum have NO arm: see the classifier's
+		-- header. Their clipsPerState blocks below are left in place (dead but
+		-- harmless) so nothing else in this file has to change.
 	} )
-	
+
 	-- Subscribe to showCursorHint model to trigger state updates (official pattern)
 	self:subscribeToModel( Engine.GetModel( Engine.GetModelForController( controller ), "hudItems.showCursorHint" ), function ( model )
 		menu:updateElementState( self, {
@@ -579,61 +355,78 @@ CoD.ZMCursorHintNew.new = function ( menu, controller )
 		} )
 	end )
 	
-	-- Also subscribe to cursorHintText to update the default prompt text
+	-- Also subscribe to cursorHintText to drive the per-card modes.
 	self:subscribeToModel( Engine.GetModel( Engine.GetModelForController( controller ), "hudItems.cursorHintText" ), function ( model )
 		local cursorHintText = Engine.GetModelValue( model )
-		
+
 		if cursorHintText and cursorHintText ~= "" then
-			local isPower = isPowerSwitchHint(cursorHintText)
-			local perkData = getPerkFromHint(cursorHintText)
-			local isPAP = isPAPHint(cursorHintText)
-			local isRepack = isRepackHint(cursorHintText)
-			local isMystBox = isMysteryBoxHint(cursorHintText)
-			local isMystWeapon = isMysteryBoxWeapon(cursorHintText)
-			local isGum = isGobbleGumHint(cursorHintText)
-			
+			local state = classifyHint( cursorHintText )
+
 			-- Update perk prompt if it's a perk
-			if perkData and self.promptPerks then
-				CoD.PromptPerks.UpdatePerkInfo( self.promptPerks, perkData )
+			if state == "Perks" and self.promptPerks then
+				CoD.PromptPerks.UpdatePerkInfo( self.promptPerks, getPerkFromHint( cursorHintText ), cursorHintText )
 			end
-			
+
 			-- Update PAP prompt mode (pack vs re-pack)
-			if isPAP and self.promptPAP then
-				CoD.PromptPAP.SetMode( self.promptPAP, isRepack )
+			if state == "PAP" and self.promptPAP then
+				CoD.PromptPAP.SetMode( self.promptPAP, isRepackHint( cursorHintText ) )
 			end
-			
-			-- Update Mystery Box prompt mode (spin vs weapon pickup)
-			if (isMystBox or isMystWeapon) and self.promptMysteryBox then
-				if CoD.PromptMysteryBox.SetMode then
-					if isMystWeapon then
-						-- Weapon mode - extract weapon name
-						local weaponName = getWeaponFromHint(cursorHintText)
-						CoD.PromptMysteryBox.SetMode( self.promptMysteryBox, "weapon", weaponName )
-					else
-						-- Spin mode
-						CoD.PromptMysteryBox.SetMode( self.promptMysteryBox, "spin" )
-					end
-				end
-			end
-			
-			-- Update default prompt text if needed (with safety check)
-			if not isPower and not perkData and not isPAP and not isGum and not isMystBox and not isMystWeapon and self.promptDefault and self.promptDefault.hintText then
-				self.promptDefault.hintText:setText( Engine.Localize( cursorHintText ) )
-			end
-			
-			-- Force state update to ensure correct prompt displays
-			menu:updateElementState( self, {
-				name = "cursorHintText_update",
-				menu = menu,
-				modelValue = cursorHintText,
-				modelName = "hudItems.cursorHintText"
-			} )
+
+			-- [tod 2026-08-31] NOTHING HERE WRITES promptDefault.hintText ANY
+			-- MORE. The line that used to sit here was
+			--     self.promptDefault.hintText:setText( Engine.Localize( cursorHintText ) )
+			-- and it was the second of TWO writers on that field. PromptDefault
+			-- subscribes to this same model inside its own constructor, which
+			-- runs EARLIER (PromptDefault.new is called from this file, above,
+			-- before this subscribe), so this one fired LAST and won -- and it
+			-- wrote the RAW hint: colour codes, the [{+activate}] token and a
+			-- 44-character price line, all poured into one 146px-wide box.
+			-- That is the "HoldXAMMOCRATE / there is no spacing between things"
+			-- report. PromptDefault now owns its text and parses the hint into
+			-- title / detail / price / footer fields. DO NOT ADD A WRITER HERE.
 		end
+
+		-- Force state update to ensure correct prompt displays.
+		--
+		-- [tod v16.27] THIS RUNS FOR A BLANK HINT TOO. It used to sit inside the
+		-- non-empty guard above, so when a trigger's hint went from real text
+		-- to "" while the player stayed in range -- exactly what the
+		-- Pack-a-Punch did the moment a purchase landed (the packed gun in hand
+		-- set SetHintString( "" )) -- nothing re-evaluated the state and the
+		-- LAST card stayed up: "Pack-a-Punch / 5000 / Hold F To Upgrade" over
+		-- a machine that had nothing left to sell. Hold F again, deny sound, no
+		-- explanation: the double-pack confusion. classifyHint( "" ) is nil, no
+		-- arm matches, and DefaultState hides every card, which is the right
+		-- picture for a blank hint.
+		menu:updateElementState( self, {
+			name = "cursorHintText_update",
+			menu = menu,
+			modelValue = cursorHintText,
+			modelName = "hudItems.cursorHintText"
+		} )
 	end )
-	
+
 	-- CLIPS PER STATE - Control visibility (simplified)
 	self.clipsPerState = {
 		DefaultState = {
+			DefaultClip = function ()
+				self.PromptPowerSwitch:setAlpha( 0 )
+				self.promptDefault:setAlpha( 0 )
+				self.PromptPowerRequired:setAlpha( 0 )
+				self.promptPerks:setAlpha( 0 )
+				self.promptPAP:setAlpha( 0 )
+				self.promptBBG:setAlpha( 0 )
+				self.promptMysteryBox:setAlpha( 0 )
+				self.promptWallBuy:setAlpha( 0 )
+				self.promptDoors:setAlpha( 0 )
+			end
+		},
+		-- [tod 2026-09-22, bug review F24] AetheriumHud.lua merges an
+		-- "Active_1x1" condition (stock's cursor-hint-active bit) AFTER our
+		-- six arms. A BLANK hint (zm_cwpap SetHintString("") for a weapon the
+		-- machine will not pack) matches none of ours, so Active_1x1 won with
+		-- no clip here and the last card stayed on screen. Same hide-all.
+		Active_1x1 = {
 			DefaultClip = function ()
 				self.PromptPowerSwitch:setAlpha( 0 )
 				self.promptDefault:setAlpha( 0 )

@@ -58,6 +58,7 @@
 // =============================================================================
 
 #using scripts\shared\ai_shared;
+#using scripts\shared\clientfield_shared;         // dog_fx — the stock ACTOR field
 #using scripts\shared\flag_shared;
 #using scripts\shared\util_shared;
 
@@ -68,14 +69,27 @@
 
 #using scripts\zm\zm_tower_of_doom\_tod_bosses;   // boss_hp / anchor_player / pick_spawn_point / watchers / reward
 #using scripts\zm\zm_tower_of_doom\_tod_luck;     // boss LAST-HIT luck
+#using scripts\zm\zm_tower_of_doom\_tod_perk_scatter;   // play_sound_at_origin — the temp-emitter lane
+#using scripts\zm\zm_tower_of_doom\_tod_spire_data;     // v17.92 — in_spire: a hound is never placed off the island the party is on (leaf module, no cycle)
+#using scripts\zm\zm_tower_of_doom\_tod_corpse_cleanup; // v17.92 — corpse_remove: the delete-on-death lane the hound never had (stock-only usings, no cycle)
+
+// THE ARRIVAL BOLT (v17.83). Stock precaches this at _zm_ai_dogs.gsc:31 and it
+// is a REAL 53 KB effect, not one of the 298 stub .efx. We precache it AGAIN on
+// our side and carry our own `fx,zombie/fx_dog_lightning_buildup_zmb` zone line,
+// because a #precache whose asset no zone pulled in resolves to nothing and
+// PlayFX no-ops SILENTLY (the v14.20 rampage-spark lesson). The map's `.ff`
+// ledger has no fx_dog_* row today — they ride in zm_levelcommon, a fastfile
+// this zone cannot see — so relying on that would be relying on something we
+// cannot check from here.
+#precache( "fx", "zombie/fx_dog_lightning_buildup_zmb" );
 
 // --- cadence: anchored to the round the LAP 30 breather door was bought
 // (_tod_doors::breather_unlock stamps level.tod_enemy_unlock_round["hellhound"]),
 // then every 3rd round. Never a global grid — a fast climber and a slow climber
 // must get the same fight relative to their own unlock. ------------------------
 #define TOD_HOUND_INTERVAL       3
-#define TOD_HOUND_INTERVAL_DEV   2     // dev: repeats faster for testing
-#define TOD_HOUND_MAX_ALIVE      4     // concurrency roof for hounds alone
+// RETIRED v16.87: TOD_HOUND_INTERVAL_DEV 2 (dev no longer changes cadence)
+#define TOD_HOUND_MAX_ALIVE      4     // SOLO base since v13.22 — live roof is hound_max_alive() (4 + players/2: 4/5/5/6, so the quad pack of 5 is no longer clamped)
 
 // COMBINED ELITE ROOF. The existing per-type roofs already permit 8 Protectors
 // + 1 Panzer + 3 Reavers = 12 live elites, and the v10.4 audit established that
@@ -84,7 +98,21 @@
 // nothing trims zombie_ai_limit. Hounds therefore only ever fill SPARE capacity:
 // they may not spawn while 9+ elites already stand. Legal one-directionally —
 // this module imports _tod_bosses, never the reverse (the cycle the KB forbids).
-#define TOD_HOUND_ELITE_ROOF     9
+// v13.22 (co-op elite scale-up): both roofs are per-player now — the defines
+// stay as the SOLO bases. hound_max_alive() = 4+np/2 (4/5/5/6, the quad pack
+// of 5 no longer clamps); hound_elite_roof() = 8+np (9/10/11/12). WHY THE
+// ELITE ROOF HAD TO MOVE WITH THE OTHERS: elites_alive() counts
+// protectors+panzer+reavers+hounds (sprinters deliberately absent — horde
+// CONVERSIONS, zero extra actors), and the v13.22 quad worst case is
+// 8+1+3 = 12 non-hound elites, which would sit permanently above a flat 9
+// and STARVE hounds out of every quad confluence round. 12 is the historical
+// reachable line the v10.4 audit measured (the pre-tankiness roofs permitted
+// exactly 12); at quad it is brief, elite-kill throughput is four guns, and
+// the horde-choke cost is one the map already carried at that line.
+// (TOD_HOUND_ELITE_ROOF 9 RETIRED v18.9 — hound_elite_roof() returns the shared
+// tod_bosses::elite_roof_all() now, so this had no readers left. The rationale
+// block above is kept as the record of why hounds once had a private roof; it
+// describes a retired flat-12 world and must not be read as current.)
 
 // --- HP: the same anchored curve every other elite uses, so coop_hp_mult()
 // rides in automatically inside boss_hp.
@@ -95,17 +123,54 @@
 // compounding horde that is 0.91x a TRASH ZOMBIE at round 30 and 0.35x at round
 // 40. The literal number would ship an "elite" softer than the horde it spawns
 // with, and the LAP 30 door would feel like it unlocked less than LAP 20 did.
-// 16,000 on the standard curve keeps the user's actual intent — a real threat —
-// and lands the hound as the LIGHTEST elite, which is correct for the only one
-// that arrives four at a time and outruns a sprinting player:
-//   solo r30  hound 16,000  vs  Reaver 43,178 / Protector 43,497 / Panzer 129,346
-//   solo r30  trash zombie 8,788  ->  the hound is just under 2x a zombie
-// THE DIAL: drop BASE to 8000 for the literal 5x reading. One define, -GscOnly.
+// 16,000 on the standard curve kept the user's actual intent — a real threat —
+// and landed the hound as the LIGHTEST elite, which is correct for the only one
+// that arrives four at a time and outruns a sprinting player.
+//
+// -30% (user 2026-08-27: "nerf the dogs hellhounds health by 30%"), 16000 ->
+// 11200. The curve multiplies off BASE from the anchor, so scaling the base is
+// exactly -30% at EVERY round, not just at 30. Post-nerf reads:
+//   solo r30  hound 11,200  vs  Reaver 43,178 / Protector 43,497 / Panzer 129,346
+//   solo r30  trash zombie 8,788  ->  the hound is ~1.27x a zombie
+// Still the lightest elite by far; its threat is the pack + the speed, not the
+// pool. THE DIAL: this define alone, -GscOnly.
 #define TOD_HOUND_HP_ANCHOR      30
-#define TOD_HOUND_HP_BASE        16000
+#define TOD_HOUND_HP_BASE        11200
 #define TOD_HOUND_HP_EXP         1.09
 
-#define TOD_HOUND_PTS            150   // team-wide on death (luck goes to the last hit only)
+// THE SPAWN-IN (v17.83, user 2026-09-05: "they should target right away. Also
+// they dont have a spawn animation. They just appear ... typically the game has
+// an animation of them spawning in"). Seconds of lightning buildup before the
+// hound is revealed — stock's own `dog_spawn_fx` waits 1.5; 1.2 keeps the tell
+// without making a pack feel late.
+#define TOD_HOUND_SPAWN_FX_SECS  1.2
+
+// RETIRED v17.83: TOD_HOUND_SPAWN_HOLD_MS (2500). v17.43 withheld the hound's
+// TARGET for 2.5 s to stop 306 throws of `pair '100' and 'undefined'` out of
+// behavior_zombie_dog's GetYaw. That worked, and it cost the thing the enemy is
+// for: a pack that stands still for three seconds after it lands. The correct
+// guard was in stock all along and it is one field, not a timer —
+// `ignoreme`. Read behavior_zombie_dog.gsc:378-400 in order:
+//
+//   :378  if ( ignoreall || pacifist || target invalid )  -> CLEARS favoriteenemy
+//   :397  if ( IS_TRUE( ignoreme ) )                      -> plain `return`
+//   :412  if ( isdefined( favoriteenemy ) && need_to_run() )   <- THE THROW SITE
+//
+// `ignoreme` returns from zombieDogTargetService BEFORE need_to_run() — the
+// exact call that threw — and unlike `ignoreall` it does NOT wipe the target on
+// its way past. So the hound can hold its enemy from the SpawnActor frame and
+// still never run the yaw math while it is materialising. Stock reaches the
+// same state by a different road (dog_init hides + shields, dog_spawn_fx clears
+// ignoreme at the reveal); we do the half we can safely own.
+//
+// ⚠️ AND THAT SAME LINE :378 IS WHY A WORLD PAUSE COSTS EVERY DOG ITS TARGET:
+// set_world_pause writes `ignoreall = true` on every axis AI, and the tree
+// answers by clearing favoriteenemy. hound_target_watch re-picks within 0.5 s
+// of the unpause, so it recovers — but nothing else in the map does, and that
+// is worth knowing before adding another ignoreall writer.
+
+// (TOD_HOUND_PTS 150 team-wide: RETIRED v14.5 — elite payouts are the shared
+// killer-only TOD_ELITE_PTS in _tod_bosses::grant_elite_reward; tune it THERE)
 
 #namespace tod_hellhounds;
 
@@ -136,7 +201,7 @@ function init()
 function dbg( msg )
 {
 	if ( IS_TRUE( level.tod_dev ) )
-		IPrintLn( "[hound] " + msg );
+		tod_quiet_print( "[hound] " + msg );
 }
 
 // ---------------------------------------------------------------------------
@@ -153,7 +218,10 @@ function hound_due( round )
 	if ( round < start )
 		return 0;
 
-	interval = ( ( IS_TRUE( level.tod_dev ) ) ? TOD_HOUND_INTERVAL_DEV : TOD_HOUND_INTERVAL );
+	// [v16.87] Ship cadence in every build — the dev interval is gone (user:
+	// dev must not add elites). LOCKSTEP with _tod_bosses / _tod_reaver /
+	// _tod_sprinter; the full note is on panzer_due in _tod_bosses.gsc.
+	interval = TOD_HOUND_INTERVAL;
 	if ( ( ( round - start ) % interval ) != 0 )
 		return 0;
 
@@ -192,8 +260,15 @@ function round_watch()
 		// most; the punishment for not clearing one is the hounds still
 		// standing, not a queue behind them. Clamping n BEFORE the compare is
 		// what keeps the debt itself under the roof.
-		if ( n > TOD_HOUND_MAX_ALIVE )
-			n = TOD_HOUND_MAX_ALIVE;
+		// RAMPAGE (v14.20): wave and clamp both scaled, delivery exactly 2x.
+		// hound_max_alive() is NOT scaled — the director's standing gate still
+		// admits at most 4..6 hounds, and its combined elites_alive() check is
+		// likewise untouched. Rampage only lets the pack re-feed for longer.
+		m = tod_bosses::elite_mult();
+		n = n * m;
+		roof = hound_max_alive() * m;
+		if ( n > roof )
+			n = roof;
 		if ( n > 0 && n > level.tod_hound_debt )
 			level.tod_hound_debt = n;
 	}
@@ -219,6 +294,55 @@ function hounds_alive()
 // Every live elite of every type — the combined-budget guard. Reads the Reaver's
 // count through its published LEVEL FIELD, never by importing the module (that
 // direction would be the cycle).
+// v13.25 BOOT FIX (the "hound_max_alive unresolved external" fatal, caught
+// by the user on the PUBLISHED build): in v13.22 these two functions were
+// inserted ABOVE the #namespace directive. The LINKER accepts that silently,
+// but the GAME's loader does not — calls made after `#namespace
+// tod_hellhounds;` resolve inside that namespace, and a pre-namespace
+// definition never joins it, so every call site was an unresolved external
+// and the map fataled at load. It shipped in builds #12 through the publish
+// because NO build in that window was ever booted (each battery checked
+// deploy-state, not bootability), and lint_tod_arity does not model
+// namespace boundaries. RULES: functions go BELOW #namespace, always; and a
+// battery is not a boot.
+function hound_max_alive()
+{
+	np = GetPlayers().size;
+	if ( np < 1 )
+		np = 1;
+	return 4 + int( np / 2 );
+}
+
+// v18.9 — THE SHARED ROOF, not a private one. This returned 8 + players
+// (9/10/11/12), a number tuned against the retired flat 12, while every OTHER
+// elite director calls tod_bosses::elite_roof_all(). v18.1 lowered the shared
+// roof to 5/7/9/11 as a SOLO RELIEF pass and this function quietly kept solo at
+// 9 — about 80% of that pass eroded at solo and 9% at quad, the exact inversion
+// of the intent. Hounds also never read level.tod_trial_reserve, so the Wardens'
+// first claim did not hold against the one family that most needed it in THE
+// KENNEL; going through the shared roof fixes that too.
+//
+// elite_roof_all() and NOT !elites_over_roof(): that function carries a finale
+// exemption, and inheriting it would silently remove the hounds' only combined
+// ceiling on the crown road.
+//
+// TOD_HOUND_ELITE_ROOF is retired with this — grep found it only on its own
+// #define line.
+function hound_elite_roof()
+{
+	roof = tod_bosses::elite_roof_all();
+	// THE WARDENS' FIRST CLAIM (bug review 2026-09-22, F14): every other
+	// director honours level.tod_trial_reserve through elites_over_roof();
+	// this one read the bare roof, so KENNEL hounds refilled the slot a fallen
+	// or frenzy Warden was waiting for. Subtracted here rather than switching
+	// to elites_over_roof, which carries the finale exemption (see above).
+	if ( isdefined( level.tod_trial_reserve ) )
+		roof -= level.tod_trial_reserve;
+	if ( roof < 0 )
+		roof = 0;
+	return roof;
+}
+
 function elites_alive()
 {
 	n = hounds_alive();
@@ -246,8 +370,8 @@ function director()
 			continue;
 
 		if ( level.tod_hound_debt > 0
-		  && level.tod_hound_alive_n < TOD_HOUND_MAX_ALIVE
-		  && elites_alive() < TOD_HOUND_ELITE_ROOF )
+		  && level.tod_hound_alive_n < hound_max_alive()
+		  && elites_alive() < hound_elite_roof() )
 		{
 			e = spawn_hound();
 			// Only ever decrement on a LIVE actor — a failed spawn must keep the
@@ -265,7 +389,13 @@ function director()
 function spawn_hound()
 {
 	rn = ( ( isdefined( level.round_number ) ) ? level.round_number : 1 );
-	hp = tod_bosses::boss_hp( rn, TOD_HOUND_HP_ANCHOR, TOD_HOUND_HP_BASE, TOD_HOUND_HP_EXP );
+	// x elite_hp_mult (v18.2): the -10% elite pass, one owner in _tod_bosses.
+	// Scaled HERE and not after level.dog_health is written - that assignment
+	// IS the health knob and the reveal clamp reads it (TRAP 1 below), so the
+	// reduced number has to be the one it sees.
+	hp = int( tod_bosses::boss_hp( rn, TOD_HOUND_HP_ANCHOR, TOD_HOUND_HP_BASE, TOD_HOUND_HP_EXP ) * tod_bosses::elite_hp_mult() );
+	if ( hp < 1 )
+		hp = 1;
 
 	// Any kind that is not panzer/protector falls through to a random living
 	// player — correct here: a pack should not all converge from one bearing.
@@ -276,6 +406,21 @@ function spawn_hound()
 	v_ground = tod_bosses::pick_spawn_point( target.origin );
 	if ( !isdefined( v_ground ) )
 		v_ground = target.origin;
+	// v17.92 — NEVER OFF THE ISLAND. Once the party has ascended, the tower is a
+	// place no player can ever stand again, so a hound placed there is a slot
+	// spent for the rest of the match: it cannot reach anyone, so it never dies.
+	// pick_spawn_point filters for this too now; this is the belt over it, and it
+	// falls back to the target rather than to nothing.
+	if ( IS_TRUE( level.tod_spire_active ) && !( tod_spire_data::in_spire( v_ground ) ) )
+		v_ground = target.origin;
+	// v17.43 — NEVER ON THE TARGET'S EXACT ORIGIN. The stock dog tree's
+	// GetYaw() is VectorToAngles( enemy.origin - self.origin ); a zero vector
+	// there hands back undefined and `self.angles[1] - undefined` THROWS,
+	// every think tick, until the dog moves. The console log of 2026-09-04
+	// carried 306 of exactly that throw, all inside 2 s of a hound spawn.
+	// A fallback spawn at the target's own origin is the zero-vector case.
+	if ( Distance2D( v_ground, target.origin ) < 8 )
+		v_ground += ( 48 * Cos( RandomInt( 360 ) ), 48 * Sin( RandomInt( 360 ) ), 0 );
 	ang = ( 0, RandomInt( 360 ), 0 );
 
 	// TRAP 1. This assignment is the health knob AND the crash guard, and it has
@@ -303,19 +448,191 @@ function spawn_hound()
 	dog.acc_is_mini_boss            = true;
 	dog.tod_boss_custom_speed       = true;
 	dog.tod_boss_kind               = "hellhound";
+	// v17.92 — THE 306 THROWS, PINNED BY COUNT. Stock behavior_zombie_dog's
+	// need_to_run() opens with `self.health < self.maxhealth`, every frame the
+	// tree runs. The tree starts at the reveal (TOD_HOUND_SPAWN_FX_SECS, 1.2 s)
+	// and hound_tune wrote maxhealth at +2.5 s — so for 1.3 s the compare was
+	// `100 < undefined` (100 = the dog's stock default health), which is the
+	// exact text of the exception: "pair '100' and 'undefined'", and 1.3 s /
+	// 50 ms = the 27-frame runs console_mp.log shows after every spawn. v17.83
+	// read it as a yaw and moved the target guard; the count did not move.
+	// Stamped HERE, on the spawn frame, before any wait. hound_tune still
+	// re-stamps at +2.5 s (stock's reveal clamp order) and level.dog_health was
+	// set to hp above SpawnActor, so the clamp is a no-op by construction.
+	dog.health                      = hp;
+	dog.maxhealth                   = hp;
 	dog.ignore_enemy_count          = true;   // exempt from zombie_ai_limit like every elite
 	dog.ignore_round_spawn_failsafe = true;   // must precede dog_init's failsafe thread
 	dog.ignore_nuke                 = true;
 	dog.allow_zombie_to_target_ai   = 0;
 	dog.disableAmmoDrop             = true;
+	// v17.83 — TARGETED FROM THE SPAWN FRAME, and safe because of the line
+	// below it. `ignoreme` is stock's "not in the playable area yet" gate and
+	// it returns out of the dog tree ABOVE need_to_run(), which is the only
+	// thing that ever threw; it does not wipe favoriteenemy the way `ignoreall`
+	// does. See the TOD_HOUND_SPAWN_FX_SECS block for the line numbers.
+	// (v17.43's tod_hound_spawn_ms / tod_hound_first_target pair is retired
+	// with the hold — the target is simply set, and hound_target_watch's job
+	// goes back to being RE-acquisition only.)
 	dog.favoriteenemy               = target;
+	dog.ignoreme                    = true;   // cleared by hound_spawn_in's reveal
+	dog Hide();                               // ...and shown there too
 
+	dog thread hound_spawn_in( v_ground, target );
 	dog thread hound_tune( hp );
 	dog thread hound_death_watch();
+	dog thread hound_target_watch();
 	dog thread tod_bosses::tod_boss_stuck_watch();
+	// v16.3 (repo review 2026-09-01) — the UPGRADE-PAUSE restore. set_world_pause
+	// writes ASMSetAnimationRate( 0.05 ) on every axis AI, hounds included, and
+	// leaves the restore to _tod_zombie_speed's sweep — which skips anything
+	// carrying is_boss (TRAP 3 above). Panzer, Protector and Reaver each thread
+	// this watcher for exactly that reason; the hound was the one elite without
+	// it, so any pack alive at a round-4n boundary stayed at 5% speed for the
+	// rest of its life, still counted by hounds_alive(), and the director never
+	// spawned another ("dog rounds bugged", Workshop 2026-08-29). Rate 1.0 is
+	// the dog's own locomotion rate — this only puts back what the pause took.
+	dog thread tod_bosses::boss_pause_watch( 1.0 );
 
 	dbg( "spawned hp=" + hp + " round=" + rn + " alive=" + hounds_alive() );
 	return dog;
+}
+
+// self = the hound. THE ARRIVAL (v17.83) — stock's dog_spawn_fx, rebuilt for a
+// map that cannot call it.
+//
+// WHY NOT JUST CALL dog_spawn_fx: it asserts a magic bullet shield, calls
+// util::stop_magic_bullet_shield on an actor that never got one, and runs
+// zombie_setup_attack_properties_dog — all of it the tail of dog_init, which
+// this map deliberately never runs (Ghosted + shielded + ignoreme, with only
+// dog_spawn_fx's own tail to undo it, plus a second death handler fighting
+// hound_death_watch). This is the half that is ours to own: the tell, the
+// bolt, the shake, and the reveal.
+//
+// ONE-SHOT FX RIDE A tag_origin HOST. A bare server-side PlayFX draws for
+// LOOPING effects only; one-shot bursts need a script_model host and
+// PlayFxOnTag (this map's derez_burst_run / zap_burst_run are the proven
+// lane). Stock gets away with `Playfx` here because its call sits in a
+// different lane entirely — do not copy that line.
+//
+// NO `level endon( "end_game" )`: the only thing this thread owes the world is
+// the Show() and the ignoreme clear, and a hound left hidden and untargetable
+// forever is a worse outcome than a stray reveal at the end of a match. The
+// `self endon( "death" )` is the one that matters — a hound killed mid-buildup
+// is dead either way.
+//
+// The three `zmb_hellhound_*` aliases are stock's own (the game ships a
+// `hellhound` sound loadspec). They are NOT in the mod tools' raw alias CSVs,
+// so this is unverified from disk: if a bolt lands in silence, the aliases are
+// the first thing to look at, not the fx.
+function hound_spawn_in( org, target )   // self = the hound, hidden and ignoreme
+{
+	self endon( "death" );
+
+	if ( !isdefined( org ) )
+		org = self.origin;
+
+	host = Spawn( "script_model", org );
+	if ( isdefined( host ) )
+	{
+		host SetModel( "tag_origin" );
+		PlayFxOnTag( level._effect[ "lightning_dog_spawn" ], host, "tag_origin" );
+		// The host's lifetime is the LEVEL's, not the hound's (bug review
+		// 2026-09-22, F18): `self endon( "death" )` above ends this thread
+		// before the Delete at the bottom when the hound dies mid-arrival (a
+		// wipe, splash near the spawn), and the entity stayed for the match.
+		level thread hound_fx_host_delete( host, TOD_HOUND_SPAWN_FX_SECS + 0.1 );
+	}
+	tod_perk_scatter::play_sound_at_origin( org, "zmb_hellhound_prespawn", 4 );
+
+	wait TOD_HOUND_SPAWN_FX_SECS;
+
+	tod_perk_scatter::play_sound_at_origin( org, "zmb_hellhound_bolt", 4 );
+	tod_perk_scatter::play_sound_at_origin( org, "zmb_hellhound_spawn", 4 );
+	Earthquake( 0.5, 0.75, org, 1000 );
+
+	if ( isdefined( self ) && isalive( self ) )
+	{
+		// Face the enemy on arrival, exactly as stock does — a hound that lands
+		// looking away reads as broken even when it turns a frame later. Yaw
+		// only; the dog's pitch and roll are its own.
+		if ( isdefined( target ) && isdefined( target.origin ) && Distance2D( target.origin, org ) > 8 )
+		{
+			a = VectorToAngles( target.origin - org );
+			self ForceTeleport( org, ( self.angles[ 0 ], a[ 1 ], self.angles[ 2 ] ) );
+		}
+		// v17.92 — if anything moved us off the island between spawn and reveal,
+		// come back to the spot the entrance FX played at. Same in_spire rule as
+		// the spawn; a stranded reveal is the whole-match slot leak.
+		if ( IS_TRUE( level.tod_spire_active ) && !( tod_spire_data::in_spire( self.origin ) ) )
+			self ForceTeleport( org, self.angles );
+		self Show();
+		self.ignoreme = false;   // the tree's movement service opens here
+		self notify( "visible" );
+	}
+	// (the FX host is deleted by hound_fx_host_delete, on the level's clock)
+}
+
+function hound_fx_host_delete( host, secs )
+{
+	wait secs;
+	if ( isdefined( host ) )
+		host Delete();
+}
+
+// self = the hound. RE-ACQUIRE THE TARGET — the frozen-hound bug (player report
+// "dog rounds bugged", 2026-08-30).
+//
+// favoriteenemy was set ONCE at spawn above and nothing ever refreshed it. The
+// dog behaviour tree deliberately does not re-acquire in zombies mode:
+// behavior_zombie_dog.gsc:404 guards its own retarget with
+// (!SessionModeIsZombiesGame() || team == "allies"), which is always false for
+// an axis dog here, and its comment says "zombie mode does this in another
+// script". That other script is _zm_ai_dogs::dog_run_think — and IT NEVER RUNS
+// ON THIS MAP: it is threaded only from dog_init, which is registered solely at
+// _zm_ai_dogs.gsc:147 onto level.dog_spawners, and dog_spawner_init returns
+// early because this map has ZERO zombie_dog_spawner ents (we SpawnActor
+// directly). So a hound gets the blackboard and nothing else.
+//
+// The failure: the moment the anchored player stops being valid — last stand
+// (stock set_ignoreme), death/spectate, or the ignoreme powerup —
+// zombieDogTargetService (behavior_zombie_dog.gsc:378-392) clears favoriteenemy
+// and calls SetGoal(self.origin), "stay at the spot". Nothing reassigns it, so
+// that hound stands still FOR THE REST OF THE MATCH, even after a revive. In
+// solo one down freezes the pack. Worse, frozen hounds are alive, so
+// hounds_alive() keeps counting them and once hound_max_alive() are stuck the
+// director never spawns another hound again.
+//
+// This is stock dog_run_think's only load-bearing behaviour, restored. The Rogue
+// Protector has had exactly this loop all along (tod_bosses::hunt_players) — the
+// hound was the only elite in the map without one.
+function hound_target_watch()
+{
+	self endon( "death" );
+	level endon( "end_game" );
+
+	for ( ;; )
+	{
+		wait 0.5;
+		if ( !isdefined( self ) || !isalive( self ) )
+			return;
+		// v17.83 — the v17.43 spawn hold and its first_target handoff are GONE:
+		// spawn_hound sets favoriteenemy on the spawn frame and `ignoreme`
+		// keeps the tree off it until the arrival finishes. This loop is back
+		// to the one job it was written for — RE-acquisition after the tree
+		// drops a target (a down, a spectate, the ignoreme powerup, or any
+		// world pause, which clears it via ignoreall).
+		// TARGETABLE (2026-09-24, the Zombie Blood report): the tree drops a
+		// Zombie Blood target (behavior_zombie_dog.gsc:378-392), and this used to
+		// hand the same player straight back every 0.5 s, so the hound stalled
+		// on them instead of hunting a teammate. Nobody targetable -> no pick;
+		// the next tick re-acquires the moment the window ends.
+		if ( isdefined( self.favoriteenemy ) && zm_utility::is_player_valid( self.favoriteenemy, true ) )
+			continue;
+		t = tod_bosses::pick_target_player( true );
+		if ( isdefined( t ) )
+			self.favoriteenemy = t;
+	}
 }
 
 // self = the hound. The pack threads its own health init, so our set has to land
@@ -326,12 +643,59 @@ function hound_tune( hp )
 	self endon( "death" );
 	level endon( "end_game" );
 
-	wait 2.5;
+	// THE EYES AND THE FIRE TRAIL (user 2026-08-30: "lets fix the hell hounds
+	// visual issue"). Stock drives BOTH off one 1-bit ACTOR clientfield,
+	// "dog_fx", which is ALREADY registered on both VMs and needs nothing from
+	// us: server _zm_ai_dogs.gsc:44, client _zm_ai_dogs.csc. Both halves ride in
+	// via zm_usermap on their own side, so this adds ZERO new clientfield bits,
+	// no .csc change and no .zone line. The client callback does the whole job —
+	// eye glow on the eyeball tag, PlayFxOnTag of the fire trail on the spine —
+	// and both fx are client-precached in stock and ship in zm_levelcommon.
+	//
+	// WHY OUR HOUNDS RENDER PLAIN: the ONLY place stock sets this field is
+	// _zm_ai_dogs.gsc:937, inside dog_run_think, threaded from dog_init, which is
+	// registered ONLY onto level.dog_spawners — and dog_spawner_init returns
+	// early because this map has ZERO zombie_dog_spawner ents. Exactly the same
+	// root cause as the frozen-hound bug fixed by hound_target_watch().
+	//
+	// DO NOT "just call dog_init" instead: it Ghosts the actor, gives it a magic
+	// bullet shield and sets ignoreme, and the ONLY code that undoes all three is
+	// the tail of dog_spawn_fx (_zm_ai_dogs.gsc:346-353), which we never run.
+	// dog_init alone = an invisible, invulnerable, non-aggro hound, plus a second
+	// death handler fighting hound_death_watch().
+	//
+	// The 0.5s is courtesy, not a guarantee — stock's own set lands ~1.6s in
+	// (it waits on "visible"). If the trail is missing in game, RAISING THIS
+	// NUMBER WILL NOT FIX IT; suspect the model tags instead.
+	wait 0.5;
+	if ( !isdefined( self ) || !isalive( self ) )
+		return;
+	self clientfield::set( "dog_fx", 1 );
+	dbg( "dog_fx set" );
+
+	wait 2.0;
 	if ( !isdefined( self ) || !isalive( self ) )
 		return;
 
-	self.health    = hp;
-	self.maxhealth = hp;
+	// v18.9 — THE RE-STAMP IS GONE, AND 'hp' IS DELIBERATELY STILL A PARAMETER.
+	// This used to write 'self.health = hp; self.maxhealth = hp;' here, which by
+	// this point is a FULL HEAL of everything the player did in the hound's first
+	// ~1.3 s of visible life. It also cleared stock behavior_zombie_dog's
+	// damage-driven run flag ('self.health < self.maxhealth'), so a hound you had
+	// hurt stopped being flagged "needs to run".
+	//
+	// It was written to defend dog_run_think's reveal clamp — a clamp that CANNOT
+	// RUN on this map, as the block at the top of this file already establishes
+	// (no dog spawners; we SpawnActor directly, so dog_init never runs). v17.92
+	// then added the spawn-frame stamp before SpawnActor, which made this a belt
+	// on a belt.
+	//
+	// ⚠️ THE HEADERS ABOVE (TRAP 1 / TRAP 3) ARE WRITTEN AS IF dog_init RUNS.
+	// A future reader following TRAP 1 will re-add exactly the two lines removed
+	// here. It is safe to delete them because level.dog_health is set to the same
+	// hp before SpawnActor and the spawn frame stamps maxhealth directly. The
+	// parameter stays so the call site keeps documenting what this thread was
+	// tuned against.
 }
 
 // self = the hound. NOTE: stock dog_death deletes the actor on this same notify,
@@ -340,12 +704,46 @@ function hound_death_watch()
 {
 	level endon( "end_game" );
 
+	source = tod_luck::track_source( self );
 	self waittill( "death", attacker );
 
-	if ( isdefined( attacker ) && isplayer( attacker ) )
-		tod_luck::boss_kill( attacker, "hellhound" );
+	// v14.5: killer-only 500 (×2x ×BOUNTY) like every elite. The old "points
+	// fountain" worry inverts under killer-only: hounds die in packs, but each
+	// head now pays ONE player, so the team-wide multiplication is gone.
+	org = source.org;
+	if ( isdefined( self ) )
+		org = self.origin;   // v18.96: the bottle roll's spot (guarded — dog_death deletes the actor on this notify)
+	tod_luck::boss_kill( attacker, "hellhound", org );
+	tod_bosses::grant_elite_reward( "HELLHOUND", attacker, org );
 
-	// Quiet, team-wide, per-unit — hounds die in packs, so a full boss reward
-	// per head would be a points fountain.
-	tod_bosses::grant_boss_reward( "HELLHOUND", TOD_HOUND_PTS, true );
+	// v17.92 — THE DELETE THE HOUND NEVER HAD. _tod_corpse_cleanup skips the
+	// is_boss triad on purpose (the Panzer runs its own death sequence), and
+	// until tonight nothing else ever Deleted a hound: every corpse held an
+	// actor slot for the rest of the match. console_mp.log 2026-09-05: act=
+	// 43 -> 60 in five minutes, then "no free actor entities" every 1-4 s for
+	// the remaining eight. corpse_remove is the same lane trash uses:
+	// NotSolid, a short linger (or an immediate Ghost when the pool is near
+	// the cap), then Delete, re-checking existence at every step.
+	if ( isdefined( self ) )
+		self thread tod_corpse_cleanup::corpse_remove();
+}
+
+// ---------------------------------------------------------------------------
+// v17.97 — DEV PRINTS ARE MUTABLE. level.tod_dev_quiet (set beside tod_dev in
+// zm_tower_of_doom::tod_resolve_dev_flags) silences every bottom-left IPrintLn
+// in this file — screenshot sessions want dev + god with a clean HUD. Each
+// print site's own tod_dev gate is unchanged; this is one extra gate under it.
+// IPrintLnBold (real game toasts) is not routed here.
+function tod_quiet_print( msg )
+{
+	if ( IS_TRUE( level.tod_dev_quiet ) )
+		return;
+	IPrintLn( msg );
+}
+
+function tod_quiet_print_to( msg )   // self = the player to print to
+{
+	if ( IS_TRUE( level.tod_dev_quiet ) )
+		return;
+	self IPrintLn( msg );
 }

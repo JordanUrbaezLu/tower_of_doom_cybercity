@@ -13,13 +13,11 @@
  "Standalone" : true,
  "Builds" : [ "T7" ],
  "Sources" : [
+ { "Type" : "ALIAS", "Name" : "tod_luck_orbs", "Filename" : "tod_luck_orbs.csv", "Specs" : [ ] },
+ { "Type" : "ALIAS", "Name" : "tod_perk_machines", "Filename" : "tod_perk_machines.csv", "Specs" : [ ] },
+ { "Type" : "ALIAS", "Name" : "tod_baseball_bat", "Filename" : "tod_baseball_bat.csv", "Specs" : [ ] },
+ { "Type" : "ALIAS", "Name" : "tod_rocket", "Filename" : "tod_rocket.csv", "Specs" : [ ] },
  {
- "Type" : "ALIAS",
- "Name" : "user_aliases",
- "Filename" : "user_aliases.csv",
- "Specs" : [ ]
-},
-{
  "Type" : "ALIAS",
  "Name" : "tod_weapons",
  "Filename" : "tod_weapons.csv",
@@ -47,6 +45,12 @@
  "Type" : "ALIAS",
  "Name" : "zm_ai_zod_companion",
  "Filename" : "zm_ai_zod_companion.csv",
+ "Specs" : [ ]
+},
+{
+ "Type" : "ALIAS",
+ "Name" : "zm_ai_apothicon_fury",
+ "Filename" : "zm_ai_apothicon_fury.csv",
  "Specs" : [ ]
 },
 {
@@ -80,6 +84,24 @@
  "Specs" : [
   "mpl_mod"
   ]
+},
+{
+ "Type" : "ALIAS",
+ "Name" : "zm_cwpap_sound",
+ "Filename" : "zm_cwpap_sound.csv",
+ "Specs" : [ ]
+},
+{
+ "Type" : "ALIAS",
+ "Name" : "tod_wisp_tea",
+ "Filename" : "tod_wisp_tea.csv",
+ "Specs" : [ ]
+},
+{
+ "Type" : "ALIAS",
+ "Name" : "tod_perk_cans",
+ "Filename" : "tod_perk_cans.csv",
+ "Specs" : [ ]
 }
 ]
 }

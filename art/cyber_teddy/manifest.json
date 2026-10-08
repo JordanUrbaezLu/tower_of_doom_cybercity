@@ -1,0 +1,47 @@
+{
+  "revision": "cyber_teddy_1",
+  "source": "art/cyber_teddy/source/cyber_teddy_walking.fbx",
+  "source_md5": "0cdea9bee11f5360fe6cd63c51f4e619",
+  "pose": "rest",
+  "target_height": 28.0,
+  "scale_from_fbx_world": 16.470589945005592,
+  "bounds": [
+    [
+      -11.311,
+      -7.85,
+      -14.0
+    ],
+    [
+      11.311,
+      7.85,
+      14.0
+    ]
+  ],
+  "size": [
+    22.622,
+    15.7,
+    28.0
+  ],
+  "lift": 14.0,
+  "half_depth": 7.9,
+  "verts": 4952,
+  "tris": 9919,
+  "texture": [
+    2048,
+    2048
+  ],
+  "glow_fraction": 0.0062,
+  "glow_scale": "4",
+  "files": {
+    "model_export/tod_cyber_teddy/tod_cyber_teddy.xmodel_bin": "e3df039838fa331dca0b3dbbcacbb94d8d7d25607d13da869dd2cd435e4cba08",
+    "model_export/tod_cyber_teddy/_images/i_tod_cyber_teddy_c.png": "3232c6886ff9f3747e04a68fe17e0dff77a83ea1ee70e7ab36942a214ebaa5c8",
+    "model_export/tod_cyber_teddy/_images/i_tod_cyber_teddy_e.png": "f2118b2d81e09564aeb3f7a629d72533f8f95e35f5fbe5da5a9ea55508a95c34",
+    "source_data/tod_cyber_teddy.gdt": "1be91c1491a350bc3cb3fa8273c6e3ebd969155eac1db7a1a1b321ca3d0e8727"
+  },
+  "previews": [
+    "art/cyber_teddy/preview_front.jpg",
+    "art/cyber_teddy/preview_three_quarter.jpg",
+    "art/cyber_teddy/preview_side.jpg",
+    "art/cyber_teddy/preview_dim_glow.jpg"
+  ]
+}

@@ -64,11 +64,12 @@ CoD.AetheriumWeaponData = {
 		icon = "i_mtl_sat_ui_icon_zm_support_cymball_monkey",
 		description = "Attracts zombies with music"
 	},
-	["octobomb"] = {
-		ingame_name = "Li'l Arnie",
-		icon = "i_mtl_hud_octobomb",
-		description = "Li'l Arnie - Summons a tentacle beast"
-	},
+	-- ["octobomb"] RETIRED v17.9. Li'l Arnie left the DISTRACTION domain in
+	-- v16.49 (cymbal monkey only, level = carry cap) and nothing in this map has
+	-- granted the octobomb since. Its two images, i_mtl_hud_octobomb and
+	-- i_mtl_hud_octobomb_empty, were retired from aetherium_hud.zpkg in the SAME
+	-- edit: retiring an entry without its art leaves dead load RAM, and retiring
+	-- the art without the entry draws a WHITE SQUARE.
 	-- Hero Weapons
 	["hero_gravityspikes_melee"] = {
 		ingame_name = "Ragnarok DG-4",

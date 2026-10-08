@@ -23,7 +23,9 @@ tasklist /FI "IMAGENAME eq radiant_modtools.exe" 2>NUL | find /I "radiant_modtoo
 REM logfile 2 = UNBUFFERED console_mp.log (logfile 1 buffers ~4KB, so a hang or
 REM a Task-Manager kill loses the last lines - the 2026-08-21 black-screen triage
 REM had the log cut mid-word with the real error still sitting in the buffer).
-start "" "steam://run/311210//+set fs_game zm_tower_of_doom +set_gametype zclassic +devmap zm_tower_of_doom +set developer 1 +set logfile 2"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0tools\capture_ai_logs.ps1"
+if errorlevel 1 exit /b 1
+start "" "steam://run/311210//+set fs_game zm_tower_of_doom +set_gametype zclassic +set developer 1 +set logfile 2 +set scr_mod_enable_devblock 1 +devmap zm_tower_of_doom"
 goto :eof
 
 :build_running

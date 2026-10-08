@@ -1,0 +1,37 @@
+{
+  "0": {
+    "solid": 81900,
+    "portal": 6,
+    "wings": 644
+  },
+  "1": {
+    "solid": 50610,
+    "portal": 6,
+    "wings": 350
+  },
+  "2": {
+    "solid": 34750,
+    "portal": 6,
+    "wings": 336
+  },
+  "3": {
+    "solid": 25933,
+    "portal": 6,
+    "wings": 336
+  },
+  "4": {
+    "solid": 21072,
+    "portal": 6,
+    "wings": 336
+  },
+  "5": {
+    "solid": 17405,
+    "portal": 6,
+    "wings": 336
+  },
+  "6": {
+    "solid": 14743,
+    "portal": 6,
+    "wings": 336
+  }
+}

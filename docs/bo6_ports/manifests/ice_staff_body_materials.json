@@ -1,0 +1,843 @@
+{
+  "stage": "body_base_material_streams",
+  "source": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\wpn_t10_wm_ww_zmb_staffs_nocol_LOD0.cast",
+  "source_sha256": "1ef3b0fe917b1803cec43bf079afe4a1fa17b9b03f6b0ef8e1e78dcab44d9091",
+  "decode": "normal=(A,G,reconstructed positive Z); gloss=R; AO=B; linear DirectX data",
+  "deployed": false,
+  "native_verified": false,
+  "full_shader_parity": false,
+  "materials": [
+    {
+      "material": "material_5cca21b19874c8d9",
+      "source_resolution": [
+        2048,
+        2048
+      ],
+      "source_slots": {
+        "extra0": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra1": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra2": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\wpn_default_thermal.png",
+          "sha256": "d817156af5237d2530434d44547eab046f3e655afdd60852ecdaf9e5f18305a6"
+        },
+        "extra3": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra4": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra5": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra6": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra7": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra8": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "albedo": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\image_77e42e0587286e58.png",
+          "sha256": "7872283b115f170093cbb9107090be559d84ba74ac12178473a6857035502ddc"
+        },
+        "extra9": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\image_1dd4b502684b6e69.png",
+          "sha256": "a3383ff1273d33ea6fa22a0348edbbe25932a585f3e66fe5f38778747578ebaa"
+        },
+        "extra10": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra11": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra12": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra13": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra14": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra15": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra16": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra17": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra18": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra19": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$identitypackednog.png",
+          "sha256": "883ae81cf8c53742cfbbfc10ce5ada6a6ae1692703f8649a4e709b27f9d863a6"
+        },
+        "extra20": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra21": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra22": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra23": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra24": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra25": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra26": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra27": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra28": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra29": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$identitypackednog.png",
+          "sha256": "883ae81cf8c53742cfbbfc10ce5ada6a6ae1692703f8649a4e709b27f9d863a6"
+        },
+        "extra30": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra31": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra32": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra33": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra34": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra35": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra36": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra37": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_5cca21b19874c8d9\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        }
+      },
+      "suggested_fields": {
+        "colorMap": "i_tod_bo6_ice_5cca21b19874c8d9_c",
+        "normalMap": "i_tod_bo6_ice_5cca21b19874c8d9_n",
+        "cosinePowerMap": "i_tod_bo6_ice_5cca21b19874c8d9_g",
+        "occMap": "i_tod_bo6_ice_5cca21b19874c8d9_o"
+      },
+      "output_files": [
+        {
+          "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_5cca21b19874c8d9_c.png",
+          "sha256": "7872283b115f170093cbb9107090be559d84ba74ac12178473a6857035502ddc"
+        },
+        {
+          "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_5cca21b19874c8d9_n.png",
+          "sha256": "602ff448f4586c2c036c3b6815527e7ab70fe3abd09776863341f28187eeb6e0"
+        },
+        {
+          "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_5cca21b19874c8d9_g.png",
+          "sha256": "a691a2e5a05760eb8d551d5a36c67cc7b6a4edf086fb1397340bad0f50f61f35"
+        },
+        {
+          "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_5cca21b19874c8d9_o.png",
+          "sha256": "3e54e7eaf4a3af82307f3a0a9a35442dda186cbf0d1c34d1160c1d26d4696a20"
+        }
+      ],
+      "unresolved_slots": [
+        "extra0",
+        "extra1",
+        "extra2",
+        "extra3",
+        "extra4",
+        "extra5",
+        "extra6",
+        "extra7",
+        "extra8",
+        "extra10",
+        "extra11",
+        "extra12",
+        "extra13",
+        "extra14",
+        "extra15",
+        "extra16",
+        "extra17",
+        "extra18",
+        "extra19",
+        "extra20",
+        "extra21",
+        "extra22",
+        "extra23",
+        "extra24",
+        "extra25",
+        "extra26",
+        "extra27",
+        "extra28",
+        "extra29",
+        "extra30",
+        "extra31",
+        "extra32",
+        "extra33",
+        "extra34",
+        "extra35",
+        "extra36",
+        "extra37"
+      ],
+      "unresolved": [
+        "Albedo alpha and metal/specular interpretation",
+        "Layer masks, emission and state transitions",
+        "Native material comparison"
+      ]
+    },
+    {
+      "material": "material_6394a6b54d0b53ec",
+      "source_resolution": [
+        2048,
+        2048
+      ],
+      "source_slots": {
+        "extra0": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra1": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra2": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\wpn_default_thermal.png",
+          "sha256": "d817156af5237d2530434d44547eab046f3e655afdd60852ecdaf9e5f18305a6"
+        },
+        "extra3": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra4": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra5": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra6": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra7": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra8": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "albedo": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\image_44643873cf00b5ce.png",
+          "sha256": "207b9415b95f3b8485564085a5122b7f5c2168fed68b0fc5a0ccb8c6dca37b1d"
+        },
+        "extra9": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\image_1e9ffce5b9366288.png",
+          "sha256": "1fd6c4dc7dff0f2030db1c740f1d957f2135bd98afe33e578759ad01b017834b"
+        },
+        "extra10": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\image_6fc6b04c1f625cd5.png",
+          "sha256": "995702bae963a03f28295c57ac85378cbb7489368a53c73b97144b70c6c959a8"
+        },
+        "extra11": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra12": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra13": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra14": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra15": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra16": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra17": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra18": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\image_169ce6917b0bc467.png",
+          "sha256": "93af53d6393f367bfbd3f960fe0808c6d96009368f66cf00bb634f4bdab8cf2c"
+        },
+        "extra19": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\image_1e9ffce5b9366288.png",
+          "sha256": "1fd6c4dc7dff0f2030db1c740f1d957f2135bd98afe33e578759ad01b017834b"
+        },
+        "extra20": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra21": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra22": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra23": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra24": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\image_b85577ab17f7517.png",
+          "sha256": "7755cdec214479680920240a27e336d6e2e316e42fddafe1240fc3eb30eeb71c"
+        },
+        "extra25": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\image_3cba774b87adc19f.png",
+          "sha256": "4c4967eda56db621ff38205aaeaf285ec8403485fc859ed22e106ecfbe554bc3"
+        },
+        "extra26": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra27": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_6394a6b54d0b53ec\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        }
+      },
+      "suggested_fields": {
+        "colorMap": "i_tod_bo6_ice_6394a6b54d0b53ec_c",
+        "normalMap": "i_tod_bo6_ice_6394a6b54d0b53ec_n",
+        "cosinePowerMap": "i_tod_bo6_ice_6394a6b54d0b53ec_g",
+        "occMap": "i_tod_bo6_ice_6394a6b54d0b53ec_o"
+      },
+      "output_files": [
+        {
+          "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_6394a6b54d0b53ec_c.png",
+          "sha256": "207b9415b95f3b8485564085a5122b7f5c2168fed68b0fc5a0ccb8c6dca37b1d"
+        },
+        {
+          "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_6394a6b54d0b53ec_n.png",
+          "sha256": "9ec396053a88ba1367b2251246629543a74ed193d6fe2289486a0d4bde792548"
+        },
+        {
+          "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_6394a6b54d0b53ec_g.png",
+          "sha256": "9139240a159f15eacfca2861e673d2409613c2f3ebe83d49663df03abe3cd45f"
+        },
+        {
+          "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_6394a6b54d0b53ec_o.png",
+          "sha256": "d7b0e4e8296dbef03b4bd1698aee916f94d012bdbf7cfd57bbb73ed39c18d7bc"
+        }
+      ],
+      "unresolved_slots": [
+        "extra0",
+        "extra1",
+        "extra2",
+        "extra3",
+        "extra4",
+        "extra5",
+        "extra6",
+        "extra7",
+        "extra8",
+        "extra10",
+        "extra11",
+        "extra12",
+        "extra13",
+        "extra14",
+        "extra15",
+        "extra16",
+        "extra17",
+        "extra18",
+        "extra19",
+        "extra20",
+        "extra21",
+        "extra22",
+        "extra23",
+        "extra24",
+        "extra25",
+        "extra26",
+        "extra27"
+      ],
+      "unresolved": [
+        "Albedo alpha and metal/specular interpretation",
+        "Layer masks, emission and state transitions",
+        "Native material comparison"
+      ]
+    },
+    {
+      "material": "material_181e47b523024669",
+      "source_resolution": [
+        2048,
+        2048
+      ],
+      "source_slots": {
+        "extra0": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra1": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra2": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\wpn_default_thermal.png",
+          "sha256": "d817156af5237d2530434d44547eab046f3e655afdd60852ecdaf9e5f18305a6"
+        },
+        "extra3": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra4": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra5": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra6": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra7": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra8": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "albedo": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\image_30755846ee5e7b42.png",
+          "sha256": "9e9555395d61cd2ec694e2ba4098cc8abee554375159d6d23df79883457bcd36"
+        },
+        "extra9": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\image_39362eec09515abb.png",
+          "sha256": "521561e32ce1f6a4bc2b10f9869391e278f3497da546f8ca8347926980f17dd9"
+        },
+        "extra10": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\image_59b087e33e884470.png",
+          "sha256": "8b229d6eac37e98d2aa6bb4ee91e3349dcfa6954320d44f562ad575a4ca3ddc3"
+        },
+        "extra11": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra12": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra13": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra14": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra15": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra16": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra17": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra18": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\image_26ba2be56ea07a1f.png",
+          "sha256": "b611904304ebb87c873fc1a8ff1439ca69fcbee4fbf6c3f233529b23247f8945"
+        },
+        "extra19": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\image_39362eec09515abb.png",
+          "sha256": "521561e32ce1f6a4bc2b10f9869391e278f3497da546f8ca8347926980f17dd9"
+        },
+        "extra20": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra21": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra22": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra23": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra24": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\image_175f57a2b150d7d5.png",
+          "sha256": "73a9646fd40b5e7291a77d60b3c352c05b5df957bd76a662d06ebf435324043e"
+        },
+        "extra25": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\image_142fd2917289296f.png",
+          "sha256": "6b198e458d5ae8679654362b19075908c4599e515299dc248443b4f861c6680b"
+        },
+        "extra26": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra27": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_181e47b523024669\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        }
+      },
+      "suggested_fields": {
+        "colorMap": "i_tod_bo6_ice_181e47b523024669_c",
+        "normalMap": "i_tod_bo6_ice_181e47b523024669_n",
+        "cosinePowerMap": "i_tod_bo6_ice_181e47b523024669_g",
+        "occMap": "i_tod_bo6_ice_181e47b523024669_o"
+      },
+      "output_files": [
+        {
+          "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_181e47b523024669_c.png",
+          "sha256": "9e9555395d61cd2ec694e2ba4098cc8abee554375159d6d23df79883457bcd36"
+        },
+        {
+          "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_181e47b523024669_n.png",
+          "sha256": "b55ac9c0e2045da62dc1f80e9351d16395df3d38fa74fe072e66c4f9c648fd5b"
+        },
+        {
+          "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_181e47b523024669_g.png",
+          "sha256": "ac72c57dad91704a85aaa0418c8af6644e415bea297cefd8ddeb15799ad6f8e8"
+        },
+        {
+          "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_181e47b523024669_o.png",
+          "sha256": "03d69f3280d9d520298108ba71f4fa5aa26ca3276090d175b7b278802661ee0a"
+        }
+      ],
+      "unresolved_slots": [
+        "extra0",
+        "extra1",
+        "extra2",
+        "extra3",
+        "extra4",
+        "extra5",
+        "extra6",
+        "extra7",
+        "extra8",
+        "extra10",
+        "extra11",
+        "extra12",
+        "extra13",
+        "extra14",
+        "extra15",
+        "extra16",
+        "extra17",
+        "extra18",
+        "extra19",
+        "extra20",
+        "extra21",
+        "extra22",
+        "extra23",
+        "extra24",
+        "extra25",
+        "extra26",
+        "extra27"
+      ],
+      "unresolved": [
+        "Albedo alpha and metal/specular interpretation",
+        "Layer masks, emission and state transitions",
+        "Native material comparison"
+      ]
+    },
+    {
+      "material": "material_3587ccc715838fe3",
+      "source_resolution": [
+        1024,
+        1024
+      ],
+      "source_slots": {
+        "extra0": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra1": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra2": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\wpn_default_thermal.png",
+          "sha256": "d817156af5237d2530434d44547eab046f3e655afdd60852ecdaf9e5f18305a6"
+        },
+        "extra3": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra4": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra5": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra6": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra7": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra8": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "albedo": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\image_2da4497c9aeca00b.png",
+          "sha256": "19c23d3b4ec0eca3f1c946ba9187e43dabbe3fb9ca674edd189c0b7da8ee4c50"
+        },
+        "extra9": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\image_3f6c9e8374e6c096.png",
+          "sha256": "7b5a936247ed10080fa0302079ccddfd0a4de41adfbea118883d9347115756dd"
+        },
+        "extra10": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra11": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra12": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra13": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra14": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\image_78a075220f11d1b9.png",
+          "sha256": "12dac620ac5bd489c78e7d8c4b6b51ccf194737e9e5950c72fdaff2a59ed543e"
+        },
+        "extra15": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra16": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra17": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra18": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra19": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$identitypackednog.png",
+          "sha256": "883ae81cf8c53742cfbbfc10ce5ada6a6ae1692703f8649a4e709b27f9d863a6"
+        },
+        "extra20": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra21": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra22": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra23": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra24": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra25": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra26": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra27": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra28": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra29": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$identitypackednog.png",
+          "sha256": "883ae81cf8c53742cfbbfc10ce5ada6a6ae1692703f8649a4e709b27f9d863a6"
+        },
+        "extra30": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra31": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra32": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$black.png",
+          "sha256": "8313d381deec4befb20560110138e9b2c6048c81c918f04148a2b0c592f75ea3"
+        },
+        "extra33": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra34": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra35": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra36": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        },
+        "extra37": {
+          "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\_images\\material_3587ccc715838fe3\\$white.png",
+          "sha256": "ad28af2cedf713563fbe27aa472fa998c36cf1b53d5262d3428c61c9f3261581"
+        }
+      },
+      "suggested_fields": {
+        "colorMap": "i_tod_bo6_ice_3587ccc715838fe3_c",
+        "normalMap": "i_tod_bo6_ice_3587ccc715838fe3_n",
+        "cosinePowerMap": "i_tod_bo6_ice_3587ccc715838fe3_g",
+        "occMap": "i_tod_bo6_ice_3587ccc715838fe3_o"
+      },
+      "output_files": [
+        {
+          "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_3587ccc715838fe3_c.png",
+          "sha256": "19c23d3b4ec0eca3f1c946ba9187e43dabbe3fb9ca674edd189c0b7da8ee4c50"
+        },
+        {
+          "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_3587ccc715838fe3_n.png",
+          "sha256": "3d41646de11179347cba387d740809ba54bfe4bd35bc65fd6c1bbc606eb05aff"
+        },
+        {
+          "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_3587ccc715838fe3_g.png",
+          "sha256": "a3f3fb4dece7f8b3794b4646cd003f48ec1722b4e2225eb6bbe671d5e0d0234d"
+        },
+        {
+          "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\_images\\i_tod_bo6_ice_3587ccc715838fe3_o.png",
+          "sha256": "5d83d313422584700dab9a54b26d268a3422b08845bd27cb93287b09c7478495"
+        }
+      ],
+      "unresolved_slots": [
+        "extra0",
+        "extra1",
+        "extra2",
+        "extra3",
+        "extra4",
+        "extra5",
+        "extra6",
+        "extra7",
+        "extra8",
+        "extra10",
+        "extra11",
+        "extra12",
+        "extra13",
+        "extra14",
+        "extra15",
+        "extra16",
+        "extra17",
+        "extra18",
+        "extra19",
+        "extra20",
+        "extra21",
+        "extra22",
+        "extra23",
+        "extra24",
+        "extra25",
+        "extra26",
+        "extra27",
+        "extra28",
+        "extra29",
+        "extra30",
+        "extra31",
+        "extra32",
+        "extra33",
+        "extra34",
+        "extra35",
+        "extra36",
+        "extra37"
+      ],
+      "unresolved": [
+        "Albedo alpha and metal/specular interpretation",
+        "Layer masks, emission and state transitions",
+        "Native material comparison"
+      ]
+    }
+  ]
+}

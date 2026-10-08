@@ -1,0 +1,592 @@
+{
+  "checked": "2026-09-13T02:37:56.583460-04:00",
+  "scope": "Full dev/Mage BO3 baseline build; no BO6 presentation bound",
+  "fastfile": {
+    "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\usermaps\\zm_tower_of_doom\\zone\\zm_tower_of_doom.ff",
+    "sha256": "9a66757b694cdcf52f11ee659f185d26fecbf0d9bb0df2fafd074e5d02b7ac1d",
+    "bytes": 176396544,
+    "modified": "2026-09-13T02:23:39.864500-04:00"
+  },
+  "source_tree_checks": 142,
+  "no_sync_after_fastfile": true,
+  "flags": {
+    "tod_dev": "true",
+    "tod_god": "true",
+    "tod_dev_mage_test": "true",
+    "tod_dev_money": "false",
+    "tod_dev_doors": "false",
+    "tod_dev_maxed": "true",
+    "tod_dev_altar": "false",
+    "tod_dev_quiet": "false"
+  },
+  "files": [
+    {
+      "path": "scripts\\zm\\archetype_zod_companion.csc",
+      "sha256": "863857dea965703cac97ab5564714668f2e8d7b7a2f75b52fe036e12cc84ecfe"
+    },
+    {
+      "path": "scripts\\zm\\archetype_zod_companion.gsc",
+      "sha256": "cc6cd314218652a92c89f01b9592dfa1905e2b656f7c89eec42de6a8f3d4696b"
+    },
+    {
+      "path": "scripts\\zm\\archetype_zod_companion_interface.gsc",
+      "sha256": "24244ff5b7b4818901dc3edca66fdb59d2df394299230d4aaee92f558f3984bb"
+    },
+    {
+      "path": "scripts\\zm\\mechz_spiki.csc",
+      "sha256": "c6cbdf8907241fc32313e91f7324a5b21f8cbff59372867512b5f1ba6e325c7d"
+    },
+    {
+      "path": "scripts\\zm\\mechz_spiki.gsc",
+      "sha256": "bd89dd0938ede59a7f888d00dce0e8f1c87b8be130401902a93696e5675b832a"
+    },
+    {
+      "path": "scripts\\zm\\zm_cwpap.csc",
+      "sha256": "743ed997a3c46e32ebe1503420f2d4adf6c36b71447f75f13d5e0b3a0b8a3b05"
+    },
+    {
+      "path": "scripts\\zm\\zm_cwpap.gsc",
+      "sha256": "b71dc1926d8abbd4334034f8e00c71314b737db3dd7f86ead04bf4b2c1a61e78"
+    },
+    {
+      "path": "scripts\\zm\\zm_genesis_apothicon_fury.csc",
+      "sha256": "58924718d6ccee387c838d663ea754e34f98d613da074db17286af0405ed17ae"
+    },
+    {
+      "path": "scripts\\zm\\zm_genesis_apothicon_fury.gsc",
+      "sha256": "cffe2c1ab179272f07bbb427b18113a27c74e4cb28312008157523857b3df85c"
+    },
+    {
+      "path": "scripts\\zm\\zm_genesis_apothicon_fury.gsh",
+      "sha256": "b1a75059e7cbc5cb219a74806c6b457a2aa52250ab680f60508f87a7dd13752a"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom.csc",
+      "sha256": "5d45514820ee044b37bd7f68d22ad9e7cf969da868290fd17c369f2b433422e9"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom.gsc",
+      "sha256": "c9d50150c14bf740a7f734b30168cf83d3ec103c12288bf611b5b03eff214f6a"
+    },
+    {
+      "path": "scripts\\zm\\zm_weap_xmas_gun.csc",
+      "sha256": "5d6a5b3d928b4685a750f15cb6f85b31339abc2cc80039210188010dfe0c65cc"
+    },
+    {
+      "path": "scripts\\zm\\zm_weap_xmas_gun.gsc",
+      "sha256": "1d8008128efa79eec5d77554633a00f8724134b93142e725d40bfd18c97915e9"
+    },
+    {
+      "path": "scripts\\zm\\zm_weap_xmas_gun.gsh",
+      "sha256": "4928f35cce7de3b6becb2eb4c816787cf1edaf0a5f107208d3220a43194dd8c9"
+    },
+    {
+      "path": "scripts\\zm\\zm_zod_robot.csc",
+      "sha256": "d71fabf5bc72abce6033ad91ffed27670995a5b9fcb322b190117d946133bc78"
+    },
+    {
+      "path": "scripts\\zm\\zm_zod_robot.gsc",
+      "sha256": "51b26a08cf1666d51b450e03ada0cad075b2593bf23b377eae847617a03666e4"
+    },
+    {
+      "path": "scripts\\zm\\_zm_aetherium_hud.csc",
+      "sha256": "75fc2a5e78dc4f66577d1c39364bccbf7a85df8da0e15bfb9e5c9f88881df918"
+    },
+    {
+      "path": "scripts\\zm\\_zm_aetherium_hud.gsc",
+      "sha256": "9790c3090b04c00bf7e9e913c869d7ae47747a8b0c005a8d6b2138bdc5e56684"
+    },
+    {
+      "path": "scripts\\zm\\_zm_perk_wisp_tea.csc",
+      "sha256": "32a7e1189be76ed5f1708aaa9fe4d1bffa9d095ca3be6bb022aa4ac9ef0452b3"
+    },
+    {
+      "path": "scripts\\zm\\_zm_perk_wisp_tea.gsc",
+      "sha256": "593b19d8077333c49699a0c654d131b211f237b8b7cbb4f1732d3237a2b56b00"
+    },
+    {
+      "path": "scripts\\zm\\_zm_perk_wisp_tea.gsh",
+      "sha256": "15e6bfb865726577b07463d41fd45aeed5e4a55984f3810dedfa33a71b54cea1"
+    },
+    {
+      "path": "scripts\\zm\\cheese_man\\zombie_slow_util.gsc",
+      "sha256": "b3736c319a2f0b3d71d6575470fe208830240a6eb1f97ce2896788a2bb93308c"
+    },
+    {
+      "path": "scripts\\zm\\craftables\\_hb21_zm_craft_fuse.csc",
+      "sha256": "2111f50d3092035a6d5f7d7792ea072c6b4286c69c6c4f0b91751356d7cf83cd"
+    },
+    {
+      "path": "scripts\\zm\\craftables\\_hb21_zm_craft_fuse.gsc",
+      "sha256": "434514d6c43a78a75d85df5da820ccc53c6bb064503df92f7abd6892bbe70898"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_ammo_crate.gsc",
+      "sha256": "f87eac17681f4f0912262b85f31615d427d57380c64441574bd3658983140397"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_athlete.gsc",
+      "sha256": "7e9fc0c841671b5ac67c7ca9c194d35670de73098a8f452090df790cb444b85a"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_atmosphere.gsc",
+      "sha256": "e81105fa25b60bf3953d791ec7d56cd2e79c2d47ba173ac859ac548bee3415bc"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_bosses.gsc",
+      "sha256": "69eed7c7575b539670ae18191448a4afe1431dc3bf4657966dc33447ef034757"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_boss_fx.csc",
+      "sha256": "f767b00d149f5a2cf9b81d621f780ac54bdcadde47068a2bc7b5cb11ca0ddaeb"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_boss_fx.gsc",
+      "sha256": "03477b546185d5a7f39470c92ef7c25498017962588378b878b3f96d3d0766a7"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_breather_data.gsc",
+      "sha256": "ec502ff064b3b73eb710c4fc748ed9fb024fc39eac2bff14dd01b3651384069a"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_classes.gsc",
+      "sha256": "fc0cb1447e970c6aa8df829e8a73b254c23e5284ff7bb1f4ee55957cb6a157b6"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_class_select.gsc",
+      "sha256": "683c18188f68192e8a5fd29a77b6bfd6389bfbdb449e4f6d19784a16729eb2e5"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_corpse_cleanup.gsc",
+      "sha256": "d6816fa27f69536cf8242a36289330f91459b9f2879d2a0c5aea304e84739a59"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_crown_data.gsc",
+      "sha256": "d45f1f5bde56b810052ef1e233a43fa28a2359691dfab2f2632d46e2ae979229"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_deadshot.csc",
+      "sha256": "0a3bfeeaa171a3a72bb8dbf939eb331ad921435bb51977304f34ee53f5f98984"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_deadshot.gsc",
+      "sha256": "9fbecaf2c02b91f74f829fe738af0404b59b6d13fde9e125d3b2335036f822e0"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_distraction.gsc",
+      "sha256": "851758395fdc65c1c077e625f9989879a63a13cdc4d6ac256a6748ba8eb0f214"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_doors.gsc",
+      "sha256": "b3111206be00fd900563e38087ef28de56f3f656c78dc13cc42fe65d0a037e16"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_door_data.gsc",
+      "sha256": "c7cd981e85617ad20a0145d6e5240a7c2e550e478330a032ce7591f4870f0789"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_endless_rounds.gsc",
+      "sha256": "59dd94af6d1bd51de5b794c9d8d00f6d0436a16e844392b372d5c9eaea33bd03"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_finale.gsc",
+      "sha256": "da9bcb298b25d2d315082306e4a7243b8866bf3a9d7c503950c395bf1825f0a4"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_gameover.gsc",
+      "sha256": "6635cdbb642940d2eae9afb2a84e4d653df8dd7195382f5e8fc1ebf139fc627f"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_gauge.gsc",
+      "sha256": "a435b7f28f3ec4770e4ac28ea7b1fa5b4bea93ea0fd51e93d25c405150d2d4ee"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_hellhounds.gsc",
+      "sha256": "b21ab1f664a4d8e57ca70eb0193551c15a97bc6d24e76df1c23a0165a60b359e"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_luck.gsc",
+      "sha256": "690b30b38273b453755105a135bfbaab962e7d2c5ebedf972be752fbce4f7c6a"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_lunge.gsc",
+      "sha256": "95ba7b68adbb28fba9f2f465fd26e79bca143d677f995c596a320ab2e0e16e67"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_mage.gsh",
+      "sha256": "da6565d13bfb3ecdbd1a1d58bffa847515726b6d53ef29ac74cefff756d60567"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_mage_elements.csc",
+      "sha256": "6f2b6e60f6a9007b9ba71f47d43a8fa1a986e147f3bbe1d21916d5225ba260ce"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_mage_elements.gsc",
+      "sha256": "69bc0910f1a70768cf9c8122c56a305cb2593b1b13f9e1b77a23d0ff182af9e9"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_main.gsc",
+      "sha256": "38912490e8e6e0aa1fadb8b3d32366f0dfd862e9b474b41c1c4355f64c54d727"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_perk_anims.gsc",
+      "sha256": "5b40885963cdd0940de558d30124e2ce94111a555a76c2d971cf374e71ffbce3"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_perk_drink.gsc",
+      "sha256": "afcc858398d8b3568450133704c1619520eeef9491125fc0c4320c0ebc199d56"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_perk_electric_cherry.csc",
+      "sha256": "9b2ccbef5ca8fd9f3ec7ec3c0bdac8551dd0f66fbdb9abf064a1fc1e00a5d364"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_perk_electric_cherry.gsc",
+      "sha256": "28ef297ef6135308778f2021cab7548b5c2534dfc919d97ceeda7e8c0b3e29a2"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_perk_lights.csc",
+      "sha256": "8cfc31f1f8fcd4b7a27fe2b4872b7743221390e235be031839f6d06cfd3f43f4"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_perk_lights.gsc",
+      "sha256": "439e853b7b90171521339e7397fae11ee6b3a943d8351471b5438099f19790d2"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_perk_phd.gsc",
+      "sha256": "e6c491cc3bc65c73d307762e2d301164a946d2b50a9ad274c1537ba1185fdd7e"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_perk_scatter.gsc",
+      "sha256": "833229d773ca7410a8f459175f91eb57a283cc5a38353fc6cc127a359c330bbe"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_perk_widows.gsc",
+      "sha256": "3b776646767685559f76e07f821ead8ace9b7b3f2d1894b1c0b8afd0c08b96ff"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_powerups.csc",
+      "sha256": "ca2615390f55580bbd64d3e83bc6d8db1d7a441bb49f9d844ab7b76c2708e3a6"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_powerups.gsc",
+      "sha256": "c351ed58efee6065002ede085a789b6ba7ac46267eec94fc4edf7760cd168461"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_rampage.gsc",
+      "sha256": "60bb312e9cbfd596d3dfa49ddb5882d19364550278af91bfc1729e97bc1cef21"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_reaver.gsc",
+      "sha256": "08af427db721412e285d828db89941905ed9dafd2cad25c6d300b44ff43bdfff"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_riotshield.gsc",
+      "sha256": "47fc090d255a905394af92a305e4eed0d25818f6a38042dcb9b1b4de26a6bd89"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_runandgun.gsc",
+      "sha256": "4ab5316cd921b6ba0ee45e44e2cf03a05d8e9263627a9c6c5b94d71162ddb3b8"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_spire.gsc",
+      "sha256": "ef8f9d29f3b79ee6ebdf8f57941a638bfaaf1810a6c406508fda9bccbafe4e5c"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_spire_data.gsc",
+      "sha256": "f69438ae8a44e22005ea601cdc53ca5c8f93d9ad633829fc25691393c62ea71f"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_sprinter.gsc",
+      "sha256": "a83958f71d4f31564882fe4a049ff71b0d215cc875ede3603496677e5a5b0712"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_stray.gsc",
+      "sha256": "477f90593c395bfc9d7c103b9c7a82274f51cafcd6ccebcfe575d9523b0240ed"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_teleport.gsc",
+      "sha256": "f80e2dc75a7ffb703fc2db48544af77579a4990ba740a32193a85ddb6f8ae02e"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_uniques.gsc",
+      "sha256": "00b0365ba555049a053c8bcb87bfca10ac9a6123f45db98e02c26d54f119225b"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_upgrades.gsc",
+      "sha256": "57621ad6f0f39e1e156151c62ce7a282a74a537026bbbe6d714fd40abd4a1181"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_upgrade_ui.csc",
+      "sha256": "c180cb26858edfbbc4fd0a9a624bc56c685b32c7937b5a571dd2205c1dfd9274"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_upgrade_ui.gsc",
+      "sha256": "eeb69bad138fbf2fcfdecc3f4402f24fd5d438094e117ada8e500e83c1f2e160"
+    },
+    {
+      "path": "scripts\\zm\\zm_tower_of_doom\\_tod_zombie_speed.gsc",
+      "sha256": "5f381027c2d8e6e5c0ac398171e4fde847a714d043102c621f223b61a8bc2367"
+    },
+    {
+      "path": "scripts\\zm\\logical\\powerups\\_zm_powerup_infiniteammo.csc",
+      "sha256": "59fee80f2cbe80b0041a8040d66955333b9e5c68b1d351ba0dc8be7a5efaf743"
+    },
+    {
+      "path": "scripts\\zm\\logical\\powerups\\_zm_powerup_infiniteammo.gsc",
+      "sha256": "ac0bfd056e4cc5d20763c629c7f626c35e95904957f36892c2aece4933c6facf"
+    },
+    {
+      "path": "scripts\\zm\\logical\\powerups\\_zm_powerup_infiniteammo.gsh",
+      "sha256": "de760428ff42a3bcf7fbc6e214e49b5c34c63d911658de63b72573ce9ae8716e"
+    },
+    {
+      "path": "scripts\\zm\\logical\\powerups\\_zm_powerup_timewarp.csc",
+      "sha256": "45b34a21ea66b756ca2a96975ad82f2788c4474dfdc8c276adf51d73a385cacc"
+    },
+    {
+      "path": "scripts\\zm\\logical\\powerups\\_zm_powerup_timewarp.gsc",
+      "sha256": "04966ad49da095123b2977047aea2c586bd39fa51328e86e522d277204fc0556"
+    },
+    {
+      "path": "scripts\\zm\\logical\\powerups\\_zm_powerup_timewarp.gsh",
+      "sha256": "4ac2e3a97ee88948a90ed45f8abe4ebdedc447440aacab3931c309d5540bd8fb"
+    },
+    {
+      "path": "scripts\\shared\\ai\\archetype_apothicon_fury.csc",
+      "sha256": "c2e3c588aade1c23df1553ce6fa17bd00d15120359c6ccac84c150cc07decee7"
+    },
+    {
+      "path": "scripts\\shared\\ai\\archetype_apothicon_fury.gsc",
+      "sha256": "323265037d69b5c4bbdfcd660ca390d1078f4cdb1995ebfa28ab8cf55054189c"
+    },
+    {
+      "path": "scripts\\shared\\ai\\archetype_apothicon_fury.gsh",
+      "sha256": "523eff16963da3299f1755ee90b7822ff3b347010704bf9a025b1275d9cf17ea"
+    },
+    {
+      "path": "scripts\\shared\\ai\\archetype_apothicon_fury_interface.gsc",
+      "sha256": "da25577fbe026f2f9d36e2f6a09cc0112617162c8545da49e2bf52c0c8bf9359"
+    },
+    {
+      "path": "scripts\\shared\\ai\\systems\\animation_state_machine_utility.gsc",
+      "sha256": "8a8a93c0976357bc6ad950c2f32b1aa44d70a0cef6579ad9c6bde2a118ce4823"
+    },
+    {
+      "path": "zone_source\\aetherium_hud.zpkg",
+      "sha256": "99cfc3d46066e949de195aef5aac166f50469d0b7f1d6632b761d3e87adb2aff"
+    },
+    {
+      "path": "zone_source\\logical_powerups.zpkg",
+      "sha256": "41c36af6eb84de87240d7aa01ba8953cf4c1c6edb02f4f05bff055461f596e0a"
+    },
+    {
+      "path": "zone_source\\tod_twins.zpkg",
+      "sha256": "3674d8dcf01024ef502fdebfb0ab2ce16801fb4ab54cde5c43b78f0099d44bae"
+    },
+    {
+      "path": "zone_source\\xmas_gun.zpkg",
+      "sha256": "340541ac065d623d4deb82410a2dc57780b98488c23bb8270d09903fb16f8439"
+    },
+    {
+      "path": "zone_source\\zm_tower_of_doom.zone",
+      "sha256": "aae53914c2bf54f02f1be5fe63d2bd6346563a0fca96d54736de5eca04f92f1c"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\StartMenu\\AetheriumMenuButton.lua",
+      "sha256": "5a53f1c839d27654fff6f5cd8e38f43a31c7cabb3cea8b7e60d734f701345b54"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\StartMenu\\AetheriumSmallButton.lua",
+      "sha256": "ee204886607f2727e0c27b5a05f1df17431265de00af5ba7e4e6d93e074a1695"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumCompass.lua",
+      "sha256": "d8c529c536ed16829cfe60b7d9fbd2a5643e85354037d4ee83d544958a2fbbb6"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumGobbleGum.lua",
+      "sha256": "4e8481acd2bcb74d1a66bcdc3360922057021263207ee828528c0bf67d1764c9"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumKillFeed.lua",
+      "sha256": "a7e51e896212e60470b716d327cfc810d70c13df78f58f22270075efb093861b"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumKillFeedText.lua",
+      "sha256": "288d437bfa9ce3480051a8145a45c185bd0f312231b4cd0485c5d325cf269781"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumLoadout.lua",
+      "sha256": "9221e2a439757c17ea97d77dae910c45712416e68e3910985bbede0c1f2e41af"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumPartyPlayers.lua",
+      "sha256": "2fab7abe41f393d71de744d3df20ecb93b40302bfe864db28b68dca4ea75eb04"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumPerkItem.lua",
+      "sha256": "befa44ca3244a85be5fe7a335a2efa71887b57b8193c0ea09dcbb0c007e3e114"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumPerksContainer.lua",
+      "sha256": "044bf94ae2bbffb51063b7836e51d2658f1ab9c69ccb479db9c5abb019933441"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumPlayerInfo.lua",
+      "sha256": "f0b58e18ba6f476884a8677f59098a9a8358e44884d90d7a8012bff806871e93"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumPlusPoints.lua",
+      "sha256": "f13a2e61292a52b25e43f1fffbb935bca60bd21019c08d0c6790ef8f44946f48"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumPlusPointsContainer.lua",
+      "sha256": "4339bb27e68395e991f36bb52df7eed814789fcc0528f378a313eecfa1d87c16"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumPointsDelta.lua",
+      "sha256": "dbdd8a0f564ad3b60bba3ce6c5cce245c1a084744ecfd71cae8ba70c71e07522"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumPowerupItem.lua",
+      "sha256": "7cf790ce1fd305a66294c4506f6bd298724615c9f448ac6a7a3745cfb5a318c5"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumPowerupNotification.lua",
+      "sha256": "e4a6315450ccf01865d819c39009fc454ae119c477251a9e724a253ee64a04e4"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumPowerupsContainer.lua",
+      "sha256": "b90f69256feb8db00742fcf70a50ecc24a3d956d9a9abe263f0df140bdb47ff7"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumRoundCounter.lua",
+      "sha256": "ffc9c5fe1b6e0a9556e8f733949a8f539f2e4dedeee22f3b761a6b544cc32f9e"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumScoreboard.lua",
+      "sha256": "45b8fd5f92ffb9624b146a30d98b203aed0b98286da5f71cb880b5b254d6cf64"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumSpecialWeapon.lua",
+      "sha256": "fc2c40133215ef16a87bdb0a8ea2d61b04248c3e544fa5abee8dfc1ee4c31b7c"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\AetheriumThirdPersonCrosshair.lua",
+      "sha256": "65d52dcab4d3b48e69a40ff9d5d6559b9c792490f0cd66c916ca5d25d25c58c1"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\TodAbilityFeedback.lua",
+      "sha256": "a1e5cd22da06533eab87dbbdd0c21fbd73b15e6d9c1c058cac542396616e6a17"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\TodGlyphMetrics.lua",
+      "sha256": "17609b2998dc752eda16ce0ab22aae5f82d77142d9930b76837722f7e5f2d1bc"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\TodGlyphRow.lua",
+      "sha256": "b24e8ec92e0211fb570b149de3ba1246c079d387789c04b3b182c700c73c0d3b"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\TodGlyphText.lua",
+      "sha256": "7d153f042698c3e4253ba67abaa8b7ff904ce2ec83e8cd73e702d6a2424209ff"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\TodHealthTint.lua",
+      "sha256": "0897961a55953191a629d04f23c73c9bb6cd7033a44e1fde75a01a5ffdcf32de"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\TodKeycap.lua",
+      "sha256": "7558b703e57345c138cc0d34202ca1934733b98d4ea91aa60056a2caaf268d7b"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\Mappings\\AetheriumAAT.lua",
+      "sha256": "a9f64e012b62333c1303bc97e3142783276b3c727706bc5488c1ba4366cfe2bc"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\Mappings\\AetheriumBBG.lua",
+      "sha256": "b98d00db490c914a1f0364b1d37aaf3e9ea7dba1d3060356d049b1a1610be1de"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\Mappings\\AetheriumCharacters.lua",
+      "sha256": "5989b9929f7fd3683feadbcd70be2727090d63a0246c6d59d8ec093105de5215"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\Mappings\\AetheriumPerks.lua",
+      "sha256": "765efa65e78aa33910bdbc5de25150db8b2096c0225cbbb78e8d7f3f6b3b9850"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\Mappings\\AetheriumWeapons.lua",
+      "sha256": "e57c14e3f020e3aae6d2a5091ff04de468633ff56aeddc5179ab735a1f383afe"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\ZM_CursorHint\\ZMCursorHintNew.lua",
+      "sha256": "6072049f6048a80d0f3e0984ca3637f73502d6bf3d6844d5d9c8599286a29d42"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\ZM_CursorHint\\Prompts\\PromptBBG.lua",
+      "sha256": "54aa337181ce3e4dacdc1f78bb8c733e4cacdf4f1094ce511a8b3abfafeb4a57"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\ZM_CursorHint\\Prompts\\PromptDefault.lua",
+      "sha256": "41dbdc1850cd40c8492ddf2e9c2be9b201a9ad05331aa36e9e4cd04410a56cd7"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\ZM_CursorHint\\Prompts\\PromptDoors.lua",
+      "sha256": "c9aaab53c4a6da376b7a967af25d61135872ce65a4165e2b4d437c21ff217177"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\ZM_CursorHint\\Prompts\\PromptMysteryBox.lua",
+      "sha256": "66873eff1437f3f66fe96f53473c79b8e7569138e28e19f720f4c00f7e32f04c"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\ZM_CursorHint\\Prompts\\PromptPAP.lua",
+      "sha256": "2b657f0d585624320d759963daf5f8a295075557523c42e6cd55f43c5b78228e"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\ZM_CursorHint\\Prompts\\PromptPerks.lua",
+      "sha256": "a85bb6e2652413c999253c879cde84f731ee8ff8e49e2424e417d9262aa7ec2d"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\ZM_CursorHint\\Prompts\\PromptPowerRequired.lua",
+      "sha256": "c644d4314dc343a3b340606cbe45bb49c42a884c99fec646d39d24654584349f"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\ZM_CursorHint\\Prompts\\PromptPowerSwitch.lua",
+      "sha256": "7533d678a5405979e5e06a3328ff39f917107bcea66a81caffa3ceda1a1bbe3f"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\ZM_CursorHint\\Prompts\\PromptTemplate.lua",
+      "sha256": "8856b86d47f1d4458b28ce2dd8f5df8429173313fb7c3fb51f0c62c83e334cb7"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\ZM_CursorHint\\Prompts\\PromptWallBuy.lua",
+      "sha256": "4b4f4d0fd4743c51ed1843ea31a52342dad894eb82aaf689950f4e11d0497ce0"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\ZM_CursorHint\\Prompts\\TodTeleportFeedback.lua",
+      "sha256": "fd91fae6fd860a387c0f6b5f946d925509b1540a37e08c13ae81659111704f28"
+    },
+    {
+      "path": "ui\\uieditor\\widgets\\HUD\\AetheriumWidgets\\Scoreboard\\AetheriumQuestsCustom.lua",
+      "sha256": "2c8132c130db59bc405cd58392b2ce2f6c25474223545e1cb21f729af6703452"
+    },
+    {
+      "path": "ui\\uieditor\\menus\\hud\\AetheriumHud.lua",
+      "sha256": "92a57fe46812b682fd93fffcf8b693c5ae0dcf5e2006abef7eea333748e02c9e"
+    },
+    {
+      "path": "ui\\uieditor\\menus\\hud\\tod_class_select.lua",
+      "sha256": "36f9bd9e81c5f789692d9fb880e321b710d820d90fe0995d7f31810cdd971d0b"
+    },
+    {
+      "path": "ui\\uieditor\\menus\\hud\\tod_upgrade.lua",
+      "sha256": "785225a2ec0f14cd977600bc7c4c5f2501b623da9e946f41dfaf21c45b85dc01"
+    },
+    {
+      "path": "ui\\uieditor\\menus\\StartMenu\\AetheriumStartMenu.lua",
+      "sha256": "817b6ab1e4e41b9456f4188d6b6622b58980bba77027f2825b9267a41cd7ba25"
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "authoring": "upstream Blender MCP execute_blender_code",
+  "port": 9877,
+  "scope": "Reference-one Crown art master and built native derivative; user playtest pending",
+  "equipment_objects": 1640,
+  "evaluated_equipment_triangles": 536848,
+  "attachment_bones": {
+    "j_elbow_le": 289,
+    "j_knee_le": 213,
+    "j_spine4": 583,
+    "j_shoulder_le": 112,
+    "j_shoulder_ri": 56,
+    "j_hip_le": 44,
+    "j_wrist_le": 44,
+    "j_thumb_le_1": 13,
+    "j_thumb_le_2": 8,
+    "j_thumb_le_3": 8,
+    "j_index_le_1": 13,
+    "j_index_le_2": 8,
+    "j_index_le_3": 8,
+    "j_mid_le_1": 13,
+    "j_mid_le_2": 8,
+    "j_mid_le_3": 8,
+    "j_ring_le_1": 13,
+    "j_ring_le_2": 8,
+    "j_ring_le_3": 8,
+    "j_pinky_le_1": 13,
+    "j_pinky_le_2": 8,
+    "j_pinky_le_3": 8,
+    "j_head": 154
+  },
+  "donor_geometry_and_weights_unchanged": true,
+  "reference": "CyberZombie1.png",
+  "attachment_pose_checks": [
+    {
+      "name": "head_turn",
+      "max_attachment_error": 1.5850801600069677e-05
+    },
+    {
+      "name": "arm_flex",
+      "max_attachment_error": 1.8219922232191848e-05
+    },
+    {
+      "name": "leg_flex",
+      "max_attachment_error": 7.914859461689085e-06
+    }
+  ],
+  "native_exported": true,
+  "native_playtested": false,
+  "limitations": [
+    "Adapted to original donor body proportions and clothing, not exact image-to-mesh recovery.",
+    "High-detail editable art; game LODs, texture bake, moving-joint clearance and performance must be checked before integration."
+  ],
+  "surface_textures": {
+    "worn_steel_v1.png": {
+      "pixels": [
+        1254,
+        1254
+      ],
+      "sha256": "36377d9e207c37b1037135a8e1fc222637310a144393adbdc6d540662c06c578"
+    },
+    "chipped_enamel_v1.png": {
+      "pixels": [
+        1254,
+        1254
+      ],
+      "sha256": "caf21aeb21fc97461717350b7ce62f1a849ce6b83fc0113faf8efeccc7918d2d"
+    }
+  },
+  "texture_generation": "built-in image_gen; prompts in textures/prompts.json",
+  "label_orientation_corrected": 21,
+  "surface_finish": "Dedicated raster enamel/steel and matte stained canvas; original zombie textures retained",
+  "reference_refinement": "Emissive purple plumbing, lateral forearm reservoir, sculpted knee and layered tibial armor",
+  "magenta_emission_strength": 2.5999999046325684,
+  "game_integration": {
+    "ff_bytes": 149992000,
+    "ff_local_time": "2026-09-16T12:46:04.802466",
+    "snapshot_inputs": 407,
+    "differences": [],
+    "deployed_inputs_newer_than_ff": [],
+    "missing_assets": [],
+    "native_visual_verified": false,
+    "game_launched": false,
+    "equipment_lod_triangles": [
+      44610,
+      27464,
+      12050,
+      7705,
+      4350,
+      2702,
+      1776
+    ],
+    "atlas_size": 4096,
+    "atlas_maps": 5,
+    "source_and_compiled_binaries_verified": 233,
+    "install_manifest_sha256": "63a7849ccee0d0b7d7212b304dfd91597638413f870d1944aff2dffe54f2efd2"
+  }
+}

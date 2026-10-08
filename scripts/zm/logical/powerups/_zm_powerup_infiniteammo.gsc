@@ -126,6 +126,10 @@ function powerup_activate( drop_item, player )
 	while( level.zombie_vars["zombie_powerup_infiniteammo_time"] > 0 )
 	{
 		wait( 0.05 );
+		// [tod v19.76] the clock stops while the upgrade cards hold the world
+		// (_tod_powerups::powerup_pause_hold has the map-wide list)
+		if ( IS_TRUE( level.tod_upgrade_pause ) )
+			continue;
 		level.zombie_vars["zombie_powerup_infiniteammo_time"] = level.zombie_vars["zombie_powerup_infiniteammo_time"] - 0.05;
 	}
 	level thread powerup_deactivate( player );
@@ -134,10 +138,9 @@ function powerup_activate( drop_item, player )
 function powerup_deactivate( player )
 {
 	level.zombie_vars["zombie_powerup_infiniteammo_on"] = 0;
-	// [tod] isdefined guard — disconnect mid-effect otherwise ends the match
-	// (verify 2026-08-20; same fix as the timewarp module).
-	if ( isdefined( player ) )
-		player._show_solo_hud = 0;
+	// [tod] v17.47: the pack's `player._show_solo_hud = 0` is REMOVED — same
+	// reason as the timewarp module: a level-wide powerup was clearing the one
+	// flag every grabber-only tray icon (ZOMBIE BLOOD) is gated on.
 
 	level notify( "powerup_infiniteammo_notif" );
 }

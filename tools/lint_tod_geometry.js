@@ -69,6 +69,7 @@
 //         node tools/lint_tod_geometry_selftest.js   prove it still catches a hole
 'use strict';
 const fs = require('fs');
+const CB = require('./convex_brush');
 const path = require('path');
 
 const REPO = path.join(__dirname, '..');
@@ -114,7 +115,23 @@ const MATERIALS = new Map([
   // dark_blue_tinted: ground slab, crown hall floor, power hall floor, and the
   // ziggurat tiers under the hall.
   ['mwiii_vertigo_retro_synth_dark_blue_tinted', DECK],
+  // dark_blue (PLAIN): as of v17.32 this is ONLY the core column's plinth — the
+  // first BASE_GRID_LAPS core bands, which wear a darker tint than the floor so
+  // the four plain-hue SPINES standing in them stay visible. Nothing stands on a
+  // band (they are 384 tall and MAX_SLAB rejects them anyway), so BLOCK is the
+  // honest class now. It was DECK in v17.28-31, when this material was also the
+  // arena floor; see DECK_LABELS below for what replaced that.
+  ['mwiii_vertigo_retro_synth_dark_blue', BLOCK],
   ['clip', BLOCK],   // rail caps, base clip, doorway clips
+  // clip_player: player-only clip. The stair ramps use it as WEDGES (non-AABB,
+  // never parsed here); v13 adds the first AXIAL uses — the breather-lounge
+  // WINDOW guards, which fill the open window band so players stay inside
+  // while bullets pass. BLOCK is the honest class: for every check in this
+  // file (guards, walls, standability) a player-clip stops a body exactly
+  // like a solid does. Note CHECK 1's misplaced-wall test matches `clip`
+  // EXACTLY, not this — a stray clip_player on a floor would not be flagged;
+  // don't use clip_player where plain clip serves.
+  ['clip_player', BLOCK],
   ['sky', BLOCK],
   // pap: the core capital band and the mast tiers. Nothing STANDS on either, so
   // not floor — but both are solid, and the capital band is the tower core
@@ -151,11 +168,53 @@ const MATERIALS = new Map([
 // brushes only.
 //   `ammo crate body` — the four breather ammo crates (2026-08-24) plus the
 //   crown hall crate (v12, 2026-08-26; label `crown hall ammo crate body`). The model is
-//   acc_west_ammo_crate, which ships CollisionMap "" and BulletCollisionFile "",
+//   tod_ammo_chest since v19.69 (no CollisionMap either; it was acc_west_ammo_crate,
+//   which ships CollisionMap "" and BulletCollisionFile ""),
 //   so Solid() has nothing to switch on. A SOLID brush was tried first and was
 //   worse in both directions: it showed through the mesh, and it swallowed the
 //   crate's trigger_radius_use origin so the crate could not be bought at all.
-const MODEL_CLIP_COLUMNS = /ammo crate body$/;
+//   `rampage inducer body` - the cyber Rampage Inducer (2026-10-02), 44 x 44 x 67,
+//   a script_model with no collision of its own (tools/inducer_cyber ships no
+//   CollisionMap); the clip is generated from the same constants that place it.
+//   `power terminal body` - Nikolai's Grid Terminal V5 (2026-10-02), the power
+//   switch, 60 x 11 x 88 on the power hall's east end wall: a script_model with no
+//   collision of its own (tools/fan_props ships none); clip from POWER_TERM.
+//   `rocket wreck body` - the crashed rocket (v19.68s, docs/170), nose-down in the
+//   Endless Spire arena's NW corner: `tod_rocket_wreck` is a script_model with no
+//   collision of its own (tools/fan_props ships none); the clip column round its lower
+//   hull is generated from the same RK_* pose that places it (RK_CORNER.clip).
+const MODEL_CLIP_COLUMNS = /ammo crate body$|rampage inducer body$|power terminal body$|rocket wreck body$/;
+
+// ---------------------------------------------------------------------------
+// DECK BY LABEL (v17.32) — the one place this file classes a brush by what it IS
+// rather than by what it is MADE OF, and the reason is worth stating because it
+// is the hole this table always had.
+//
+// The class is keyed on the MATERIAL, and the header above already admits the
+// weakness: "several materials serve two purposes and only the labels say
+// which." Until v17.32 no material actually did, so material-as-key held. Then
+// the arena floor took plain `blue` (user's call — the lighter grid line), and
+// plain `blue` is ALSO every base wall, parapet, rail and under-stair fill in
+// the map, which are BLOCK. One name, two genuinely different roles, and no
+// choice of class is right for both: BLOCK deletes the arena floor from the
+// walkability flood and reports the map unreachable; DECK gives every parapet in
+// the map standing room and invents unguarded edges by the hundred.
+//
+// So these three labels — and they are the WHOLE ground-level floor, nothing
+// else — are deck regardless of material. Same shape as MODEL_CLIP_COLUMNS
+// above: an explicit, enumerated exception, not an inference from shape.
+//
+// The thickness gate still applies (`isDeck` below ANDs it), so this can only
+// ever promote a genuine slab. 'ground slab' matches the spire's own base slab
+// too, which is also a floor and already DECK by material — the override agrees
+// with it rather than changing it.
+//
+// ⚠️ KEEP THIS LIST SHORT AND EXACT. Every entry is a place the material table
+// stopped being the authority, and an over-broad pattern here would silently
+// turn walls into floor — the failure this whole file exists to prevent. If it
+// ever needs a fourth entry, ask first whether the material should have been
+// unique instead.
+const DECK_LABELS = /^(ground slab|power hall floor|tp bay floor)$/;
 // PALETTE FAMILIES. The suffix carries the meaning:
 //   <colour>              plain  -> parapets, rails, base walls, door slabs. BLOCK.
 //   <colour>_tinted       -> stair treads, and the core's decorative band rings.
@@ -166,6 +225,27 @@ for (const c of PAL) {
   MATERIALS.set(`mwiii_vertigo_retro_synth_${c}_tinted`, DECK);
   MATERIALS.set(`mwiii_vertigo_retro_synth_${c}_tinted_edge`, DECK);
 }
+// v17.88 (docs/110): the trial halls' own art materials — tod_hall_crest_N (a wall
+// plaque), tod_hall_wall_N (the drum liner band) and tod_hall_floor_N (the trial
+// mark, a 1u inlay nobody stands ON — same class as the plain-material sigils
+// that shipped in v17.69). All BLOCK: nothing here is a floor.
+for (const k of ['crest', 'wall', 'floor']) for (let i = 1; i <= 7; i++) MATERIALS.set(`tod_hall_${k}_${i}`, BLOCK);
+// v18.99g: the MATTE BUYABLE-DOOR clones (source_data/tod_materials.gdt, made by
+// tools/gen_tod_door_materials.js). Same texture and tint as
+// <hue>_tinted_edge with the specular/reflection zeroed, so a door stops acting
+// as a mirror. BLOCK, not DECK: a door slab is a wall you cannot stand on, and
+// the `_tinted_edge` originals only ever counted as BLOCK here because a
+// 128-tall slab fails the MAX_SLAB thickness gate — this states it outright.
+// LOCKSTEP with DISTRICTS in gen_tower_map.js and with the generated GDT block:
+// a door material missing from this table ABORTS the lint, which is the point
+// (the linker substitutes an unknown material silently and draws a white face).
+for (const c of ['blue', 'green', 'orange', 'yellow', 'red']) MATERIALS.set(`tod_door_${c}`, BLOCK);
+// v19.69 THE SURFACE REFRESH (docs/169): the stair RISER glow (source_data/
+// tod_refresh.gdt, tools/gen_tod_refresh_assets.py). It only ever sits on a tread's
+// riser - a VERTICAL face - and a brush's class comes from its TOP face (parseWorld
+// below), so these never decide anything; they are listed because every face's
+// material must be known. BLOCK: a riser is the front of a step, not a floor.
+for (const c of ['blue', 'green', 'orange', 'yellow', 'red', 'spire']) MATERIALS.set(`tod_rf_riser_${c}`, BLOCK);
 // DECK AND BLOCK ARE NOT EXCLUSIVE. A solid brush BLOCKS along its whole body
 // whatever its material; the material only decides whether its TOP FACE is also
 // somewhere you can stand. Treating them as exclusive made the whole-map pass
@@ -208,29 +288,52 @@ function parseWorld(text) {
     if (lines[i] !== '{' || label === null) continue;
 
     const planes = [];
-    let mat = null;
+    const actualPlanes = [];
+    let mat = null, topMat = null, topZ = -Infinity;
+    const faceMats = new Set();
     for (let j = i + 1; j < lines.length && lines[j] !== '}'; j++) {
       const pm = lines[j].match(
         /^ \( (\S+) (\S+) (\S+) \) \( (\S+) (\S+) (\S+) \) \( (\S+) (\S+) (\S+) \) (\S+) /);
       if (!pm) continue;
       const v = pm.slice(1, 10).map(Number);
       mat = pm[10];
+      faceMats.add(mat);
       const verts = [[v[0], v[1], v[2]], [v[3], v[4], v[5]], [v[6], v[7], v[8]]];
+      actualPlanes.push(CB.plane(verts, mat));
       for (let a = 0; a < 3; a++)
-        if (verts[0][a] === verts[1][a] && verts[1][a] === verts[2][a])
+        if (verts[0][a] === verts[1][a] && verts[1][a] === verts[2][a]) {
           planes.push([a, verts[0][a]]);
+          if (a === 2 && verts[0][2] > topZ) { topZ = verts[0][2]; topMat = mat; }
+        }
     }
-    if (planes.length !== 6 || !mat) { label = null; continue; }
+    if (!mat) { label = null; continue; }
+    // v19.69 PER-FACE MATERIALS (the surface refresh, docs/169): a tread may wear a
+    // riser glow on its front and a soffit on its underside. The class comes from the
+    // TOP face - the only face that decides whether a brush is somewhere to stand,
+    // which is what this table has always meant - and EVERY face's material must be
+    // classified (an unknown one anywhere is still a hard abort). A one-material
+    // brush, i.e. every brush before the refresh, reads exactly as it did.
+    if (topMat) mat = topMat;
+    // (the class material itself is checked with the brush below; every OTHER face here)
+    for (const fm of faceMats) if (fm !== mat && MATERIALS.get(fm) === undefined) unknown.set(fm, (unknown.get(fm) || 0) + 1);
+    // Stair ramp sampling retains the established tread model. Every crown
+    // non-axial solid is decoded and sampled at the column center, not its AABB.
+    if (planes.length !== 6 && !label.startsWith('crown ')) { label = null; continue; }
+    const convex = actualPlanes.length!==6 || planes.length!==6;
+    const shape = convex ? CB.hull(actualPlanes) : null;
 
     const b = { label, mat, lo: [Infinity, Infinity, Infinity], hi: [-Infinity, -Infinity, -Infinity] };
     for (const [axis, val] of planes) {
       if (val < b.lo[axis]) b.lo[axis] = val;
       if (val > b.hi[axis]) b.hi[axis] = val;
     }
+    if(shape) { b.lo=shape.lo; b.hi=shape.hi; b.planes=actualPlanes; }
     const kind = MATERIALS.get(mat);
     if (kind === undefined) unknown.set(mat, (unknown.get(mat) || 0) + 1);
     b.kind = kind;
-    b.isDeck = kind === DECK && (b.hi[2] - b.lo[2]) <= MAX_SLAB;
+    b.isDeck = (kind === DECK || DECK_LABELS.test(b.label))
+      && (b.hi[2] - b.lo[2]) <= MAX_SLAB;
+    if(shape) b.isDeck=false; // convex crown architecture, never a gameplay floor
     b.isBlock = true;             // everything in worldspawn is solid
     brushes.push(b);
     label = null;
@@ -327,7 +430,10 @@ function run() {
       for (let y = snap(b.lo[1]); y < b.hi[1]; y += G) {
         const k = kkey(x, y);
         if (!blockIdx.has(k)) blockIdx.set(k, []);
-        blockIdx.get(k).push(b);
+        if(b.planes) {
+          const span=CB.verticalSpan(b.planes,x+G/2,y+G/2);
+          if(span) blockIdx.get(k).push({...b,lo:[b.lo[0],b.lo[1],span[0]],hi:[b.hi[0],b.hi[1],span[1]]});
+        } else blockIdx.get(k).push(b);
       }
   }
   const floors = new Map();   // column -> Map(z -> label)
@@ -345,6 +451,7 @@ function run() {
 
   const nkey = (k, z) => `${k}@${z}`;
   const findings = { walls: [], holes: [], unreachable: 0, unreachableTower: 0,
+                     unreachableSpireFromTower: 0, spireDetached: null, spireReachesSummit: null,
                      reachTerraceToCitadel: false, baseReachesTerrace: null, anchorMissing: null };
 
   // --- CHECK 1: MISPLACED WALLS — INVISIBLE ONES ONLY ---------------------
@@ -519,6 +626,11 @@ function run() {
     for (const node of stand.values()) {
       if (seen.has(nkey(node.k, node.z))) continue;
       if (node.label.startsWith('causeway') || node.label.startsWith('terrace')) findings.unreachable++;
+      // v14: the SPIRE is a deliberate island — teleport-only, no walkable
+      // route from the tower BY DESIGN, so its nodes must not drown the tower
+      // bucket (100 floors ≈ 80k nodes would gate every future edit). It gets
+      // its own bucket and its own flood proof below.
+      else if (node.label.startsWith('spire')) findings.unreachableSpireFromTower++;
       else findings.unreachableTower++;
     }
 
@@ -533,6 +645,44 @@ function run() {
     findings.baseReachesTerrace = base ? seen.has(base) : null;
   }
 
+  // --- THE SPIRE ISLAND (v14, docs/44) ------------------------------------
+  // Teleport-only by design, so the main flood can never reach it. When spire
+  // brushes exist it gets the SAME treatment the tower gets: a flood rooted on
+  // its own arrival slab, a named route proof (arena -> summit apron), and a
+  // detachment counter gated on increase. No spire in the map = fields stay
+  // null and every verdict below is byte-identical to the pre-spire lint.
+  if (brushes.some(b => b.label === 'spire ground slab')) {
+    let seed = null;
+    for (const node of stand.values())
+      if (node.label === 'spire ground slab') { seed = nkey(node.k, node.z); break; }
+    if (seed) {
+      const seenS = new Set([seed]);
+      const st2 = [seed];
+      while (st2.length) {
+        const cur = stand.get(st2.pop());
+        const [gx, gy] = cur.k.split(',').map(Number);
+        for (const [dx, dy] of DIRS) {
+          const nk = kkey(gx + dx, gy + dy);
+          for (const nz of stepsTo(nk, cur.z)) {
+            const nn = nkey(nk, nz);
+            if (seenS.has(nn) || !stand.has(nn)) continue;
+            seenS.add(nn); st2.push(nn);
+          }
+        }
+      }
+      findings.spireReachesSummit = false;
+      findings.spireDetached = 0;
+      for (const node of stand.values()) {
+        if (!node.label.startsWith('spire')) continue;
+        if (node.label === 'spire summit apron' && seenS.has(nkey(node.k, node.z)))
+          findings.spireReachesSummit = true;
+        if (!seenS.has(nkey(node.k, node.z))) findings.spireDetached++;
+      }
+    } else {
+      findings.spireReachesSummit = false;   // a spire with no standable arrival is broken outright
+    }
+  }
+
   // --- report -------------------------------------------------------------
   const summary = {
     floorNodes,
@@ -543,6 +693,8 @@ function run() {
     unreachableTowerNodes: findings.unreachableTower,
     baseReachesTerrace: findings.baseReachesTerrace,
     terraceReachesCitadel: findings.reachTerraceToCitadel,
+    spireDetached: findings.spireDetached,
+    spireReachesSummit: findings.spireReachesSummit,
   };
 
   console.log('geometry lint — STATIC GEOMETRY ONLY');
@@ -562,6 +714,10 @@ function run() {
   // everywhere; the traversal claims are two named routes and nothing else.
   console.log(`  base -> terrace walkable:    ${summary.baseReachesTerrace === null ? 'ANCHOR MISSING' : (summary.baseReachesTerrace ? 'YES' : 'NO')}`);
   console.log(`  terrace -> citadel walkable: ${summary.terraceReachesCitadel ? 'YES' : 'NO'}`);
+  if (summary.spireReachesSummit !== null) {
+    console.log(`  spire arena -> summit walkable: ${summary.spireReachesSummit ? 'YES' : 'NO'}`);
+    console.log(`  detached: spire   ${summary.spireDetached}    (spire-from-tower ${findings.unreachableSpireFromTower} — teleport-only BY DESIGN, not gated)`);
+  }
   if (findings.anchorMissing)
     console.error(`  ANCHOR NOT FOUND — the reachability proof did not run: ${findings.anchorMissing}`);
 
@@ -599,6 +755,11 @@ function run() {
   const base = JSON.parse(fs.readFileSync(BASELINE, 'utf8'));
   const worse = [];
   for (const k of GATED) if (summary[k] > (base[k] || 0)) worse.push(`${k}: ${base[k]} -> ${summary[k]}`);
+  // v14: the spire's own gates, active only when spire brushes exist. A map
+  // without them keeps null fields and these lines never fire.
+  if (summary.spireReachesSummit === false) worse.push('spire arena -> summit is NOT walkable');
+  if (summary.spireDetached !== null && summary.spireDetached > (base.spireDetached || 0))
+    worse.push(`spireDetached: ${base.spireDetached || 0} -> ${summary.spireDetached}`);
   if (!summary.terraceReachesCitadel) worse.push('terrace -> citadel is NO LONGER walkable');
   if (summary.baseReachesTerrace === false) worse.push('base -> terrace is NO LONGER walkable — the climb is severed');
   if (summary.baseReachesTerrace === null) worse.push('base anchor missing — the climb was not checked');

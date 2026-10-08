@@ -1,0 +1,40 @@
+{
+  "master": "art\\cyber_reference_two_mcp\\reference_two.blend",
+  "master_sha256": "a4ecb46acbf81126671737facfc485c12c25aa7e1d5cd224710adc2a60f1b13e",
+  "revision": 6,
+  "fit_pass": 2,
+  "authoring_stage": "03_completed_reference_two",
+  "lod_method": "component_floor_v1",
+  "textures": {
+    "i_tod_roster_trooper_c.png": "a6846e09fd0b5e9541edbd68c9b629591767116b2502ec4a184464a0a51f2d39",
+    "i_tod_roster_trooper_e.png": "ffd2e4c061fe9bfe5569de70aaf001305b57665f4fe292c0298c9930361b7944",
+    "i_tod_roster_trooper_g.png": "1370338dc8aed9c979d432cc8a74d9985828c5a4467acbfb67f8a213e654546d",
+    "i_tod_roster_trooper_n.png": "51689272b366259157694dd9a0d9914443652e7a6cb83d660c00953b12855e17",
+    "i_tod_roster_trooper_s.png": "d63132e230a3e3a7d836c9dc968d88d7646f791360da2bdef144ae270beca6aa"
+  },
+  "groups": [
+    "arm",
+    "chest",
+    "head",
+    "hip_le",
+    "hip_ri",
+    "rightarm",
+    "shin_le",
+    "shin_ri",
+    "shoulder_le",
+    "shoulder_ri"
+  ],
+  "atlas_size": 4096,
+  "lod_area_floors": {
+    "chest": [
+      0,
+      0.025,
+      0.18,
+      1.0,
+      2.5,
+      5.0,
+      12.0
+    ]
+  },
+  "reference_assignment": "regular zombies only"
+}

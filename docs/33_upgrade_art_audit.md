@@ -1,5 +1,43 @@
 # 33 — Upgrade card audit + art prompts (2026-08-24)
 
+> **⚠️ OPEN 2026-09-08 — THE FOUR HEADSHOT CARDS ARE STALE AGAIN, and this time
+> for TWO reasons.** The domain went **+5%/Lv × 10 levels → +12%/Lv × 5**
+> (v18.41). So (1) the three light cards bake `+5 / +10 / +15%` and the game now
+> pays 12 / 24 / 36, and (2) **all four carry 3 pips**, which is the *max-10*
+> convention — at max 5 the rule is one pip per level, so they need **5**. The
+> pip half also hits the DARK card, whose wording was already correct.
+> The fix is the generic-card-text rule: the re-bake carries **no number at
+> all**, reusing the wording the DARK card has always had (`HEADSHOTS / HIT
+> HARDER`), so the next retune of this domain owes no art. Pack out to the user
+> 2026-09-08: `docs/119_headshot_card_recopy_art_prompt.md` →
+> `~/Downloads/tod_headshot_recopy_art_pack.zip`. The pause plate
+> `i_tod_pause_r06` is name-only and needs no re-bake.
+>
+> **THE LESSON THIS ONE ADDS: a CAP change is an art change even when no value
+> moves.** Every earlier entry in this doc is about a stale NUMBER. The pip row
+> is a second, quieter dependency — nothing greps it, no lint sees it, and a
+> retune that only touched `max` would have shipped a 3-pip card on a 5-level
+> domain with every printed figure correct.
+
+> **RESOLVED 2026-08-30 — the six cards were re-baked and installed the same day**
+> (user drop `files (71).zip`, md5-verified, FULL build 15:22:22). HEADSHOT and
+> GIANT SLAYER now read +5/+10/+15 and are back on the "Verified CURRENT" list.
+> The re-bake shipped in the SAME session as the number change — the first time
+> that has happened here, and the thing to keep doing.
+>
+> (Was: **⚠️ OPEN — HEADSHOT AND GIANT SLAYER ARE STALE AGAIN.** The user
+> buffed both from 4%/Lv to **5%/Lv** ("buff the headshot and boss damage
+> upgrades for the assault class from 4% to 5% each level"). Code, Lua, armory
+> and prose are on 5%; the **six cards still read +4/+8/+12** and are the only
+> thing outstanding. Prompt + install checklist:
+> **`docs/48_assault_5pct_card_art_prompt.md`**. Until they land, HEADSHOT and
+> GIANT SLAYER are OFF the "Verified CURRENT" list below.
+>
+> That is the **fourth** recurrence, and the third bullet of this header has
+> predicted each one. Note what is *different* this time and keep it that way:
+> the re-bake doc was written in the same pass as the number change rather than
+> discovered by a later audit.)
+
 > **RESOLVED 2026-08-26 (was: three cards went stale again).** The Assault
 > buff (user: *"headshot damage needs to be 4% for each level and boss damage
 > also 4% per level. Recoil will go to 10% per level"*) moved HEADSHOT 3%→4%/Lv,
@@ -87,14 +125,23 @@ card. Both are supported paths.
 
 ## Verified CURRENT — no action (26 cards + the class/tier sets)
 
-DAMAGE +24% · DMG REDUCTION −10% · BOUNTY +10% · LUCK +20% · HEADSHOT +8% (4%/Lv)
+> ⚠️ **THE CLASS CARD HALF OF THIS HEADING IS NO LONGER TRUE (2026-09-01).**
+> `i_tod_card_class_slasher.png` reads `FASTEST ON THE TOWER`, which the v14.29
+> speed swap (2026-08-30) made false — skirmisher 1.1 now beats slasher 1.0.
+> This pass predates the swap and never re-checked it. The eight TIER cards were
+> re-opened on 2026-09-01 and are all still correct. Fix + prompt: `docs/59`,
+> which also adds a SIDEARM CHIP to all twelve — after which the "no card ...
+> carries a weapon stat" note below stops holding too.
+
+DAMAGE +24% · DMG REDUCTION −10% · BOUNTY +10% · LUCK +20%
 · MAG SIZE +60% · SCAVENGER (no numbers) · BULLET FEED 2.0s→0.4s · REGEN +1.0%/s
 · PENETRATION (no numbers) · THOR'S THUNDER (no numbers) · CLEAVE 33%/Lv ·
 FIRE RATE (no numbers) · HANDLING (no numbers) · RECOIL −20% MAX ·
 SPRINT FIRE (no numbers) · RUN AND GUN +35% · ADRENALINE +6% ·
 OVERDRIVE +8%/10 rounds · KILL RELOAD "EVERY 75TH KILL" · IMPACT ROUNDS 6% ·
 DRAW CUT +100% · SPRINT ARMOR −10% · SECOND WIND (no numbers) ·
-MOMENTUM (no numbers) · GIANT SLAYER +8% · BACK ARMOR.
+MOMENTUM (no numbers) · BACK ARMOR ·
+HEADSHOT +15% (5%/Lv, 3 pips) · GIANT SLAYER +15% (5%/Lv, 5 pips).
 
 Four things worth knowing about that list:
 

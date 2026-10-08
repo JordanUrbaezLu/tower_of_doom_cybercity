@@ -1,0 +1,25 @@
+{
+  "view": "front_dark",
+  "configured_model_scale": 1.33,
+  "native_material_emission_scale": 16.0,
+  "lighting_preset": "dim studio; visibility study, not native game lighting",
+  "head_source_lod": 0,
+  "source_binary_and_texture_hashes": {
+    "model_export\\tod_cyber_zombie\\_images\\i_tod_roster_sprinter_c.png": "94b11129e3cbf551d516175d26a97aab5733db040ae0e3fee3a63d6038637515",
+    "model_export\\tod_cyber_zombie\\_images\\i_tod_roster_sprinter_e.png": "ac798f03407d61b29895d088424b23034a621704106405cd8913cbe81bca6f21",
+    "model_export\\tod_cyber_zombie\\_images\\i_tod_roster_sprinter_g.png": "7af4eeb6def1c8a44a38997747879710e68849e6cb07850b4d8253f87653121c",
+    "model_export\\tod_cyber_zombie\\_images\\i_tod_roster_sprinter_n.png": "90048267c403c11b2acce924fbb66de0caa0aeb923ee5695df79e98a2f119132",
+    "model_export\\tod_cyber_zombie\\tod_cyber_sprinter_lod0.xmodel_bin": "cd98aa4ccc2bb39a68f6cc7982780a4b9e73420a4e2573dea03da5f06eb74d51",
+    "model_export\\tod_cyber_zombie\\tod_cyber_sprinter_head2_lod0.xmodel_bin": "e0fbdbf36231ed93988de9aca8105d69eb869842838a3ac30128a8af35130628",
+    "model_export\\tod_cyber_zombie\\tod_cyber_sprinter_head2_lod6.xmodel_bin": "226c39f3c0460a138d5acbf76d88c29d5cefaeaa42b39dca1c0c4f3909938fc1"
+  },
+  "image_sha256": "3e93b224660412eaf503795a66e3b9cd64cab51ffd1eba7ba2c10e02e3219c36",
+  "render_engine": "CYCLES",
+  "render_device": "GPU",
+  "samples": 128,
+  "resolution": [
+    1600,
+    1760
+  ],
+  "type": "Blender render of native source binaries and baked maps; not an in-game screenshot"
+}

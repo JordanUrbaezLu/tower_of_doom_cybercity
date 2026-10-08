@@ -1,0 +1,11 @@
+const assert = require('assert/strict');
+const {verifyWeaponCosts, MAX_TABLE_WEAPON_COSTS} = require('./verify_weapon_costs');
+const header = 'weapon_name,upgrade_name,cost\n';
+const table = n => header + Array.from({length: n}, (_, i) => `base_${i},up_${i},100`).join('\n');
+assert.equal(verifyWeaponCosts(table(MAX_TABLE_WEAPON_COSTS / 2)).costs, MAX_TABLE_WEAPON_COSTS);
+assert.throws(() => verifyWeaponCosts(table(MAX_TABLE_WEAPON_COSTS / 2 + 1)), /budget/);
+assert.throws(() => verifyWeaponCosts(table(152)), /304 entries/);
+assert.equal(verifyWeaponCosts(header + 'base,shared,100\nother,shared,100').costs, 3);
+assert.throws(() => verifyWeaponCosts(header + 'base,up,100\nbase,up,100'), /Duplicate/);
+assert.throws(() => verifyWeaponCosts('wrong,header\nbase,up'), /header/);
+console.log('Weapon-cost guard self-test passed: counts upgrades, deduplicates shared upgrades, rejects overflow and malformed tables.');

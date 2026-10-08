@@ -1,0 +1,40 @@
+{
+  "id": "mvp",
+  "revision": 3,
+  "source_backup": "tmp\\cyber_finish_v2\\art\\cyber_zombie_mvp\\cyber_zombie_mvp.blend",
+  "donor_geometry_weights_preserved": true,
+  "forearm_fit": {
+    "fit": "48-ray body-specific closed straps; smooth tapered shell fitted over measured sleeve folds",
+    "sample_radius_min": 1.6268446687608957,
+    "sample_radius_max": 2.5850659534335136,
+    "surface_samples": 888,
+    "strap_gap": 0.055,
+    "shell_gap_above_smooth_envelope": 0.12,
+    "smooth_shell_fit_lift": 0.22574451211671648,
+    "wrist_clearance_units": 2.157319985810913,
+    "body_objects": [
+      "Original_body"
+    ]
+  },
+  "poses": [
+    {
+      "pose": "rest",
+      "max_attachment_error": 1.1689806625491393e-05
+    },
+    {
+      "pose": "head_turn",
+      "max_attachment_error": 1.5625173174107518e-05
+    },
+    {
+      "pose": "arm_flex",
+      "max_attachment_error": 1.4016092735957212e-05
+    },
+    {
+      "pose": "torso_leg",
+      "max_attachment_error": 2.288942532349966e-05
+    }
+  ],
+  "attachment_objects": 76,
+  "attachment_triangles": 9056,
+  "notes": "Actual donor-surface measurements; studio previews. Native animation/lighting remains user tested."
+}

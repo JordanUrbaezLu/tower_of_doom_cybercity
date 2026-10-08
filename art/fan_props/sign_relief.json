@@ -1,0 +1,113 @@
+{
+ "revision": "sign_relief_3",
+ "model": "tod_cybercity_sign2",
+ "material": "mtl_tod_cybercity_sign2",
+ "tris": 59999,
+ "verts": 30102,
+ "level": {
+  "target": 16.513,
+  "letter_px": 76477,
+  "moved_px": 28845,
+  "before_min": 13.5,
+  "before_max": 20.1
+ },
+ "bounds": [
+  [
+   0.0,
+   -128.0,
+   0.239
+  ],
+  [
+   24.201,
+   128.0,
+   118.99
+  ]
+ ],
+ "grid": 0.25,
+ "sharp_deg": 40.0,
+ "sizes": {
+  "c": [
+   4096,
+   2048
+  ],
+  "e": [
+   2048,
+   1024
+  ],
+  "s": [
+   1024,
+   512
+  ],
+  "g": [
+   1024,
+   512
+  ],
+  "coff": [
+   2048,
+   1024
+  ],
+  "eoff": [
+   64,
+   64
+  ]
+ },
+ "glow_fraction": 0.1757,
+ "metal_mean": 0.006,
+ "rough_mean": 0.458,
+ "states": {
+  "on": "tod_cybercity_sign2",
+  "dim": "tod_cybercity_sign2_dim",
+  "off": "tod_cybercity_sign2_off",
+  "dim_scale": "2",
+  "off_dim": 0.28,
+  "off_desat": 0.5
+ },
+ "sides": {
+  "metal": {
+   "colour": [
+    0.184,
+    0.196,
+    0.286
+   ],
+   "glow": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "cyan": {
+   "colour": [
+    0.157,
+    0.329,
+    0.49
+   ],
+   "glow": [
+    0.043,
+    0.094,
+    0.137
+   ]
+  },
+  "pink": {
+   "colour": [
+    0.337,
+    0.216,
+    0.478
+   ],
+   "glow": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  }
+ },
+ "files": {
+  "model_export/tod_fan_props/tod_cybercity_sign2.xmodel_bin": "96a38ab66fe14385f22a44e1c068bf0d29b2d51002be3bbbd6b6b102c81a758a",
+  "source_data/tod_sign_relief.gdt": "b0fee7f4c76e9e29486ee3aaa27b40425ab6696d2007bf833a6e5e053c669e44",
+  "model_export/tod_fan_props/_images/i_tod_csign2_c.png": "67cd7fbe5fb19ac72e07637423962c395f8ca5093700d0952e02fc87c4fdfd20",
+  "model_export/tod_fan_props/_images/i_tod_csign2_s.png": "dc29432eb3de001c97de4b2ea0d7dd03504dbab988bd048af2bf08144d513e6e",
+  "model_export/tod_fan_props/_images/i_tod_csign2_g.png": "e6e4b5b5ebdba41819f87e7b5163de652f267c543a7d5392b71b59085fe4bc4e",
+  "model_export/tod_fan_props/_images/i_tod_csign2_e.png": "19fcdd059f2aec6ff4ed8f1a8eb43ec4c43123efa7da077de9c7e8b253073248",
+  "model_export/tod_fan_props/_images/i_tod_csign2_coff.png": "46353b0476b0390008720a86f397effdd94c6b60d97902d4966e5163be8177da",
+  "model_export/tod_fan_props/_images/i_tod_csign2_eoff.png": "d4270cb3908ae3f796665c14721e6d14728d75ba314b01b5094ee8988359c537"
+ }
+}

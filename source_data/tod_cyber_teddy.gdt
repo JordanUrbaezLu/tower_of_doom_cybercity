@@ -1,0 +1,59 @@
+{
+	"i_tod_cyber_teddy_c" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_cyber_teddy\\_images\\i_tod_cyber_teddy_c.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed high color"
+		"semantic" "diffuseMap"
+		"coreSemantic" "sRGB3chAlpha"
+		"streamable" "1"
+	}
+	"i_tod_cyber_teddy_e" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_cyber_teddy\\_images\\i_tod_cyber_teddy_e.png"
+		"imageType" "Texture"
+		"type" "image"
+		"compressionMethod" "compressed high color"
+		"semantic" "diffuseMap"
+		"coreSemantic" "sRGB3chAlpha"
+		"streamable" "1"
+	}
+	"mtl_tod_cyber_teddy" ( "material.gdf" )
+	{
+		"surfaceType" "plastic"
+		"template" "material.template"
+		"materialCategory" "Geometry Plus"
+		"materialType" "lit_emissive_plus"
+		"colorMap" "i_tod_cyber_teddy_c"
+		"normalMap" "$identitynormalmap"
+		"colorTint" "1 1 1 1"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"heatmap" "$gray_32_one_channel"
+		"normalHeightScale" "1"
+		"glossRangeMin" "4"
+		"glossRangeMax" "5"
+		"specAmount" "0.2"
+		"reflectionProbeAmount" "0.15"
+		"waterRoughness" "0"
+		"colorMap00" "i_tod_cyber_teddy_e"
+		"colorTint1" "1 1 1 1"
+		"scaleRGB" "4"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+	}
+	"tod_cyber_teddy" ( "xmodel.gdf" )
+	{
+		"filename" "tod_cyber_teddy\\tod_cyber_teddy.xmodel_bin"
+		"type" "rigid"
+		"skinOverride" ""
+		"BulletCollisionLOD" "None"
+		"physicsPreset" ""
+		"scale" "1"
+		"highLodDist" "0"
+		"lodNormalPriority" "1"
+		"lodPositionPriority" "1"
+	}
+}

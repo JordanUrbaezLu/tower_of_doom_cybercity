@@ -1,0 +1,14 @@
+{
+  "type": "Blender render of native source geometry, baked maps and backface culling; not an in-game screenshot",
+  "hashes": {
+    "i_tod_altar_c.png": "9d6458fc895c7c7b2335534b1be8b74b5cac8133c8e28927c66bed0fdf5b42a8",
+    "i_tod_altar_e.png": "091848dd4dca590f39a04564fa8c13be8dfc4547f02b976d4aa4d72a58ee96f9",
+    "i_tod_altar_g.png": "5859502d1b6d28f8f7ddbaac1a753fb1dd290a874cbf7ea58740c95500c2c2e9",
+    "i_tod_altar_n.png": "568136c8879b67cff4531469debd9f3f3fd31b4a64a921967c44940e35236a3d",
+    "i_tod_altar_portal_e.png": "71944597bdc80da22e4bf524e000fc536a45579eb859d16416d4649c898d3fe1",
+    "i_tod_altar_wings_c.png": "3465753854f72eeca56c8a1a1f819b4a67a88004785e9280555766019582a6e5",
+    "i_tod_altar_wings_e.png": "d1b3ffc4948343ae067d4d26a9d45bc42f5e3140fcc91248749aa651e15a1574",
+    "tod_heavenly_altar_lod0.xmodel_bin": "9cf761262e1bc707c0feb6e722a15b7f4fff5621ff89f04c9549fbc6c52b8337"
+  },
+  "lod": 0
+}

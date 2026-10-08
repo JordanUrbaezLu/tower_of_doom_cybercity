@@ -1,0 +1,12 @@
+{
+  "view": "back_detail",
+  "source_binary_and_texture_hashes": {
+    "model_export\\tod_cyber_zombie\\_images\\i_tod_roster_relay_c.png": "a6846e09fd0b5e9541edbd68c9b629591767116b2502ec4a184464a0a51f2d39",
+    "model_export\\tod_cyber_zombie\\_images\\i_tod_roster_relay_e.png": "ffd2e4c061fe9bfe5569de70aaf001305b57665f4fe292c0298c9930361b7944",
+    "model_export\\tod_cyber_zombie\\_images\\i_tod_roster_relay_g.png": "1370338dc8aed9c979d432cc8a74d9985828c5a4467acbfb67f8a213e654546d",
+    "model_export\\tod_cyber_zombie\\_images\\i_tod_roster_relay_n.png": "51689272b366259157694dd9a0d9914443652e7a6cb83d660c00953b12855e17",
+    "model_export\\tod_cyber_zombie\\tod_cyber_relay_body_lod0.xmodel_bin": "f22e0a71a872d534fed20b4cb485f92ab122bbe03a9b8a8b40e247d94087dee5",
+    "model_export\\tod_cyber_zombie\\tod_cyber_bhead2_lod0.xmodel_bin": "9740d6477cb415ae46d10060629321ed204b011ba1099b057299363723666e2c"
+  },
+  "type": "Blender render of native source binaries and baked maps; not an in-game screenshot"
+}

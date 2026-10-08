@@ -20,3 +20,13 @@ local_sync_cache/
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
+
+# generated each publish by tools/patch_notes.js window
+docs/patch_notes_window.md
+
+# Blender's automatic save backups (the .blend beside each one is the master; docs/174 moves
+# these with the transfer bundle, not GitHub) + Python bytecode caches
+*.blend1
+*.blend@
+__pycache__/
+*.pyc

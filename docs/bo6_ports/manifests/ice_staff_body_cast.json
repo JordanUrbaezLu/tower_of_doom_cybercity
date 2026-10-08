@@ -1,0 +1,1155 @@
+{
+  "checked_at": "2026-09-13T01:07:29.264097-04:00",
+  "evidence_scope": "Cast data only; no Blender import or BO3 runtime test",
+  "cast_reader": "C:\\Users\\jorda\\AppData\\Roaming\\Blender Foundation\\Blender\\4.2\\scripts\\addons\\io_scene_cast\\cast.py",
+  "cast_reader_sha256": "d1ff7fcb2a184f208b21be34485d1863834ae33811078a28a2ccf6ff61f2c577",
+  "files": [
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\wpn_t10_wm_ww_zmb_staffs_nocol_LOD0.cast",
+      "sha256": "1ef3b0fe917b1803cec43bf079afe4a1fa17b9b03f6b0ef8e1e78dcab44d9091",
+      "models": [
+        {
+          "name": "wpn_t10_wm_ww_zmb_staffs_nocol_LOD0",
+          "meshes": [
+            {
+              "name": null,
+              "vertices": 7170,
+              "raw_triangles": 8570,
+              "unique_index_triangles": 8570,
+              "duplicate_index_triangles": 0,
+              "uv_layers": 1,
+              "color_layers": 0,
+              "max_weight_influence": 8,
+              "material": "material_5cca21b19874c8d9",
+              "bounds": [
+                [
+                  -85.42764282226562,
+                  -8.165928840637207,
+                  -8.528170585632324
+                ],
+                [
+                  -48.6279411315918,
+                  8.822020530700684,
+                  7.050695419311523
+                ]
+              ]
+            },
+            {
+              "name": null,
+              "vertices": 8719,
+              "raw_triangles": 10266,
+              "unique_index_triangles": 10266,
+              "duplicate_index_triangles": 0,
+              "uv_layers": 1,
+              "color_layers": 0,
+              "max_weight_influence": 8,
+              "material": "material_6394a6b54d0b53ec",
+              "bounds": [
+                [
+                  -31.255538940429688,
+                  -3.433896541595459,
+                  -3.162797451019287
+                ],
+                [
+                  21.893718719482422,
+                  3.073162078857422,
+                  3.4048402309417725
+                ]
+              ]
+            },
+            {
+              "name": null,
+              "vertices": 7561,
+              "raw_triangles": 10800,
+              "unique_index_triangles": 10800,
+              "duplicate_index_triangles": 0,
+              "uv_layers": 1,
+              "color_layers": 0,
+              "max_weight_influence": 8,
+              "material": "material_181e47b523024669",
+              "bounds": [
+                [
+                  44.32160186767578,
+                  -8.458271026611328,
+                  -7.40553617477417
+                ],
+                [
+                  58.543209075927734,
+                  8.458134651184082,
+                  7.405398845672607
+                ]
+              ]
+            },
+            {
+              "name": null,
+              "vertices": 9602,
+              "raw_triangles": 10070,
+              "unique_index_triangles": 10070,
+              "duplicate_index_triangles": 0,
+              "uv_layers": 1,
+              "color_layers": 0,
+              "max_weight_influence": 8,
+              "material": "material_181e47b523024669",
+              "bounds": [
+                [
+                  21.521333694458008,
+                  -8.870949745178223,
+                  -10.18437671661377
+                ],
+                [
+                  54.37749481201172,
+                  8.870813369750977,
+                  10.184231758117676
+                ]
+              ]
+            },
+            {
+              "name": null,
+              "vertices": 815,
+              "raw_triangles": 802,
+              "unique_index_triangles": 802,
+              "duplicate_index_triangles": 0,
+              "uv_layers": 1,
+              "color_layers": 0,
+              "max_weight_influence": 8,
+              "material": "material_5cca21b19874c8d9",
+              "bounds": [
+                [
+                  -95.71379089355469,
+                  -10.960119247436523,
+                  -2.890876054763794
+                ],
+                [
+                  -29.393070220947266,
+                  10.95997428894043,
+                  2.549467086791992
+                ]
+              ]
+            },
+            {
+              "name": null,
+              "vertices": 2411,
+              "raw_triangles": 3226,
+              "unique_index_triangles": 3226,
+              "duplicate_index_triangles": 0,
+              "uv_layers": 1,
+              "color_layers": 0,
+              "max_weight_influence": 8,
+              "material": "material_181e47b523024669",
+              "bounds": [
+                [
+                  25.5047607421875,
+                  -4.421255111694336,
+                  -4.924665927886963
+                ],
+                [
+                  44.80938720703125,
+                  4.486357688903809,
+                  4.4696364402771
+                ]
+              ]
+            },
+            {
+              "name": null,
+              "vertices": 1518,
+              "raw_triangles": 2364,
+              "unique_index_triangles": 2364,
+              "duplicate_index_triangles": 0,
+              "uv_layers": 1,
+              "color_layers": 0,
+              "max_weight_influence": 8,
+              "material": "material_6394a6b54d0b53ec",
+              "bounds": [
+                [
+                  0.5381546020507812,
+                  -8.716075897216797,
+                  -11.180644989013672
+                ],
+                [
+                  43.952919006347656,
+                  8.463205337524414,
+                  0.7732074856758118
+                ]
+              ]
+            },
+            {
+              "name": null,
+              "vertices": 141,
+              "raw_triangles": 168,
+              "unique_index_triangles": 168,
+              "duplicate_index_triangles": 0,
+              "uv_layers": 1,
+              "color_layers": 0,
+              "max_weight_influence": 8,
+              "material": "material_3587ccc715838fe3",
+              "bounds": [
+                [
+                  -0.12999862432479858,
+                  -2.336343288421631,
+                  -2.336343288421631
+                ],
+                [
+                  43.473899841308594,
+                  2.336343288421631,
+                  2.336343288421631
+                ]
+              ]
+            }
+          ],
+          "vertices": 37937,
+          "raw_triangles": 46266,
+          "unique_index_triangles": 46266,
+          "bones": [
+            {
+              "name": "j_gun",
+              "parent": -1
+            },
+            {
+              "name": "tag_sling",
+              "parent": 0
+            },
+            {
+              "name": "j_clamp_1",
+              "parent": 1
+            },
+            {
+              "name": "bone_fa99b3963f008bb0",
+              "parent": 1
+            },
+            {
+              "name": "bone_6789938ca1d0cc52",
+              "parent": 1
+            },
+            {
+              "name": "bone_6782bb8ca1caf19c",
+              "parent": 1
+            },
+            {
+              "name": "bone_f0c948db143821ec",
+              "parent": 1
+            },
+            {
+              "name": "bone_5bc5e979602c46a9",
+              "parent": 1
+            },
+            {
+              "name": "bone_cccb98f0d2cb4fd",
+              "parent": 1
+            },
+            {
+              "name": "bone_cd3c98f0d32eedb",
+              "parent": 1
+            },
+            {
+              "name": "bone_f0c949db1438239f",
+              "parent": 1
+            },
+            {
+              "name": "bone_8f2efb90fd967bda",
+              "parent": 1
+            },
+            {
+              "name": "bone_847dd42c39dd7144",
+              "parent": 1
+            },
+            {
+              "name": "bone_8469f42c39ccfe9a",
+              "parent": 1
+            },
+            {
+              "name": "bone_f0c946db14381e86",
+              "parent": 1
+            },
+            {
+              "name": "bone_bf046fb38a89941b",
+              "parent": 1
+            },
+            {
+              "name": "bone_b43531d7e55049bf",
+              "parent": 1
+            },
+            {
+              "name": "bone_b49b59d7e5a740e9",
+              "parent": 1
+            },
+            {
+              "name": "bone_f0c947db14382039",
+              "parent": 1
+            },
+            {
+              "name": "bone_f5325da00d2c1224",
+              "parent": 1
+            },
+            {
+              "name": "bone_f6ad260920fb6556",
+              "parent": 1
+            },
+            {
+              "name": "bone_f6c10609210bd800",
+              "parent": 1
+            },
+            {
+              "name": "bone_f0c944db14381b20",
+              "parent": 1
+            },
+            {
+              "name": "bone_fbee99c16133765d",
+              "parent": 1
+            },
+            {
+              "name": "bone_77be00e47f398461",
+              "parent": 1
+            },
+            {
+              "name": "bone_77dff8e47f565d2f",
+              "parent": 1
+            },
+            {
+              "name": "bone_68e87003bd71be3b",
+              "parent": 1
+            },
+            {
+              "name": "bone_b823e625651ec279",
+              "parent": 1
+            },
+            {
+              "name": "bone_637e5c3c2fb77486",
+              "parent": 1
+            },
+            {
+              "name": "bone_637e5b3c2fb772d3",
+              "parent": 1
+            },
+            {
+              "name": "bone_68e20f3f36357579",
+              "parent": 1
+            },
+            {
+              "name": "bone_91f53f73e050b5cf",
+              "parent": 1
+            },
+            {
+              "name": "bone_91ee2773e04a6e59",
+              "parent": 1
+            },
+            {
+              "name": "bone_be4bf08950f466ff",
+              "parent": 1
+            },
+            {
+              "name": "bone_be4bf18950f468b2",
+              "parent": 1
+            },
+            {
+              "name": "bone_be4bf28950f46a65",
+              "parent": 1
+            },
+            {
+              "name": "bone_be4beb8950f45e80",
+              "parent": 1
+            },
+            {
+              "name": "bone_be4bec8950f46033",
+              "parent": 1
+            },
+            {
+              "name": "bone_be4bed8950f461e6",
+              "parent": 1
+            },
+            {
+              "name": "bone_549cab933dd446a2",
+              "parent": 1
+            },
+            {
+              "name": "bone_550293933e2ad10c",
+              "parent": 1
+            },
+            {
+              "name": "bone_2b29aff53db1574e",
+              "parent": 1
+            },
+            {
+              "name": "bone_a927afc859251d91",
+              "parent": 1
+            },
+            {
+              "name": "bone_a927acc859251878",
+              "parent": 1
+            },
+            {
+              "name": "bone_a927adc859251a2b",
+              "parent": 1
+            },
+            {
+              "name": "bone_a927b2c8592522aa",
+              "parent": 1
+            },
+            {
+              "name": "bone_a927b3c85925245d",
+              "parent": 1
+            },
+            {
+              "name": "bone_a927b0c859251f44",
+              "parent": 1
+            },
+            {
+              "name": "j_trigger",
+              "parent": 1
+            },
+            {
+              "name": "j_tube",
+              "parent": 1
+            },
+            {
+              "name": "tag_barrel_attach",
+              "parent": 1
+            },
+            {
+              "name": "tag_ik_loc_le",
+              "parent": 1
+            },
+            {
+              "name": "tag_ik_loc_ri",
+              "parent": 1
+            },
+            {
+              "name": "bone_5bf0937161e29111",
+              "parent": 33
+            },
+            {
+              "name": "bone_5bf0907161e28bf8",
+              "parent": 34
+            },
+            {
+              "name": "bone_5bf0917161e28dab",
+              "parent": 35
+            },
+            {
+              "name": "bone_5bf0967161e2962a",
+              "parent": 36
+            },
+            {
+              "name": "bone_5bf0977161e297dd",
+              "parent": 37
+            },
+            {
+              "name": "bone_5bf0947161e292c4",
+              "parent": 38
+            },
+            {
+              "name": "bone_83c3bbab4b6a34ad",
+              "parent": 39
+            },
+            {
+              "name": "bone_835e8bab4b14e2eb",
+              "parent": 40
+            }
+          ],
+          "materials": [
+            {
+              "name": "material_5cca21b19874c8d9",
+              "slots": {
+                "extra0": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$black.png",
+                  "exists": true
+                },
+                "extra1": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$black.png",
+                  "exists": true
+                },
+                "extra2": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/wpn_default_thermal.png",
+                  "exists": true
+                },
+                "extra3": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra4": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$black.png",
+                  "exists": true
+                },
+                "extra5": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$black.png",
+                  "exists": true
+                },
+                "extra6": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$black.png",
+                  "exists": true
+                },
+                "extra7": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$black.png",
+                  "exists": true
+                },
+                "extra8": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$black.png",
+                  "exists": true
+                },
+                "albedo": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/image_77e42e0587286e58.png",
+                  "exists": true
+                },
+                "extra9": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/image_1dd4b502684b6e69.png",
+                  "exists": true
+                },
+                "extra10": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$black.png",
+                  "exists": true
+                },
+                "extra11": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra12": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$black.png",
+                  "exists": true
+                },
+                "extra13": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra14": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra15": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra16": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra17": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra18": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra19": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$identitypackednog.png",
+                  "exists": true
+                },
+                "extra20": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$black.png",
+                  "exists": true
+                },
+                "extra21": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra22": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$black.png",
+                  "exists": true
+                },
+                "extra23": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra24": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra25": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra26": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra27": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra28": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra29": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$identitypackednog.png",
+                  "exists": true
+                },
+                "extra30": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$black.png",
+                  "exists": true
+                },
+                "extra31": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra32": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$black.png",
+                  "exists": true
+                },
+                "extra33": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra34": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra35": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra36": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                },
+                "extra37": {
+                  "node_type": "File",
+                  "path": "_images/material_5cca21b19874c8d9/$white.png",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "name": "material_6394a6b54d0b53ec",
+              "slots": {
+                "extra0": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$black.png",
+                  "exists": true
+                },
+                "extra1": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$black.png",
+                  "exists": true
+                },
+                "extra2": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/wpn_default_thermal.png",
+                  "exists": true
+                },
+                "extra3": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$white.png",
+                  "exists": true
+                },
+                "extra4": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$black.png",
+                  "exists": true
+                },
+                "extra5": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$black.png",
+                  "exists": true
+                },
+                "extra6": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$black.png",
+                  "exists": true
+                },
+                "extra7": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$black.png",
+                  "exists": true
+                },
+                "extra8": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$black.png",
+                  "exists": true
+                },
+                "albedo": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/image_44643873cf00b5ce.png",
+                  "exists": true
+                },
+                "extra9": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/image_1e9ffce5b9366288.png",
+                  "exists": true
+                },
+                "extra10": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/image_6fc6b04c1f625cd5.png",
+                  "exists": true
+                },
+                "extra11": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$white.png",
+                  "exists": true
+                },
+                "extra12": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$black.png",
+                  "exists": true
+                },
+                "extra13": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$white.png",
+                  "exists": true
+                },
+                "extra14": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$white.png",
+                  "exists": true
+                },
+                "extra15": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$white.png",
+                  "exists": true
+                },
+                "extra16": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$white.png",
+                  "exists": true
+                },
+                "extra17": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$white.png",
+                  "exists": true
+                },
+                "extra18": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/image_169ce6917b0bc467.png",
+                  "exists": true
+                },
+                "extra19": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/image_1e9ffce5b9366288.png",
+                  "exists": true
+                },
+                "extra20": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$black.png",
+                  "exists": true
+                },
+                "extra21": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$white.png",
+                  "exists": true
+                },
+                "extra22": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$black.png",
+                  "exists": true
+                },
+                "extra23": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$white.png",
+                  "exists": true
+                },
+                "extra24": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/image_b85577ab17f7517.png",
+                  "exists": true
+                },
+                "extra25": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/image_3cba774b87adc19f.png",
+                  "exists": true
+                },
+                "extra26": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$white.png",
+                  "exists": true
+                },
+                "extra27": {
+                  "node_type": "File",
+                  "path": "_images/material_6394a6b54d0b53ec/$white.png",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "name": "material_181e47b523024669",
+              "slots": {
+                "extra0": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$black.png",
+                  "exists": true
+                },
+                "extra1": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$black.png",
+                  "exists": true
+                },
+                "extra2": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/wpn_default_thermal.png",
+                  "exists": true
+                },
+                "extra3": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$white.png",
+                  "exists": true
+                },
+                "extra4": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$black.png",
+                  "exists": true
+                },
+                "extra5": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$black.png",
+                  "exists": true
+                },
+                "extra6": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$black.png",
+                  "exists": true
+                },
+                "extra7": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$black.png",
+                  "exists": true
+                },
+                "extra8": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$black.png",
+                  "exists": true
+                },
+                "albedo": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/image_30755846ee5e7b42.png",
+                  "exists": true
+                },
+                "extra9": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/image_39362eec09515abb.png",
+                  "exists": true
+                },
+                "extra10": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/image_59b087e33e884470.png",
+                  "exists": true
+                },
+                "extra11": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$white.png",
+                  "exists": true
+                },
+                "extra12": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$black.png",
+                  "exists": true
+                },
+                "extra13": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$white.png",
+                  "exists": true
+                },
+                "extra14": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$white.png",
+                  "exists": true
+                },
+                "extra15": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$white.png",
+                  "exists": true
+                },
+                "extra16": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$white.png",
+                  "exists": true
+                },
+                "extra17": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$white.png",
+                  "exists": true
+                },
+                "extra18": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/image_26ba2be56ea07a1f.png",
+                  "exists": true
+                },
+                "extra19": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/image_39362eec09515abb.png",
+                  "exists": true
+                },
+                "extra20": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$black.png",
+                  "exists": true
+                },
+                "extra21": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$white.png",
+                  "exists": true
+                },
+                "extra22": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$black.png",
+                  "exists": true
+                },
+                "extra23": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$white.png",
+                  "exists": true
+                },
+                "extra24": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/image_175f57a2b150d7d5.png",
+                  "exists": true
+                },
+                "extra25": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/image_142fd2917289296f.png",
+                  "exists": true
+                },
+                "extra26": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$white.png",
+                  "exists": true
+                },
+                "extra27": {
+                  "node_type": "File",
+                  "path": "_images/material_181e47b523024669/$white.png",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "name": "material_3587ccc715838fe3",
+              "slots": {
+                "extra0": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$black.png",
+                  "exists": true
+                },
+                "extra1": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$black.png",
+                  "exists": true
+                },
+                "extra2": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/wpn_default_thermal.png",
+                  "exists": true
+                },
+                "extra3": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra4": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$black.png",
+                  "exists": true
+                },
+                "extra5": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$black.png",
+                  "exists": true
+                },
+                "extra6": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$black.png",
+                  "exists": true
+                },
+                "extra7": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$black.png",
+                  "exists": true
+                },
+                "extra8": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$black.png",
+                  "exists": true
+                },
+                "albedo": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/image_2da4497c9aeca00b.png",
+                  "exists": true
+                },
+                "extra9": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/image_3f6c9e8374e6c096.png",
+                  "exists": true
+                },
+                "extra10": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$black.png",
+                  "exists": true
+                },
+                "extra11": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra12": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$black.png",
+                  "exists": true
+                },
+                "extra13": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra14": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/image_78a075220f11d1b9.png",
+                  "exists": true
+                },
+                "extra15": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra16": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra17": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra18": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra19": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$identitypackednog.png",
+                  "exists": true
+                },
+                "extra20": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$black.png",
+                  "exists": true
+                },
+                "extra21": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra22": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$black.png",
+                  "exists": true
+                },
+                "extra23": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra24": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra25": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra26": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra27": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra28": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra29": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$identitypackednog.png",
+                  "exists": true
+                },
+                "extra30": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$black.png",
+                  "exists": true
+                },
+                "extra31": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra32": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$black.png",
+                  "exists": true
+                },
+                "extra33": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra34": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra35": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra36": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                },
+                "extra37": {
+                  "node_type": "File",
+                  "path": "_images/material_3587ccc715838fe3/$white.png",
+                  "exists": true
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "animations": []
+    }
+  ]
+}

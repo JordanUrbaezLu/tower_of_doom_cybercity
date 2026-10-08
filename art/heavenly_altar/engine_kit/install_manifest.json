@@ -1,0 +1,121 @@
+{
+  "asset": "tod_heavenly_altar",
+  "master_sha256": "a9883c5d26038cfbdee82a0fed2b7deed6db58988ffb6b84f598a677aee4155e",
+  "gdt_sha256": "2f8eb0295e0410d4cccf81f4ed3b26eabf49ceac3d3e3a3b0f374a35cc900596",
+  "models": [
+    {
+      "lod": 0,
+      "file": "model_export\\tod_heavenly_altar\\tod_heavenly_altar_lod0.xmodel_bin",
+      "sha256": "30f01d2ca84e678baae618494da5c9a4acefd733bbc2bc5ba2a90f4ee191e95d",
+      "triangles": 83220,
+      "groups": {
+        "solid": 81900,
+        "portal": 32,
+        "wings": 1288
+      },
+      "meshes": 7,
+      "vertices": 91678
+    },
+    {
+      "lod": 1,
+      "file": "model_export\\tod_heavenly_altar\\tod_heavenly_altar_lod1.xmodel_bin",
+      "sha256": "477f759866d24b0ffc0ab5a7da150e68c9466bc71cccf19c6002fff3b0d7398c",
+      "triangles": 51342,
+      "groups": {
+        "solid": 50610,
+        "portal": 32,
+        "wings": 700
+      },
+      "meshes": 5,
+      "vertices": 30654
+    },
+    {
+      "lod": 2,
+      "file": "model_export\\tod_heavenly_altar\\tod_heavenly_altar_lod2.xmodel_bin",
+      "sha256": "e612600588611a8598c9a69f006979b9a48911ea103e4c61b8d248d538d8b1f0",
+      "triangles": 35454,
+      "groups": {
+        "solid": 34750,
+        "portal": 32,
+        "wings": 672
+      },
+      "meshes": 4,
+      "vertices": 21210
+    },
+    {
+      "lod": 3,
+      "file": "model_export\\tod_heavenly_altar\\tod_heavenly_altar_lod3.xmodel_bin",
+      "sha256": "8bc873a599569091014e993bf72321b7d8944aa54c134570bd6680430331dd42",
+      "triangles": 26637,
+      "groups": {
+        "solid": 25933,
+        "portal": 32,
+        "wings": 672
+      },
+      "meshes": 4,
+      "vertices": 15995
+    },
+    {
+      "lod": 4,
+      "file": "model_export\\tod_heavenly_altar\\tod_heavenly_altar_lod4.xmodel_bin",
+      "sha256": "8abb2ce153f80e17c4b371c4bc4931d71680078dab58a7599f7b23a3647bda4b",
+      "triangles": 21776,
+      "groups": {
+        "solid": 21072,
+        "portal": 32,
+        "wings": 672
+      },
+      "meshes": 4,
+      "vertices": 13046
+    },
+    {
+      "lod": 5,
+      "file": "model_export\\tod_heavenly_altar\\tod_heavenly_altar_lod5.xmodel_bin",
+      "sha256": "45e7ed75c1063213b434fbef292af1180247580cd9d7caa0aad87cd35e104788",
+      "triangles": 18109,
+      "groups": {
+        "solid": 17405,
+        "portal": 32,
+        "wings": 672
+      },
+      "meshes": 3,
+      "vertices": 10807
+    },
+    {
+      "lod": 6,
+      "file": "model_export\\tod_heavenly_altar\\tod_heavenly_altar_lod6.xmodel_bin",
+      "sha256": "0b88e524774c18ba8ca638213c2649c11fa331166eb7943aea8a44eab06db2a0",
+      "triangles": 15447,
+      "groups": {
+        "solid": 14743,
+        "portal": 32,
+        "wings": 672
+      },
+      "meshes": 3,
+      "vertices": 9216
+    }
+  ],
+  "textures": {
+    "i_tod_altar_c.png": "9d6458fc895c7c7b2335534b1be8b74b5cac8133c8e28927c66bed0fdf5b42a8",
+    "i_tod_altar_e.png": "091848dd4dca590f39a04564fa8c13be8dfc4547f02b976d4aa4d72a58ee96f9",
+    "i_tod_altar_g.png": "5859502d1b6d28f8f7ddbaac1a753fb1dd290a874cbf7ea58740c95500c2c2e9",
+    "i_tod_altar_n.png": "568136c8879b67cff4531469debd9f3f3fd31b4a64a921967c44940e35236a3d",
+    "i_tod_altar_s.png": "8ab1895f3f5379429b3b9ac8d31e372fd1df136ed046c2f75de1b4b305a719b7",
+    "i_tod_altar_wings_c.png": "7fbfb645da8ae885d945e081fdc8af1a19839c9a43515262c7f0873b5bfe19ef",
+    "i_tod_altar_wings_e.png": "6fbdfa4d6bd2faa96818864380e8e5c2f43fe8d5ade313439fa174b6a02cc179"
+  },
+  "materials": [
+    "mtl_tod_altar",
+    "chaos_pap_background",
+    "mtl_tod_altar_wings"
+  ],
+  "source_geometry_unchanged": true,
+  "placements": 6,
+  "native_playtested": false,
+  "original_portal_source_sha256": "c738e6cb1ce082f4b9a7d64a50af9f2519522650ce1da2e7646434e12ed22c8f",
+  "external_images": [
+    "i_chaos_pap_background_c",
+    "i_chaos_pap_background_2_c",
+    "i_chaos_pap_background_3_c"
+  ]
+}

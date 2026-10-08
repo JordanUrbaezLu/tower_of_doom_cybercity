@@ -2,6 +2,19 @@
 
 CoD.PromptBBG = InheritFrom( LUI.UIElement )
 
+-- [tod 2026-09-02, KBM audit] One footer line carrying the engine's bind
+-- token, so the key is the player's real bound key or pad glyph (the kit
+-- hardcoded "F"). This card is UNREACHABLE on this map (no GobbleGum;
+-- classifyHint has no BBG arm) and is patched only so no literal key name
+-- survives anywhere in Prompts/. Full note in PromptDefault.lua.
+local HOLD_KEY = "Hold ^3[{+activate}]^7 "
+function CoD.PromptBBG.SetFooter( self, verb )
+	if not self.footerLine then
+		return
+	end
+	self.footerLine:setText( Engine.Localize( HOLD_KEY .. ( verb or "" ) ) )
+end
+
 function CoD.PromptBBG.new( menu, controller )
     local self = LUI.UIElement.new()
     
@@ -99,21 +112,14 @@ function CoD.PromptBBG.new( menu, controller )
 	self.bbgCost:setAlignment(Enum.LUIAlignment.LUI_ALIGNMENT_LEFT)
 	self:addElement(self.bbgCost)
 	
-	-- footer_text_1
-	self.footerText = LUI.UIText.new()
-	self.footerText:setLeftRight(true, false, 620, 640)
-	self.footerText:setTopBottom(true, false, 507, 514)
-	self.footerText:setText("Hold ")
-	self.footerText:setTTF("fonts/ltromatic.ttf")
-	self.footerText:setRGB(1, 1, 1)
-	self.footerText:setAlignment(Enum.LUIAlignment.LUI_ALIGNMENT_LEFT)
-	self:addElement(self.footerText)
+	-- (the kit's separate "Hold " element is gone -- the footer line below
+	-- carries the whole "Hold <key> <verb>" line; see SetFooter)
 	
 	-- ui_icons_zombie_essence (points icon)
 	self.pointsIcon = LUI.UIImage.new()
 	self.pointsIcon:setLeftRight(true, false, 727, 742)
 	self.pointsIcon:setTopBottom(true, false, 503, 515)
-	self.pointsIcon:setImage(RegisterImage("i_mtl_ui_icons_zombie_essence"))
+	self.pointsIcon:setImage(RegisterImage("i_tod_hud_points_icon"))
 	self.pointsIcon:setRGB(1, 1, 1)
 	self:addElement(self.pointsIcon)
 	
@@ -126,24 +132,20 @@ function CoD.PromptBBG.new( menu, controller )
 	self:addElement(self.bbgIcon)
 	
 	-- interact_text_button
-	self.interactButton = LUI.UIText.new()
-	self.interactButton:setLeftRight(true, false, 643, 650)
-	self.interactButton:setTopBottom(true, false, 507, 514)
-	self.interactButton:setText("F")
-	self.interactButton:setTTF("fonts/ltromatic.ttf")
-	self.interactButton:setRGB(0.792156862745098, 0.7803921568627451, 0.3803921568627451)
-	self.interactButton:setAlignment(Enum.LUIAlignment.LUI_ALIGNMENT_LEFT)
-	self:addElement(self.interactButton)
+	-- Footer: "Hold <key> To Dispense" -- one line, key resolved by the engine
+	-- (SetFooter above; re-set on every SetMode)
+	self.footerLine = LUI.UIText.new()
+	self.footerLine:setLeftRight(true, false, 620, 724)
+	self.footerLine:setTopBottom(true, false, 507, 515)
+	self.footerLine:setTTF("fonts/ltromatic.ttf")
+	self.footerLine:setRGB(1, 1, 1)
+	self.footerLine:setAlignment(Enum.LUIAlignment.LUI_ALIGNMENT_LEFT)
+	self:addElement(self.footerLine)
+	CoD.PromptBBG.SetFooter(self, "To Dispense")
 	
 	-- footer_text_2
-	self.footerText2 = LUI.UIText.new()
-	self.footerText2:setLeftRight(true, false, 650, 704)
-	self.footerText2:setTopBottom(true, false, 507, 515)
-	self.footerText2:setText("To Dispense")
-	self.footerText2:setTTF("fonts/ltromatic.ttf")
-	self.footerText2:setRGB(1, 1, 1)
-	self.footerText2:setAlignment(Enum.LUIAlignment.LUI_ALIGNMENT_LEFT)
-	self:addElement(self.footerText2)
+	-- (the kit's separate "F" and "To Dispense" elements are gone -- the
+	-- footer line above carries both; see SetFooter)
 	
 	-- Start hidden
 	self:setAlpha(0)
@@ -152,6 +154,10 @@ function CoD.PromptBBG.new( menu, controller )
         PostLoadFunc( self, controller, menu )
     end
     
+    -- [tod 2026-09-22, bug review F23] this card is never routed to (classifyHint
+    -- has no arm for it) but is still built per HUD life; its children were
+    -- left open on close. Attach the shared owner so they close with it.
+    if CoD.TodUIOwnership then CoD.TodUIOwnership.Attach( self ) end
     return self
 end
 
@@ -176,8 +182,8 @@ function CoD.PromptBBG.SetMode( self, mode, ggData )
 		end
 		
 		-- Update footer text to "To Retrieve"
-		if self.footerText2 then
-			self.footerText2:setText( "To Retrieve" )
+		if self.footerLine then
+			CoD.PromptBBG.SetFooter( self, "To Retrieve" )
 		end
 		
 		-- Update icon to specific gobblegum
@@ -210,8 +216,8 @@ function CoD.PromptBBG.SetMode( self, mode, ggData )
 		end
 		
 		-- Reset footer text to "To Dispense"
-		if self.footerText2 then
-			self.footerText2:setText( "To Dispense" )
+		if self.footerLine then
+			CoD.PromptBBG.SetFooter( self, "To Dispense" )
 		end
 		
 		-- Reset icon to default machine icon

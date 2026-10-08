@@ -21,10 +21,12 @@
 // Client half: _tod_powerups.csc (include + add for tod_free_pap).
 // =============================================================================
 
+#using scripts\shared\clientfield_shared;   // v13.6b: the ALXS idle-FX clientfield on the breather vendors
 #using scripts\shared\flag_shared;   // power_on gate on the free-PaP drop
 #using scripts\shared\laststand_shared;
 #using scripts\shared\system_shared;
 #using scripts\shared\util_shared;
+#using scripts\shared\visionset_mgr_shared;   // v19.65: Zombie Blood's screen filter (see TOD_BLOOD_VSMGR)
 
 #using scripts\zm\_zm;
 #using scripts\zm\_zm_perks;      // give_random_perk — the bottle grants a PERK
@@ -32,6 +34,8 @@
 #using scripts\zm\_zm_score;      // breather Pack-a-Punch charges points
 #using scripts\zm\_zm_utility;
 #using scripts\zm\_zm_weapons;   // can_upgrade_weapon / get_upgrade_weapon (vendor stock lane)
+#using scripts\zm\zm_cwpap;   // v13.12 — register_pap_machine: the vendors run the pack's own flow
+#using scripts\zm\zm_tower_of_doom\_tod_breather_data;   // GENERATED — lounge PaP anchors (v13)
 #using scripts\zm\zm_tower_of_doom\_tod_classes;   // is_class_primary (vendor: which lane)
 #using scripts\zm\_zm_weapons;
 #using scripts\zm\zm_tower_of_doom\_tod_upgrade_ui;   // push_dmg_num (crosshair numbers)
@@ -41,7 +45,11 @@
 #insert scripts\zm\_zm_powerups.gsh;
 
 #precache( "string", "" );
-#precache( "model", "p7_zm_vending_packapunch_on" );   // breather Pack-a-Punch vendor mesh
+#precache( "model", "p9_fxanim_zm_gp_pap_xmodel_off" );   // breather PaP vendor mesh, unpowered (ALXS pack, v13.6)
+#precache( "model", "p9_fxanim_zm_gp_pap_xmodel" );       // its powered/animated twin (swapped at the flip)
+// (v13.6b/c's anim grafts lived here between builds — RETIRED v13.12; the
+// animtree, xanims and every show now run inside zm_cwpap itself, one code
+// path for all five machines. See the tombstone below.)
 
 // Gift of Death (Xmas Gun) grants on the Death Machine drop with FIXED
 // shots-to-kill, round-independent: damage = health / shots, per archetype.
@@ -57,6 +65,37 @@
 // 24 -> 45 on 2026-08-25, so a window in which nothing dies fills a much bigger
 // board than the 30 was originally tuned against.
 #define TOD_BLOOD_SECS     15
+
+// ZOMBIE BLOOD'S SCREEN FILTER (v19.65, 2026-09-30; user: "zombie blood gives you
+// no indicator or visual indicator that you're still in it ... I want it to run out
+// when zombie blood runs out"). Treyarch's OWN Zombie Blood filter: material
+// generic_filter_zombie_blood on the `zombie_blood` techset, both RETAIL zm_common
+// assets (tools zone_source/all/assetlist/zm_common.csv) that every zombies map,
+// usermaps included, loads - so no zone line, and none is possible (no tools GDT
+// defines it). What stays absent is Origins' separate vision grade: it lived in
+// the Origins map files, and the only zm_common vision of that lineage is In
+// Plain Sight's, which the user declined.
+// THE AUGUST BUG IS WHY THIS WAS MISSING (the note in zombie_blood_window): an
+// activate() on a name nobody REGISTERED killed the window thread. This name IS
+// registered, in both halves' first-frame REGISTER_SYSTEM __init__, the stock
+// _zm_playerhealth pattern. LOCKSTEP _tod_powerups.csc: name, VERSION_SHIP and
+// lerp steps.
+// THE CLOCK IS THE WINDOW'S OWN COUNTDOWN: the filter holds while more than
+// TOD_BLOOD_FX_OUT seconds remain (zombie_blood_fx_hold) and its fade reaches zero
+// on the frame the window expires; a re-grab keeps it up with no dip; a down cuts
+// it with the rest of the state (zombie_blood_clear).
+#define TOD_BLOOD_VSMGR      "tod_zombie_blood"   // OUR overlay name, all lower case (visionset_mgr lower-cases)
+#define TOD_BLOOD_VS_PRIO    110                  // unique among overlays (stock ZM: 21/22/27/60/61), above the damage blur
+#define TOD_BLOOD_VS_LERP    16                   // fade steps on the wire
+#define TOD_BLOOD_FX_IN      0.5                  // s: the filter rises at the grab
+#define TOD_BLOOD_FX_OUT     1.0                  // s: the fade that ENDS as the window does
+#define TOD_BLOOD_FX_REV     "zb_filter_1"        // [TOD_BLOOD] FX_* log marker
+
+// DEV ONLY - the Zombie Blood shelf (dev_blood_shelf; level.tod_dev + level.tod_dev_blood_shelf).
+#define TOD_DEV_SHELF_DIST     150    // units in front of the host
+#define TOD_DEV_SHELF_REFILL   10     // s before a taken drop is put back
+#define TOD_DEV_SHELF_CLEAR    110    // keep clear of other players: the dev Mage preview bot stands 128 ahead
+#define TOD_DEV_SHELF_BOT_WAIT 12     // s to let that bot land first, so the clearance check can see it
 
 // DROP RATES (user 2026-08-24: "We need to reduce the rate of pap drops cause
 // they drop very often. I would say lets half the rate it currently is. And we
@@ -81,7 +120,24 @@
 // The DEATH MACHINE is deliberately untouched at 50: only PaP was named.
 #define TOD_PAP_DROP_PCT      25   // free-PaP drop: a quarter of its former share
 #define TOD_MINIGUN_DROP_PCT  50   // Death Machine (= the Gift of Death here): same
-#define XMAS_ZOMBIE_SHOTS  2     // normal zombie (bosses handled in _tod_bosses)
+#define XMAS_ZOMBIE_SHOTS  2     // normal zombie (Panzer/Protector handled in _tod_bosses)
+// v14.8 (user 2026-08-30: "buff the death machine by 30% for bosses and
+// elites") — the buff multiplier PLUS the two elite lanes that never existed:
+// the Reaver and the hellhound postdate the original 2/10/30 design, and the
+// blanket boss-skip in xmas_fixed_shots_cb meant the Gift of Death did only
+// its RAW GDT weapon damage against them — negligible against 11-43k HP, so
+// "the DM works on elites" was quietly false for half the roster. Their
+// fixed-shot lanes live HERE (first in the level damage chain) because,
+// unlike the Panzer (mechz wrap) and the Protector (its own aiOverrideDamage
+// feed), NOTHING dispatches after this chain to rescale their damage —
+// _tod_upgrades' GIANT SLAYER comment documents the same fact for the Reaver.
+// LOCKSTEP: XMAS_ELITE_BUFF == TOD_XMAS_ELITE_BUFF in _tod_bosses.gsc.
+// v19.63 (user 2026-09-30: "The Gift of Death needs a slight buff on elites.
+// 20%"): 1.3 -> 1.56 (x1.2). Reaver / hound here, Panzer / Protector in
+// _tod_bosses.gsc; the Warden King keeps his own divisor, unbuffed.
+#define XMAS_ELITE_BUFF    1.56
+#define XMAS_REAVER_SHOTS  6     // pre-buff baseline — same HP class as the Protector (~43k @ r30 solo)
+#define XMAS_HOUND_SHOTS   3     // pre-buff baseline — ~1/4 a Protector's HP, and they arrive in packs
 #define TOD_BREATHER_PAP_COST  5000   // stock PaP price
 
 #namespace tod_powerups;
@@ -90,6 +146,12 @@ REGISTER_SYSTEM( "tod_powerups", &__init__, undefined )
 
 function __init__()
 {
+	// Zombie Blood's screen filter: registration MUST be this first frame
+	// (register_info asserts level.vsmgr_initializing). Per player, ramped by
+	// stock's ramp_in_out thread, whose hold is zombie_blood_fx_hold.
+	visionset_mgr::register_info( "overlay", TOD_BLOOD_VSMGR, VERSION_SHIP, TOD_BLOOD_VS_PRIO, TOD_BLOOD_VS_LERP, true, &visionset_mgr::ramp_in_out_thread_per_player, false );
+	level thread dev_blood_shelf();   // dev only: reads its flags after the black screen
+
 	// FREE PACK-A-PUNCH (instant). register_powerup auto-includes the name
 	// server-side; ORDER: every level.zombie_powerups[name].* setter (e.g.
 	// can_pick_up_in_last_stand) MUST come AFTER add_zombie_powerup — the
@@ -101,7 +163,8 @@ function __init__()
 	// on solo. (A PaP-machine-look drop needs a pivot-centered custom mesh —
 	// revisit later.)
 	zm_powerups::register_powerup( "tod_free_pap", &grab_free_pap );
-	zm_powerups::powerup_set_prevent_pick_up_if_drinking( "tod_free_pap", true );
+	// v19.53: NOT flagged prevent_pick_up_if_drinking any more - see
+	// drinking_besides_powerup_gun(); grab_free_pap does the check itself.
 	// POWER GATE (user 2026-08-21: "those drops should only start dropping
 	// once power is on"). should_drop_free_pap replaces the stock always-drop.
 	zm_powerups::add_zombie_powerup( "tod_free_pap", "zombie_pickup_perk_bottle", &"", &should_drop_free_pap, POWERUP_ONLY_AFFECTS_GRABBER, !POWERUP_ANY_TEAM, !POWERUP_ZOMBIE_GRABBABLE );
@@ -162,7 +225,8 @@ function __init__()
 	// :163 now excludes bosses and non-zombies, and the loop re-asserts at 4 Hz
 	// (wait 0.25, :204) instead of per frame. Verified still live 2026-08-25.
 	//
-	// THE ONE REAL CAVEAT: level.zombie_ai_limit went 24 -> 45 today, so 30s in
+	// THE ONE REAL CAVEAT: level.zombie_ai_limit went 24 -> 45 that day (and is
+	// 30-45 by party size since v18.11, still 45 on rampage), so 30s in
 	// which nothing dies fills a bigger board than it used to. That is a BALANCE
 	// question for play, not the performance problem this was blamed for.
 	// Shorten the window if it feels bad; do not shorten it "for frame time".
@@ -178,12 +242,38 @@ function __init__()
 	// The clientfield name MUST match the .csc add AND the tray row in
 	// AetheriumPowerupsContainer.lua ("tod_zombie_blood" in all three).
 	zm_powerups::register_powerup( "tod_zombie_blood", &grab_zombie_blood );
-	zm_powerups::powerup_set_prevent_pick_up_if_drinking( "tod_zombie_blood", true );
+	// v19.53: NOT flagged prevent_pick_up_if_drinking - see
+	// drinking_besides_powerup_gun(); grab_zombie_blood does the check itself.
 	zm_powerups::add_zombie_powerup( "tod_zombie_blood", "zombie_blood", &"", &zm_powerups::func_should_always_drop, POWERUP_ONLY_AFFECTS_GRABBER, !POWERUP_ANY_TEAM, !POWERUP_ZOMBIE_GRABBABLE, undefined, "tod_zombie_blood", "zombie_powerup_zombie_blood_time", "zombie_powerup_zombie_blood_on" );
 	zm_powerups::powerup_set_can_pick_up_in_last_stand( "tod_zombie_blood", 0 );
 
+	// v17.99 — EVERY CUSTOM POWERUP THREW ON PICKUP (Workshop, Troy Terry
+	// 2026-09-05: "weird error messages when i pick up power ups"). Stock's grab
+	// (_zm_powerups.gsc:1104) runs zm_stats::increment_client_stat( name +
+	// "_pickedup" ) -> globallogic_score::incPersStat -> `self.pers[ stat ] += 1`,
+	// and only STOCK names are initPersStat'd (_zm_stats::player_stats_init:
+	// nuke/insta_kill/full_ammo/...). For ours the pers slot is undefined, so the
+	// add throws `pair 'undefined' and '1'` — the exact stack console_mp.log
+	// carried 11 times (_globallogic_score <- _zm_stats <- _zm_stats <-
+	// _zm_powerups). Our effect had already run (the _custom_powerups grab
+	// callback is earlier in that function), but everything AFTER the throw in
+	// stock's grab thread was skipped: the grab FX, the intro VO, and
+	// powerup_delete_delayed + the "powerup_grabbed" notify (UNVERIFIED in game
+	// whether the orb visibly lingered — the timeout thread still owns it).
+	// Stock's own answer is the statless table (_zm_powerups::should_award_stat
+	// reads level.zombie_statless_powerups): the whole stats block is skipped, so
+	// no pers slot and no engine IncrementPlayerStat with a name the stats DDL
+	// does not know. Keyed by NAME, so it does not care whether the vendored
+	// modules (infiniteammo / timewarp) registered before or after this line.
+	zm_powerups::powerup_set_statless_powerup( "tod_pap" );
+	zm_powerups::powerup_set_statless_powerup( "tod_free_pap" );
+	zm_powerups::powerup_set_statless_powerup( "tod_zombie_blood" );
+	zm_powerups::powerup_set_statless_powerup( "infiniteammo" );   // scripts/zm/logical/powerups/_zm_powerup_infiniteammo.gsc
+	zm_powerups::powerup_set_statless_powerup( "timewarp" );       // scripts/zm/logical/powerups/_zm_powerup_timewarp.gsc
+
 	// BREATHER PACK-A-PUNCH vendors (see below) — one per rest balcony.
 	level thread breather_pap_spawn();
+	level thread crown_pap_clips();   // v13.9 — the ALXS prefab ships no collision
 	level thread pap_power_hint();   // "REQUIRES POWER" copy while the switch is off
 }
 
@@ -191,11 +281,32 @@ function __init__()
 // BREATHER PACK-A-PUNCH (user 2026-08-22) — a standalone vendor per balcony
 // ---------------------------------------------------------------------------
 // WHY IT EXISTS: the CLASS TIER card requires the class gun Pack-a-Punched
-// (tier_card_eligible), but the map's only PaP machine sits in the CROWN,
-// above all 50 laps — unreachable during the climb where the gun is actually
-// maxed. So the promotion could never fire (user: "I maxed out my Enfield and
-// was never able to upgrade my class"). One machine per breather (floors
-// 10/20/30/40) makes PaP reachable, which makes the tier ladder reachable.
+// (tier_card_eligible), but when this was written the map's only PaP machine
+// sat in the CROWN, above all 50 laps — unreachable during the climb where
+// the gun is actually maxed. So the promotion could never fire (user: "I
+// maxed out my Enfield and was never able to upgrade my class"). One machine
+// per breather (floors 10/20/30/40) makes PaP reachable, which makes the
+// tier ladder reachable.
+//
+// v14.35: the promotion now ALSO requires floor 10 (T2) / floor 30 (T3; 20 until 2026-09-02) —
+// _tod_upgrades::tier_floor_ok. That is the same shape as this vendor
+// placement, deliberately: the first two breathers are both the first two PaP
+// machines and the two gate floors, so the normal climbing route is unchanged.
+// What it closes is the FREE-PAP POWERUP, which sets tod_pap_owned wherever it
+// drops and could hand a base-camped player a promotion with no doors bought.
+//
+// 2026-08-28 CORRECTION (same night, second pass): the crown PaP DOES still
+// exist. An earlier claim that it was removed — briefly recorded here — came
+// from grepping map_source for zm_pack_a_punch/packapunch, and the stock
+// prefab matches NEITHER string: it is `vending_weapon_upgrade_spawnable.map`
+// (gen_tower_map.js:4109, .map entity at (-480, 7913, 19392), hall west of
+// the gate). VERIFY PaP-EXISTENCE AGAINST THE GENERATOR'S EMISSION, never by
+// string-matching the output. So the hall holds TWO machines: the REAL
+// Pack-a-Punch (west of the gate) and the personal UPGRADE STATION on the
+// west wall wearing the chaos_pack_a_punch mesh (_tod_upgrades) — which is
+// why "what does that pap do?" is such an easy question to ask up there.
+// These four breather vendors exist because the crown machine is unreachable
+// during the climb, exactly as the paragraph above says.
 //
 // WHY SCRIPT-SPAWNED AND NOT THE STOCK PREFAB — HARD-WON, DO NOT "SIMPLIFY":
 // a SECOND stock `zm_pack_a_punch` zbarrier FATALS THE MAP LOAD. Stock
@@ -224,38 +335,119 @@ function breather_pap_spawn()
 		wait 0.05;
 	level flag::wait_till( "initial_blackscreen_passed" );
 
-	// Breather laps are 10/20/30/40 — all EVEN, so every balcony is the
-	// mirrored (SW) one: floor x[-800,-256], y[-992,-416] (gen_tower_map.js,
-	// v9.37 expansion). Already occupied: the two PERK pads on the south wall
-	// (y -959, x -360 / -536), the UPGRADE STATION on the west wall (model
-	// -760,-600; trigger -704,-600, radius 64) and the TELEPORTER pad in the
-	// SE quarter (-640,-800, ~167u ring, trigger radius 110). The PaP takes
-	// the NORTH edge facing SOUTH into the floor — yaw 359.999 = front toward
-	// -y, the live-verified vending convention on this map. Nearest neighbour
-	// (the teleporter trigger) is ~430u away, well clear of our 64u radius.
-	// Breather mid z = (lap-1) * 384 + 192.
-	zs = array( 3648, 7488, 11328, 15168 );
+	// v13 — the PaP owns the lounge's WEST wall, facing east into the room
+	// (it used to stand IN the entrance path at (-320,-470), its trigger 174u
+	// from the ammo crate's with both costing 5000 — the reported wrong-buy).
+	// Anchors are GENERATED (_tod_breather_data.gsc, the door-data no-drift
+	// contract); the generator asserts every lounge trigger pair clears by
+	// both radii + 64, so this machine can never crowd a neighbour again.
+	zs = tod_breather_data::breather_zs();
 	foreach ( z in zs )
-		breather_pap_place( ( -320, -470, z ), ( -320, -526, z ), 359.999 );
+		breather_pap_place( tod_breather_data::pap_org( z ), tod_breather_data::pap_trig( z ), tod_breather_data::pap_yaw() );
 }
 
-// One vendor: the machine model plus its own use trigger.
-function breather_pap_place( model_org, trig_org, yaw )
+// v13.10 (user at the publish gate: "The pap at the crown had all these cool
+// fx ... Can we please have that on all the paps? ... glwoing middle and top")
+// — THE FX WERE ALREADY WIRED ON EVERY MACHINE; what the vendors were missing
+// is the REKICK. The idle field is set once at the power flip, and the map-1
+// lesson _tod_perk_lights' header records applies verbatim: "an FX spawned
+// far from the viewer never becomes visible on approach". The crown got seen
+// working; the four tower vendors sat beyond render reach when power came on
+// and their glow never materialised for a climbing player. Fix = the same
+// cure the perk glows ship: re-pulse the clientfield on the 0->1 edge the
+// first time any player comes near the machine. Threaded on all FIVE
+// machines (vendors at the flip, crown from its clips hook — a double pulse
+// on the crown is harmless).
+// ---------------------------------------------------------------------------
+// v13.12 TOMBSTONE — breather_pap_use_loop / breather_pap_power_hint /
+// vendor_pap_show / vendor_pap_lever / pap_fx_rekick are GONE. Every vendor
+// interaction (trigger, hints incl. NEED_POWER, power model swap, idle show,
+// purchase show, sounds, network-global cooldown, class-gun tier latch) now
+// runs through the de-singularized zm_cwpap flow (user 2026-08-29: "just do
+// it that way now") — one code path for the crown and all four vendors, via
+// zm_cwpap::register_pap_machine in breather_pap_place. The refund-triage
+// lesson from the old non-class lane lives on inside zm_cwpap ordering
+// (can_upgrade is checked BEFORE the charge). The rekick died with the graft:
+// the crown map-proven flow never needed one.
+// ---------------------------------------------------------------------------
+
+// v13.9 — the shared machine-collision row (see the comment at the vendor's
+// call site). self-less helper: m = the machine script_model, clips stored on
+// it for any future teardown (Hide != NotSolid — the QR invisible-wall rule).
+function pap_place_clips( m )
+{
+	fwd = AnglesToForward( m.angles );
+	offs = array( -32, 0, 32 );
+	clips = [];
+	for ( ci = 0; ci < offs.size; ci++ )
+	{
+		c = Spawn( "script_model", m.origin + VectorScale( fwd, offs[ ci ] ), 1 );
+		c.angles = m.angles;
+		c SetModel( "zm_collision_perks1" );
+		c.script_noteworthy = "clip";
+		c DisconnectPaths();
+		clips[ clips.size ] = c;
+	}
+	m.tod_clips = clips;
+}
+
+// v13.9 — the CROWN machine gets the same row: the ALXS prefab ships model +
+// trigger struct and NO collision (verified: walk-through, user report). The
+// pack's model is singular by name, so this finds exactly one.
+function crown_pap_clips()
+{
+	level endon( "end_game" );
+	for ( i = 0; i < 40; i++ )
+	{
+		m = GetEnt( "pack_a_punch_model", "targetname" );
+		if ( isdefined( m ) )
+		{
+			pap_place_clips( m );
+			return;
+		}
+		wait 0.25;   // prefab models exist at init; the retry is pure paranoia
+	}
+}
+
+// One vendor — v13.12: the machine model + collision, REGISTERED into the
+// de-singularized zm_cwpap flow (user: "just do it that way now ... they all
+// need to act as if they work together"). The pack's own code now runs this
+// machine: its unitrigger, hints, power swap, idle show, purchase show, the
+// network-global cooldown, and the class-gun tier lane — one code path for
+// all five stations. Everything this module used to graft (use loop, power
+// hint, show, rekick) is RETIRED below.
+// [tod v17.33] b_tiers — does this machine sell the spire's PACK II / PACK III
+// re-packs? Defaulted false, so the four breather lounges and the crown (which
+// call this without the argument) keep the shipped tower behaviour exactly.
+// _tod_spire.gsc's hub vendors are the only caller that passes true.
+function breather_pap_place( model_org, trig_org, yaw, b_tiers )
 {
 	m = Spawn( "script_model", model_org );
 	m.angles = ( 0, yaw, 0 );
-	m SetModel( "p7_zm_vending_packapunch_on" );   // packed (assetlist-verified)
-	// DELIBERATELY NOT SOLID: the navmesh ignores entity collision entirely
-	// (KB §navmesh), so a solid machine would need DisconnectPaths and would
-	// still be a grinding spot for the horde on a small balcony. The model is
-	// the landmark; the trigger is the interaction.
+	// v13.6 (user: "replace all pap machines with this new version"): the ALXS
+	// CW/BO6 PaP mesh — the _off state at spawn; breather_pap_power_hint swaps
+	// to the animated-on form at the power flip alongside its copy change.
+	// Both models ride the alxs_cwpap zpkg (force-packed there). The full
+	// animated system (zm_cwpap) is SINGULAR by design and lives on the crown;
+	// these four keep our tod_pap_owned lane wearing the pack's machine.
+	m SetModel( "p9_fxanim_zm_gp_pap_xmodel_off" );
+	// SOLID SINCE v13.9 (user: "The new pap has no clip. I just walk through").
+	// The old "deliberately not solid" stance was written for the small p7
+	// wall-box; the CW cabinet is a real machine you expect to bump into, and
+	// walking through it reads as a bug. Recipe = the upgrade stations'
+	// proven one (_tod_upgrades:3711-3737, the Heavenly-Altar fix): THREE
+	// zm_collision_perks1 script_models spaced +-32 along the mesh's local +X
+	// (its wide axis, mapped by the entity yaw via AnglesToForward — do not
+	// simplify to world axes), each DisconnectPaths'd per the navmesh rule.
+	// The asset is stock-resident (station precedent: no zone line, no
+	// precache). Machines back a wall, so over-cover is safe; zombies path
+	// around the front like they do at every station.
+	pap_place_clips( m );
 
-	t = Spawn( "trigger_radius_use", trig_org, 0, 64, 100 );
-	t TriggerIgnoreTeam();      // REQUIRED for a script-spawned use-trigger
-	t SetCursorHint( "HINT_NOICON" );
-	t SetHintString( "Hold ^3[{+activate}]^7 ^5PACK-A-PUNCH ^2[Cost: " + TOD_BREATHER_PAP_COST + "]" );
-	t thread breather_pap_use_loop();
-	t thread breather_pap_power_hint();   // <- the unpowered state (2026-08-25)
+	// v13.12 — the whole interaction belongs to zm_cwpap now. No jingle on
+	// vendors (five overlapping music stings with unknown 2d routing; the
+	// crown keeps it — flip the last arg to true to change that).
+	zm_cwpap::register_pap_machine( m, trig_org, ( 0, yaw, 0 ), false, IS_TRUE( b_tiers ) );
 }
 
 // self = trigger. THE UNPOWERED STATE FOR THE FOUR BREATHER PACK-A-PUNCHES
@@ -285,161 +477,27 @@ function breather_pap_place( model_org, trig_org, yaw )
 // Edge-driven, not polled: two SetHintString calls per machine per game. Every
 // distinct hint string costs a slot in the engine's trigger-string table, which
 // is the config-string discipline the door price watcher documents.
-function breather_pap_power_hint()
-{
-	level endon( "end_game" );
 
-	// The flag may not exist yet — waiting on a flag that has not been created
-	// negates undefined and fatals the server script (the 2026-08-25 crash
-	// documented in pap_power_hint below).
-	while ( !( level flag::exists( "power_on" ) ) )
-		wait 0.1;
+// v13.6c — THE FULL PURCHASE SHOW ON EVERY VENDOR (user: "Okay can this be
+// on every machine. DOe sit have to be crown only"). The pack's presentation
+// is clientfield-driven PER ENTITY (all eight FX fields registered in BOTH
+// VMs by zm_cwpap.gsc:51-58 / .csc:32-39 — parity verified), so the crown's
+// buy sequence ports to the vendors verbatim: in-use anim, purchase FX,
+// machine + lever + sting sounds, then back to idle. Cribbed exactly from
+// zm_cwpap.gsc:127-147 (the sequence), :196-203 (the restore) and :318-341
+// (the sounds), timings included (UPGRADE_FXANIM_TIME = 4).
+// (HISTORY — this paragraph used to end with "ONE DELIBERATE DIFFERENCE: the
+// crown hands the gun back after the show; the vendors keep our INSTANT
+// take-and-give". That was TRUE ONLY OF THE v13.6c GRAFT and died with it in
+// v13.12: every machine, the crown included, now runs zm_cwpap's own
+// giveWeaponUpgraded / class-gun lane through register_pap_machine, so there
+// is NO crown-vs-vendor behavioural difference left. Re-verified 2026-09-02
+// when the user asked whether the crown PaP still "worked differently": the
+// crown differs only in registering from the prefab's struct and keeping the
+// jingle. Do not reintroduce a per-machine lane on the strength of this note.)
 
-	if ( level flag::get( "power_on" ) )
-		return;                       // already powered — the buy line stands
-
-	if ( !isdefined( self ) )
-		return;
-	self SetHintString( "^1NO POWER^7 - you must turn on the power first" );
-
-	level flag::wait_till( "power_on" );
-	if ( !isdefined( self ) )
-		return;
-	self SetHintString( "Hold ^3[{+activate}]^7 ^5PACK-A-PUNCH ^2[Cost: " + TOD_BREATHER_PAP_COST + "]" );
-}
 
 // self = trigger
-function breather_pap_use_loop()
-{
-	level endon( "end_game" );
-
-	for ( ;; )
-	{
-		self waittill( "trigger", player );
-
-		if ( !isdefined( player ) || !isplayer( player ) )
-			continue;
-		if ( player laststand::player_is_in_laststand() )
-			continue;
-		// A revive press is not a purchase (_zm_blockers.gsc:307 — stock checks
-		// this on every buy path). Reviving polls the raw USE button
-		// (_zm_laststand.gsc:1129), so without this the press that revives a
-		// teammate ALSO buys a 5000-point pack. Silent, like the laststand
-		// branch above: the player is holding use.
-		if ( player zm_utility::in_revive_trigger() )
-			continue;
-		// Power gates every PaP on this map (the switch is at the base).
-		if ( !( level flag::exists( "power_on" ) ) || !( level flag::get( "power_on" ) ) )
-		{
-			player PlaySound( "zmb_no_purchase" );
-			continue;
-		}
-		// (v10.4, audit find: the tod_pap_owned refusal used to sit HERE, above
-		// the lane split — so once the class primary was packed the vendor
-		// refused EVERYTHING, including a sidearm the stock lane below could
-		// upgrade fine. The latch check now lives inside the class-gun lane,
-		// where it belongs: it is a fact about the class gun only.)
-		// Never while holding a temporary powerup gun — its restore would
-		// fight the swap (same guard grab_pap uses).
-		if ( isdefined( player.zombie_vars ) && IS_TRUE( player.zombie_vars[ "zombie_powerup_minigun_on" ] ) )
-		{
-			player PlaySound( "zmb_no_purchase" );
-			continue;
-		}
-		if ( !( player zm_score::can_player_purchase( TOD_BREATHER_PAP_COST ) ) )
-		{
-			player PlaySound( "zmb_no_purchase" );
-			continue;
-		}
-
-		// v10.3 (playtest 2026-08-23: "Enfield, Knife, MR6. Pap machine doesnt
-		// work but grabbing the power up worked for MR6"): the vendor used to
-		// latch tod_pap_owned UNCONDITIONALLY — which only reconcile_twin acts
-		// on, and reconcile only ever touches the CLASS PRIMARY. Paying while
-		// holding the MR6 (or any sidearm) took the points and did NOTHING.
-		// The free-PaP drop never had this hole: grab_pap has always carried a
-		// second, stock-path lane for non-class weapons. The vendor now has
-		// the same two lanes:
-		//  - class primary in hand -> the latch (reconcile swaps within 1s;
-		//    since v10.2 the lookup resolves either asset spelling)
-		//  - anything else in hand -> the stock upgrade path, inline
-		w = player GetCurrentWeapon();
-		// v10.7 (peer catch off CZ's second comment, 2026-08-23): the v10.3 lane
-		// keyed PURELY off the weapon in hand — so a player holding their PISTOL
-		// paid 5000 and got a PaP'd pistol while the class gun stayed dry. On a
-		// map whose identity is the class gun, with the pistol as the starting
-		// weapon, that is "my AR didn't get pap'd" with the points buying the
-		// wrong thing instead of nothing. The sidearm lane now opens ONLY once
-		// the class gun is ALREADY packed: the class gun is always the vendor's
-		// first sale regardless of what is in hand (the latch lane below packs
-		// it even while a sidearm is held — reconcile swaps it in inventory),
-		// and the MR6-after-class-gun case the playtest reported stays served.
-		// v10.30 (user 2026-08-25: "When i pack my secondary before my primary is
-		// packed and im holding my secondary when i pap my primary will get
-		// papped. It should pap the gun im holding"). THE v10.7 GATE IS REMOVED:
-		// this lane no longer requires the class gun to be packed first.
-		//
-		// WHAT v10.7 WAS PROTECTING AND WHY IT NO LONGER APPLIES: back then the
-		// only sidearm was the starting MR6, so "pack what is in hand" mostly
-		// meant "accidentally pack the pistol you spawned holding" and lose 5000.
-		// Since the secondary ladder (2026-08-24) every class carries a real,
-		// chosen, tier-appropriate sidearm that a player may very reasonably want
-		// packed first — and the gate made that impossible, silently packing the
-		// PRIMARY instead while the player watched their secondary stay dry.
-		// Taking the points and upgrading a gun the player is not holding is the
-		// worse failure of the two.
-		//
-		// THE TRADE IS ACCEPTED, NOT OVERLOOKED: holding the MR6 at the vendor
-		// now packs the MR6. That is the standard zombies contract — the machine
-		// packs what you are holding — and it is predictable, which the two-lane
-		// rule never was.
-		if ( isdefined( w ) && w != level.weaponNone
-		     && !( tod_classes::is_class_primary( player, w ) ) )
-		{
-			if ( !( zm_weapons::can_upgrade_weapon( w ) ) )
-			{
-				player PlaySound( "zmb_no_purchase" );
-				continue;   // already upgraded / not upgradable — refuse, keep the points
-			}
-			up = zm_weapons::get_upgrade_weapon( w, false );
-			if ( !isdefined( up ) )
-			{
-				player PlaySound( "zmb_no_purchase" );
-				continue;
-			}
-			player PlaySound( "zmb_cha_ching" );
-			player zm_score::minus_to_player_score( TOD_BREATHER_PAP_COST );
-			player TakeWeapon( w );
-			up = player zm_weapons::weapon_give( up );
-			if ( isdefined( up ) )
-			{
-				player GiveStartAmmo( up );
-				player notify( "weapon_give", up );
-				player SwitchToWeapon( up );
-			}
-			else
-			{
-				player zm_weapons::weapon_give( w );   // give failed — never strand them unarmed
-			}
-			player PlayLocalSound( "free_packapunch_vox" );
-			wait 0.5;
-			continue;
-		}
-
-		// CLASS-GUN LANE: refuse a second buy on an already-packed class gun
-		// (the latch survives until a tier-up clears it).
-		if ( IS_TRUE( player.tod_pap_owned ) )
-		{
-			player PlaySound( "zmb_no_purchase" );
-			continue;
-		}
-		player PlaySound( "zmb_cha_ching" );
-		player zm_score::minus_to_player_score( TOD_BREATHER_PAP_COST );
-		player.tod_pap_owned = true;   // reconcile_twin swaps to the _up form within 1s
-		player PlayLocalSound( "free_packapunch_vox" );
-		wait 0.5;   // debounce a held use
-	}
-}
 
 // ---------------------------------------------------------------------------
 // FREE PACK-A-PUNCH DROP (user 2026-08-21) — its own drop, own model
@@ -498,15 +556,27 @@ function grab_pap( player )
 
 	// CLASS GUN — the reliable lane, taken when the class gun is what is in
 	// hand. We only LATCH the flag; reconcile_twin does the swap within 1s.
-	if ( held_is_class && !IS_TRUE( player.tod_pap_owned ) )
+	if ( held_is_class && tod_classes::pap_tier( player, w ) == 0 )
 	{
-		player.tod_pap_owned = true;
+		tod_classes::pap_first_grant( player, w );
 		return;   // consumed
 	}
 
 	// NON-CLASS WEAPON IN HAND — the stock upgrade path, on the gun you are
 	// actually holding.
-	if ( !held_is_class && isdefined( w ) && w != level.weaponNone && zm_weapons::can_upgrade_weapon( w ) )
+	// OFFHAND GUARD (v14.59). can_upgrade_weapon() has NO offhand exclusion — it
+	// asks only "is this weapon included, and does it have an .upgrade row". The
+	// stock CSV gives `octobomb` an `octobomb_upgraded`, and GetCurrentWeapon()
+	// can return an offhand (stock's own laststand code says so, mid-throw). So
+	// while DISTRACTION (domain 41) handed out Li'l Arnies (v14.59-v16.48; it is
+	// Cymbal Monkey-only since v16.49), grabbing a free-PaP drop mid-throw would
+	// have TakeWeapon'd the octobomb and weapon_give'n an UNREGISTERED tactical,
+	// which routes down the PRIMARY flow and eats a class gun. Silently, because
+	// this map disables the too-many-weapons monitor. The guard belongs at this
+	// call site regardless of that domain: nothing here ever wants to
+	// Pack-a-Punch an offhand.
+	if ( !held_is_class && isdefined( w ) && w != level.weaponNone
+	     && !zm_utility::is_offhand_weapon( w ) && zm_weapons::can_upgrade_weapon( w ) )
 	{
 		up = zm_weapons::get_upgrade_weapon( w, false );
 		if ( isdefined( up ) )
@@ -528,15 +598,23 @@ function grab_pap( player )
 	// FALLBACK 2: the held weapon could not take it (already packed, or not
 	// upgradable, or the give failed). Spend it on the class gun if that is
 	// still dry — better than burning the drop on ammo.
-	if ( !IS_TRUE( player.tod_pap_owned ) )
+	foreach ( primary in player GetWeaponsListPrimaries() )
 	{
-		player.tod_pap_owned = true;
-		return;   // consumed
+		if ( tod_classes::is_class_primary( player, primary ) && tod_classes::pap_tier( player, primary ) == 0 )
+		{
+			tod_classes::pap_first_grant( player, primary );
+			return;   // consumed
+		}
 	}
 
-	// FALLBACK 3: everything that could be packed already is — consolation ammo.
+	// FALLBACK 3: everything that could be packed already is — consolation ammo
+	// PLUS +20% LUCK (v14.8, user 2026-08-30: "if a player already has a pap
+	// gun but gets a pap drop they will get 20% luck"). Via the level pointer,
+	// never a #using — powerups -> luck -> upgrades -> powerups is a cycle.
 	if ( isdefined( w ) && w != level.weaponNone )
 		player GiveMaxAmmo( w );
+	if ( isdefined( level.tod_luck_dupe_fn ) )
+		[[ level.tod_luck_dupe_fn ]]( player, "pap", self.origin );
 	// consumed
 }
 
@@ -555,6 +633,9 @@ function grab_zombie_blood( player )
 		return true;
 	if ( player laststand::player_is_in_laststand() )
 		return true;
+	if ( drinking_besides_powerup_gun( player ) )
+		return true;
+	gift_grab_log( player, "tod_zombie_blood" );
 
 	player thread zombie_blood_window();
 	// consumed
@@ -572,6 +653,7 @@ function zombie_blood_window()
 	self endon( "tod_blood_restart" );
 
 	self PlayLocalSound( "zombie_blood_vox" );
+	b_regrab = IS_TRUE( self.tod_in_blood );   // v19.65: the filter is already up - no second fade-in
 	self.ignoreme = true;
 	self.tod_in_blood = true;
 	self EnableInvulnerability();
@@ -590,6 +672,16 @@ function zombie_blood_window()
 	self.zombie_vars[ "zombie_powerup_zombie_blood_time" ] = TOD_BLOOD_SECS;
 	self._show_solo_hud = true;
 
+	// THE SCREEN FILTER (v19.65): Zombie Blood's own, registered as TOD_BLOOD_VSMGR
+	// in __init__ (the header note by TOD_BLOOD_SECS). Started here, AFTER every
+	// state write above, and in ITS OWN THREAD: that is the lesson of the note
+	// below - a visual can never again be the line that kills this thread and
+	// strands ignoreme + invulnerability. The countdown below is its clock.
+	self thread zombie_blood_fx_start( b_regrab );
+
+	// HISTORY - why Zombie Blood had no visual from 2026-08-26 to v19.65. The
+	// removal note, kept as written:
+	//
 	// NO VISIONSET HERE, AND THE ONE THAT USED TO BE HERE WAS A LIVE BUG
 	// (2026-08-26). The line read:
 	//
@@ -637,6 +729,9 @@ function zombie_blood_window()
 	// later it needs a REAL registration — visionset_mgr::register_info in an
 	// __init__ plus the asset on a `visionset,` line in the .zone — and it must
 	// be verified in game, not assumed.
+	// (v19.65: done for Zombie Blood's own FILTER - registered in __init__ on both
+	// halves; a filter material in zm_common needs no zone line and cannot have
+	// one. The in-game look is the one thing a build cannot prove.)
 
 	// Going down mid-window must not leave the player permanently ignored.
 	self thread zombie_blood_laststand_guard();
@@ -664,7 +759,19 @@ function zombie_blood_window()
 		// stops this re-assert instead of forcing ignoreme = true onto a crawler
 		// and stealing stock's last-stand reference.
 		self.ignoreme = true;
+		// THE TRAY GATE TOO (v17.47). Stock's minigun window end
+		// (_zm_powerups.gsc:1895/:1934 — the Gift of Death rides it) writes
+		// _show_solo_hud = false unconditionally, and that is code we do not
+		// own. The Logical packs' matching writes were REMOVED the same day;
+		// this re-assert covers the one writer left, so a Death Machine ending
+		// mid-window no longer blanks the blood icon while you are still ignored.
+		self._show_solo_hud = true;
 		wait 0.05;
+		// v19.76 — THE CLOCK STOPS FOR THE CARDS (lead tester Nikolai, Oct 2026:
+		// "Double Points, Insta-Kill, Gift of Death, and Zombie Blood should pause
+		// while players are selecting upgrade paths"). See powerup_pause_hold.
+		if ( IS_TRUE( level.tod_upgrade_pause ) )
+			continue;
 		self.zombie_vars[ "zombie_powerup_zombie_blood_time" ] = self.zombie_vars[ "zombie_powerup_zombie_blood_time" ] - 0.05;
 	}
 
@@ -723,8 +830,24 @@ function zombie_blood_clear()
 	// cosmetic bug for a real one. This recompute is idempotent.
 	self.ignoreme = ( isdefined( self.ignorme_count ) && self.ignorme_count > 0 );
 	self.tod_in_blood = undefined;
-	self DisableInvulnerability();
-	// (no visionset to deactivate — see the note in zombie_blood_window)
+	// ANOTHER OWNER MAY STILL HOLD THE SHIELD (bug review 2026-09-22, F15):
+	// the card-deal world pause (tod_pause_invuln), the finale's departure and
+	// the summit win all EnableInvulnerability on their own account, and the
+	// blood window's real-time countdown can expire inside any of them. The
+	// pause release already checks tod_in_blood the other way round
+	// (tod_upgrades::pause_invuln_held_elsewhere); this is the mirror.
+	b_departing = ( isdefined( level.tod_finale_state )
+	                && ( level.tod_finale_state == "departing" || level.tod_finale_state == "done" ) );
+	if ( b_departing || IS_TRUE( level.tod_spire_won ) )
+		self.ignoreme = true;              // the send-off set it; keep it
+	if ( !IS_TRUE( self.tod_pause_invuln ) && !b_departing && !IS_TRUE( level.tod_spire_won ) )
+		self DisableInvulnerability();
+	// v19.65: the screen filter goes with the state. A normal end finds it already
+	// faded to zero on this frame (the hold released TOD_BLOOD_FX_OUT early); an
+	// early end - a down - cuts it now. Threaded like the start, so a filter
+	// problem can never cost the tray writes below. Read `left` before those
+	// writes zero it.
+	self thread zombie_blood_fx_stop( ( ( zombie_blood_left( self ) > 0.05 ) ? "early" : "expired" ) );
 
 	// Take the tray icon down with the window.
 	if ( isdefined( self.zombie_vars ) )
@@ -740,6 +863,191 @@ function zombie_blood_clear()
 	// minigun var on players who haven't grabbed one (the v8.4 boot-fix rule).
 	if ( !( isdefined( self.zombie_vars ) && IS_TRUE( self.zombie_vars[ "zombie_powerup_minigun_on" ] ) ) )
 		self._show_solo_hud = false;
+}
+
+// ---------------------------------------------------------------------------
+// ZOMBIE BLOOD'S SCREEN FILTER (v19.65) - the four pieces around the window.
+// Stock does the drawing: the overlay registered in __init__ is ramped by
+// visionset_mgr::ramp_in_out_thread_per_player (ramp in, HOLD, ramp out, then it
+// deactivates itself) and the client half maps the material (_tod_powerups.csc).
+// ---------------------------------------------------------------------------
+
+// self = player. Its own thread (see the window). A re-grab passes ramp-in 0: the
+// fresh ramp thread replaces the running one (stock's lerp_thread_per_player_wrapper
+// notifies it off first) and sets full at once, so the filter never dips - and a
+// re-grab during the final fade snaps it back to full with the new 15 s.
+function zombie_blood_fx_start( b_regrab )
+{
+	ramp_in = TOD_BLOOD_FX_IN;
+	if ( IS_TRUE( b_regrab ) )
+		ramp_in = 0;
+	self.tod_blood_fx_on = true;
+	visionset_mgr::activate( "overlay", TOD_BLOOD_VSMGR, self, ramp_in, &zombie_blood_fx_hold, TOD_BLOOD_FX_OUT );
+	self thread zombie_blood_fx_end_game();
+	blood_fx_log( "FX_ON player=" + self GetEntityNumber() + " regrab=" + IS_TRUE( b_regrab ) + " ramp_in=" + ramp_in + " left=" + zombie_blood_left( self ) + " fade=" + TOD_BLOOD_FX_OUT );
+}
+
+// self = player - the ramp thread's HOLD (stock calls `player [[full_period]]()`).
+// Returns when the fade must begin for it to reach zero the frame the window
+// expires: the window's own countdown is the clock, so a re-grab (which resets it
+// to TOD_BLOOD_SECS) simply keeps the hold going. A cleared window (a down) stops
+// holding at once - and by then zombie_blood_fx_stop has already deactivated,
+// which ends this thread with no fade.
+function zombie_blood_fx_hold()
+{
+	self endon( "disconnect" );
+	while ( IS_TRUE( self.tod_in_blood ) && zombie_blood_left( self ) > TOD_BLOOD_FX_OUT )
+		WAIT_SERVER_FRAME;
+	blood_fx_log( "FX_FADE player=" + self GetEntityNumber() + " left=" + zombie_blood_left( self ) + " in_blood=" + IS_TRUE( self.tod_in_blood ) );
+}
+
+// self = player. Idempotent (clear() can run twice for one window): only the first
+// call after a start deactivates and logs. The notify comes LAST: the end_game
+// watcher calls this in its own thread, which that notify ends.
+function zombie_blood_fx_stop( why )
+{
+	if ( IS_TRUE( self.tod_blood_fx_on ) )
+	{
+		self.tod_blood_fx_on = undefined;
+		visionset_mgr::deactivate( "overlay", TOD_BLOOD_VSMGR, self );
+		blood_fx_log( "FX_OFF player=" + self GetEntityNumber() + " why=" + why );
+	}
+	self notify( "tod_blood_fx_done" );
+}
+
+// self = player. end_game kills the window thread WITHOUT clear(), so the filter
+// would sit on the game-over screen. One watcher per player (notify/endon pair);
+// zombie_blood_fx_stop retires it.
+function zombie_blood_fx_end_game()
+{
+	self notify( "tod_blood_fx_watch" );
+	self endon( "tod_blood_fx_watch" );
+	self endon( "tod_blood_fx_done" );
+	self endon( "disconnect" );
+	level waittill( "end_game" );
+	self zombie_blood_fx_stop( "end_game" );
+}
+
+// Seconds of Zombie Blood left: the window's countdown, which the tray reads too.
+function zombie_blood_left( player )
+{
+	if ( !isdefined( player ) || !isdefined( player.zombie_vars ) || !isdefined( player.zombie_vars[ "zombie_powerup_zombie_blood_time" ] ) )
+		return 0;
+	return player.zombie_vars[ "zombie_powerup_zombie_blood_time" ];
+}
+
+// ---------------------------------------------------------------------------
+// DEV ONLY: THE ZOMBIE BLOOD SHELF (2026-09-30, user: "can you spawn some in fornt
+// of me in spawn. In dev mode"). Needs level.tod_dev AND level.tod_dev_blood_shelf
+// (zm_tower_of_doom.gsc; -Publish refuses both). Once the host is playing and the
+// draft / first deal pause is over, four Zombie Blood drops stand in a fan in front
+// of the host - off the forward line, where the dev Mage preview bot is placed - on
+// real floor, never within reach of another player. They never time out, and a
+// taken one comes back TOD_DEV_SHELF_REFILL s later (back-to-back and re-grab tests).
+// ---------------------------------------------------------------------------
+function dev_blood_shelf()
+{
+	level endon( "end_game" );
+	// THREADED FROM __init__, WHICH STOCK RUNS BEFORE MAIN CREATES ITS FLAGS. The first
+	// cut waited here bare and crashed every load, dev on or off (2026-09-30, "cannot
+	// cast undefined to bool ... flag_shared.gsc", stack :946 <- __init__ :153) - the
+	// exact trap breather_pap_spawn / pap_power_hint already document. Poll for the
+	// flag to EXIST first. tools/lint_tod_init_flags.js now fails the build on it.
+	while ( !( level flag::exists( "initial_blackscreen_passed" ) ) )
+		wait 0.05;
+	level flag::wait_till( "initial_blackscreen_passed" );
+	if ( !IS_TRUE( level.tod_dev ) || !IS_TRUE( level.tod_dev_blood_shelf ) )
+		return;
+	host = undefined;
+	while ( !isdefined( host ) )
+	{
+		foreach ( p in GetPlayers() )
+		{
+			if ( isdefined( p ) && !( p IsTestClient() ) && IsAlive( p ) && p.sessionstate == "playing" )
+			{
+				host = p;
+				break;
+			}
+		}
+		if ( !isdefined( host ) )
+			wait 0.5;
+	}
+	while ( IS_TRUE( level.tod_upgrade_pause ) )
+		wait 0.25;
+	// Let the dev Mage preview bot land (it is placed after the first deal), so the
+	// clearance check below can see it; give up waiting if it never comes.
+	for ( t = 0; t < TOD_DEV_SHELF_BOT_WAIT; t += 0.5 )
+	{
+		bot = level.tod_dev_mage_bot;
+		if ( isdefined( bot ) && IsAlive( bot ) && bot.sessionstate == "playing" )
+			break;
+		wait 0.5;
+	}
+	wait 1;
+	if ( !isdefined( host ) )
+		return;
+	angles = host GetPlayerAngles();
+	yaw = angles[ 1 ];
+	origin = host.origin;
+	offsets = array( -65, -35, 35, 65 );   // a fan either side of the forward line
+	placed = 0;
+	for ( i = 0; i < offsets.size; i++ )
+	{
+		spot = dev_shelf_spot( host, origin, yaw + offsets[ i ] );
+		if ( !isdefined( spot ) )
+		{
+			blood_fx_log( "DEV_SHELF skip slot=" + i + " (no clear floor, or a player there)" );
+			continue;
+		}
+		level thread dev_shelf_slot( i, spot );
+		placed++;
+	}
+	blood_fx_log( "DEV_SHELF placed=" + placed + "/" + offsets.size + " host=" + host GetEntityNumber() + " at=" + origin + " yaw=" + Int( yaw ) );
+}
+
+// -> floor in front of `origin` at `yaw`, or undefined (no navmesh / a step / another player near)
+function dev_shelf_spot( host, origin, yaw )
+{
+	dir = AnglesToForward( ( 0, yaw, 0 ) );
+	point = GetClosestPointOnNavMesh( origin + dir * TOD_DEV_SHELF_DIST, 64, 64 );
+	if ( !isdefined( point ) || Abs( point[ 2 ] - origin[ 2 ] ) > 32 )
+		return undefined;
+	foreach ( p in GetPlayers() )
+	{
+		if ( isdefined( p ) && p != host && DistanceSquared( p.origin, point ) < TOD_DEV_SHELF_CLEAR * TOD_DEV_SHELF_CLEAR )
+			return undefined;
+	}
+	return point;
+}
+
+// one shelf slot: a drop that never times out, put back after each grab
+function dev_shelf_slot( i, spot )
+{
+	level endon( "end_game" );
+	for ( n = 1; IS_TRUE( level.tod_dev_blood_shelf ); n++ )
+	{
+		drop = zm_powerups::specific_powerup_drop( "tod_zombie_blood", spot, undefined, undefined, undefined, undefined, true );
+		if ( !isdefined( drop ) )
+		{
+			blood_fx_log( "DEV_SHELF slot=" + i + " spawn FAILED" );
+			return;
+		}
+		blood_fx_log( "DEV_SHELF slot=" + i + " drop=" + n + " at=" + spot );
+		while ( isdefined( drop ) )
+			wait 0.5;
+		wait TOD_DEV_SHELF_REFILL;
+	}
+}
+
+// dev-only, the tag _tod_bosses' Zombie Blood targeting logs already use
+function blood_fx_log( msg )
+{
+	if ( !IS_TRUE( level.tod_dev ) )
+		return;
+	line = "[TOD_BLOOD] ms=" + GetTime() + " " + msg + " rev=" + TOD_BLOOD_FX_REV;
+	/#
+	PrintLn( line );
+	#/
 }
 
 // ---------------------------------------------------------------------------
@@ -780,6 +1088,23 @@ function max_ammo_clip_watch()   // self = player
 
 		if ( !isdefined( self ) || !IsAlive( self ) )
 			continue;
+
+		// DISTRACTION (_tod_distraction, domain 41) rides this same settle wait:
+		// its decoy grenade is opted OUT of stock full_ammo and gains exactly +1
+		// per grab instead. Called through a level pointer, not a #using — that
+		// module imports _tod_upgrades, which imports THIS one, so a direct
+		// import would close the cycle. Guarded, so the module being absent
+		// degrades to "no top-up" rather than to a crash.
+		if ( isdefined( level.tod_distract_max_ammo ) )
+			self [[ level.tod_distract_max_ammo ]]();
+
+		// THE MAGE'S MANA BAR (2026-09-09): a Max Ammo fills it, for a mage who
+		// holds the first ARCHMAGE card. Same guarded-pointer shape as the line
+		// above and for the same cycle reason (_tod_mage_elements imports
+		// _tod_upgrades, which imports this module). Set in _tod_mage_elements::init.
+		if ( isdefined( level.tod_mage_max_ammo ) )
+			self [[ level.tod_mage_max_ammo ]]();
+
 		weapons = self GetWeaponsListPrimaries();
 		foreach ( w in weapons )
 		{
@@ -878,11 +1203,13 @@ function pap_power_hint()
     // fixes the CURSOR ICON, which is still worth doing.
     //
     // NOTE ON REACH: this targets script_noteworthy "pack_a_punch", which stock
-    // stamps on the ONE zbarrier-derived trigger — the CROWN PaP. That machine
-    // sits behind the roof door at the top of a 50-floor climb, so in practice
-    // nobody is standing at it with the power off. The reachable machines are
-    // the four breather vendors, and they are handled by
-    // breather_pap_power_hint() above.
+    // stamps on the ONE zbarrier-derived trigger — the CROWN PaP
+    // (vending_weapon_upgrade_spawnable, gen_tower_map.js:4109; a 2026-08-28
+    // claim that it had been removed was a grep-term artifact — the prefab
+    // name contains neither "packapunch" nor "zm_pack_a_punch"). That machine
+    // sits at the top of the 50-floor climb, so in practice nobody stands at
+    // it with the power off. The reachable machines are the four breather
+    // vendors, handled by breather_pap_power_hint() above.
     foreach ( t in trigs )
     {
         if ( !isdefined( t ) )
@@ -921,6 +1248,41 @@ function tod_should_drop_minigun()
 	return ( RandomInt( 100 ) < TOD_MINIGUN_DROP_PCT );
 }
 
+// v19.53 (2026-09-24, user: "when you are holding the Gift of Death you cannot
+// grab drops ... pack-a-punch is one that you shouldn't be able to grab but
+// there are other ones like perk drops or zombie blood that you should").
+// STOCK COUNTS THE POWERUP GUN AS A DRINK: zm_powerups::weapon_powerup calls
+// increment_is_drinking for the whole Gift of Death (Death Machine lane), and
+// the grab loop refuses every powerup flagged prevent_pick_up_if_drinking while
+// is_drinking > 0 - so the perk bottle and Zombie Blood were dead for the
+// gun's whole window. Those two drop the stock flag and ask this instead: a
+// drink OTHER than the powerup gun's own one (a real perk bottle, PaP taking
+// the weapon, a revive). Neither touches the held weapon: the bottle is
+// zm_perks::give_perk (SetPerk, no bottle animation), Zombie Blood is flags +
+// invulnerability. The PaP drop keeps the stock flag AND grab_pap's own
+// minigun_on refusal - it would upgrade the temporary gun. has_powerup_weapon
+// is stock's own marker, set and cleared beside the increment/decrement.
+function drinking_besides_powerup_gun( player )
+{
+	if ( !isdefined( player.is_drinking ) )
+		return false;
+	n = player.is_drinking;
+	if ( IS_TRUE( player.has_powerup_weapon ) )
+		n = n - 1;
+	return ( n > 0 );
+}
+
+// dev-only: a drop taken while the powerup gun is out (the v19.53 lane)
+function gift_grab_log( player, name )
+{
+	if ( !IS_TRUE( level.tod_dev ) || !IS_TRUE( player.has_powerup_weapon ) )
+		return;
+	line = "[TOD_POWERUP] ms=" + GetTime() + " GIFT_GRAB player=" + player GetEntityNumber() + " drop=" + name + " is_drinking=" + player.is_drinking;
+	/#
+	PrintLn( line );
+	#/
+}
+
 // self = the drop entity; player = the toucher. Return TRUE = NOT consumed
 // (the grab loop keeps polling — the drop stays for someone who can use it).
 // Runs synchronously in the grab poll: the upgrade happens THIS frame so the
@@ -932,22 +1294,111 @@ function grab_free_pap( player )
 		return true;
 	if ( player laststand::player_is_in_laststand() )
 		return true;
-	if ( isdefined( player.is_drinking ) && player.is_drinking > 0 )
+	if ( drinking_besides_powerup_gun( player ) )
 		return true;
+	gift_grab_log( player, "tod_free_pap" );
 
-	// A PERK the grabber does not already own. give_random_perk builds the
-	// not-owned list itself and returns undefined when every perk is held —
-	// in that case DON'T strand the drop (solo has no teammate to save it
-	// for): consume it and refill ammo as the consolation, the same rule the
-	// old PaP grant used.
-	got = player zm_perks::give_random_perk();
+	// A PERK the grabber does not already own — FROM THE MACHINES THIS MAP
+	// ACTUALLY SELLS. NOT stock give_random_perk (live bug, 3-player report
+	// 2026-08-29): that helper draws from ALL of level._custom_perks, and this
+	// map #using's stock perk modules it does not sell — MULE KICK
+	// (_zm_perk_additionalprimaryweapon, kept for its clientfield: the Death
+	// Perception HUD icon BORROWS hudItems.perks.additional_primary_weapon,
+	// see _tod_perk_electric_cherry's icon note) and stock ELECTRIC CHERRY
+	// (kept for the tesla-FX pipeline). A drop that rolled Mule Kick lit the
+	// borrowed field — so the player saw the DEATH PERCEPTION icon appear,
+	// got no outlines, and the DP machine still sold the perk (they never had
+	// that specialty). tod_give_random_map_perk below draws only from perks
+	// with a live vending trigger in the .map. Returns undefined when every
+	// sellable perk is held — DON'T strand the drop (solo has no teammate to
+	// save it for): consume it and refill ammo as the consolation, the same
+	// rule the old PaP grant used.
+	got = player tod_give_random_map_perk();
 	if ( !isdefined( got ) )
 	{
+		// Every sellable perk owned — consolation ammo PLUS +10% LUCK (v14.8,
+		// user 2026-08-30: "if they get a perk bottle with max perks they
+		// will get 10% luck"). Same pointer lane as the PaP dupe above.
 		w = player GetCurrentWeapon();
 		if ( isdefined( w ) && w != level.weaponNone )
 			player GiveMaxAmmo( w );
+		if ( isdefined( level.tod_luck_dupe_fn ) )
+			[[ level.tod_luck_dupe_fn ]]( player, "perk", self.origin );
 	}
 	// consumed (no return value) — stock plays zmb_powerup_grabbed + hides it
+}
+
+// self = player. Stock give_random_perk with the pool cut to MAP TRUTH: only
+// specialties that have a zombie_vending use-trigger in this .map (the same
+// query _tod_perk_scatter captures its machines from) qualify. That is the NINE
+// scatter machines — registered-but-machineless perks (Mule Kick, stock cherry)
+// can never roll out of a bottle again. (This comment said "8 scatter machines
+// + PhD" until v14.56; PhD is one OF the nine — it rides
+// specialty_electriccherry, see _tod_perk_phd.gsc's header — so that phrasing
+// double-counted it and read as a roster of nine perks plus one.)
+// Give rides stock give_perk so the perk threads / HUD clientfield / HasPerk
+// state all land exactly as a machine buy would (minus the bought
+// presentation, same as stock's helper).
+function tod_give_random_map_perk()
+{
+	// THE BOTTLE ASKS STOCK'S OWN GATE. give_perk is SetPerk + num_perks++ with
+	// NO limit check of its own, so the bottle goes through
+	// can_player_purchase_perk exactly as a machine buy would — the two can
+	// never disagree, and the BGB unquenchable/soda-fountain carve-outs inside
+	// it keep working. Since v16.80 the perk limit sits above the roster, so
+	// this only ever refuses "every sellable perk already owned"; the caller's
+	// existing branch turns that into the consolation (max ammo + 10% luck).
+	// (v14.56..v16.79 it was also the cap check that kept the PERK SLOTS card
+	// the only way past 4.)
+	if ( !( self zm_utility::can_player_purchase_perk() ) )
+		return undefined;
+
+	pool = [];
+	seen = [];
+	trigs = GetEntArray( "zombie_vending", "targetname" );
+	for ( i = 0; i < trigs.size; i++ )
+	{
+		t = trigs[ i ];
+		if ( !isdefined( t ) || !isdefined( t.script_noteworthy ) || t.script_noteworthy == "" )
+			continue;
+		spec = t.script_noteworthy;
+		if ( IS_TRUE( seen[ spec ] ) )
+			continue;   // one entry per machine, however many triggers it grew
+		seen[ spec ] = true;
+		// Registered with the perk framework (paranoia — a stray trigger name
+		// must not reach give_perk) and not already owned or merely paused.
+		if ( !isdefined( level._custom_perks ) || !isdefined( level._custom_perks[ spec ] ) )
+			continue;
+		if ( self HasPerk( spec ) || ( self zm_perks::has_perk_paused( spec ) ) )
+			continue;
+		pool[ pool.size ] = spec;
+	}
+
+	if ( pool.size == 0 )
+		return undefined;
+
+	perk = pool[ RandomInt( pool.size ) ];
+
+	// A FREE QUICK REVIVE MUST NOT SPEND ONE OF SOLO'S THREE LIFETIME REVIVES
+	// (v18.14). In solo, stock's give hook (_zm_perk_quick_revive::
+	// give_quick_revive_perk) does three things on EVERY grant, bought or not:
+	// self.lives = 1, level.solo_lives_given++, and — the moment that counter
+	// reaches 3 — level flag::set( "solo_revive" ), which flies the base Quick
+	// Revive machine away FOR THE REST OF THE MATCH. So a bottle that happened
+	// to roll Quick Revive was quietly spending a third of the run's revive
+	// budget, and three lucky bottles retired the machine with the player never
+	// having bought it once and no way to tell what had happened.
+	//
+	// level.solo_game_free_player_quickrevive is stock's own opt-out for exactly
+	// this case (its comment: "Sometimes we want to give the quick revive and not
+	// take a use away"). The hook CONSUMES it — sets it straight back to
+	// undefined — so it covers this one grant and cannot leak into the next
+	// machine purchase. Set only in solo: in co-op the whole ledger is inert.
+	if ( perk == "specialty_quickrevive" && zm_perks::use_solo_revive() )
+		level.solo_game_free_player_quickrevive = true;
+
+	self zm_perks::give_perk( perk );
+	return perk;
 }
 
 
@@ -978,23 +1429,38 @@ function install_gift_of_death()
 
 	zm::register_actor_damage_callback( &xmas_fixed_shots_cb );
 
-	// INSTA-KILL rework (user 2026-08-20: "insta kill should grant all players
-	// 3x damage output, different than base"). The stock insta_kill_powerup
-	// checks level.insta_kill_powerup_override and runs it INSTEAD of setting
-	// the one-shot flag — so ours grants a team-wide 3x damage window. The mult
-	// is read at the ZOMBIE final-damage sites only: upgrade_damage_cb (all
-	// player weapons) + xmas_fixed_shots_cb (the Gift of Death). BOSSES are
-	// deliberately EXEMPT — their damage is fixed/round-independent by design
-	// (Gift of Death 2/10/30 shots; the mechz wrap runs last and would rescale
-	// anything set upstream). level.tod_dmg_mult defaults to 1.
+	// v19.76 — POWER-UPS PAUSE FOR THE CARDS (see powerup_pause_hold). Double
+	// Points' stock grab is replaced by the pause-aware copy; stock's __init__
+	// registered it already (register_powerup only ever sets an UNSET grab, so
+	// the field is assigned directly), and the clock-hold starts here, after
+	// every stock power-up has initialised its vars.
+	if ( isdefined( level._custom_powerups ) && isdefined( level._custom_powerups[ "double_points" ] ) )
+		level._custom_powerups[ "double_points" ].grab_powerup = &grab_double_points_paused;
+	level thread powerup_pause_hold();
+
+	// INSTA-KILL (user 2026-08-20 "3x damage output", then 2026-08-30 "make
+	// instakill a one hit on normal zombies but keep the 3x for everything
+	// else"). The stock insta_kill_powerup checks level.insta_kill_powerup_override
+	// and runs it INSTEAD of setting the stock one-shot flag; ours opens a
+	// team-wide window by setting level.tod_dmg_mult to 3 (default 1). What the
+	// window DOES is decided where the mult is read:
+	//   * _tod_upgrades::upgrade_damage_cb - any player hit on a NON-boss actor
+	//     (the horde, armored sprinters included) is LETHAL while the window is
+	//     live; the boss/elite triad (Panzer, Rogue Protector, Reaver,
+	//     hellhounds) takes the normal math x3.
+	//   * xmas_fixed_shots_cb (the Gift of Death) - its zombie shot is x3, which
+	//     is one shot from full; the elite branch above it ignores the mult
+	//     (fixed shots by design; the mechz wrap runs last and would rescale
+	//     anything set upstream).
 	level.tod_dmg_mult = 1;
 	level.insta_kill_powerup_override = &instakill_3x_override;
 }
 
 // Runs INSTEAD of the base insta-kill (stock threads it from insta_kill_powerup
-// with (drop_item, player)). Shows the stock insta-kill HUD icon + timer but
-// grants 3x damage for the duration rather than the one-shot. Re-grab restarts
-// the window via the tod_instakill_<team> notify/endon.
+// with (drop_item, player)). Shows the stock insta-kill HUD icon + timer and
+// opens the window: one-hit on the horde, 3x on bosses/elites (see init above
+// for where each half is applied). Re-grab restarts the window via the
+// tod_instakill_<team> notify/endon.
 function instakill_3x_override( drop_item, player )
 {
 	team = player.team;
@@ -1004,8 +1470,117 @@ function instakill_3x_override( drop_item, player )
 	level thread zm_powerups::show_on_hud( team, "insta_kill" );   // icon + countdown
 	level.tod_dmg_mult = 3;
 	// (3X announce removed 2026-08-20 — the tripled crosshair numbers ARE the tell)
-	wait N_POWERUP_DEFAULT_TIME;
+	// v19.76: unpaused time, so a card deal no longer eats the window (the HUD
+	// countdown is held by powerup_pause_hold the same frames this is).
+	unpaused_wait( N_POWERUP_DEFAULT_TIME );
 	level.tod_dmg_mult = 1;
+}
+
+// ---------------------------------------------------------------------------
+// v19.76 — POWER-UPS PAUSE WHILE THE CARDS ARE UP (lead tester Nikolai, Oct 2026:
+// "Double Points, Insta-Kill, Gift of Death, and Zombie Blood should pause while
+// players are selecting upgrade paths so effects don't expire prematurely").
+// The upgrade pause (tod_upgrades::set_world_pause -> level.tod_upgrade_pause:
+// every round deal, a solo altar buy, a trial win's reward, the King's max-out)
+// froze the zombies and the players but not one power-up clock, so a 30 s
+// Insta-Kill grabbed before a deal could run out while everyone stared at cards.
+// Every timed power-up on this map, and what now holds it:
+//   * Insta-Kill        our override: unpaused_wait ................. above
+//   * Double Points     our copy of stock's grab: unpaused_wait ...... below
+//   * Zombie Blood      its own window loop skips the tick ........... zombie_blood_window
+//   * Infinite Ammo / Time Warp   their (vendored) loops skip the tick . logical/powerups
+//   * Gift of Death     stock minigun_countdown (per player) ......... powerup_pause_hold
+//   * the HUD countdowns of the first two (stock time_remaining_on_powerup)
+//                                                                       powerup_pause_hold
+// The two lanes stay in step because both count the same unpaused frames.
+// ---------------------------------------------------------------------------
+
+// Waits `secs` of UNPAUSED time. self = anything (a level thread here).
+function unpaused_wait( secs )
+{
+	left = secs;
+	while ( left > 0 )
+	{
+		wait 0.05;
+		if ( !IS_TRUE( level.tod_upgrade_pause ) )
+			left -= 0.05;
+	}
+}
+
+// THE STOCK CLOCKS WE DO NOT OWN. Stock decrements each by 0.05 a server frame;
+// while the world is paused this hands the 0.05 straight back, so the HUD
+// countdown (and the Gift of Death's whole window) stands still. Team clocks
+// only count while their "_on" flag is up; the Gift's only while it is held.
+function powerup_pause_hold()
+{
+	level endon( "end_game" );
+
+	team_clocks = array( "double_points", "insta_kill" );
+	for ( ;; )
+	{
+		wait 0.05;
+		if ( !IS_TRUE( level.tod_upgrade_pause ) || !isdefined( level.zombie_vars ) )
+			continue;
+		players = GetPlayers();
+		seen = [];
+		foreach ( p in players )
+		{
+			if ( !isdefined( p ) || !isdefined( p.team ) )
+				continue;
+			// the Gift of Death: stock minigun_countdown, a PER-PLAYER clock
+			if ( isdefined( p.zombie_vars ) && IS_TRUE( p.zombie_vars[ "zombie_powerup_minigun_on" ] )
+			  && isdefined( p.zombie_vars[ "zombie_powerup_minigun_time" ] ) && p.zombie_vars[ "zombie_powerup_minigun_time" ] > 0 )
+				p.zombie_vars[ "zombie_powerup_minigun_time" ] = p.zombie_vars[ "zombie_powerup_minigun_time" ] + 0.05;
+			// the team clocks, once per team
+			team = p.team;
+			if ( IS_TRUE( seen[ team ] ) || !isdefined( level.zombie_vars[ team ] ) )
+				continue;
+			seen[ team ] = true;
+			foreach ( n in team_clocks )
+			{
+				on_key = "zombie_powerup_" + n + "_on";
+				t_key  = "zombie_powerup_" + n + "_time";
+				if ( IS_TRUE( level.zombie_vars[ team ][ on_key ] ) && isdefined( level.zombie_vars[ team ][ t_key ] ) )
+					level.zombie_vars[ team ][ t_key ] = level.zombie_vars[ team ][ t_key ] + 0.05;
+			}
+		}
+	}
+}
+
+// DOUBLE POINTS, PAUSE-AWARE. Stock's double_points_powerup holds the 2x scalar
+// with a flat `wait 30`, which no clock-hold can reach, so its grab is replaced
+// by this copy (install_gift_of_death): the same notify/endon re-grab contract,
+// the same HUD icon + countdown, the same scalar and HUD flag, with the wait
+// counted in unpaused time. Left out on purpose, because none of them exist on
+// this map: stock's race mode, its persistent-upgrade hook and BGB Temporal Gift.
+function grab_double_points_paused( player )   // self = the drop
+{
+	level thread double_points_paused( self, player );
+	player thread zm_powerups::powerup_vo( "double_points" );
+}
+
+function double_points_paused( drop_item, player )
+{
+	level notify( "powerup points scaled_" + player.team );
+	level endon( "powerup points scaled_" + player.team );
+
+	team = player.team;
+	level thread zm_powerups::show_on_hud( team, "double_points" );
+	level.zombie_vars[ team ][ "zombie_point_scalar" ] = 2;
+	double_points_hud( team, 1 );
+	unpaused_wait( N_POWERUP_DEFAULT_TIME );
+	level.zombie_vars[ team ][ "zombie_point_scalar" ] = 1;
+	double_points_hud( team, 0 );
+}
+
+function double_points_hud( team, on )
+{
+	players = GetPlayers();
+	for ( i = 0; i < players.size; i++ )
+	{
+		if ( isdefined( players[ i ] ) && team == players[ i ].team )
+			players[ i ] clientfield::set_player_uimodel( "hudItems.doublePointsActive", on );
+	}
 }
 
 // Level actor-damage callback — NORMAL ZOMBIES only. Bosses take their fixed
@@ -1016,9 +1591,34 @@ function xmas_fixed_shots_cb( inflictor, attacker, damage, flags, meansofdeath, 
 {
 	if ( !isdefined( weapon ) || !isdefined( weapon.name ) || !IsSubStr( weapon.name, "xmas_gun" ) )
 		return -1;   // not the Gift of Death — let the rest of the chain run
-	// Bosses are handled in _tod_bosses (the wrap would rescale a value here).
+	// Boss-flagged victims: the Panzer and the Protector are handled in
+	// _tod_bosses (their wraps dispatch after this chain and would rescale a
+	// value set here) — but the REAVER and the HELLHOUND have no such wrap and
+	// take their fixed-shot Gift damage RIGHT HERE (v14.8; see the defines).
+	// No dmult on these lanes, matching the Panzer/RP sites: the Gift's boss
+	// damage is fixed shots by design, insta-kill window or not.
 	if ( IS_TRUE( self.is_boss ) || IS_TRUE( self.acc_is_boss ) || IS_TRUE( self.acc_is_mini_boss ) )
-		return -1;
+	{
+		kind = ( isdefined( self.tod_boss_kind ) ? self.tod_boss_kind : "" );
+		if ( kind != "reaver" && kind != "hellhound" )
+			return -1;   // Panzer / Protector: their own callbacks own the Gift
+		if ( IS_TRUE( level.tod_upgrade_pause ) )
+			return 0;    // no free hits on the frozen board (same rule as below)
+		if ( !isdefined( damage ) || damage <= 0 )
+			return -1;
+		now = GetTime();
+		if ( isdefined( self.tod_xmas_hit_ms ) && self.tod_xmas_hit_ms == now )
+			return 1;    // same-frame dedupe (the trap the zombie lane documents)
+		self.tod_xmas_hit_ms = now;
+		hp = ( isdefined( self.maxhealth ) ? self.maxhealth : self.health );
+		shots = XMAS_HOUND_SHOTS;
+		if ( kind == "reaver" )
+			shots = XMAS_REAVER_SHOTS;
+		final = int( ( hp / shots ) * XMAS_ELITE_BUFF ) + 1;
+		if ( isdefined( attacker ) && isplayer( attacker ) )
+			attacker tod_upgrade_ui::push_dmg_num( final, false, false, self );   // crosshair parity
+		return final;
+	}
 	// No free damage on the frozen horde during an upgrade pick.
 	if ( IS_TRUE( level.tod_upgrade_pause ) )
 		return 0;
@@ -1032,10 +1632,11 @@ function xmas_fixed_shots_cb( inflictor, attacker, damage, flags, meansofdeath, 
 	self.tod_xmas_hit_ms = now;
 
 	hp = ( isdefined( self.maxhealth ) ? self.maxhealth : self.health );
-	// INSTA-KILL 3x window multiplies output (level.tod_dmg_mult; default 1).
+	// INSTA-KILL window (level.tod_dmg_mult 3; default 1): 2 hits from full
+	// becomes 1, matching the window's one-hit rule on the horde.
 	dmult = ( isdefined( level.tod_dmg_mult ) ? level.tod_dmg_mult : 1 );
 	final = int( ( hp / XMAS_ZOMBIE_SHOTS ) * dmult ) + 1;   // 2 hits from full, any round
 	if ( isdefined( attacker ) && isplayer( attacker ) )
-		attacker tod_upgrade_ui::push_dmg_num( final, false );   // crosshair number parity
+		attacker tod_upgrade_ui::push_dmg_num( final, false, false, self );   // crosshair number parity
 	return final;
 }

@@ -1,0 +1,26 @@
+{
+  "native_verified": false,
+  "files": [
+    {
+      "path": "scripts/zm/zm_tower_of_doom.gsc",
+      "sha256": "c9d50150c14bf740a7f734b30168cf83d3ec103c12288bf611b5b03eff214f6a",
+      "baseline": "local_sync_cache\\bo6_ice_staff\\test_setup_20260913_014510\\map.gsc",
+      "baseline_sha256": "0eece0b545bacdb8ba7a0ee2aad5cc5544668eb09c5717130cd4780af25bed23",
+      "diff": "tmp/bo6_ice_staff/map.gsc.patch"
+    },
+    {
+      "path": "scripts/zm/zm_tower_of_doom/_tod_main.gsc",
+      "sha256": "38912490e8e6e0aa1fadb8b3d32366f0dfd862e9b474b41c1c4355f64c54d727",
+      "baseline": "local_sync_cache\\bo6_ice_staff\\test_setup_20260913_014510\\main.gsc",
+      "baseline_sha256": "f34153b3171ba49e8d3ce26f491768b09d884dfe203738f5a70f846427f71d07",
+      "diff": "tmp/bo6_ice_staff/main.gsc.patch"
+    },
+    {
+      "path": "scripts/zm/zm_tower_of_doom/_tod_class_select.gsc",
+      "sha256": "683c18188f68192e8a5fd29a77b6bfd6389bfbdb449e4f6d19784a16729eb2e5",
+      "baseline": "local_sync_cache\\bo6_ice_staff\\test_setup_20260913_014510\\class_select.gsc",
+      "baseline_sha256": "316b86d330c0ec3c94357bdefe6a4225e861bf5d5d0f7bd36124e440d48a650b",
+      "diff": "tmp/bo6_ice_staff/class_select.gsc.patch"
+    }
+  ]
+}

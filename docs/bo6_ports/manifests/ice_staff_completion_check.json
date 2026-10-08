@@ -1,0 +1,18 @@
+[
+  {
+    "port": "ice_staff",
+    "complete": false,
+    "errors": [],
+    "gaps": [
+      "discovery: pending - Four packages loaded after accepted UAC at 01:52. All 31 available model LOD Casts, 116 animation Casts and 110 known audio payloads acquired. Authored sound cues resolve across three banks. Full FX/retail settings reference remains open.",
+      "geometry: pending - Both full source assemblies staged: 11 meshes, 51060 vertices, 59842 triangles and 76 bones each. Original attachment socket, all weights and 31 source LOD files accounted for. BO3 view-hand alignment/animation integration and native checks remain open.",
+      "materials: pending - Six original colors, eighteen decoded NOG streams and four original emission-color maps staged. All source slots hashed. Shader constants, full layering/transparency/metal/specular and native shading remain unresolved.",
+      "animations: pending - 116 source clips validated at Cast-data level. No BO6 retarget, BO3 motion binding, weighted-mesh motion check or sound-notetrack installation yet.",
+      "audio: pending - 260 rows across three banks, 110 distinct PCM payloads exported/validated, including both global first-raise cues and shared LFE. Thirty-seven alias hashes unresolved; runtime event/mix/attenuation/loop wiring and listening not done.",
+      "fx: pending - Known effect-name search returned zero rows even with images/materials/additional types loaded (408004 assets). Authored first-raise/reload/inspect cues recorded. Existing BO3 effects/glow remain active; source particle data and reconstruction/native comparison still required.",
+      "behavior: pending - User requested a presentation replacement and explicitly excluded charge shot. Existing ice Single Shot fire, Tower damage/mana/upgrades/three-missile behavior retained. Dev test setup changes class selection and grants only.",
+      "integration: pending - No BO6 weapon/GDT/zone/alias bindings installed. Dev/god and automatic max Mage setup compiled/deployed but not natively tested. Complete source assemblies now exist; motion, material/FX/audio runtime integration remains open.",
+      "native: pending - Full dev/Mage BO3 baseline build and deployment verified at 02:23:39. Steam launch requested; native control blocked after the Windows administrator focus prompt was canceled. No game process or new gameplay evidence. BO6 presentation remains unbound."
+    ]
+  }
+]

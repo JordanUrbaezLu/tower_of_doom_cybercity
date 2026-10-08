@@ -23,4 +23,3 @@ function SearchAnimationMap( entity, aliasname )
 		
 	}
 }
-

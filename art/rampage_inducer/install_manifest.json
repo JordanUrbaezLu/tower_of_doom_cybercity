@@ -1,0 +1,128 @@
+{
+  "gdt": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\source_data\\tod_bo6_inducer.gdt",
+  "xmodel": "tod_inducer",
+  "xmodel_on": "tod_inducer_on",
+  "cap": 1024,
+  "materials": {
+    "material_36ade0417853ec32": {
+      "material": "mtl_tod_inducer_36ade0417853ec32",
+      "role": "fluid",
+      "color": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\t10_zm_essence_container_orange\\_images\\material_36ade0417853ec32\\image_1c59efe782f11836.png",
+      "normal": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\t10_zm_essence_container_orange\\_images\\material_36ade0417853ec32\\image_1c4bed632a12d5c1.png",
+      "color_sha256": "f775a9587faa12a3ffde6f41900611a6f72ea3a1b2ba74f9a02ad212e133f09a",
+      "normal_sha256": "89c3181ff80a56735152df828fa0be429f632fa055c07dde7d72a63dbd50b111",
+      "emission": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\t10_zm_essence_container_orange\\_images\\material_36ade0417853ec32\\image_76bcc7fc69c91d60.png",
+      "emission_sha256": "3c3453dee6c97351c9458baa9ba1467d63c0febf3c6642b0201ebcca813d65f6",
+      "glow": {
+        "idle": "0.9",
+        "on": "4"
+      }
+    },
+    "material_503f0f822297b23b": {
+      "material": "mtl_tod_inducer_503f0f822297b23b",
+      "role": "fluid",
+      "color": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\t10_zm_essence_container_orange\\_images\\material_503f0f822297b23b\\image_1c59efe782f11836.png",
+      "normal": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\t10_zm_essence_container_orange\\_images\\material_503f0f822297b23b\\image_1c4bed632a12d5c1.png",
+      "color_sha256": "486a0bb9194f7f8a19826be6304656d016ea81d007458e823077b1fb2d32fe12",
+      "normal_sha256": "89c3181ff80a56735152df828fa0be429f632fa055c07dde7d72a63dbd50b111",
+      "emission": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\t10_zm_essence_container_orange\\_images\\material_503f0f822297b23b\\image_76bcc7fc69c91d60.png",
+      "emission_sha256": "16d8a7ae3cbbf5de326e84bad91457951fc4e402209bda236fe55ea68275c3cd",
+      "glow": {
+        "idle": "0.9",
+        "on": "4"
+      }
+    },
+    "material_c85ade6d4063e1b": {
+      "material": "mtl_tod_inducer_c85ade6d4063e1b",
+      "role": "steel",
+      "color": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\t10_zm_essence_container_orange\\_images\\material_c85ade6d4063e1b\\image_4e916eea758fb17d.png",
+      "normal": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\t10_zm_essence_container_orange\\_images\\material_c85ade6d4063e1b\\image_66c6df8b9e73a09f.png",
+      "color_sha256": "134f6d46b96d35d0f5ca67b9e047dc85fc8cffafc50756fbeba35a7531178b95",
+      "normal_sha256": "cb028852e913716b34cc2cb19cd6c37ffbf294bead6b030d4874c5a0481b4381"
+    },
+    "material_c85aee6d4063fce": {
+      "material": "mtl_tod_inducer_c85aee6d4063fce",
+      "role": "steel",
+      "color": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\t10_zm_essence_container_orange\\_images\\material_c85aee6d4063fce\\image_695a0372fbcb24f9.png",
+      "normal": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\t10_zm_essence_container_orange\\_images\\material_c85aee6d4063fce\\image_5221632e265be4f7.png",
+      "color_sha256": "6d4206a7dc2059302caca4b4e9de9e5141c0a4a9329681d34a618e86068ff6d4",
+      "normal_sha256": "f02be9c07a5c0df79d32fe04d7118ac8267689a33b05cc8b41310c4fc4ccd2da"
+    },
+    "mtl_t10_zm_essence_container_large_orange_glass": {
+      "material": "mtl_tod_inducer_glass",
+      "role": "glass",
+      "color": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\t10_zm_essence_container_orange\\_images\\m\\mtl_t10_zm_essence_container_large_orange_glass\\image_16dfcc8bd7716bbd.png",
+      "normal": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\t10_zm_essence_container_orange\\_images\\m\\mtl_t10_zm_essence_container_large_orange_glass\\image_5b89db36d79ba542.png",
+      "color_sha256": "a38518ff5a3c127e0393f6f1508ee2493ee84c00337a69fd792d74a982e18480",
+      "normal_sha256": "98e6653a71ad56075dd7266d71a98b2c216bc5fe2fa9dc53ed71afbc0a7affaa",
+      "glow": {
+        "idle": "1",
+        "on": "3"
+      }
+    },
+    "t10_zm_crystal_medium_01": {
+      "material": "mtl_tod_inducer_crystal01",
+      "role": "crystal",
+      "color": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\t10_zm_essence_container_crystal_02\\_images\\m\\t10_zm_crystal_medium_01\\image_76f5396b13a90a.png",
+      "normal": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\t10_zm_essence_container_crystal_02\\_images\\m\\t10_zm_crystal_medium_01\\image_202cbef27fecffd9.png",
+      "color_sha256": "25920eca5c57cdf777d047bc96b4926ca54c5168720c534a36ee5b034bdbedd2",
+      "normal_sha256": "4a5413afb7b9f348a0d5021164d9f7fc84f8df9d59db239fa4cd735bea7ac036",
+      "emission": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\t10_zm_essence_container_crystal_02\\_images\\m\\t10_zm_crystal_medium_01\\image_6a8f686fd9bc7929.png",
+      "emission_sha256": "96a2201065704d17e792cffc6cc39c88b460805996c0e43d3ebff1dd6ab72f8d",
+      "glow": {
+        "idle": "2",
+        "on": "8"
+      }
+    },
+    "t10_zm_crystal_medium_03": {
+      "material": "mtl_tod_inducer_crystal03",
+      "role": "crystal",
+      "color": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\t10_zm_essence_container_crystal_01\\_images\\m\\t10_zm_crystal_medium_03\\image_18d367cc6daf50fd.png",
+      "normal": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\t10_zm_essence_container_crystal_01\\_images\\m\\t10_zm_crystal_medium_03\\image_299b01dca3653352.png",
+      "color_sha256": "886a70a61398e0d63614b25d4505e6f92f852b0eb2570e6b0041476c8502ca0e",
+      "normal_sha256": "ee39663fb794d9d238074745a5dd3c1c1c11a58ed5ac8917a73b356e95b56968",
+      "emission": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\t10_zm_essence_container_crystal_01\\_images\\m\\t10_zm_crystal_medium_03\\image_6a8f686fd9bc7929.png",
+      "emission_sha256": "96a2201065704d17e792cffc6cc39c88b460805996c0e43d3ebff1dd6ab72f8d",
+      "glow": {
+        "idle": "2",
+        "on": "8"
+      }
+    }
+  },
+  "revision": "amber_liquid_2",
+  "gdt_sha256": "bbab7cd59ea75649d870862f8f7911bfa54d438e64be9236d7eb205a73f36910",
+  "images": {
+    "i_tod_inducer_36ade0417853ec32_c.png": "f775a9587faa12a3ffde6f41900611a6f72ea3a1b2ba74f9a02ad212e133f09a",
+    "i_tod_inducer_36ade0417853ec32_e.png": "3c3453dee6c97351c9458baa9ba1467d63c0febf3c6642b0201ebcca813d65f6",
+    "i_tod_inducer_36ade0417853ec32_n.png": "89c3181ff80a56735152df828fa0be429f632fa055c07dde7d72a63dbd50b111",
+    "i_tod_inducer_503f0f822297b23b_c.png": "486a0bb9194f7f8a19826be6304656d016ea81d007458e823077b1fb2d32fe12",
+    "i_tod_inducer_503f0f822297b23b_e.png": "16d8a7ae3cbbf5de326e84bad91457951fc4e402209bda236fe55ea68275c3cd",
+    "i_tod_inducer_503f0f822297b23b_n.png": "89c3181ff80a56735152df828fa0be429f632fa055c07dde7d72a63dbd50b111",
+    "i_tod_inducer_c85ade6d4063e1b_c.png": "134f6d46b96d35d0f5ca67b9e047dc85fc8cffafc50756fbeba35a7531178b95",
+    "i_tod_inducer_c85ade6d4063e1b_g.png": "a449e5a3273caebee93f5c1d20e18a3ab3d1cc396e063d29ed56dcd4e791cb25",
+    "i_tod_inducer_c85ade6d4063e1b_n.png": "cb028852e913716b34cc2cb19cd6c37ffbf294bead6b030d4874c5a0481b4381",
+    "i_tod_inducer_c85aee6d4063fce_c.png": "6d4206a7dc2059302caca4b4e9de9e5141c0a4a9329681d34a618e86068ff6d4",
+    "i_tod_inducer_c85aee6d4063fce_g.png": "17126d702f26b54469da8fa9d87b1bb7264957d4cf0bb51b35e5248fa75d98b5",
+    "i_tod_inducer_c85aee6d4063fce_n.png": "f02be9c07a5c0df79d32fe04d7118ac8267689a33b05cc8b41310c4fc4ccd2da",
+    "i_tod_inducer_crystal01_c.png": "25920eca5c57cdf777d047bc96b4926ca54c5168720c534a36ee5b034bdbedd2",
+    "i_tod_inducer_crystal01_e.png": "96a2201065704d17e792cffc6cc39c88b460805996c0e43d3ebff1dd6ab72f8d",
+    "i_tod_inducer_crystal01_g.png": "f48e8100975621fe368b22c270989239e70b706349b79a50d78d9b10db7e8a33",
+    "i_tod_inducer_crystal01_n.png": "4a5413afb7b9f348a0d5021164d9f7fc84f8df9d59db239fa4cd735bea7ac036",
+    "i_tod_inducer_crystal03_c.png": "886a70a61398e0d63614b25d4505e6f92f852b0eb2570e6b0041476c8502ca0e",
+    "i_tod_inducer_crystal03_e.png": "96a2201065704d17e792cffc6cc39c88b460805996c0e43d3ebff1dd6ab72f8d",
+    "i_tod_inducer_crystal03_g.png": "77c2605e9b9d7374b665005284bf246c6330c1563275afa77b020fa560887382",
+    "i_tod_inducer_crystal03_n.png": "ee39663fb794d9d238074745a5dd3c1c1c11a58ed5ac8917a73b356e95b56968",
+    "i_tod_inducer_gauge_e.png": "db454873ebe886f25ac96a4a5eeed59bec3b11630f9363eeb91a649c89d421b7",
+    "i_tod_inducer_glass_c.png": "a38518ff5a3c127e0393f6f1508ee2493ee84c00337a69fd792d74a982e18480",
+    "i_tod_inducer_glass_g.png": "cfa4d0dfacc142eb1dc5e79c2cfcccde4d6484e87d40d44f2d93a8eebbccb324",
+    "i_tod_inducer_glass_n.png": "98e6653a71ad56075dd7266d71a98b2c216bc5fe2fa9dc53ed71afbc0a7affaa"
+  },
+  "skin_override": [
+    "mtl_tod_inducer_36ade0417853ec32 mtl_tod_inducer_36ade0417853ec32_on",
+    "mtl_tod_inducer_503f0f822297b23b mtl_tod_inducer_503f0f822297b23b_on",
+    "mtl_tod_inducer_glass mtl_tod_inducer_glass_on",
+    "mtl_tod_inducer_crystal01 mtl_tod_inducer_crystal01_on",
+    "mtl_tod_inducer_crystal03 mtl_tod_inducer_crystal03_on"
+  ],
+  "xmodel_bin_sha256": "99a724fba7904f015998e8918ec9aa5dbbba24c9d094c945510269d6b184d0ee"
+}

@@ -1,0 +1,1428 @@
+{
+  "scope": "BO6-INSPIRED rebuild from BO3 emitters; Saluki exports no particle systems, so no BO6 vfx data exists here",
+  "effects": {
+    "fx_bo6_ice_muzzle_1p": {
+      "blocks": [
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_1p.efx",
+          "block": "wraith_looping_def0",
+          "name": "wraith_looping_def0",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_1p.efx",
+          "block": "wraith_looping_def1",
+          "name": "wraith_looping_def1",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_1p.efx",
+          "block": "wraith_looping_def2",
+          "name": "wraith_looping_def2",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_1p.efx",
+          "block": "wraith_looping_def3",
+          "name": "wraith_looping_def3",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_1p.efx",
+          "block": "wraith_looping_def4",
+          "name": "wraith_looping_def4",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_1p.efx",
+          "block": "wraith_looping_def5",
+          "name": "wraith_looping_def5",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_1p.efx",
+          "block": "wraith_looping_def6",
+          "name": "wraith_looping_def6",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_1p.efx",
+          "block": "wraith_looping_def8",
+          "name": "wraith_looping_def8",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_1p.efx",
+          "block": "wraith_looping_def9",
+          "name": "wraith_looping_def9",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_1p.efx",
+          "block": "wraith_looping_def10",
+          "name": "wraith_looping_def10",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_1p.efx",
+          "block": "wraith_oneshot_def0",
+          "name": "wraith_oneshot_def0",
+          "edits": {
+            "org_x": 48.0
+          }
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_1p.efx",
+          "block": "wraith_oneshot_def1",
+          "name": "wraith_oneshot_def1",
+          "edits": {
+            "org_x": 48.0
+          }
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_1p.efx",
+          "block": "wraith_oneshot_def2",
+          "name": "wraith_oneshot_def2",
+          "edits": {
+            "org_x": 48.0
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_freezegun_flash_upg.efx",
+          "block": "smaller_flakes",
+          "name": "smaller_flakes",
+          "edits": {
+            "scale": 1.0,
+            "color": "tint"
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_freezegun_flash_upg.efx",
+          "block": "bigger_flakes",
+          "name": "bigger_flakes",
+          "edits": {
+            "scale": 1.0,
+            "color": "tint"
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_freezegun_flash_upg.efx",
+          "block": "swirling_flakes",
+          "name": "swirling_flakes",
+          "edits": {
+            "scale": 0.8,
+            "color": "tint"
+          }
+        }
+      ],
+      "path": "share/raw/fx/tod/bo6/fx_bo6_ice_muzzle_1p.efx",
+      "sha256": "781bd580bdfb5d910ae43aa126a66b6082eb2019295a0f876cfa95b0a284ec5a"
+    },
+    "fx_bo6_ice_muzzle_3p": {
+      "blocks": [
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_3p.efx",
+          "block": "wraith_looping_def0",
+          "name": "wraith_looping_def0",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_3p.efx",
+          "block": "wraith_looping_def1",
+          "name": "wraith_looping_def1",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_3p.efx",
+          "block": "wraith_looping_def2",
+          "name": "wraith_looping_def2",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_3p.efx",
+          "block": "wraith_looping_def3",
+          "name": "wraith_looping_def3",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_3p.efx",
+          "block": "wraith_looping_def4",
+          "name": "wraith_looping_def4",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_3p.efx",
+          "block": "wraith_looping_def5",
+          "name": "wraith_looping_def5",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_3p.efx",
+          "block": "wraith_looping_def6",
+          "name": "wraith_looping_def6",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_3p.efx",
+          "block": "wraith_looping_def7",
+          "name": "wraith_looping_def7",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_3p.efx",
+          "block": "wraith_looping_def8",
+          "name": "wraith_looping_def8",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_3p.efx",
+          "block": "wraith_looping_def9",
+          "name": "wraith_looping_def9",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_3p.efx",
+          "block": "wraith_oneshot_def0",
+          "name": "wraith_oneshot_def0",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_3p.efx",
+          "block": "wraith_oneshot_def1",
+          "name": "wraith_oneshot_def1",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_3p.efx",
+          "block": "wraith_oneshot_def2",
+          "name": "wraith_oneshot_def2",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_3p.efx",
+          "block": "wraith_oneshot_def3",
+          "name": "wraith_oneshot_def3",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_3p.efx",
+          "block": "wraith_oneshot_def4",
+          "name": "wraith_oneshot_def4",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_3p.efx",
+          "block": "wraith_oneshot_def18",
+          "name": "wraith_oneshot_def18",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\fx_tod_ice_muzzle_3p.efx",
+          "block": "wraith_oneshot_def19",
+          "name": "wraith_oneshot_def19",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_freezegun_flash_upg.efx",
+          "block": "initial_flash",
+          "name": "initial_flash",
+          "edits": {
+            "scale": 0.6,
+            "color": "tint"
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_freezegun_flash_upg.efx",
+          "block": "smaller_flakes",
+          "name": "smaller_flakes",
+          "edits": {
+            "scale": 1.0,
+            "color": "tint"
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_freezegun_flash_upg.efx",
+          "block": "bigger_flakes",
+          "name": "bigger_flakes",
+          "edits": {
+            "scale": 1.2,
+            "color": "tint"
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_freezegun_flash_upg.efx",
+          "block": "swirling_flakes",
+          "name": "swirling_flakes",
+          "edits": {
+            "scale": 1.0,
+            "color": "tint"
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_freezegun_flash_upg.efx",
+          "block": "frost",
+          "name": "frost",
+          "edits": {
+            "scale": 0.5,
+            "color": "tint"
+          }
+        }
+      ],
+      "path": "share/raw/fx/tod/bo6/fx_bo6_ice_muzzle_3p.efx",
+      "sha256": "3a17df00c4a200eae867446d1da3ccd99eda784838de82457709cbf3bbc0c835"
+    },
+    "fx_bo6_ice_trail": {
+      "blocks": [
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\mage\\fx_staff_ice_trail_clean.efx",
+          "block": "wraith_oneshot_def0",
+          "name": "wraith_oneshot_def0",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\mage\\fx_staff_ice_trail_clean.efx",
+          "block": "wraith_oneshot_def5",
+          "name": "wraith_oneshot_def5",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\mage\\fx_staff_ice_trail_clean.efx",
+          "block": "wraith_oneshot_def7",
+          "name": "wraith_oneshot_def7",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\mage\\fx_staff_ice_trail_clean.efx",
+          "block": "wraith_oneshot_def9",
+          "name": "wraith_oneshot_def9",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\mage\\fx_staff_ice_trail_clean.efx",
+          "block": "wraith_oneshot_def2",
+          "name": "wraith_oneshot_def2",
+          "edits": {
+            "spawn_min": 96
+          }
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\mage\\fx_staff_ice_trail_clean.efx",
+          "block": "wraith_oneshot_def8",
+          "name": "wraith_oneshot_def8",
+          "edits": {
+            "spawn_min": 96
+          }
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\mage\\fx_staff_ice_trail_clean.efx",
+          "block": "wraith_oneshot_def1",
+          "name": "wraith_oneshot_def1",
+          "edits": {
+            "spawn_min": 136
+          }
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\mage\\fx_staff_ice_trail_clean.efx",
+          "block": "wraith_oneshot_def6",
+          "name": "wraith_oneshot_def6",
+          "edits": {
+            "spawn_min": 176
+          }
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\mage\\fx_staff_ice_trail_clean.efx",
+          "block": "wraith_oneshot_def14",
+          "name": "wraith_oneshot_def14",
+          "edits": {
+            "spawn_min": 176
+          }
+        },
+        {
+          "source": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\share\\raw\\fx\\tod\\mage\\fx_staff_ice_trail_clean.efx",
+          "block": "wraith_oneshot_def13",
+          "name": "wraith_oneshot_def13",
+          "edits": {
+            "spawn_min": 216
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_freezegun_flash_upg.efx",
+          "block": "smaller_flakes",
+          "name": "smaller_flakes",
+          "edits": {
+            "scale": 0.8,
+            "color": "tint"
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_freezegun_flash_upg.efx",
+          "block": "swirling_flakes",
+          "name": "swirling_flakes",
+          "edits": {
+            "scale": 0.5,
+            "color": "tint"
+          }
+        }
+      ],
+      "path": "share/raw/fx/tod/bo6/fx_bo6_ice_trail.efx",
+      "sha256": "22b2c4986d67b46218626b2cfa6ca6da04171e591513946152d022c5ae68d1e1"
+    },
+    "fx_bo6_ice_impact": {
+      "blocks": [
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_looping_def0",
+          "name": "wraith_looping_def0",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_looping_def1",
+          "name": "wraith_looping_def1",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_looping_def2",
+          "name": "wraith_looping_def2",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_looping_def3",
+          "name": "wraith_looping_def3",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_looping_def4",
+          "name": "wraith_looping_def4",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_looping_def5",
+          "name": "wraith_looping_def5",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_looping_def6",
+          "name": "wraith_looping_def6",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_looping_def7",
+          "name": "wraith_looping_def7",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_looping_def8",
+          "name": "wraith_looping_def8",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def0",
+          "name": "wraith_oneshot_def0",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def1",
+          "name": "wraith_oneshot_def1",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def2",
+          "name": "wraith_oneshot_def2",
+          "edits": {
+            "scale": 0.75,
+            "alpha": 0.35,
+            "life": 0.5
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def3",
+          "name": "wraith_oneshot_def3",
+          "edits": {
+            "scale": 0.75,
+            "alpha": 0.35,
+            "life": 0.5
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def4",
+          "name": "wraith_oneshot_def4",
+          "edits": {
+            "scale": 0.8,
+            "alpha": 0.6
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def5",
+          "name": "wraith_oneshot_def5",
+          "edits": {
+            "scale": 0.8,
+            "alpha": 0.6
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def6",
+          "name": "wraith_oneshot_def6",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def7",
+          "name": "wraith_oneshot_def7",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def8",
+          "name": "wraith_oneshot_def8",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def9",
+          "name": "wraith_oneshot_def9",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def10",
+          "name": "wraith_oneshot_def10",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def11",
+          "name": "wraith_oneshot_def11",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def12",
+          "name": "wraith_oneshot_def12",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def13",
+          "name": "wraith_oneshot_def13",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def14",
+          "name": "wraith_oneshot_def14",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def15",
+          "name": "wraith_oneshot_def15",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def16",
+          "name": "wraith_oneshot_def16",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def17",
+          "name": "wraith_oneshot_def17",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def18",
+          "name": "wraith_oneshot_def18",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def19",
+          "name": "wraith_oneshot_def19",
+          "edits": {
+            "alpha": 0.4,
+            "life": 0.5
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def20",
+          "name": "wraith_oneshot_def20",
+          "edits": {
+            "alpha": 0.4,
+            "life": 0.5
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def21",
+          "name": "wraith_oneshot_def21",
+          "edits": {
+            "alpha": 0.4,
+            "life": 0.5
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def22",
+          "name": "wraith_oneshot_def22",
+          "edits": {
+            "alpha": 0.4,
+            "life": 0.5
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def23",
+          "name": "wraith_oneshot_def23",
+          "edits": {
+            "alpha": 0.4,
+            "life": 0.5
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def24",
+          "name": "wraith_oneshot_def24",
+          "edits": {
+            "alpha": 0.4,
+            "life": 0.5
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def25",
+          "name": "wraith_oneshot_def25",
+          "edits": {
+            "alpha": 0.6
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def26",
+          "name": "wraith_oneshot_def26",
+          "edits": {
+            "alpha": 0.6
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def27",
+          "name": "wraith_oneshot_def27",
+          "edits": {
+            "alpha": 0.6
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def28",
+          "name": "wraith_oneshot_def28",
+          "edits": {
+            "alpha": 0.6
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def29",
+          "name": "wraith_oneshot_def29",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def30",
+          "name": "wraith_oneshot_def30",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def31",
+          "name": "wraith_oneshot_def31",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def32",
+          "name": "wraith_oneshot_def32",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def33",
+          "name": "wraith_oneshot_def33",
+          "edits": {
+            "scale": 0.8,
+            "alpha": 0.6
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def34",
+          "name": "wraith_oneshot_def34",
+          "edits": {
+            "scale": 0.8,
+            "alpha": 0.6
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def35",
+          "name": "wraith_oneshot_def35",
+          "edits": {
+            "scale": 0.8,
+            "alpha": 0.6
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def36",
+          "name": "wraith_oneshot_def36",
+          "edits": {
+            "scale": 0.8,
+            "alpha": 0.6
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def37",
+          "name": "wraith_oneshot_def37",
+          "edits": {
+            "scale": 0.8,
+            "alpha": 0.6
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def38",
+          "name": "wraith_oneshot_def38",
+          "edits": {
+            "scale": 0.8,
+            "alpha": 0.6
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def39",
+          "name": "wraith_oneshot_def39",
+          "edits": {
+            "scale": 0.8,
+            "alpha": 0.6
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_impact.efx",
+          "block": "wraith_oneshot_def40",
+          "name": "wraith_oneshot_def40",
+          "edits": {
+            "scale": 0.8,
+            "alpha": 0.6
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_exp_freezegun_impact.efx",
+          "block": "light",
+          "name": "light",
+          "edits": {
+            "scale": 1.0,
+            "color": "tint"
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_exp_freezegun_impact.efx",
+          "block": "IGC_glow",
+          "name": "IGC_glow",
+          "edits": {
+            "scale": 1.2,
+            "color": "tint"
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_exp_freezegun_impact.efx",
+          "block": "0_snow_flakes_out",
+          "name": "0_snow_flakes_out",
+          "edits": {
+            "scale": 0.8,
+            "color": "tint",
+            "alpha": 0.5
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_exp_freezegun_impact.efx",
+          "block": "sparks_A",
+          "name": "sparks_A",
+          "edits": {
+            "scale": 1.0,
+            "color": "tint"
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_exp_freezegun_impact.efx",
+          "block": "11tendrils",
+          "name": "11tendrils",
+          "edits": {
+            "scale": 1.0,
+            "color": "tint"
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_freezegun_flash_upg.efx",
+          "block": "ring_inner",
+          "name": "ring_inner",
+          "edits": {
+            "scale": 0.5,
+            "color": "tint"
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_freezegun_flash_upg.efx",
+          "block": "bigger_flakes",
+          "name": "bigger_flakes",
+          "edits": {
+            "scale": 1.5,
+            "color": "tint"
+          }
+        }
+      ],
+      "path": "share/raw/fx/tod/bo6/fx_bo6_ice_impact.efx",
+      "sha256": "f8a300cf40d74048c859ea21cc265624451047031679fe0168b1c1323ea5ef9a"
+    },
+    "fx_tod_staff_glow_elec": {
+      "blocks": [
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def0",
+          "name": "wraith_looping_def0",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def1",
+          "name": "wraith_looping_def1",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def2",
+          "name": "wraith_looping_def2",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def3",
+          "name": "wraith_looping_def3",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def4",
+          "name": "wraith_looping_def4",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def5",
+          "name": "wraith_looping_def5",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def6",
+          "name": "wraith_looping_def6",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def7",
+          "name": "wraith_looping_def7",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def8",
+          "name": "wraith_looping_def8",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def9",
+          "name": "wraith_looping_def9",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def10",
+          "name": "wraith_looping_def10",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def11",
+          "name": "wraith_looping_def11",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def12",
+          "name": "wraith_looping_def12",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def13",
+          "name": "wraith_looping_def13",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def14",
+          "name": "wraith_looping_def14",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def15",
+          "name": "wraith_looping_def15",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def16",
+          "name": "wraith_looping_def16",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def17",
+          "name": "wraith_looping_def17",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def18",
+          "name": "wraith_looping_def18",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def19",
+          "name": "wraith_looping_def19",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def20",
+          "name": "wraith_looping_def20",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def21",
+          "name": "wraith_looping_def21",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def22",
+          "name": "wraith_looping_def22",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def23",
+          "name": "wraith_looping_def23",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def24",
+          "name": "wraith_looping_def24",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def25",
+          "name": "wraith_looping_def25",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def26",
+          "name": "wraith_looping_def26",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def27",
+          "name": "wraith_looping_def27",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def28",
+          "name": "wraith_looping_def28",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def29",
+          "name": "wraith_looping_def29",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def30",
+          "name": "wraith_looping_def30",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def31",
+          "name": "wraith_looping_def31",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def32",
+          "name": "wraith_looping_def32",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def33",
+          "name": "wraith_looping_def33",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def34",
+          "name": "wraith_looping_def34",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def35",
+          "name": "wraith_looping_def35",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_elec_persistent.efx",
+          "block": "wraith_looping_def36",
+          "name": "wraith_looping_def36",
+          "edits": {}
+        }
+      ],
+      "path": "share/raw/fx/tod/bo6/fx_tod_staff_glow_elec.efx",
+      "sha256": "269b2c430994d0303590f569100ce87daedca6b82ce78d7fcc71e0b09426da58"
+    },
+    "fx_tod_staff_glow_fire": {
+      "blocks": [
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def0",
+          "name": "wraith_looping_def0",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def1",
+          "name": "wraith_looping_def1",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def2",
+          "name": "wraith_looping_def2",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def3",
+          "name": "wraith_looping_def3",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def4",
+          "name": "wraith_looping_def4",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def5",
+          "name": "wraith_looping_def5",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def6",
+          "name": "wraith_looping_def6",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def7",
+          "name": "wraith_looping_def7",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def8",
+          "name": "wraith_looping_def8",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def9",
+          "name": "wraith_looping_def9",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def10",
+          "name": "wraith_looping_def10",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def11",
+          "name": "wraith_looping_def11",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def12",
+          "name": "wraith_looping_def12",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def13",
+          "name": "wraith_looping_def13",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def14",
+          "name": "wraith_looping_def14",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def15",
+          "name": "wraith_looping_def15",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def16",
+          "name": "wraith_looping_def16",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def17",
+          "name": "wraith_looping_def17",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def18",
+          "name": "wraith_looping_def18",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def19",
+          "name": "wraith_looping_def19",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def20",
+          "name": "wraith_looping_def20",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def21",
+          "name": "wraith_looping_def21",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def22",
+          "name": "wraith_looping_def22",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def23",
+          "name": "wraith_looping_def23",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def24",
+          "name": "wraith_looping_def24",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def25",
+          "name": "wraith_looping_def25",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def26",
+          "name": "wraith_looping_def26",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def27",
+          "name": "wraith_looping_def27",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def28",
+          "name": "wraith_looping_def28",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def29",
+          "name": "wraith_looping_def29",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def30",
+          "name": "wraith_looping_def30",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def31",
+          "name": "wraith_looping_def31",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def32",
+          "name": "wraith_looping_def32",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def33",
+          "name": "wraith_looping_def33",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def34",
+          "name": "wraith_looping_def34",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def35",
+          "name": "wraith_looping_def35",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def36",
+          "name": "wraith_looping_def36",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def37",
+          "name": "wraith_looping_def37",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def38",
+          "name": "wraith_looping_def38",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def39",
+          "name": "wraith_looping_def39",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def40",
+          "name": "wraith_looping_def40",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def41",
+          "name": "wraith_looping_def41",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def42",
+          "name": "wraith_looping_def42",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def43",
+          "name": "wraith_looping_def43",
+          "edits": {}
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_fire_persistent.efx",
+          "block": "wraith_looping_def44",
+          "name": "wraith_looping_def44",
+          "edits": {}
+        }
+      ],
+      "path": "share/raw/fx/tod/bo6/fx_tod_staff_glow_fire.efx",
+      "sha256": "189ae0a14d03604ccfd45d7a92f0b69d489b4b1bb1ff42af2a7bc41785c837b4"
+    },
+    "fx_tod_staff_glow_ice": {
+      "blocks": [
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_persistent.efx",
+          "block": "wraith_looping_def0",
+          "name": "wraith_looping_def0",
+          "edits": {
+            "scale": 1.25
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_persistent.efx",
+          "block": "wraith_looping_def1",
+          "name": "wraith_looping_def1",
+          "edits": {
+            "scale": 1.25
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_persistent.efx",
+          "block": "wraith_looping_def2",
+          "name": "wraith_looping_def2",
+          "edits": {
+            "scale": 1.25
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_persistent.efx",
+          "block": "wraith_looping_def3",
+          "name": "wraith_looping_def3",
+          "edits": {
+            "scale": 1.25
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_persistent.efx",
+          "block": "wraith_looping_def4",
+          "name": "wraith_looping_def4",
+          "edits": {
+            "scale": 1.25
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_persistent.efx",
+          "block": "wraith_looping_def5",
+          "name": "wraith_looping_def5",
+          "edits": {
+            "scale": 1.25
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_persistent.efx",
+          "block": "wraith_looping_def6",
+          "name": "wraith_looping_def6",
+          "edits": {
+            "scale": 1.25
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_persistent.efx",
+          "block": "wraith_looping_def7",
+          "name": "wraith_looping_def7",
+          "edits": {
+            "scale": 1.25
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_persistent.efx",
+          "block": "wraith_looping_def8",
+          "name": "wraith_looping_def8",
+          "edits": {
+            "scale": 1.25
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_persistent.efx",
+          "block": "wraith_looping_def9",
+          "name": "wraith_looping_def9",
+          "edits": {
+            "scale": 1.25
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_persistent.efx",
+          "block": "wraith_looping_def10",
+          "name": "wraith_looping_def10",
+          "edits": {
+            "scale": 1.25
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_persistent.efx",
+          "block": "wraith_looping_def11",
+          "name": "wraith_looping_def11",
+          "edits": {
+            "scale": 1.25
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_persistent.efx",
+          "block": "wraith_looping_def12",
+          "name": "wraith_looping_def12",
+          "edits": {
+            "scale": 1.25
+          }
+        },
+        {
+          "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\share\\raw\\fx\\dlc5\\zmb_weapon\\fx_staff_ice_persistent.efx",
+          "block": "wraith_looping_def13",
+          "name": "wraith_looping_def13",
+          "edits": {
+            "scale": 1.25
+          }
+        }
+      ],
+      "path": "share/raw/fx/tod/bo6/fx_tod_staff_glow_ice.efx",
+      "sha256": "5d4042b95929ed84e269ec4077f612746050234f474d88001f878dc8fe674690"
+    }
+  },
+  "native_verified": false
+}

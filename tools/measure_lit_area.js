@@ -3,30 +3,13 @@
 // measure_lit_area.js — what the LED bake ACTUALLY costs, measured before you
 // spend two minutes finding out.
 //
-// WHY THIS EXISTS (2026-08-25). The project spent a long time believing the LED
-// bake tracked BRUSH COUNT, because that is the number the generator prints.
-// It does not. The decisive datum: the SAME 4,700 brushes bake in 38.2 s at
-// CR_SCALE 1.0 and 126.2 s at CR_SCALE 1.4 — 3.3x the time for ~2x the LIT
-// SURFACE AREA, with the brush count identical. See docs/34_crown_redesign.md.
-//
-// So this sums the surface area of every LIT face in the generated .map and
-// groups it by what part of the map it belongs to. Run it after a geometry
-// change and BEFORE tools/_bake_test.ps1: if the area barely moved, the bake
-// will barely move, and you have saved yourself the wait. If it jumped, you
-// already know why.
-//
-// It is a BUDGET INSTRUMENT, not a gate — there is no pass/fail. The gate is
-// still _bake_test.ps1, because the failure mode (brush.cpp:1860) is a D3D
-// allocation on the bake host and no static measurement can predict it.
-//
-//   node tools/measure_lit_area.js
-//   node tools/measure_lit_area.js --map some/other.map
-//
-// Faces in clip / sky / caulk / nodraw and the tool-material volume brushes are
-// excluded: they carry no lightmap chart and are free.
-// ---------------------------------------------------------------------------
+// Sums authored lit face areas, including true convex crown faces. This is
+// an input surface-area measure, not frame time, final CSG area or a prediction
+// of bake duration. The native bake remains the pass/fail gate.
+// Usage: node tools/measure_lit_area.js [--map candidate.map]
 'use strict';
 const fs = require('fs');
+const CB = require('./convex_brush');
 const path = require('path');
 
 const REPO = path.join(__dirname, '..');
@@ -60,7 +43,8 @@ const groupOf = (label) => {
 
 const lines = fs.readFileSync(MAP, 'utf8').split(/\r?\n/);
 const acc = new Map();
-let label = null, skipped = 0;
+let label = null, skipped = 0, nonAxial = 0;
+const nonAxialLabels = new Set();
 
 for (let i = 0; i < lines.length; i++) {
   const m = /^\/\/ brush \d+ [—-] (.*)$/.exec(lines[i]);
@@ -72,20 +56,18 @@ for (let i = 0; i < lines.length; i++) {
     const f = /^\s*\(\s*(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s*\)\s*\(\s*(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s*\)\s*\(\s*(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s*\)\s+(\S+)/.exec(lines[j]);
     if (f) { faces.push(f.slice(1, 10).map(Number)); mat = mat || f[10]; }
   }
-  if (faces.length === 6 && mat) {
-    // the box() plane template: [z1, z2, y1, x2, y2, x1]
-    const z1 = faces[0][2], z2 = faces[1][2], y1 = faces[2][1], y2 = faces[4][1], x1 = faces[5][0], x2 = faces[3][0];
-    const dx = x2 - x1, dy = y2 - y1, dz = z2 - z1;
-    if (dx > 0 && dy > 0 && dz > 0) {
-      if (UNLIT.test(mat)) { skipped++; }
-      else {
-        const g = groupOf(label);
-        const e = acc.get(g) || { n: 0, area: 0 };
-        e.n++; e.area += 2 * (dx * dy + dy * dz + dx * dz);
-        acc.set(g, e);
-      }
-    }
-  } else if (faces.length) skipped++;
+  // UNLIT first, BEFORE the box-template read (2026-08-27): the stair ramp
+  // wedges are clip_player with two sloped planes — index-reading those through
+  // the box template produced a garbage box that silently failed the dx/dy/dz
+  // check and vanished from BOTH totals, so TOTAL stopped summing to the
+  // generator's brush count with no tell. An unlit brush is skipped whatever
+  // its shape; a LIT brush with a sloped face gets its own reported bucket.
+  if (faces.length && mat && UNLIT.test(mat)) { skipped++; }
+  else if (faces.length >=4 && mat) {
+    const h=CB.hull(faces.map(v=>CB.plane([v.slice(0,3),v.slice(3,6),v.slice(6,9)],mat)));
+    const g=groupOf(label),e=acc.get(g)||{n:0,area:0};
+    e.n++;e.area+=h.faces.reduce((a,f)=>a+f.area,0);acc.set(g,e);
+  }
   label = null;
   i = j;
 }
@@ -108,6 +90,11 @@ const crown = rows.filter(r => r[0].startsWith('crown ')).reduce((s, r) => s + r
 console.log(`  the crown is ${((crown / totA) * 100).toFixed(0)}% of all lit area in the map ` +
   `(${(crown / 1e6).toFixed(0)}M of ${(totA / 1e6).toFixed(0)}M u^2).`);
 console.log(`  ${skipped} unlit/degenerate brush(es) excluded (clip, sky, tool materials).`);
+if (nonAxial) {
+  console.log(`  WARNING: ${nonAxial} LIT brush(es) have sloped faces this tool cannot measure:`);
+  for (const l of nonAxialLabels) console.log(`    ${l}`);
+  console.log('  Their area is NOT in the totals above — measure by hand before trusting a delta.');
+}
 console.log();
 console.log('  RULE OF THUMB for a detail pass: a 200-unit cube is ~0.24M u^2, so 300 of them');
 console.log(`  is ~72M = ${((72e6 / totA) * 100).toFixed(0)}% of the current total. Small relief is nearly free; what costs`);

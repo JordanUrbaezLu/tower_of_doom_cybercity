@@ -1,0 +1,595 @@
+{
+	"i_tod_csign_c" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_csign_c.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"i_tod_csign_n" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_csign_n.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "normalMap"
+		"compressionMethod" "compressed"
+		"streamable" "1"
+	}
+	"i_tod_csign_s" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_csign_s.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "specularMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"i_tod_csign_g" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_csign_g.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "glossMap"
+		"compressionMethod" "compressed"
+		"streamable" "1"
+	}
+	"i_tod_csign_e" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_csign_e.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"mtl_tod_cybercity_sign" ( "material.gdf" )
+	{
+		"surfaceType" "metal"
+		"template" "material.template"
+		"materialCategory" "Geometry Advanced"
+		"materialType" "lit_emissive_advanced_fullspec"
+		"colorMap" "i_tod_csign_c"
+		"normalMap" "i_tod_csign_n"
+		"cosinePowerMap" "i_tod_csign_g"
+		"specColorMap" "i_tod_csign_s"
+		"specMapEnable" "1"
+		"specColorTint" "1 1 1 1"
+		"colorMap00" "i_tod_csign_e"
+		"colorTint" "1 1 1 1"
+		"colorTint1" "1 1 1 1"
+		"scaleRGB" "6"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "11"
+		"specAmount" "0.6"
+		"reflectionProbeAmount" "0.3"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"waterRoughness" "0"
+	}
+	"tod_cybercity_sign" ( "xmodel.gdf" )
+	{
+		"filename" "tod_fan_props\\tod_cybercity_sign.xmodel_bin"
+		"type" "rigid"
+		"skinOverride" ""
+		"BulletCollisionLOD" "High"
+		"physicsPreset" ""
+		"scale" "1"
+		"highLodDist" "0"
+		"autogenMediumLod" "0"
+		"autogenLowLod" "0"
+		"autogenLowestLod" "0"
+		"autogenLod4" "0"
+		"autogenLod5" "0"
+		"autogenLod6" "0"
+		"autogenLod7" "0"
+		"lodNormalPriority" "1"
+		"lodPositionPriority" "1"
+	}
+	"i_tod_uterm_c" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_uterm_c.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"i_tod_uterm_n" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_uterm_n.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "normalMap"
+		"compressionMethod" "compressed"
+		"streamable" "1"
+	}
+	"i_tod_uterm_e" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_uterm_e.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"mtl_tod_uplink_terminal" ( "material.gdf" )
+	{
+		"surfaceType" "metal"
+		"template" "material.template"
+		"materialCategory" "Geometry Plus"
+		"materialType" "lit_emissive_plus"
+		"colorMap" "i_tod_uterm_c"
+		"normalMap" "i_tod_uterm_n"
+		"colorTint" "1 1 1 1"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"heatmap" "$gray_32_one_channel"
+		"normalHeightScale" "1"
+		"glossRangeMin" "3"
+		"glossRangeMax" "7"
+		"specAmount" "0.4"
+		"reflectionProbeAmount" "0.2"
+		"waterRoughness" "0"
+		"colorMap00" "i_tod_uterm_e"
+		"colorTint1" "1 1 1 1"
+		"scaleRGB" "5"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+	}
+	"tod_uplink_terminal" ( "xmodel.gdf" )
+	{
+		"filename" "tod_fan_props\\tod_uplink_terminal.xmodel_bin"
+		"type" "rigid"
+		"skinOverride" ""
+		"BulletCollisionLOD" "High"
+		"physicsPreset" ""
+		"scale" "1"
+		"highLodDist" "0"
+		"autogenMediumLod" "0"
+		"autogenLowLod" "0"
+		"autogenLowestLod" "0"
+		"autogenLod4" "0"
+		"autogenLod5" "0"
+		"autogenLod6" "0"
+		"autogenLod7" "0"
+		"lodNormalPriority" "1"
+		"lodPositionPriority" "1"
+	}
+	"i_tod_pterm_c" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_pterm_c.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"i_tod_pterm_n" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_pterm_n.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "normalMap"
+		"compressionMethod" "compressed"
+		"streamable" "1"
+	}
+	"i_tod_pterm_e" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_pterm_e.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"mtl_tod_power_terminal" ( "material.gdf" )
+	{
+		"surfaceType" "metal"
+		"template" "material.template"
+		"materialCategory" "Geometry Plus"
+		"materialType" "lit_emissive_plus"
+		"colorMap" "i_tod_pterm_c"
+		"normalMap" "i_tod_pterm_n"
+		"colorTint" "1 1 1 1"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"heatmap" "$gray_32_one_channel"
+		"normalHeightScale" "1"
+		"glossRangeMin" "3"
+		"glossRangeMax" "7"
+		"specAmount" "0.4"
+		"reflectionProbeAmount" "0.2"
+		"waterRoughness" "0"
+		"colorMap00" "i_tod_pterm_e"
+		"colorTint1" "1 1 1 1"
+		"scaleRGB" "5"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+	}
+	"tod_power_terminal" ( "xmodel.gdf" )
+	{
+		"filename" "tod_fan_props\\tod_power_terminal.xmodel_bin"
+		"type" "rigid"
+		"skinOverride" ""
+		"BulletCollisionLOD" "High"
+		"physicsPreset" ""
+		"scale" "1"
+		"highLodDist" "0"
+		"autogenMediumLod" "0"
+		"autogenLowLod" "0"
+		"autogenLowestLod" "0"
+		"autogenLod4" "0"
+		"autogenLod5" "0"
+		"autogenLod6" "0"
+		"autogenLod7" "0"
+		"lodNormalPriority" "1"
+		"lodPositionPriority" "1"
+	}
+	"i_tod_achest_c" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_achest_c.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"i_tod_achest_n" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_achest_n.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "normalMap"
+		"compressionMethod" "compressed"
+		"streamable" "1"
+	}
+	"i_tod_achest_s" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_achest_s.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "specularMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"i_tod_achest_g" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_achest_g.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "glossMap"
+		"compressionMethod" "compressed"
+		"streamable" "1"
+	}
+	"i_tod_achest_e" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_achest_e.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"mtl_tod_ammo_chest" ( "material.gdf" )
+	{
+		"surfaceType" "metal"
+		"template" "material.template"
+		"materialCategory" "Geometry Advanced"
+		"materialType" "lit_emissive_advanced_fullspec"
+		"colorMap" "i_tod_achest_c"
+		"normalMap" "i_tod_achest_n"
+		"cosinePowerMap" "i_tod_achest_g"
+		"specColorMap" "i_tod_achest_s"
+		"specMapEnable" "1"
+		"specColorTint" "1 1 1 1"
+		"colorMap00" "i_tod_achest_e"
+		"colorTint" "1 1 1 1"
+		"colorTint1" "1 1 1 1"
+		"scaleRGB" "4"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "11"
+		"specAmount" "0.6"
+		"reflectionProbeAmount" "0.3"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"waterRoughness" "0"
+	}
+	"tod_ammo_chest" ( "xmodel.gdf" )
+	{
+		"filename" "tod_fan_props\\tod_ammo_chest.xmodel_bin"
+		"type" "rigid"
+		"skinOverride" ""
+		"BulletCollisionLOD" "High"
+		"physicsPreset" ""
+		"scale" "1"
+		"highLodDist" "0"
+		"autogenMediumLod" "0"
+		"autogenLowLod" "0"
+		"autogenLowestLod" "0"
+		"autogenLod4" "0"
+		"autogenLod5" "0"
+		"autogenLod6" "0"
+		"autogenLod7" "0"
+		"lodNormalPriority" "1"
+		"lodPositionPriority" "1"
+	}
+	"i_tod_rkspire_c" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_rkspire_c.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"i_tod_rkspire_n" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_rkspire_n.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "normalMap"
+		"compressionMethod" "compressed"
+		"streamable" "1"
+	}
+	"i_tod_rkspire_s" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_rkspire_s.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "specularMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"i_tod_rkspire_g" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_rkspire_g.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "glossMap"
+		"compressionMethod" "compressed"
+		"streamable" "1"
+	}
+	"i_tod_rkspire_e" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_rkspire_e.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"mtl_tod_rocket_spire" ( "material.gdf" )
+	{
+		"surfaceType" "metal"
+		"template" "material.template"
+		"materialCategory" "Geometry Advanced"
+		"materialType" "lit_emissive_advanced_fullspec"
+		"colorMap" "i_tod_rkspire_c"
+		"normalMap" "i_tod_rkspire_n"
+		"cosinePowerMap" "i_tod_rkspire_g"
+		"specColorMap" "i_tod_rkspire_s"
+		"specMapEnable" "1"
+		"specColorTint" "1 1 1 1"
+		"colorMap00" "i_tod_rkspire_e"
+		"colorTint" "1 1 1 1"
+		"colorTint1" "1 1 1 1"
+		"scaleRGB" "6"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "11"
+		"specAmount" "0.6"
+		"reflectionProbeAmount" "0.3"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"waterRoughness" "0"
+	}
+	"tod_rocket_spire" ( "xmodel.gdf" )
+	{
+		"filename" "tod_fan_props\\tod_rocket_spire.xmodel_bin"
+		"type" "rigid"
+		"skinOverride" ""
+		"BulletCollisionLOD" "High"
+		"physicsPreset" ""
+		"scale" "1"
+		"highLodDist" "0"
+		"autogenMediumLod" "0"
+		"autogenLowLod" "0"
+		"autogenLowestLod" "0"
+		"autogenLod4" "0"
+		"autogenLod5" "0"
+		"autogenLod6" "0"
+		"autogenLod7" "0"
+		"lodNormalPriority" "1"
+		"lodPositionPriority" "1"
+	}
+	"i_tod_rkwreck_c" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_rkwreck_c.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"i_tod_rkwreck_e" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_rkwreck_e.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"mtl_tod_rocket_wreck" ( "material.gdf" )
+	{
+		"surfaceType" "metal"
+		"template" "material.template"
+		"materialCategory" "Geometry Advanced"
+		"materialType" "lit_emissive_advanced_fullspec"
+		"colorMap" "i_tod_rkwreck_c"
+		"normalMap" "i_tod_rkspire_n"
+		"cosinePowerMap" "i_tod_rkspire_g"
+		"specColorMap" "i_tod_rkspire_s"
+		"specMapEnable" "1"
+		"specColorTint" "1 1 1 1"
+		"colorMap00" "i_tod_rkwreck_e"
+		"colorTint" "1 1 1 1"
+		"colorTint1" "1 1 1 1"
+		"scaleRGB" "5"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "11"
+		"specAmount" "0.6"
+		"reflectionProbeAmount" "0.3"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"waterRoughness" "0"
+	}
+	"tod_rocket_wreck" ( "xmodel.gdf" )
+	{
+		"filename" "tod_fan_props\\tod_rocket_spire.xmodel_bin"
+		"type" "rigid"
+		"skinOverride" "mtl_tod_rocket_spire mtl_tod_rocket_wreck\r\n"
+		"BulletCollisionLOD" "High"
+		"physicsPreset" ""
+		"scale" "1"
+		"highLodDist" "0"
+		"autogenMediumLod" "0"
+		"autogenLowLod" "0"
+		"autogenLowestLod" "0"
+		"autogenLod4" "0"
+		"autogenLod5" "0"
+		"autogenLod6" "0"
+		"autogenLod7" "0"
+		"lodNormalPriority" "1"
+		"lodPositionPriority" "1"
+	}
+	"i_tod_rkexit_c" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_rkexit_c.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"i_tod_rkexit_n" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_rkexit_n.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "normalMap"
+		"compressionMethod" "compressed"
+		"streamable" "1"
+	}
+	"i_tod_rkexit_s" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_rkexit_s.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "specularMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"i_tod_rkexit_g" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_rkexit_g.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "glossMap"
+		"compressionMethod" "compressed"
+		"streamable" "1"
+	}
+	"i_tod_rkexit_e" ( "image.gdf" )
+	{
+		"baseImage" "model_export\\tod_fan_props\\_images\\i_tod_rkexit_e.png"
+		"imageType" "Texture"
+		"type" "image"
+		"semantic" "diffuseMap"
+		"compressionMethod" "compressed high color"
+		"streamable" "1"
+		"coreSemantic" "sRGB3chAlpha"
+	}
+	"mtl_tod_rocket_extract" ( "material.gdf" )
+	{
+		"surfaceType" "metal"
+		"template" "material.template"
+		"materialCategory" "Geometry Advanced"
+		"materialType" "lit_emissive_advanced_fullspec"
+		"colorMap" "i_tod_rkexit_c"
+		"normalMap" "i_tod_rkexit_n"
+		"cosinePowerMap" "i_tod_rkexit_g"
+		"specColorMap" "i_tod_rkexit_s"
+		"specMapEnable" "1"
+		"specColorTint" "1 1 1 1"
+		"colorMap00" "i_tod_rkexit_e"
+		"colorTint" "1 1 1 1"
+		"colorTint1" "1 1 1 1"
+		"scaleRGB" "6"
+		"emissiveIncompetence" "1"
+		"emissiveFalloff" "0"
+		"normalHeightScale" "1"
+		"glossRangeMin" "0"
+		"glossRangeMax" "11"
+		"specAmount" "0.6"
+		"reflectionProbeAmount" "0.3"
+		"textureAtlasRowCount" "1"
+		"textureAtlasColumnCount" "1"
+		"usage" "<not in editor>"
+		"waterRoughness" "0"
+	}
+	"tod_rocket_extract" ( "xmodel.gdf" )
+	{
+		"filename" "tod_fan_props\\tod_rocket_extract.xmodel_bin"
+		"type" "rigid"
+		"skinOverride" ""
+		"BulletCollisionLOD" "High"
+		"physicsPreset" ""
+		"scale" "1"
+		"highLodDist" "0"
+		"autogenMediumLod" "0"
+		"autogenLowLod" "0"
+		"autogenLowestLod" "0"
+		"autogenLod4" "0"
+		"autogenLod5" "0"
+		"autogenLod6" "0"
+		"autogenLod7" "0"
+		"lodNormalPriority" "1"
+		"lodPositionPriority" "1"
+	}
+}

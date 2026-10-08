@@ -1,3 +1,4 @@
+require( "ui.uieditor.widgets.HUD.AetheriumWidgets.TodUIOwnership" )
 -- Aetherium Powerups Container Widget
 -- Dynamically displays active powerups with timers
 
@@ -136,6 +137,7 @@ end, true )
 CoD.AetheriumPowerupsContainer = InheritFrom( LUI.UIElement )
 CoD.AetheriumPowerupsContainer.new = function ( menu, controller )
 	local self = LUI.UIElement.new()
+    CoD.TodUIOwnership.Attach( self )
 
 	if PreLoadFunc then
 		PreLoadFunc( self, controller )
@@ -165,5 +167,7 @@ CoD.AetheriumPowerupsContainer.new = function ( menu, controller )
 		PostLoadFunc( self, controller, menu )
 	end
 
+
+	-- =========================================================================
 	return self
 end

@@ -92,12 +92,25 @@
 //     acc_panzer_flame_mult 1.21 (map 1's +10% then +10% passes).
 //   * function_3389e2f3        (~:743)  = the GROUND-FIRE pool, ignited by the
 //     10Hz proximity sweep (~:710). Was NEVER scaled — raw stock 30/20.
-// Both now multiply by this one constant, so per-tick damage halves exactly:
-//   cone   36 -> 18 (no Jugg) / 24 -> 12 (Jugg)
-//   ground 30 -> 15 (no Jugg) / 20 -> 10 (Jugg)
+// The GROUND-FIRE pool still multiplies by this one constant, so its per-tick
+// damage halves exactly: 30 -> 15 (no Jugg) / 20 -> 10 (Jugg).
 // The old acc_panzer_flame_mult DVAR is folded away with it — this map's
 // doctrine is compile-time constants, never dvars.
 #define TOD_PANZER_FIRE_MULT   0.5
+
+// [tod 2026-09-08] THE CONE'S NUMBERS ARE PINNED, NOT DERIVED (user: "do 25 and
+// 12"). They used to be int(30 * 1.21 * TOD_PANZER_FIRE_MULT) = 18 and
+// int(20 * ...) = 12 — a stock base times a map-1 heritage factor times a
+// halving pass, three movable parts for a number the user tunes by feel. Same
+// lesson as CLASS_SEC_CAP_MULT: pin the value, never derive it from something
+// that moves. 0.5s ticks over a 1.5s burn = ~3 ticks, so these are a THIRD of
+// the per-ignite total against a 100 HP player: 75 without Jugg, 36 with it.
+// The DoT cannot be outrun and is NOT reduced by the DR upgrade domain (it
+// never enters boss_player_damage), so the total is what matters — 75 is a
+// hard hit that leaves you alive; the historical 36/tick (108 total) was a
+// guaranteed no-Jugg down from a single tag.
+#define TOD_PANZER_FLAME_DMG        25
+#define TOD_PANZER_FLAME_DMG_JUGG   12
 
 REGISTER_SYSTEM( "zm_ai_mechz", &__init__, undefined )
 
@@ -132,6 +145,19 @@ function __init__()
 
 	spawner::add_archetype_spawn_function("mechz", &tomb_spawn_function);
 	level.mechz_claw_cooldown_time = 7000;
+	// [tod 2026-09-08] OURS IS THE ONLY FLAME DAMAGE (user: "I want our damage not the
+	// stock"). Stock's mechzUpdateFlame (mechz.gsc:800) sweeps the flame cone itself every
+	// behavior-tree tick and, with no callback set, ran MechzBehavior::playerFlameDamage at
+	// the raw stock 30/20 per tick - in PARALLEL with this map's halved twin, on a separate
+	// latch (is_burning vs acc_mechz_burn_until). SetPlayerBurning does not stack (its
+	// WatchBurnDamage endons on its own restart notify), so the last caller of the frame won
+	// and the flame did full or half damage more or less at random, while every comment in
+	// this file said "halved". Claiming the callback makes stock call US instead, so
+	// TOD_PANZER_FIRE_MULT is the one owner of the number.
+	// It also retires the last writer of player.is_burning: stock's playerFlameDamage set it,
+	// and _zm_utility.gsc:3776 requests the "lava_small" shellshock for a burning player on
+	// explosive damage - an asset no fastfile here carries. See acc_player_flame_damage.
+	level.mechz_flamethrower_player_callback = &acc_mechz_flame_player_cb;
 	level.mechz_left_arm_damage_callback = &function_671deda5;
 	level.mechz_explosive_damage_reaction_callback = &function_6028875a;
 	level.mechz_powercap_destroyed_callback = &function_d6f31ed2;
@@ -173,8 +199,8 @@ function __init__()
 
 	// [acc] VISIBLE FLAMETHROWER (user 2026-07-08: "his flamethrower has no fx"): the pack's
 	// "mechz_ft" field is VERSION_DLC1 = version-gated dead on a usermap, so the flame cone
-	// never rendered. This is OUR OWN SHIP-version twin, set from the same start_ft/stop_ft
-	// anim notetracks below; the .csc callback plays/stops the real dlc1/castle flame cone fx
+	// never rendered. This is OUR OWN SHIP-version twin, mirrored from stock flame state
+	// as well as animation notetracks; the .csc callback plays/stops the real castle cone FX
 	// on tag_flamethrower_fx (the avogadro bolt clientfield-on-entity pattern - self-cleaning).
 	// Registered IDENTICALLY in mechz_spiki.csc - keep in lockstep.
 	clientfield::register("actor", "acc_panzer_ft", VERSION_SHIP, 1, "int");
@@ -1441,7 +1467,9 @@ function private player_can_be_grabbed()
 	{
 		return 0;
 	}
-	if(!zm_utility::is_player_valid(self))
+	// [tod 2026-09-24] Honour .ignoreme (Zombie Blood): the claw must not fire
+	// at a player the Panzer is supposed to be ignoring.
+	if(!zm_utility::is_player_valid(self, 1))
 	{
 		return 0;
 	}
@@ -1511,7 +1539,7 @@ function private start_ft(entity)
 {
 	entity notify("hash_8225d137");
 	entity clientfield::set("mechz_ft", 1);
-	entity clientfield::set("acc_panzer_ft", 1);   // [acc] our SHIP-version flame-fx twin (mechz_ft is DLC1 = version-gated dead)
+	acc_ft_visual_state(entity, true);
 	entity.isShootingFlame = 1;
 	entity thread function_fa513ca0();
 }
@@ -1529,8 +1557,33 @@ function private function_fa513ca0()
 {
 	self endon("death");
 	self endon("hash_8225d137");
+	self thread acc_ft_fx_off_on_death();
 	while(1)
 	{
+		// [tod 2026-09-08] THE FLAME OUTLIVED THE ANIMATION (user: "he will shoot his fire
+		// and then end the animation to run at you but you are still being burned").
+		// This loop is started by the start_ft anim notetrack and, until today, could ONLY be
+		// stopped by the stop_ft notetrack ("hash_8225d137"). But the flame is a BEHAVIOR TREE
+		// action, and stock leaves it WITHOUT the animation ever reaching stop_ft:
+		// mechzShootFlameActionUpdate calls mechzStopFlame and returns SUCCESS the moment he
+		// goes berserk or decides to MELEE (mechz.gsc:735-752), and mechzShootFlameActionEnd
+		// calls it on any other interruption. NONE of those notify us. So "he cuts the flame
+		// short to charge you" left this loop running for the rest of his life - and
+		// flameTrigger is LinkTo'd to tag_flamethrower_fx, so it is a burn cone that FOLLOWS
+		// him while he sprints at you.
+		// mechzStopFlame's own state is the authority, so read it instead of trusting a
+		// notetrack that may never play:
+		//   isShootingFlame       - cleared by every stock stop path.
+		//   stopShootingFlameTime - stock's MECHZ_FT_RUN_DURATION (2.5s) deadline. It is
+		//                           UNDEFINED outside the BT action, so the claw grab-burn
+		//                           (a scripted anim that DOES run its stop_ft) is untouched.
+		if(!(isdefined(self.isShootingFlame) && self.isShootingFlame)
+			|| (isdefined(self.stopShootingFlameTime) && GetTime() > self.stopShootingFlameTime))
+		{
+			acc_ft_fx_off(self);
+			return;
+		}
+
 		// [acc] flameTrigger only exists once mechzSpawnSetup has run (archetype spawn funcs) -
 		// unguarded istouching(undefined) THROWS and kills the flame damage loop.
 		if(!isdefined(self.flameTrigger))
@@ -1562,20 +1615,18 @@ function private function_fa513ca0()
 // = ~3 ticks) inside a stock function we can't edit, so the flame loop above calls this instead.
 // Jugg branch, burnplayer::SetPlayerBurning (already #using'd).
 //
-// [tod 2026-08-23] THE DOT MATH, corrected — this is why the halving was needed.
-// ~3 ticks run to completion once you are tagged; the DoT cannot be outrun and
-// is NOT reduced by the DR upgrade domain (it never enters boss_player_damage).
-// So the per-ignite TOTAL against a 100 HP player is what matters:
-//     mult 1.21 (what shipped until today): 36/tick = 108 total
-//         -> a GUARANTEED no-Jugg down from a single tag. Map 1's own note below
-//            flagged 1.2/108 as exactly that and dropped back to 1.0; the two
-//            later +10% passes silently walked it back up past that line.
-//     mult 0.605 (now, = 1.21 x TOD_PANZER_FIRE_MULT): 18/tick = 54 total
-//         -> survivable without Jugg. With Jugg 12/tick = 36 total.
-// The ground-fire pool (function_3389e2f3) likewise goes 90 -> 45 total.
-// Historical note kept because it is the reason the constant exists: the
-// original "+20%" (1.2) was tuned while the burn path was secretly dead (a
-// decompiler artifact), so it was never actually felt until the path was fixed.
+// [tod 2026-09-08] THIS IS NOW THE ONLY FLAME-CONE DAMAGE ON THE MAP. Until today
+// stock's own mechzUpdateFlame swept the same cone every behavior-tree tick and ran
+// stock playerFlameDamage at the raw 30/20, in parallel with this, on a separate
+// latch — and SetPlayerBurning does not stack, so the last caller of the frame won
+// and the cone did full or half damage more or less at random. __init__ now claims
+// level.mechz_flamethrower_player_callback, so this function owns the number.
+// Per tick: TOD_PANZER_FLAME_DMG / _JUGG (25 / 12 today) — read the defines, never
+// this line. Historical note kept because it is the reason the pinning happened:
+// the original "+20%" (1.2) was tuned while the burn path was secretly dead (a
+// decompiler artifact), so it was never actually felt until the path was fixed,
+// and the two later +10% passes then walked the cone up to 36/tick = 108 total =
+// a guaranteed no-Jugg down from a single tag.
 // MUTEX 2026-07-11: acc_mechz_burn_until (self-expiring time latch) REPLACED the is_burning
 // wait/reset latch - is_burning on a player triggers stock _zm_utility's "lava_small" shellshock
 // on explosive hits, an asset NOT in our fastfiles = a throw that kills the stock damage-feedback
@@ -1589,27 +1640,106 @@ function acc_player_flame_damage(mechz)   // self = the player
 	if(!(isdefined(self.acc_mechz_burn_until) && GetTime() < self.acc_mechz_burn_until) && zombie_utility::is_player_valid(self, 1))
 	{
 		self.acc_mechz_burn_until = GetTime() + 1500;   // matches the 1.5s SetPlayerBurning duration
-		// [tod 2026-08-23] HALVED — see TOD_PANZER_FIRE_MULT at the top of this
-		// file. 1.21 was map 1's stacked +10% flamethrower / +10% all-Panzer
-		// passes; the dvar it used to ride is folded away (no dvars on this map).
-		// Per tick: 36 -> 18 (no Jugg), 24 -> 12 (Jugg).
-		mult = 1.21 * TOD_PANZER_FIRE_MULT;
+		// [tod 2026-09-08] the two pinned cone constants at the top of this file.
 		if(!self hasPerk("specialty_armorvest"))
 		{
-			self burnplayer::SetPlayerBurning(1.5, 0.5, int(30 * mult), mechz, undefined);
+			self burnplayer::SetPlayerBurning(1.5, 0.5, TOD_PANZER_FLAME_DMG, mechz, undefined);
 		}
 		else
 		{
-			self burnplayer::SetPlayerBurning(1.5, 0.5, int(20 * mult), mechz, undefined);
+			self burnplayer::SetPlayerBurning(1.5, 0.5, TOD_PANZER_FLAME_DMG_JUGG, mechz, undefined);
 		}
 	}
+}
+
+// [tod 2026-09-08] stock's flame-cone sweep, redirected here (see __init__). Stock calls
+// this from mechzShootFlameActionUpdate every behavior-tree tick while the flame is up, and
+// passes the Panzer as a PARAMETER - there is no useful `self` in a BT action, so read only
+// `entity`. Same cone, same latch and same damage function as the notetrack loop above, so
+// the two are idempotent: whichever reaches a player first sets acc_mechz_burn_until and the
+// other finds it held. This lane's lifetime is stock's own action, so it cannot outlive the
+// animation; the notetrack loop stays because the claw grab-burn is a scripted anim that
+// runs outside the behavior-tree flame action entirely.
+function acc_mechz_flame_player_cb(entity)
+{
+	if(!isdefined(entity) || !isdefined(entity.flameTrigger))
+	{
+		return;
+	}
+	// Stock mechzDelayFlame can start the burn without start_ft. Mirror before
+	// applying damage; the per-actor watcher handles every stock stop path.
+	acc_ft_visual_state(entity, IS_TRUE(entity.isShootingFlame));
+	players = GetPlayers();
+	foreach(player in players)
+	{
+		if(!(isdefined(player.acc_mechz_burn_until) && GetTime() < player.acc_mechz_burn_until))
+		{
+			if(player istouching(entity.flameTrigger))
+			{
+				player thread acc_player_flame_damage(entity);
+			}
+		}
+	}
+}
+
+// [tod 2026-09-08] ONE writer for the flame-cone clientfields, so every stop path - the
+// stop_ft notetrack, the behavior-tree stop the notetrack never told us about, and death -
+// puts the visible cone out the same way. "mechz_ft" is the DLC1 field (version-gated dead
+// on a usermap); "acc_panzer_ft" is our SHIP twin that actually renders (see __init__).
+function acc_ft_fx_off(entity)
+{
+	if(!isdefined(entity))
+	{
+		return;
+	}
+	entity clientfield::set("mechz_ft", 0);
+	acc_ft_visual_state(entity, false);
+}
+
+// One change-gated owner for the SHIP visual field. Stock owns mechz_ft and
+// isShootingFlame; animation notetracks are not the only writers of that state.
+function acc_ft_visual_state(entity, on)
+{
+	if(isdefined(entity.tod_ft_visual_on) && entity.tod_ft_visual_on == on)
+		return;
+	entity.tod_ft_visual_on = on;
+	entity clientfield::set("acc_panzer_ft", int(on));
+	if(IS_TRUE(level.tod_dev))
+	{
+		line = "[TOD_PANZER_FX] ms=" + GetTime() + " ent=" + entity GetEntityNumber() + " on=" + on;
+		/#
+		PrintLn(line);
+		#/
+	}
+}
+
+function acc_ft_visual_watch()
+{
+	// No death endon: explicitly turn off the field on the corpse, too.
+	while(isdefined(self) && isalive(self))
+	{
+		acc_ft_visual_state(self, IS_TRUE(self.isShootingFlame));
+		wait 0.05;
+	}
+	if(isdefined(self))
+		acc_ft_visual_state(self, false);
+}
+
+// [tod 2026-09-08] endon() is not cleanup: the damage loop's endon("death") drops it
+// mid-flame with the cone still lit, leaving a corpse holding a lit flamethrower. Own the
+// teardown. Killed by the same notify every other stop path raises, so there is only ever
+// one of these per flame.
+function private acc_ft_fx_off_on_death()
+{
+	self endon("hash_8225d137");
+	self waittill("death");
+	acc_ft_fx_off(self);
 }
 
 function private stop_ft(entity)
 {
 	entity notify("hash_8225d137");
-	entity clientfield::set("mechz_ft", 0);
-	entity clientfield::set("acc_panzer_ft", 0);   // [acc] stop our flame-fx twin
+	acc_ft_fx_off(entity);                         // [acc] stop our flame-fx twin
 	entity.isShootingFlame = 0;
 	entity.nextFlameTime = GetTime() + 7500;
 	entity.stopShootingFlameTime = undefined;
@@ -3409,6 +3539,11 @@ function function_22cf3e9f(str_weapon_name, v_source, ai_mechz)
 // =============================================================================
 function acc_setup_mechz()
 {
+	if(!IS_TRUE(self.tod_ft_visual_watch_started))
+	{
+		self.tod_ft_visual_watch_started = true;
+		self thread acc_ft_visual_watch();
+	}
 	self DisableAimAssist();
 	self.actor_damage_func = &MechzServerUtils::mechzDamageCallback;
 	self.damage_scoring_function = &function_b03abc02;

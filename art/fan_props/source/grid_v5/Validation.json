@@ -1,0 +1,27 @@
+{
+  "body_color_multiplier": 0.74,
+  "display_atlas_unchanged": true,
+  "central_display_pixels_unchanged": true,
+  "protected_body_atlas_pixels": 424069,
+  "texture_resolution": [
+    4096,
+    4096
+  ],
+  "geometry_and_face_connections_unchanged": true,
+  "exported_open_edges": 0,
+  "exported_loose_vertices": 0,
+  "reimported_images": {
+    "Grid_Body_V5_4K.png": [
+      4096,
+      4096
+    ],
+    "Grid_Display_V4_4K.png": [
+      4096,
+      4096
+    ],
+    "Grid_Normal_4K.png": [
+      4096,
+      4096
+    ]
+  }
+}

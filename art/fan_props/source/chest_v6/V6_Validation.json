@@ -1,0 +1,9 @@
+{
+  "component_open_boundary_edges": 0,
+  "straight_compartment_walls": true,
+  "rifle_rounds_per_compartment": 12,
+  "pistol_rounds_per_compartment": 12,
+  "shotgun_shells_per_side": 15,
+  "exterior_source_geometry_unchanged": true,
+  "exported_open_boundary_edges": 0
+}

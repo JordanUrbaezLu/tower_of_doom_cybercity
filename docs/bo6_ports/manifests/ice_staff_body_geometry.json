@@ -1,0 +1,298 @@
+{
+  "stage": "body_geometry_only",
+  "source": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\wpn_t10_wm_ww_zmb_staffs_nocol_LOD0.cast",
+  "source_sha256": "1ef3b0fe917b1803cec43bf079afe4a1fa17b9b03f6b0ef8e1e78dcab44d9091",
+  "water_tip_present": false,
+  "deployed": false,
+  "native_verified": false,
+  "scale_cm_to_inches": 0.39370078740157477,
+  "bounds_inches": [
+    [
+      -37.682594299316406,
+      -4.31500768661499,
+      -4.401828765869141
+    ],
+    [
+      23.048507690429688,
+      4.314950466156006,
+      4.00954008102417
+    ]
+  ],
+  "meshes": 8,
+  "vertices": 37937,
+  "triangles": 46266,
+  "bones": [
+    {
+      "name": "j_gun",
+      "parent": -1
+    },
+    {
+      "name": "tag_sling",
+      "parent": 0
+    },
+    {
+      "name": "j_clamp_1",
+      "parent": 1
+    },
+    {
+      "name": "bone_fa99b3963f008bb0",
+      "parent": 1
+    },
+    {
+      "name": "bone_6789938ca1d0cc52",
+      "parent": 1
+    },
+    {
+      "name": "bone_6782bb8ca1caf19c",
+      "parent": 1
+    },
+    {
+      "name": "bone_f0c948db143821ec",
+      "parent": 1
+    },
+    {
+      "name": "bone_5bc5e979602c46a9",
+      "parent": 1
+    },
+    {
+      "name": "bone_cccb98f0d2cb4fd",
+      "parent": 1
+    },
+    {
+      "name": "bone_cd3c98f0d32eedb",
+      "parent": 1
+    },
+    {
+      "name": "bone_f0c949db1438239f",
+      "parent": 1
+    },
+    {
+      "name": "bone_8f2efb90fd967bda",
+      "parent": 1
+    },
+    {
+      "name": "bone_847dd42c39dd7144",
+      "parent": 1
+    },
+    {
+      "name": "bone_8469f42c39ccfe9a",
+      "parent": 1
+    },
+    {
+      "name": "bone_f0c946db14381e86",
+      "parent": 1
+    },
+    {
+      "name": "bone_bf046fb38a89941b",
+      "parent": 1
+    },
+    {
+      "name": "bone_b43531d7e55049bf",
+      "parent": 1
+    },
+    {
+      "name": "bone_b49b59d7e5a740e9",
+      "parent": 1
+    },
+    {
+      "name": "bone_f0c947db14382039",
+      "parent": 1
+    },
+    {
+      "name": "bone_f5325da00d2c1224",
+      "parent": 1
+    },
+    {
+      "name": "bone_f6ad260920fb6556",
+      "parent": 1
+    },
+    {
+      "name": "bone_f6c10609210bd800",
+      "parent": 1
+    },
+    {
+      "name": "bone_f0c944db14381b20",
+      "parent": 1
+    },
+    {
+      "name": "bone_fbee99c16133765d",
+      "parent": 1
+    },
+    {
+      "name": "bone_77be00e47f398461",
+      "parent": 1
+    },
+    {
+      "name": "bone_77dff8e47f565d2f",
+      "parent": 1
+    },
+    {
+      "name": "bone_68e87003bd71be3b",
+      "parent": 1
+    },
+    {
+      "name": "bone_b823e625651ec279",
+      "parent": 1
+    },
+    {
+      "name": "bone_637e5c3c2fb77486",
+      "parent": 1
+    },
+    {
+      "name": "bone_637e5b3c2fb772d3",
+      "parent": 1
+    },
+    {
+      "name": "bone_68e20f3f36357579",
+      "parent": 1
+    },
+    {
+      "name": "bone_91f53f73e050b5cf",
+      "parent": 1
+    },
+    {
+      "name": "bone_91ee2773e04a6e59",
+      "parent": 1
+    },
+    {
+      "name": "bone_be4bf08950f466ff",
+      "parent": 1
+    },
+    {
+      "name": "bone_5bf0937161e29111",
+      "parent": 33
+    },
+    {
+      "name": "bone_be4bf18950f468b2",
+      "parent": 1
+    },
+    {
+      "name": "bone_5bf0907161e28bf8",
+      "parent": 35
+    },
+    {
+      "name": "bone_be4bf28950f46a65",
+      "parent": 1
+    },
+    {
+      "name": "bone_5bf0917161e28dab",
+      "parent": 37
+    },
+    {
+      "name": "bone_be4beb8950f45e80",
+      "parent": 1
+    },
+    {
+      "name": "bone_5bf0967161e2962a",
+      "parent": 39
+    },
+    {
+      "name": "bone_be4bec8950f46033",
+      "parent": 1
+    },
+    {
+      "name": "bone_5bf0977161e297dd",
+      "parent": 41
+    },
+    {
+      "name": "bone_be4bed8950f461e6",
+      "parent": 1
+    },
+    {
+      "name": "bone_5bf0947161e292c4",
+      "parent": 43
+    },
+    {
+      "name": "bone_549cab933dd446a2",
+      "parent": 1
+    },
+    {
+      "name": "bone_83c3bbab4b6a34ad",
+      "parent": 45
+    },
+    {
+      "name": "bone_550293933e2ad10c",
+      "parent": 1
+    },
+    {
+      "name": "bone_835e8bab4b14e2eb",
+      "parent": 47
+    },
+    {
+      "name": "bone_2b29aff53db1574e",
+      "parent": 1
+    },
+    {
+      "name": "bone_a927afc859251d91",
+      "parent": 1
+    },
+    {
+      "name": "bone_a927acc859251878",
+      "parent": 1
+    },
+    {
+      "name": "bone_a927adc859251a2b",
+      "parent": 1
+    },
+    {
+      "name": "bone_a927b2c8592522aa",
+      "parent": 1
+    },
+    {
+      "name": "bone_a927b3c85925245d",
+      "parent": 1
+    },
+    {
+      "name": "bone_a927b0c859251f44",
+      "parent": 1
+    },
+    {
+      "name": "j_trigger",
+      "parent": 1
+    },
+    {
+      "name": "j_tube",
+      "parent": 1
+    },
+    {
+      "name": "tag_barrel_attach",
+      "parent": 1
+    },
+    {
+      "name": "tag_ik_loc_le",
+      "parent": 1
+    },
+    {
+      "name": "tag_ik_loc_ri",
+      "parent": 1
+    }
+  ],
+  "material_mapping": {
+    "material_181e47b523024669": "mtl_tod_bo6_ice_181e47b523024669",
+    "material_3587ccc715838fe3": "mtl_tod_bo6_ice_3587ccc715838fe3",
+    "material_5cca21b19874c8d9": "mtl_tod_bo6_ice_5cca21b19874c8d9",
+    "material_6394a6b54d0b53ec": "mtl_tod_bo6_ice_6394a6b54d0b53ec"
+  },
+  "weights": {
+    "max_influences": 2,
+    "vertices_over_four": 0,
+    "discarded_weight": 0
+  },
+  "max_rotation_component_roundtrip_error": 1.5242721985888122e-05,
+  "files": [
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\tod_bo6_ice_body.XMODEL_EXPORT",
+      "sha256": "c2ecb04e42a1855873a0f8fa9378dd24ac92031d3b82f9757d77eab8dce76e21"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\local_sync_cache\\bo6_ice_staff\\staging\\body\\tod_bo6_ice_body.XMODEL_BIN",
+      "sha256": "92baf9d8455ab769b0ac1a7a29a0fd79a9dd7e42c14c83b748b5c3314c9fbff3"
+    }
+  ],
+  "open": [
+    "Acquire and assemble the water tip and first-person body",
+    "Reconstruct remaining material layers and emission",
+    "Retarget held motions and validate weighted vertices per frame",
+    "Bind and verify sockets, audio, FX and native gameplay"
+  ]
+}

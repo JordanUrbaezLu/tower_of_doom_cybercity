@@ -1,0 +1,71 @@
+{
+  "id": "05_armored_sprinter",
+  "revision": 4,
+  "fit_pass": 3,
+  "authoring_sha256": "28d6040edabb878174701bdfd6d28320c902d4ab4ffde5c5264d7cdd8820f643",
+  "reference": "CyberZombie2.png",
+  "source_backup": "tmp\\cyber_finish_v3\\art\\cyber_zombie_roster\\05_armored_sprinter\\05_armored_sprinter.blend",
+  "donor_geometry_weights_preserved": true,
+  "limb_fits": [
+    {
+      "bone": "j_elbow_le",
+      "surface_samples": 495,
+      "radius_min": 1.6938766837120056,
+      "radius_max": 3.1606991810840555,
+      "joint_end_fraction": 0.78
+    },
+    {
+      "bone": "j_elbow_ri",
+      "surface_samples": 495,
+      "radius_min": 1.638104408979416,
+      "radius_max": 3.9890825301408768,
+      "joint_end_fraction": 0.78
+    },
+    {
+      "bone": "j_knee_le",
+      "surface_samples": 496,
+      "radius_min": 1.568418551236391,
+      "radius_max": 5.04790960252285,
+      "joint_end_fraction": 0.83
+    },
+    {
+      "bone": "j_knee_ri",
+      "surface_samples": 496,
+      "radius_min": 1.450487638823688,
+      "radius_max": 5.033412501216307,
+      "joint_end_fraction": 0.83
+    }
+  ],
+  "poses": [
+    {
+      "pose": "rest",
+      "max_attachment_error": 1.9669532775878906e-05
+    },
+    {
+      "pose": "head_turn",
+      "max_attachment_error": 1.9669532775878906e-05
+    },
+    {
+      "pose": "arm_flex",
+      "max_attachment_error": 1.823902130126953e-05
+    },
+    {
+      "pose": "leg_flex",
+      "max_attachment_error": 1.9669532775878906e-05
+    }
+  ],
+  "attachment_objects": 612,
+  "attachment_triangles": 50808,
+  "attachment_bones": [
+    "j_elbow_le",
+    "j_elbow_ri",
+    "j_head",
+    "j_hip_ri",
+    "j_knee_le",
+    "j_knee_ri",
+    "j_shoulder_le",
+    "j_shoulder_ri",
+    "j_spine4"
+  ],
+  "notes": "Equipment reconstruction adapted to original donor body; not an exact 3D recovery from reference images."
+}

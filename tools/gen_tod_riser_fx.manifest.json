@@ -1,0 +1,41 @@
+{
+  "fx_tod_rise_burst": {
+    "donor": "zombie/fx_spawn_dirt_hand_burst_zmb.efx",
+    "donor_sha256": "3b582018d82564223ac091de091f94799a9eb225e84b8f05c58e8752e281ce94",
+    "sha256": "7c31737493d4636361cd078fecf35f08832f548514f930c2841d91c12008e8e4",
+    "elements": 10,
+    "edited": [
+      "wraith_oneshot_def0",
+      "wraith_oneshot_def2",
+      "wraith_oneshot_def3",
+      "wraith_oneshot_def4",
+      "wraith_oneshot_def7",
+      "wraith_oneshot_def8",
+      "wraith_oneshot_def9"
+    ]
+  },
+  "fx_tod_rise_billow": {
+    "donor": "zombie/fx_spawn_dirt_body_billowing_zmb.efx",
+    "donor_sha256": "5b69f3f343682d22443ee8beb0fabda45ddd15d0a5ded0c1655cb0ebfb5da68f",
+    "sha256": "1ddf0b3c357cd35c7200c9d681875c71c7e9d7874e63f0dd32a02b428dd95d52",
+    "elements": 8,
+    "edited": [
+      "wraith_looping_def0",
+      "wraith_looping_def4",
+      "wraith_looping_def6",
+      "wraith_oneshot_def0"
+    ]
+  },
+  "fx_tod_rise_dust": {
+    "donor": "zombie/fx_spawn_dirt_body_dustfalling_zmb.efx",
+    "donor_sha256": "1f4d234824fb62824c62ed857bc64df5e6103b23ffefceac0780b66384aabb64",
+    "sha256": "9986581ca905f86494b0bf4fe420607f8c7f3cea3519167095e0dd1ab855fbc6",
+    "elements": 5,
+    "edited": [
+      "wraith_oneshot_def0",
+      "wraith_oneshot_def2",
+      "wraith_oneshot_def3",
+      "wraith_oneshot_def4"
+    ]
+  }
+}

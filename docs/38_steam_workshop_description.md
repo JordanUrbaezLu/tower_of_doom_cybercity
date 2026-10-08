@@ -1,159 +1,111 @@
-# Steam Workshop description — zm_tower_of_doom
-
-Mirrors map 1's `docs/38_steam_workshop_marketing.md` house style: `[h1]` section
-heads with a leading glyph, `[hr][/hr]` between sections, `[list]/[*]` for
-bullets, `[b]` for emphasis.
-
-**Steam Workshop accepts only these tags** (map 1's §1, verified there):
-`[b] [i] [u] [strike] [h1] [h2] [h3] [url] [img] [list]/[olist]/[*] [quote]
-[code] [spoiler] [hr][/hr]`. No comments, no CSS, no nesting beyond these.
-
-**The `[img]` lines are PLACEHOLDERS.** Replace each `REPLACE-WITH-STEAM-CDN-URL`
-with a real Steam-CDN link (upload the shot to the Workshop item first, then copy
-its image URL). Any you forget render visibly broken, which is how you will
-notice.
-
-Every number below was read from source on 2026-08-25: 36 upgrade domains
-(`_tod_upgrades.gsc`), 22 generated weapons (`gen_tod_twins.js`), 45 concurrent
-zombies (`_tod_corpse_cleanup.gsc`), Panzer every 5 / Protector every 3 /
-hellhounds every 3 (`_tod_bosses.gsc`, `_tod_hellhounds.gsc`), upgrade event
-every 4 rounds (`_tod_upgrades.gsc`), extraction 12,000 (`_tod_finale.gsc`).
-Re-check them if any of those change.
-
----
-
-```
-[img]REPLACE-WITH-STEAM-CDN-URL/header-shot.jpg[/img]
-
 [h1]TOWER OF DOOM: CYBERCITY[/h1]
-[b]Fifty floors up the outside of the building. The rounds never stop.[/b]
 
-The staircase spirals up the [b]outside[/b] of the tower, so every step of the climb is in
-the open air with a long drop on one side and nothing to hide behind. And the moment the
-last zombie of a round spawns, the next round begins — no break, no round-change fanfare,
-no window to reset your setup.
+Fifty floors. The staircase spirals up the [b]outside[/b] of the tower - open air, a long drop on one side, the horde on the other, nothing to hide behind.
 
-[b]How far up can you get?[/b]
+[b]And the rounds never stop.[/b] The instant a round's last zombie spawns, the next round is already coming. No break, no fanfare, no moment to breathe you didn't pay for.
 
-[hr][/hr]
+[b]But this one you can win.[/b] At the top there is a way out - if you survive one last wave.
 
-[img]REPLACE-WITH-STEAM-CDN-URL/climb-shot.jpg[/img]
+[h2]CLIMB OR DIE[/h2]
 
-[h1]⬆ THE CLIMB THAT NEVER LETS UP[/h1]
-There is no pause between rounds. The horde keeps arriving while you keep climbing, and it
-arrives [b]45 strong at once[/b] — nearly double a normal map. Every floor is bought with
-points, every floor is open to the sky, and the only way out is up.
+Buy your way up, door by door. Every tenth floor opens into a room you will have earned - the only walls in fifty floors of open air, each lit in its own colour, with a Pack-a-Punch, an upgrade altar and an ammo crate. Shelter, not safety: they come up through the floor in here too, and the teleporter home sits out over the drop.
 
-[hr][/hr]
+The perks are up there as well - nine Black Ops 6 style machines, including [b]BO7's Wisp Tea[/b]: your kills summon wisps that hunt beside you. Most of them scatter at random and reshuffle every few rounds; only Quick Revive stays put, at the base. You can carry four perks to start; PERK SLOTS cards raise that.
 
-[img]REPLACE-WITH-STEAM-CDN-URL/classes-shot.jpg[/img]
+[h2]YOUR GUN IS YOUR BUILD[/h2]
 
-[h1]🔫 FOUR CLASSES. TWENTY-TWO GUNS.[/h1]
-Draft a class at the start and commit to it. Each one has its own move speed, a three-tier
-primary ladder [b]and[/b] a three-tier sidearm ladder:
+No mystery box. No wallbuys. Draft one of five classes and live with it.
+
 [list]
-[*][b]SKIRMISHER[/b] — MAC-10 · MP5 · MP7, with a Bulldog, SG12 and SPAS-12 on the side
-[*][b]ASSAULT[/b] — Enfield · Krig 6 · AK-47, backed by a Magnum, MOG 12 and Executioner
-[*][b]HEAVY[/b] — Stoner 63 · HK21 · Death Machine, plus an RPG and a nail gun
-[*][b]SLASHER[/b] — Combat Knife · Wakizashi · Stormbreaker, with a UDM and RK7
-[/list]
-[b]No mystery box. No wallbuys.[/b] Your class gun is your gun — you upgrade what you are
-holding, or you earn the next tier.
-
-[hr][/hr]
-
-[img]REPLACE-WITH-STEAM-CDN-URL/upgrade-shot.jpg[/img]
-
-[h1]⚙ BUILD IT AS YOU CLIMB[/h1]
-Every fourth round the world stops and you pick [b]one of two cards[/b] — fifteen seconds,
-no take-backs. Thirty-six upgrade domains: damage, fire rate, penetration, reload speed,
-life steal, luck and more, each stacking level on level.
-
-A [b]luck bar[/b] built from your kills, your headshots and your revives decides how strong
-the roll is. Play well and the tower offers you better.
-
-[hr][/hr]
-
-[img]REPLACE-WITH-STEAM-CDN-URL/boss-shot.jpg[/img]
-
-[h1]☠ THE TOWER FIGHTS BACK[/h1]
-[list]
-[*][b]Panzers every 5 rounds[/b] — and they follow you up
-[*][b]Rogue Protector waves every 3[/b], scaling with the round and the party
-[*][b]Reavers and hellhounds[/b] once you have climbed far enough to let them in
-[*][b]All 8 perk machines are scattered at random[/b] and reshuffle as you climb — there is
-no memorised route, you find them again every run
+[*][b]SKIRMISHER[/b] - fastest on the stairs, fights up close.
+[*][b]ASSAULT[/b] - rifles, if played correctly this class is a DPS machine.
+[*][b]HEAVY[/b] - slowest, toughest, belt-fed.
+[*][b]SLASHER[/b] - melee, with strong movement abilities.
+[*][b]MAGE[/b] - elemental staffs. No sidearm, no grenades; the buttons cast instead. Each promotion adds a staff and keeps the old ones: lightning for the horde and the Panzer, fire for armor, ice for beasts.
 [/list]
 
-[hr][/hr]
+Every class climbs its own ladder of weapons. Pack-a-Punch what you are holding and [b]TIER[/b] cards start turning up in the deal; take one and you move up the ladder. Tier 2 opens once you have reached floor 10, tier 3 at floor 30. Each class answers one kind of enemy better than anyone else, and there is one it would rather not meet.
 
-[img]REPLACE-WITH-STEAM-CDN-URL/breather-shot.jpg[/img]
+[b]Every fourth round the world stops dead[/b] and you get fifteen seconds to pick one of two upgrade cards. They are permanent, they stack, and a luck bar that fills from kills, headshots, revives and doors decides how strong the pair is. Can't wait? The upgrade altars sell a card any time for 3000. Pause at any point to see everything you own and exactly what each level is doing.
 
-[h1]🛗 REST FLOORS[/h1]
-Every ten levels the tower gives you a balcony worth stopping on: [b]ammo crate[/b],
-[b]upgrade terminal[/b], [b]Pack-a-Punch[/b] and [b]two-way teleporters[/b] linking to a
-bought bay back at the base.
-Nothing spawns on them. They are the only rest you get.
+[h2]THE TOWER FIGHTS BACK[/h2]
 
-The soundtrack climbs with you too — four tracks that hand off as you pass the rest floors,
-and the Panzer brings his own.
+A Panzer drops in every fifth round, with his own soundtrack. Every rest floor you buy into unlocks a new hunter for good - protectors, reavers, armored sprinters, hound packs. The zombies only get faster, and the music climbs with you.
 
-[hr][/hr]
+[b]And there is a switch that makes all of it worse, on purpose.[/b] RAMPAGE stands on the floor of the spawn arena, and you can throw it either way at any point in the run - the canister glows orange while it is on. On, the zombies hit full sprint far sooner, elites come more often and hit harder, and ten more zombies are on you at once. Leave it off and the tower scales to your party.
 
-[img]REPLACE-WITH-STEAM-CDN-URL/finale-shot.jpg[/img]
+[h2]ONE LAST WAVE[/h2]
 
-[h1]🏆 THE LAST SONG[/h1]
-Reach the terrace at the top and buy [b]EXTRACTION[/b]. The gate opens, the closing song starts, and the
-tower gauge on your right empties out and becomes your clock — it fills as the song plays,
-and when it is full the map is over.
+Reach the terrace at the top and buy [b]EXTRACTION[/b]. The gate drops, the closing song starts, and that song is the only clock you get.
 
-You get [b]ninety seconds[/b] to run the bridge to the citadel while everything left in the
-tower comes at you from both sides. Then the door seals behind you and you hold the crown
-until the final chord.
+Run a forked, ambushed bridge to the floating crown, then the door slams and you hold the hall until the final chord.
 
 [b]Survive the song and you escape. Don't, and the tower keeps you.[/b]
 
-[hr][/hr]
+[h2]BEYOND THE CROWN - THE ENDLESS SPIRE[/h2]
 
-[h1]DROP IN[/h1]
-[list]
-[*]Solo or 4-player co-op
-[*]Endless rounds — no downtime, ever
-[*]4 classes, 22 weapons, 36 upgrade domains
-[*]Randomised perk placement, so no two runs are the same
-[*]A real ending with a real win condition
-[/list]
+Beat the game and a choice appears in the crown: [b]EXTRACT[/b] and take your victory - or step onto the teleporter and [b]ASCEND[/b].
 
-[b]How far up can you get?[/b] Subscribe, climb, and find your floor.
+One way. No return. You arrive at the base of the red tower you have watched the whole climb, with [b]every perk in the game, permanently[/b], and the build you beat the tower with. Seventy floors, and the horde comes faster.
 
-[hr][/hr]
+Up there the Pack-a-Punch sells two more levels it sells nowhere else in the game. Every tenth floor opens into a hall with its own name, colour and fight - and the moment your whole team is inside, it seals behind you. Win one holding a maxed ability and you can be dealt its [b]dark card[/b]: one step past maxed, and only ever found here.
 
-[h1]CREDITS[/h1]
+Something is waiting above the last hall.
+
+Solo or co-op. Found a bug? Leave a comment and I'll fix it. Enjoy the climb.
+
+[h2]Credits[/h2]
+
 [b]Music[/b]
 [list]
-[*]"Password Infinity" — Evgeny Bardyuzha
-[*]"Cyberpunk Futuristic City" — lnplusmusic
-[*]"Cyber Relay" and "Data Spike" — Psychronic
-[*]"Cyber Eclipse" — bykenneth
-[*]"You See Big Girl" — Hiroyuki Sawano / Gemie
+[*]"Password Infinity" - Evgeny Bardyuzha
+[*]"Cyberpunk Futuristic City" - lnplusmusic
+[*]"Cyber Relay" and "Data Spike" - Psychronic
+[*]"Cyber Eclipse" - bykenneth
+[*]"You See Big Girl" - Hiroyuki Sawano / Gemie
+[*]"Neon Static" - Suno (The Endless Spire)
+[*]"Chaos Unleashed" - Suno (the Warden Trials)
+[*]"Falling To Pieces" - Kevin Sherwood, Malukah & Intervals (Easter Egg Song)
 [/list]
+
 [b]Art & UI[/b]
 [list]
-[*]Nastian — Miami night skybox
-[*]emox — MWIII Vertigo materials
-[*]Owen-C137 — Aetherium HUD kit
+[*]Nastian - skybox pack (sky lighting setup)
+[*]emox - MWIII Vertigo materials
+[*]Owen-C137 - Aetherium HUD kit (with KingsLayerKyle, Shidouri & Madgaz)
+[*]Westchief596 & ZeRoY - ammo crate model ([West] packs)
+[*]DOGCANARY & Treyarch (Cold War) - power direction wall art
 [/list]
+
 [b]Weapons & enemies[/b]
 [list]
-[*]Skye — weapon ports
-[*]pmr360 — BOCW Wakizashi
-[*]WetEgg, M5_Prodigy, J.G., DeLeon & Santa Monica Studio — Leviathan Axe
-[*]Spiki — mechz pack (Panzer)
-[*]HB21 — Apothicon Fury (Reaver)
-[*]HarryBo21 — Civil Protector v2 (Rogue Protector)
-[*]GentlemanCheeseMan — Gift of Death pack
-[*]ZoekMeMaar — thunderstorm FX and free Pack-a-Punch
-[*]NSZ — Zombie Blood
+[*]TheSkyeLord - weapon ports (with Azsry, Scobalula, TomBMX, Jari, Blak, raptroes, Thomas Cat, JBird632, .115 Cal, DTZxPorter, Collie, Ray1235, xSanchez78 & lilrobot)
+[*]Treyarch - Origins elemental staffs (BO2), the Black Ops 6 ice staff and Rampage Inducer; Freesound Community & Dragon Studio (Pixabay) - staff sounds; WetEgg - Winter's Howl staff foley
+[*]Kingslayer Kyle - armored sprinter body (Blood of the Dead pack)
+[*]pmr360 - BOCW Baseball Bat & Wakizashi
+[*]Floraphonic - baseball bat swing sounds
+[*]WetEgg, M5_Prodigy, J.G., DeLeon & Santa Monica Studio - Leviathan Axe
+[*]Spiki - mechz pack (Panzer)
+[*]HB21 - Apothicon Fury (Reaver)
+[*]HarryBo21 - Civil Protector v2 (Rogue Protector)
+[*]GentlemanCheeseMan - Gift of Death pack (with Gerardo Justel, Saritasa, Orvani Sounds, MidgetBlaster)
+[*]ZoekMeMaar - thunderstorm FX and free Pack-a-Punch
+[*]NSZ - Zombie Blood
+[*]Logical & NateSmithZombies - Time Warp and Infinite Ammo; Logical - cyberpunk riot shield
+[*]Fanatic (with Scobalula, HarryBo21 & Treyarch) - Origins Soul Boxes sounds and soul FX
+[*]WetEgg & SAT - Black Ops 6/7 perk machines, perk icons & the Wisp Tea perk (with Scobalula, DTZxPorter, Dest1yo, echo000, Kingslayer Kyle, Rex, Sphynx, rayjiun, shidouri, XcDylan93 & garrett)
+[*]Madgaz & Owen C137 (model, anims, sounds) with RiDD_Alexis31, JoaoSlideCancelo, Prov3ntus, Shidouri, Resxt, CF4_99, Rayjiun & devraw (script) - CW-BO6 Pack-a-Punch
+[*]Unknown author - the Chaos-style Pack-a-Punch the upgrade altars are built from. If it is yours, reach out and I'll credit you.
 [/list]
-[i]Built with the Treyarch Black Ops III Mod Tools.[/i]
-```
+
+[b]Testers[/b]
+[list]
+[*]NINJASNIPER996
+[*]Nikolai
+[*]UrbsBurger
+[*]brandino.ur
+[*]lukertino618
+[*]KingKov11
+[/list]
+
+Please leave a thumbs up if you enjoyed :)

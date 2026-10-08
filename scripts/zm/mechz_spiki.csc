@@ -43,7 +43,7 @@
 // fx exist anywhere (not in the pack, not on the install). The dlc1/castle equivalents DO exist
 // (shipped by the HB21 FX Library, verified on-disk 2026-07-08) - repointed.
 #precache( "client_fx", "dlc1/castle/fx_mech_dmg_sparks");
-#precache( "client_fx", "dlc1/castle/fx_mech_dmg_steam");
+#precache( "client_fx", "dlc1/castle/fx_steam_hpressure_md_castle");   // v17.43: fx_mech_dmg_steam is a 4 KB stub that draws nothing
 #precache( "client_fx", "dlc1/castle/fx_mech_jump_landing");
 #precache( "client_fx", "dlc5/tomb/fx_tomb_mech_wpn_claw");
 #precache( "client_fx", "dlc5/tomb/fx_tomb_mech_wpn_source");
@@ -84,7 +84,7 @@ function __init__()
 	clientfield::register("actor", "mechz_fx_spawn", 15000, 1, "counter", &mechz_spawn_fx_cb, 0, 0);
 
 	// [acc] VISIBLE FLAMETHROWER: our SHIP-version twin of the version-gated "mechz_ft" -
-	// set from the gsc start_ft/stop_ft anim notetracks, renders the real flame cone here.
+	// mirrored from stock flame state and animation notetracks; renders the cone here.
 	// Registered IDENTICALLY in mechz_spiki.gsc - keep in lockstep.
 	clientfield::register("actor", "acc_panzer_ft", VERSION_SHIP, 1, "int", &acc_panzer_ft_cb, 0, 0);
 	level._effect["acc_panzer_flame"] = "dlc1/castle/fx_mech_wpn_flamethrower";
@@ -116,7 +116,7 @@ function __init__()
 
 	level._effect["mechz_death"] = "dlc5/tomb/fx_tomb_mech_death";
 	level._effect["mechz_sparks"] = "dlc1/castle/fx_mech_dmg_sparks";           // [acc] repointed - see precache note
-	level._effect["mechz_steam"] = "dlc1/castle/fx_mech_dmg_steam";             // [acc] repointed
+	level._effect["mechz_steam"] = "dlc1/castle/fx_steam_hpressure_md_castle";   // v17.43 repointed off the stub
 	level._effect["mech_booster_landing"] = "dlc1/castle/fx_mech_jump_landing"; // [acc] repointed
 	level._effect["mechz_claw"] = "dlc5/tomb/fx_tomb_mech_wpn_claw";
 	level._effect["mechz_wpn_source"] = "dlc5/tomb/fx_tomb_mech_wpn_source";

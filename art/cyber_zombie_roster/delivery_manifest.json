@@ -1,0 +1,95 @@
+{
+  "status": "Revision 4 reference equipment; native build and playtest status in docs/146",
+  "models": [
+    {
+      "id": "01_line_trooper",
+      "blend_sha256": "e010b8660d194ae56e2daf970512e974b0f8a564c35cd9105bdc0ba45d9e193c",
+      "revision": 4,
+      "fit_pass": 3,
+      "reference": "CyberZombie2.png",
+      "base_triangles": 26963,
+      "attachment_triangles": 54906,
+      "pose_error": 2.560753170413504e-05,
+      "renders": {
+        "front.png": "4730412fe8ec2a30c126994d0955ce0a31e98df5859d6365d4d432584347c799",
+        "detail.png": "b420d56763825329b335974bffb70a1cfa202cee7d7515a69f094b0a12cf2f4a",
+        "back.png": "65ca1d67457177f1fa5ae4fb9dd958f65bb519c9b49089305da35a9a60caa650",
+        "wrist.png": "dc91427f01438beb8d01a7d0f18415fbe55302901c8f0df7bb65a3d594568047",
+        "wrist_inside.png": "f1750d7e455df48da1618f0528dab6d45c47605aedec1b918b7709a95306aac2",
+        "equipment.png": "cc1afa5cee9bedb3a9b54f7b4bc49f046b303ee3177079a71590d8ebfe5e89ce"
+      }
+    },
+    {
+      "id": "02_signal_trooper",
+      "blend_sha256": "5eb1077ace1c29b9f15530e37da94f49b0e3b4ed9293160e67f2124ad1f7ca87",
+      "revision": 4,
+      "fit_pass": 3,
+      "reference": "CyberZombie1.png",
+      "base_triangles": 28613,
+      "attachment_triangles": 36924,
+      "pose_error": 1.7110167094095735e-05,
+      "renders": {
+        "front.png": "8b44eaefaf2077a4e2ace210ab979d56a2a13dc661fe9ad71851daba1de6d808",
+        "detail.png": "b038a388b848db34839f98abf04cf02180e913b0800c64ad915d92e9c306ed5d",
+        "back.png": "313249185484060e1bb7132e13f403c176d62c6a930fac1a645d001e8c83f660",
+        "wrist.png": "c8c1bdf45a792ed746c52459e7a3e76b71350aed55ecbbe174be01c88f73ff4b",
+        "wrist_inside.png": "adc2bee0a64050f9d39852711af1896450d49dd92093e939034763477617c228",
+        "equipment.png": "a91da42d19642be3386c55ad0001b5bee064a30c08e231fd4ee5d9f163e3f329"
+      }
+    },
+    {
+      "id": "03_relay_carrier",
+      "blend_sha256": "1bb55ac1fe22cc5d005ff02d4839eeb25c451c49a3b4849a7de3328f9215bfd1",
+      "revision": 4,
+      "fit_pass": 3,
+      "reference": "CyberZombie3.png",
+      "base_triangles": 26518,
+      "attachment_triangles": 35066,
+      "pose_error": 1.6853681023665354e-05,
+      "renders": {
+        "front.png": "a8cf115e1196cc9160b412128b688cb80195a1418968d4076d63f6ec1d73343b",
+        "detail.png": "b1ae8273513c381ee466459b971d59c79d79a3ed5ed22514c477658cf6ee0412",
+        "back.png": "78a9fdc0247b0e56a50990c58dbe9c7c5d8782130efb219db54b1b43913dfbe9",
+        "wrist.png": "0c72a3a779409b47a6864ccb30c948250775a2c3f04950530a710d55e3013f60",
+        "wrist_inside.png": "552609aac95c517a85b518d88a898e424455567fd7be9a743aed494120e17747",
+        "equipment.png": "ea522dc0ae3df2c298afaf4e1ada5b2f93384039e11298fa9df97fc28e15fc0a"
+      }
+    },
+    {
+      "id": "04_crown_carrier",
+      "blend_sha256": "60b7079f11e0381e8afe57ecbb6134f5a6436f6553fe115b70c6d6323837bbb4",
+      "revision": 4,
+      "fit_pass": 3,
+      "reference": "CyberZombie1.png",
+      "base_triangles": 26907,
+      "attachment_triangles": 35012,
+      "pose_error": 1.7110167094095735e-05,
+      "renders": {
+        "front.png": "19c0f6ba9535fd77099438bc862223835c88bf958dda2379f15ffeb8748e2577",
+        "detail.png": "e8bc2bab7f711221271bd650ebc1dc47793489fd5110f1353325178d55fcb8f8",
+        "back.png": "5988ad237acd7e8277f7dab564063621b95f4426ddb56c4e7ffff6418363fdb9",
+        "wrist.png": "35a8a525242229f141e795b5b44207103ef0122998d52d0519226786cfcda281",
+        "wrist_inside.png": "85153febe0dcb60e362bd6e1075053596694004155294bb6a5e7a0b5a40314ed",
+        "equipment.png": "80a9ce95756dc7745abc8c8d1cca239639f38266cd9ecb85e6aa527a9d9a1905"
+      }
+    },
+    {
+      "id": "05_armored_sprinter",
+      "blend_sha256": "1d0e3113b14a8a55776f0154a84dc400eea53f5ff54244a05fb7e1529f1502da",
+      "revision": 4,
+      "fit_pass": 3,
+      "reference": "CyberZombie2.png",
+      "base_triangles": 15132,
+      "attachment_triangles": 50808,
+      "pose_error": 1.9669532775878906e-05,
+      "renders": {
+        "front.png": "38a79df1ffd08c5bf7e4b4e35e70e171e764cf873cc6a04c02e792b0ace51012",
+        "detail.png": "5f7fd8b7e4639449f6158630869e287d235b228c8c3de2e81869ac1e801c6ffa",
+        "back.png": "17216c642a596e29eade7cda9b5bcbf7b2759185b3c6e68af1bf65453673d903",
+        "wrist.png": "ac69e42270552a923056304dde08bfbefc951cf51683d96ebda43f5c3309ec47",
+        "wrist_inside.png": "4b3b5cd58c12e04ebb2f3fa16220d8478c9f9325cc0c9686463d334aef8beba4",
+        "equipment.png": "088a1c49212f678c1e7dc5ddc5098ac2ab371192dae8a480dd869f6cd507518a"
+      }
+    }
+  ]
+}

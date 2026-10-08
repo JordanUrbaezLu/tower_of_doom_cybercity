@@ -47,7 +47,21 @@ for (const f of [...defFiles, ...files]) {
   const key = ns + '|' + fileSide[f];
   defs[key] = defs[key] || {};
   const re = /function\s+(?:autoexec\s+|private\s+)*([A-Za-z_][A-Za-z0-9_]*)\s*\(/g; let m;
-  while ((m = re.exec(src))) { const { n } = countArgs(src.slice(m.index + m[0].length)); (defs[key][m[1].toLowerCase()] = defs[key][m[1].toLowerCase()] || new Set()).add(n); }
+  while ((m = re.exec(src))) {
+    const after = src.slice(m.index + m[0].length);
+    const { n, end } = countArgs(after);
+    // VARIADIC DEFS ARE UNBOUNDED (fix 2026-08-30). GSC declares them
+    // `function f( ... )` and reads vararg[i] inside — stock util_shared's
+    // waittill_any_ex/waittill_any are the live examples, and their own doc
+    // block shows eight-argument calls. countArgs sees the `...` token and
+    // returns 1, so EVERY legal variadic call above one arg was reported as
+    // an arity error. That is a gate crying wolf on correct code, which is
+    // worse than no gate: it fired on a wired file and cost two sessions a
+    // publish-blocker scare. Record Infinity so `n > Math.max(...d)` can
+    // never trip, while a genuinely wrong NAME still reports UNRESOLVED.
+    const isVariadic = /\.\.\./.test(after.slice(0, end));
+    (defs[key][m[1].toLowerCase()] = defs[key][m[1].toLowerCase()] || new Set()).add(isVariadic ? Infinity : n);
+  }
 }
 const ours = new Set(Object.keys(defs).map(k => k.split('|')[0]));
 const KEYWORDS = new Set(['if','while','for','foreach','switch','return','wait','waittill','endon','notify','waittillmatch','isdefined','thread','function','self','level','undefined','case','else','waitrealtime','waittillframeend','true','false','in','sizeof','int','float','abs','min','max','new','class','constructor','destructor','RandomInt','RandomFloat','GetWeapon','Spawn','IsAlive','IsPlayer','array']);

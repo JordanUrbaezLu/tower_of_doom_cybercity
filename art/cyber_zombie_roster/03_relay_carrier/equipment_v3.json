@@ -1,0 +1,43 @@
+{
+  "id": "03_relay_carrier",
+  "revision": 3,
+  "source_backup": "tmp\\cyber_finish_v2\\art\\cyber_zombie_roster\\03_relay_carrier\\03_relay_carrier.blend",
+  "donor_geometry_weights_preserved": true,
+  "forearm_fit": {
+    "fit": "48-ray body-specific closed straps; smooth tapered shell fitted over measured sleeve folds",
+    "sample_radius_min": 0.4854699089191854,
+    "sample_radius_max": 2.9792566671967506,
+    "surface_samples": 888,
+    "strap_gap": 0.055,
+    "shell_gap_above_smooth_envelope": 0.12,
+    "smooth_shell_fit_lift": 0.5680658663033196,
+    "wrist_clearance_units": 2.157319985810913,
+    "body_objects": [
+      "c_zom_der_zombie_body1 | zombie1_upperbody_LOD0Shape1",
+      "c_zom_der_zombie_body1 | mp40pouch_1_LOD0Shape1",
+      "c_zom_der_zombie_body1 | mp40pouch_2_LOD0Shape1",
+      "c_zom_der_zombie_body1 | zombie1_lowerbody_LOD0Shape1"
+    ]
+  },
+  "poses": [
+    {
+      "pose": "rest",
+      "max_attachment_error": 1.1621530157998983e-05
+    },
+    {
+      "pose": "head_turn",
+      "max_attachment_error": 1.561971531316326e-05
+    },
+    {
+      "pose": "arm_flex",
+      "max_attachment_error": 1.2624933524011351e-05
+    },
+    {
+      "pose": "torso_leg",
+      "max_attachment_error": 2.288942532349966e-05
+    }
+  ],
+  "attachment_objects": 105,
+  "attachment_triangles": 12144,
+  "notes": "Actual donor-surface measurements; studio previews. Native animation/lighting remains user tested."
+}

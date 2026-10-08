@@ -1,0 +1,22 @@
+{
+  "source": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\chaos_models\\pack_a_punch\\chaos_pack_a_punch.xmodel_bin",
+  "sha256": "c738e6cb1ce082f4b9a7d64a50af9f2519522650ce1da2e7646434e12ed22c8f",
+  "vertices": 957900,
+  "triangles": 161216,
+  "materials": 23,
+  "textures": 26,
+  "bounds": [
+    [
+      -51.86614227294922,
+      -26.34744644165039,
+      -1.5780589580535889
+    ],
+    [
+      51.86614227294922,
+      26.633005142211914,
+      125.42703247070312
+    ]
+  ],
+  "game_assets_modified": false,
+  "shader_limitation": "BO3 animated three-layer background shown as a static first layer"
+}

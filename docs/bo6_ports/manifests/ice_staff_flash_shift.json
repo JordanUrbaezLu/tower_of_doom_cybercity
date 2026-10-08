@@ -1,0 +1,173 @@
+{
+  "shift_inches": 48.0,
+  "clips": [
+    {
+      "clip": "tod_vm_staff_ice_fit_crawl_b.XANIM_BIN",
+      "frames": 31,
+      "flash_ahead_before": 39.807,
+      "flash_ahead_after": 87.807,
+      "sha256": "94c9a064ae596b331e9a0fd092a76fb10521db2648cd34e1a61d68575b433874"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_crawl_f.XANIM_BIN",
+      "frames": 31,
+      "flash_ahead_before": 39.807,
+      "flash_ahead_after": 87.807,
+      "sha256": "e9372673638f586887fd1b8067a85eb86a158d9dbc3446a581ba2315889122e5"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_crawl_in.XANIM_BIN",
+      "frames": 11,
+      "flash_ahead_before": 39.808,
+      "flash_ahead_after": 87.808,
+      "sha256": "6c6ea07c5a76ca507a6d088ebdd42b44d535213d449265e994e2d0689f9a8bd2"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_crawl_l.XANIM_BIN",
+      "frames": 31,
+      "flash_ahead_before": 39.807,
+      "flash_ahead_after": 87.807,
+      "sha256": "e2168a52c8ae271946cd89406c5b98a77a021c1db36e8ef552a0f7357428ab63"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_crawl_out.XANIM_BIN",
+      "frames": 11,
+      "flash_ahead_before": 39.807,
+      "flash_ahead_after": 87.807,
+      "sha256": "3e616c432eec6f988c8648c8782c803827f409518eb35079e01f3cbd18995575"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_crawl_r.XANIM_BIN",
+      "frames": 31,
+      "flash_ahead_before": 39.807,
+      "flash_ahead_after": 87.807,
+      "sha256": "dbedd10d99b3dc575b9e7d250e750a0e04c1fa0c55dd5dca8f61acee4e5097b6"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_idle.XANIM_BIN",
+      "frames": 301,
+      "flash_ahead_before": 39.808,
+      "flash_ahead_after": 87.808,
+      "sha256": "f167153998be673df7616dbb867139e9ffb9bb235dfd5352a4d9124c07568238"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_slide_air_in.XANIM_BIN",
+      "frames": 14,
+      "flash_ahead_before": 39.808,
+      "flash_ahead_after": 87.808,
+      "sha256": "9638a3d41a6bfcfda148a0faf115fd0898a9de838e3efe73f469a047ab1f359a"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_slide_in.XANIM_BIN",
+      "frames": 14,
+      "flash_ahead_before": 39.808,
+      "flash_ahead_after": 87.808,
+      "sha256": "cd8060f26102d2fd12d202807aa01a89020b8b0987eed8f859ceceb708f30b38"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_slide_loop.XANIM_BIN",
+      "frames": 28,
+      "flash_ahead_before": 39.808,
+      "flash_ahead_after": 87.809,
+      "sha256": "7e2d514e9ec86b5d992e1a78e5dfe753990f3bfbfd37b955b556e99cdc329348"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_slide_out.XANIM_BIN",
+      "frames": 11,
+      "flash_ahead_before": 39.808,
+      "flash_ahead_after": 87.808,
+      "sha256": "8e5b0fc5c74beb1204a13f6f7bb6e7b6a1c2870a29339202e0cfe70fe0e8e752"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_t7_ads_fire.XANIM_BIN",
+      "frames": 6,
+      "flash_ahead_before": 39.808,
+      "flash_ahead_after": 87.808,
+      "sha256": "97dbe22499c00e90312fa454be5d44020f5dfe6f39936ac6a0d3bf1de737a08b"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_t7_fire.XANIM_BIN",
+      "frames": 15,
+      "flash_ahead_before": 39.808,
+      "flash_ahead_after": 87.808,
+      "sha256": "6a0d26ee339df5211527a0611a261bbb20e17ef91a2fb1f01196719e3ffaefb6"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_t7_hold_fire.XANIM_BIN",
+      "frames": 2,
+      "flash_ahead_before": 39.808,
+      "flash_ahead_after": 87.808,
+      "sha256": "8328499da36f10c053707017c90e0e6975f23e49015cb9276a8c7f8c3d6591bf"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_t7_melee_slash.XANIM_BIN",
+      "frames": 24,
+      "flash_ahead_before": 39.808,
+      "flash_ahead_after": 87.808,
+      "sha256": "c9048044f3b40ef34a1f5dc5d3427898ee3158fb6c38226f8044fa2670052da5"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_t7_pullout.XANIM_BIN",
+      "frames": 18,
+      "flash_ahead_before": 39.807,
+      "flash_ahead_after": 87.807,
+      "sha256": "08b2cf4f77f2c07dcd5f7ab30dcd977764a8ba52ca188881cc1a3b3bc734dce7"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_t7_pullout_quick.XANIM_BIN",
+      "frames": 26,
+      "flash_ahead_before": 39.807,
+      "flash_ahead_after": 87.807,
+      "sha256": "d97eddd4a61588bfe072d04916e3040a0740c47abd9b36849ab601439de8af57"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_t7_putaway.XANIM_BIN",
+      "frames": 16,
+      "flash_ahead_before": 39.808,
+      "flash_ahead_after": 87.808,
+      "sha256": "a941d49a20f86b9dcc94482edcd880c6df3bc1dc00d7c84c8ccdb186ed362c63"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_t7_putaway_quick.XANIM_BIN",
+      "frames": 17,
+      "flash_ahead_before": 39.808,
+      "flash_ahead_after": 87.808,
+      "sha256": "040d2430acf02c765d3a1c8054fd7dbfa193ff541993d5d1ec881cf1d7f0fcf6"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_t7_reload_ice.XANIM_BIN",
+      "frames": 75,
+      "flash_ahead_before": 39.808,
+      "flash_ahead_after": 87.808,
+      "sha256": "544b9fdcc55d2e4e0cac11f08397b04ba330bd645a546d6673aa6946d8154fed"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_t7_sprint_in.XANIM_BIN",
+      "frames": 11,
+      "flash_ahead_before": 39.808,
+      "flash_ahead_after": 87.808,
+      "sha256": "f954d4383816c739759258aa35ded997ab9e5a2dc027e9e2ec4129b1bf052f2b"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_t7_sprint_loop.XANIM_BIN",
+      "frames": 31,
+      "flash_ahead_before": 39.807,
+      "flash_ahead_after": 87.806,
+      "sha256": "9fffd410facc3f04ba2386d20ad550e9c8a2674794d5d5669ecc7a149fa6672c"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_t7_sprint_out.XANIM_BIN",
+      "frames": 11,
+      "flash_ahead_before": 39.807,
+      "flash_ahead_after": 87.806,
+      "sha256": "816752307b6ba34b8d163a4878ae2690d100280e22eacb21178cbf2131640294"
+    },
+    {
+      "clip": "tod_vm_staff_ice_fit_t7_water_first_raise.XANIM_BIN",
+      "frames": 49,
+      "flash_ahead_before": 39.807,
+      "flash_ahead_after": 87.806,
+      "sha256": "992df920b7a5a2140915a4e5fcfe98ab026261818b9a4de3005496c2f70bc620"
+    }
+  ]
+}
