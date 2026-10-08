@@ -34,7 +34,9 @@ import os
 import re
 import shutil
 import sys
+import threading
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from steam_manifest import stock_files  # noqa: E402
@@ -275,22 +277,43 @@ def overlay_export(a):
                 done[r['p']] = r
             except ValueError:
                 pass
-    records = []
+    finished = {}
+    todo = []
     pr = Progress(len(sel), total, 'export')
+    for rel, size, mtime, kind in sel:
+        dst = os.path.join(a.dest, 'files', rel)
+        r = done.get(rel)
+        if r and r['size'] == size and abs(r['mtime'] - mtime) < 2 and \
+                os.path.isfile(lp(dst)) and os.path.getsize(lp(dst)) == size:
+            finished[rel] = r
+            pr.step(size)
+        else:
+            todo.append((rel, size, mtime, kind))
+    if finished:
+        print('  resuming: %d files already in the bundle, %d to copy' % (len(finished), len(todo)))
+
+    def work(item):
+        rel, size, mtime, kind = item
+        sha = copy_hash(os.path.join(tools, rel), os.path.join(a.dest, 'files', rel), mtime)
+        return {'p': rel, 'size': size, 'mtime': mtime, 'sha1': sha, 'kind': kind}
+
+    # Several files in flight at once: over SMB each file costs round trips (create, write, rename,
+    # set time), so one-at-a-time ran at 2-4 MB/s on a link robocopy fills at 24 MB/s (2026-10-08).
+    # Only this thread writes the progress file, so a crash leaves it consistent for the resume.
     with open(prog_path, 'a', encoding='utf-8') as prog:
-        for rel, size, mtime, kind in sel:
-            dst = os.path.join(a.dest, 'files', rel)
-            r = done.get(rel)
-            if r and r['size'] == size and abs(r['mtime'] - mtime) < 2 and \
-                    os.path.isfile(lp(dst)) and os.path.getsize(lp(dst)) == size:
-                records.append(r)
-            else:
-                sha = copy_hash(os.path.join(tools, rel), dst, mtime)
-                r = {'p': rel, 'size': size, 'mtime': mtime, 'sha1': sha, 'kind': kind}
+        ex = ThreadPoolExecutor(max_workers=max(1, a.workers))
+        try:
+            for fut in as_completed([ex.submit(work, it) for it in todo]):
+                r = fut.result()
                 prog.write(json.dumps(r) + '\n')
                 prog.flush()
-                records.append(r)
-            pr.step(size)
+                finished[r['p']] = r
+                pr.step(r['size'])
+        except BaseException:
+            ex.shutdown(wait=True, cancel_futures=True)
+            raise
+        ex.shutdown(wait=True)
+    records = [finished[rel] for rel, _, _, _ in sel]
     out = {'created': datetime.datetime.now().isoformat(timespec='seconds'),
            'source_tools_root': tools, 'stock_manifest': os.path.basename(man_path),
            'stock_depot_manifest_id': str(meta.get(2)), 'map': MAP, 'all_usermaps': a.all_usermaps,
@@ -428,7 +451,7 @@ def copylist(a):
         raw = open(a.list, 'rb').read().decode('utf-8')
     items = [x.rstrip('\r') for x in re.split('[\0\n]', raw) if x.strip()]
     n = b = skipped = kept = 0
-    errors, links, absent = [], [], []
+    errors, links, absent, jobs = [], [], [], []
     onerr = lambda e: errors.append('%s: %s' % (e.filename, e.strerror))
     for rel in items:
         src = os.path.join(a.src, rel)
@@ -465,14 +488,26 @@ def copylist(a):
                 if dt.st_size == st.st_size and abs(dt.st_mtime - st.st_mtime) < 2:
                     skipped += 1
                     continue
-            try:
-                os.makedirs(lp(os.path.dirname(d)), exist_ok=True)
-                shutil.copy2(lp(s), lp(d))
-            except OSError as e:
+            jobs.append((r, s, d, st.st_size))
+    # copy in parallel (same reason as overlay-export: per-file round trips over SMB)
+    lock = threading.Lock()
+
+    def one(job):
+        r, s, d, size = job
+        try:
+            os.makedirs(lp(os.path.dirname(d)), exist_ok=True)
+            shutil.copy2(lp(s), lp(d))
+            return size
+        except OSError as e:
+            with lock:
                 errors.append('%s: %s' % (r, e.strerror))
-                continue
-            n += 1
-            b += st.st_size
+            return None
+    if jobs:
+        with ThreadPoolExecutor(max_workers=max(1, a.workers)) as ex:
+            for size in ex.map(one, jobs):
+                if size is not None:
+                    n += 1
+                    b += size
     for l in links:
         print('  not followed (junction/symlink): %s' % l)
     if absent:
@@ -526,6 +561,7 @@ def main():
     e.add_argument('--stock-manifest')
     e.add_argument('--dry-run', action='store_true')
     e.add_argument('--all-usermaps', action='store_true', help="also keep the other maps' build output")
+    e.add_argument('--workers', type=int, default=8, help='files copied at once (default 8)')
     i = sub.add_parser('overlay-import')
     i.add_argument('--src', required=True)
     i.add_argument('--tools')
@@ -544,6 +580,7 @@ def main():
     g.add_argument('--git-untracked', action='store_true', help='copy every path git does not track in --src')
     c.add_argument('--save-list', help='with --git-untracked: also write the list here')
     c.add_argument('--no-overwrite', action='store_true', help='never replace a file already at the destination')
+    c.add_argument('--workers', type=int, default=8, help='files copied at once (default 8)')
     c.add_argument('--dry-run', action='store_true')
     d = sub.add_parser('du')
     d.add_argument('paths', nargs='+')
