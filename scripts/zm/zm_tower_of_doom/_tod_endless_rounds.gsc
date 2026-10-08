@@ -34,6 +34,7 @@
 #using scripts\shared\laststand_shared;
 #using scripts\zm\_zm;
 #using scripts\zm\_zm_audio;
+#using scripts\shared\ai\zombie_utility;   // default_max_zombie_func (the stock budget curve tod_max_zombies wraps)
 #using scripts\zm\zm_tower_of_doom\_tod_crown_data;   // beyond_gate (the sealed-road spawn filter)
 #using scripts\zm\zm_tower_of_doom\_tod_breather_data;   // v13.21 — lounge z-levels (the breather calm-down check)
 #using scripts\zm\zm_tower_of_doom\_tod_spire_data;   // v14 — in_spire (the endless-mode spawn filter; leaf module, no cycle)
@@ -42,6 +43,97 @@
 
 // THE LAST MILE finale spawn floor (v10) — see tod_spawn_delay below.
 #define TOD_FINALE_SPAWN_DELAY   0.1
+// ---- RAMPAGE INDUCER (v14.20) --------------------------------------------
+// The spawn-pacing half of hard mode. Applied in tod_spawn_delay() below; see
+// the comment there for why this is round-granular rather than instant.
+//
+// 0.80 lands the effective multiplier at 0.83 x 0.80 = 0.664x stock, which is
+// almost exactly the 0.65x the map ran as its MIDDLE setting before the two
+// 2026-08-29 tone-downs — a pace this map has already shipped and been played
+// at, rather than a new guess. That is the whole design of this feature: hand
+// the pre-tone-down difficulty back to the players who wanted it, without
+// taking it from the ones who did not.
+#define TOD_RAMPAGE_SPAWN_MULT   0.80
+// The floor has to come down with the multiplier or the squeeze is swallowed at
+// depth (stock's own curve decays below 0.30 by round ~20, so a 0.25 floor
+// would already be binding and 0.80 x anything would change nothing). 0.20 is
+// the pre-tone-down floor, and it stays deliberately ABOVE the spire's 0.18.
+#define TOD_RAMPAGE_SPAWN_FLOOR  0.20
+// THE SPIRE (user 2026-08-30: rampage must work there too). Its own 0.18 is
+// already the hottest pacing on the map, so rampage tightens it by one notch
+// rather than by the multiplier — 0.18 x 0.80 = 0.144 is below anything this
+// map has ever run and there is no play data anywhere near it.
+#define TOD_RAMPAGE_SPIRE_FLOOR  0.16
+// v16.15 — the Warden trials' trickle (sealed hub arenas, 2-minute hold-outs).
+// LOCKSTEP PAIR with _tod_spire.gsc TOD_TRIAL_SPAWN_FLOOR. Below every other
+// floor in the map by design: the trial is the spire's own hard mode.
+#define TOD_SPIRE_TRIAL_SPAWN_FLOOR 0.12
+// v18.78 — THE HORDE RISES WHERE YOU STAND (the trial halls; user 2026-09-10:
+// "Everyone just bunker up in the little cubby and withstands the trial"). Of
+// every spawn inside a sealed hall, TOD_TRIAL_NEAR_PCT percent roll a random
+// upright player and rise at one of the TOD_TRIAL_NEAR_K risers nearest THEM;
+// the rest stay uniform over the hall so the room keeps filling. The generator
+// puts a riser INSIDE every pocket a hall has (the porch behind the gate always
+// gets two; tools/lint_tod_hall_bunkers.js is the proof), so hiding in one is
+// what draws the rise behind you. 100 / 1 would be pure spawn-on-the-player;
+// 0 is the old uniform hall. Read by trial_near_spots.
+#define TOD_TRIAL_NEAR_PCT       70
+#define TOD_TRIAL_NEAR_K         3
+// v18.75 — THE WARDEN KING UNDER RAMPAGE runs one notch below the trial floor.
+// LOCKSTEP PAIR with _tod_spire.gsc TOD_KING_RAMPAGE_SPAWN_FLOOR (written into
+// zombie_vars at the seal; this copy is what each rollover re-resolves).
+#define TOD_SPIRE_KING_RAMPAGE_SPAWN_FLOOR 0.10
+// ---- THE SPIRE ROUND BUDGET (v16.9) ---------------------------------------
+// User 2026-09-01, after a real spire run: "each round was like 15 minutes. We
+// need to triple the speed". THE TRICKLE WAS NEVER THE CLOCK AT DEPTH. Under
+// the twist a round ends when its budget is SPENT, and round_spawning stalls
+// on level.zombie_ai_limit (30-45 by party since v18.11, 45 on rampage — see
+// _tod_corpse_cleanup::ai_limit_for_party) whenever that many stand — so past the point
+// where the party cannot out-kill the cap, round time = budget / kill rate and
+// the 0.18 floor is irrelevant. Stock's budget past round 10 grows as
+// round^2 (get_zombie_count_for_round: 24 + 6 x players' x round/5 x round x
+// 0.15): round 40 is 168 solo and 888 for four, round 50 is 249 / 1374. A
+// party ascends at round 30-60 and every spire round asks for that many
+// kills. Dividing the budget is the one lever that moves the clock in that
+// regime — spawn delay cannot. Applied through stock's own max_zombie_func
+// hook (tod_max_zombies below), so _tod_luck's fair-share normalization
+// (KILL_BUDGET x players / round total) follows by construction: a smaller
+// round pays more luck per kill and a full clear still lands +40.
+// ⚠️ The hook is resolved ONCE per round at round_spawning's top. The round
+// already running at ascension keeps the tower's full budget unless it is
+// clamped there — _tod_spire::ascend does that (its own lesson: the 0.18
+// direct write exists for the same reason). Read this as a divisor of the
+// stock curve, not a count: the ai_limit still decides how many stand at once.
+// LEDGER — and this one HAS been played now.
+//   3   shipped (the literal "triple"), never tested.
+//   2   user dialed it down the same session, before any test — "Make it 1/2
+//       and not 1/3".
+//   1.25 user 2026-09-04, after playing 2: "the rounds progress too fast in the
+//       endless spire ... I dont want to revert but I do want to half it. Maybe
+//       even 60% less faster." Taken as the far end of that range: undo 60% of
+//       the v16.9 speed-up, not all of it.
+// READ IT AS A DIVISOR OF THE STOCK CURVE, and reason in ROUND LENGTH, which is
+// what the player feels — length is proportional to budget in the budget-bound
+// regime described above:
+//       DIV 1     stock          round length L      (pre-v16.9)
+//       DIV 2     budget 50%     0.50 L              (what was played)
+//       DIV 1.25  budget 80%     0.80 L              <- here: 60% LONGER than
+//                                                       DIV 2, still 20%
+//                                                       shorter than pre-v16.9
+//       DIV 1.333 budget 75%     0.75 L              (the milder "half it")
+// The round COUNTER is the thing that was racing: a smaller budget is fewer
+// kills per round, so the number climbs faster and every per-round ramp — the
+// +0.28%/round zombie speed, the boss cadence — ramps with it against a climb
+// that has not moved.
+// A NON-INTEGER DIVISOR IS FINE: the one use site is int( n / DIV ), the
+// division is float and int() truncates. There is no second copy of this
+// number — _tod_spire::ascend clamps the in-progress round by RE-RESOLVING
+// through zm::get_zombie_count_for_round, which comes back through this hook,
+// so it follows any change here by construction.
+#define TOD_SPIRE_BUDGET_DIV     1.25
+// Floor under the divided budget so a dev-flag ascension at round 2 (stock
+// budget 9) does not roll rounds on three zombies.
+#define TOD_SPIRE_BUDGET_MIN     12
 // HOW CLOSE IN FRONT IS TOO CLOSE. The selector below takes the NEAREST riser
 // in the half-plane the player faces, and on the causeway the risers sit on the
 // road itself — so "nearest ahead" can be the one under his feet, and a zombie
@@ -53,6 +145,87 @@
 // comparison below uses.
 #define TOD_FINALE_MIN_AHEAD_SQ  ( 280 * 280 )
 
+// ---- THE CROWN-END WALL (v14.47) -----------------------------------------
+// User 2026-08-31: "the biggest issue with the final run for the crown is that
+// zombies are spawning as you run so if you are fast enough you can just run by
+// all of them ... most of them and elites should spawn at the end of the path
+// towards the crown. The issue we are trying to prevent is a fast player running
+// through and not seeing a single zombie."
+//
+// WHY THE OLD BEHAVIOUR HAD THIS HOLE, precisely: the aggro picker below spawns
+// at the NEAREST riser ahead of a rolled player. Nearest-ahead is a *trailing*
+// pressure model — it is always relative to where you are now, so a player
+// moving faster than the spawn cadence outruns his own wave and every zombie
+// behind him is a zombie he never meets. The road is ~8,220 units; at sprint
+// that is under a minute.
+//
+// THE FIX IS AN ABSOLUTE ANCHOR, NOT A BIGGER RATE — spawns are placed by where
+// they are on the ROAD, not by where the player currently is, so the horde
+// cannot be outrun because it is not chasing. That principle survives; the
+// v14.47 *implementation* of it (a binary far/near split with a scaled
+// percentage) did not survive its first play-test and was replaced. Read on.
+//
+// ---- v14.48: THE THREE BANDS REPLACE THE BINARY SPLIT ---------------------
+// The v14.47 far/near split shipped and the user play-tested it. Two defects,
+// both real, both fixed here:
+//
+//   1. "are you spawning them inside the crown. The furthest they should spawn
+//      is right at the crown gate." — YES, WE WERE. finale_far_spots took the
+//      FURTHEST CANDIDATE and accepted anything within 1400 of it. The hall
+//      risers at y~8600 are the furthest, so the band swallowed the crown room.
+//      ⚠️ THE CAP IS NOW A FIXED WORLD Y FROM gate_org(), NOT A DISTANCE FROM
+//      THE CANDIDATE SET. That is the whole lesson of the bug: anything
+//      expressed relative to "the furthest riser" drifts the instant a riser is
+//      added somewhere new. (Peer caught the same class of error in my first
+//      draft of this fix.)
+//   2. "I basically ran 85% of the way there before I saw any of them." —
+//      a CONSEQUENCE of (1): the wall existed, but it was inside a building the
+//      player cannot see into, so the road read empty until he was on top of it.
+//
+// THE USER'S OWN DISTRIBUTION REPLACES MINE, and it is a better design: "40%
+// crown gate spawn 30% middle of bridge and 30% beginning of bridge". Continuous
+// contact along the whole road instead of one clump at the end — you meet
+// something early, something in the middle, and the heaviest concentration
+// waiting at the objective.
+//
+// v18.5 REWEIGHTED IT TO 25/25/50 (user 2026-09-06: "reduce the aggression of
+// spawn at front of crown ... by like 25%", then the exact split: "25, 25,
+// 50"). The three-band MECHANISM is untouched; only the weights moved. The
+// objective is now the LIGHTEST band and half the road's spawns meet you at the
+// bridge mouth. See the define.
+//
+// Bands are thirds of the road, derived from the two AUTHORITATIVE gate
+// constants (causeway_gate_org y~492 -> gate_org y~7860), never literals — the
+// v12 rebuild moved every lane and a hardcoded y would have rotted.
+// 40/30/30 -> 30/30/40 (v18.4) -> 25/25/50 (v18.5, the user's own numbers,
+// 2026-09-06: "25, 25, 50", after "reduce the aggression of spawn at front of
+// crown ... by like 25%"). HALF the road's spawns now start at the bridge
+// mouth and the gate band is the LIGHTEST of the three — the exact inversion of
+// the v14.48 design, and deliberate.
+//
+// WHAT THIS DOES AND DOES NOT DO, because the bands are a DISTRIBUTION and not
+// a volume: the road's total spawn pressure is UNCHANGED — every riser still
+// spawns, the freed share just lands in the beginning band (which is the
+// remainder), i.e. BEHIND the party for most of the run instead of waiting at
+// the objective. That is the ask read literally: less waiting for you at the
+// crown, not an easier road. The volume knob is TOD_FINALE_SPAWN_DELAY (0.1)
+// and the elite one is TOD_FINALE_BOSS_ROOF (4) — neither moved.
+//
+// The scaling shift below still stacks on top, so 4 players + rampage is 37% at
+// the gate (was 52 before v18.4) and the beginning band never falls below 38%.
+#define TOD_FINALE_BAND_GATE_PCT     25   // nearest the crown gate — was the heaviest third at 40 until v18.4
+#define TOD_FINALE_BAND_MID_PCT      25   // middle of the bridge
+                                          // beginning = the remainder (50), so the three always total 100
+// SCALING (user's earlier ask, kept): more players / rampage move weight OUT of
+// the beginning and INTO the crown gate, so the objective gets harder to reach
+// rather than the road getting uniformly busier. Deliberately small — the
+// 40/30/30 above is an explicit instruction and this must not drown it. Solo
+// with rampage off is EXACTLY 40/30/30, which is the condition it was specified
+// in. Worst case (4 players + rampage) is 52/30/18.
+#define TOD_FINALE_BAND_SHIFT_PLAYER 3
+#define TOD_FINALE_BAND_SHIFT_RAMP   6
+#define TOD_FINALE_BAND_SHIFT_MAX    12   // beginning never falls below 18%
+
 #namespace tod_endless_rounds;
 
 function init()
@@ -61,6 +234,11 @@ function init()
 	level.zombie_round_change_custom = &tod_round_change;
 	level.func_get_delay_between_rounds = &tod_between_round_delay;
 	level.zombie_vars[ "zombie_between_round_time" ] = 0;   // belt + braces
+	// v16.9 — the per-round spawn budget. Stock only DEFAULTS this hook when it
+	// is undefined at first use (_zm.gsc:3867), so setting it here wins; nothing
+	// else in the tree (vendored packs included) assigns it — grep before
+	// adding a second writer. Outside the spire it is stock's curve verbatim.
+	level.max_zombie_func = &tod_max_zombies;
 
 	// FASTER SPAWN TRICKLE (user 2026-08-17 "rounds didn't seem to start up as
 	// quickly"): with seamless rounds the real pacing clock is the per-zombie
@@ -107,21 +285,10 @@ function init()
 // should breathe.
 function tod_player_in_breather()
 {
-	players = GetPlayers();
-	zs = tod_breather_data::breather_zs();
-	for ( i = 0; i < players.size; i++ )
+	foreach ( p in GetPlayers() )
 	{
-		p = players[ i ];
-		if ( !isdefined( p ) || !IsAlive( p ) )
-			continue;
-		o = p.origin;
-		if ( o[ 0 ] < -900 || o[ 0 ] > -200 || o[ 1 ] < -1550 || o[ 1 ] > -400 )
-			continue;
-		for ( j = 0; j < zs.size; j++ )
-		{
-			if ( o[ 2 ] >= zs[ j ] - 64 && o[ 2 ] <= zs[ j ] + 256 )
-				return true;
-		}
+		if ( !isdefined( p ) || !IsAlive( p ) ) continue;
+		if ( tod_breather_data::lounge_index_at( p.origin ) >= 0 ) return true;
 	}
 	return false;
 }
@@ -132,6 +299,50 @@ function tod_player_in_breather()
 // it is consulted on every zombie of every round — so the non-finale path
 // returns array::random(spots), which is verbatim what stock does when no
 // override is set. Getting that wrong would silently re-pace the whole map.
+// v18.78 — the TOD_TRIAL_NEAR_K risers nearest a random UPRIGHT player (last
+// stand excluded: stock leaves a crawler at health 1, so bare isalive would
+// let a downed player draw the whole hall onto the teammate reviving them —
+// the finale focus's own lesson below). Empty when nobody qualifies; the
+// caller then takes the uniform pick. Selection-sorted: a hall has ~10 risers.
+function trial_near_spots( spots )
+{
+	alive = [];
+	players = GetPlayers();
+	for ( i = 0; i < players.size; i++ )
+	{
+		p = players[ i ];
+		if ( isdefined( p ) && isplayer( p ) && isalive( p )
+		     && !( p laststand::player_is_in_laststand() ) )
+			alive[ alive.size ] = p;
+	}
+	if ( alive.size == 0 )
+		return [];
+	focus = alive[ RandomInt( alive.size ) ];
+	near = [];
+	used = [];
+	for ( k = 0; k < TOD_TRIAL_NEAR_K && k < spots.size; k++ )
+	{
+		best = -1;
+		best_d = 0;
+		for ( i = 0; i < spots.size; i++ )
+		{
+			if ( IS_TRUE( used[ i ] ) || !isdefined( spots[ i ] ) || !isdefined( spots[ i ].origin ) )
+				continue;
+			d = DistanceSquared( spots[ i ].origin, focus.origin );
+			if ( best < 0 || d < best_d )
+			{
+				best = i;
+				best_d = d;
+			}
+		}
+		if ( best < 0 )
+			break;
+		used[ best ] = true;
+		near[ near.size ] = spots[ best ];
+	}
+	return near;
+}
+
 function finale_spawn_selection( spots )
 {
 	if ( !isdefined( spots ) || spots.size == 0 )
@@ -243,10 +454,88 @@ function finale_spawn_selection( spots )
 		// Same fail-safe shape as every filter in this function.
 		if ( up.size > 0 )
 			spots = up;
+
+		// v16.15 — THE SEALED RING (the Warden trials): while a trial runs,
+		// only the arena's own risers are eligible — a zombie risen on the
+		// spiral outside the shut gate is the stranded-actor trap in its
+		// purest form. The box is published by _tod_spire::trial_run from the
+		// generated anchors; the sealed-crown filter above is the precedent.
+		if ( isdefined( level.tod_trial_box ) )
+		{
+			ring = [];
+			for ( i = 0; i < spots.size; i++ )
+			{
+				sp = spots[ i ];
+				if ( !isdefined( sp ) || !isdefined( sp.origin ) )
+					continue;
+				if ( tod_spire_data::in_box( sp.origin, level.tod_trial_box ) )
+					ring[ ring.size ] = sp;
+			}
+			if ( ring.size > 0 )
+				spots = ring;
+			// v18.78 — THE HORDE RISES WHERE YOU STAND. Uniform over the hall's
+			// risers, a party in a three-walled pocket saw everything arrive
+			// through its one mouth. Now most spawns rise at the risers nearest
+			// a random upright player (TOD_TRIAL_NEAR_PCT / _K) — and every
+			// pocket has a riser inside it, so hiding is what draws the rise.
+			// Re-rolled per spawn, like the finale's focus: nobody is safe for a
+			// wave. Falls through to the uniform pick when nobody is upright.
+			// v19.76: A FIGHT ONLY. The summit keeps its box after the King now
+			// (the gate stays shut, so every riser must be on the deck), but the
+			// survival that follows is not a trial: uniform over the deck's
+			// risers, the nearest thing to the old "they come up the stair".
+			if ( IS_TRUE( level.tod_trial_active ) && spots.size > 1 && RandomInt( 100 ) < TOD_TRIAL_NEAR_PCT )
+			{
+				near = trial_near_spots( spots );
+				if ( near.size > 0 )
+					return array::random( near );
+			}
+		}
 	}
 
 	if ( !IS_TRUE( level.tod_finale_aggro ) || spots.size == 1 )
 		return array::random( spots );
+
+	// NOTHING PAST THE CROWN GATE (v14.48, user: "The furthest they should spawn
+	// is right at the crown gate"). A HARD WORLD-Y CAP, not a distance from the
+	// candidate set — see the define block for why that distinction is the whole
+	// bug. Applied before the band pick AND before the nearest-ahead picker, so
+	// neither path can put a zombie inside the hall during the road run.
+	if ( !IS_TRUE( level.tod_crown_sealed ) )
+	{
+		on_road = [];
+		for ( i = 0; i < spots.size; i++ )
+		{
+			sp = spots[ i ];
+			if ( !isdefined( sp ) || !isdefined( sp.origin ) )
+				continue;
+			if ( sp.origin[ 1 ] > finale_road_y1() )
+				continue;
+			on_road[ on_road.size ] = sp;
+		}
+		// Same fail-safe shape as every filter above: if the cap leaves nothing,
+		// take what we had rather than refusing to spawn.
+		if ( on_road.size > 0 )
+			spots = on_road;
+	}
+
+	// THE THREE BANDS (v14.48) — 40% crown gate / 30% middle / 30% beginning,
+	// rolled per spawn so the split is statistical rather than alternating and a
+	// party cannot time their sprint against a pattern.
+	//
+	// DELIBERATELY NOT APPLIED ONCE THE CROWN IS SEALED. By then everyone is
+	// locked in a 1536-square room and the hall filter above has already reduced
+	// `spots` to that room; banding it by road-y would bunch the whole siege
+	// against one wall. The hold-out wants the room, evenly.
+	if ( !IS_TRUE( level.tod_crown_sealed ) )
+	{
+		picked = finale_band_spots( spots, finale_roll_band() );
+		if ( picked.size > 0 )
+			return array::random( picked );
+		// The rolled band is empty on this road/at this moment — fall through to
+		// the nearest-ahead picker rather than refusing to spawn. Same fail-safe
+		// shape as every filter above.
+	}
 
 	// WHOSE front? A RANDOM LIVING PLAYER, re-rolled for every single spawn.
 	//
@@ -345,6 +634,123 @@ function finale_spawn_selection( spots )
 	return best;
 }
 
+// PUBLIC — the road's two ends in world Y. +Y is toward the crown. These are the
+// ONLY place the band maths touches geometry, and both come from the generated
+// crown data rather than from literals or from the candidate set.
+//
+// ⚠️ IF THE ROAD IS EVER RE-AUTHORED ALONG ANOTHER AXIS, these two functions and
+// finale_road_band() are what has to change — nothing else in the band system
+// knows which way the causeway runs.
+function finale_road_y0() { return tod_crown_data::causeway_gate_org()[ 1 ]; }   // terrace gate, ~492
+function finale_road_y1() { return tod_crown_data::gate_org()[ 1 ]; }            // CROWN GATE, ~7860 — the hard cap
+
+// -> which third of the road a world Y sits in. 0 beginning / 1 middle / 2 gate.
+// Anything at or past the crown gate is band 2 (it is already capped out of the
+// pool by the filter in finale_spawn_selection; this is belt and braces).
+function finale_road_band( y )
+{
+	y0 = finale_road_y0();
+	y1 = finale_road_y1();
+	span = y1 - y0;
+	if ( span <= 0 )
+		return 2;                       // degenerate road — treat everything as the gate
+	f = ( y - y0 ) / span;
+	if ( f < 0.33333 )
+		return 0;
+	if ( f < 0.66667 )
+		return 1;
+	return 2;
+}
+
+// -> points moved OUT of the beginning band and INTO the crown gate band by
+// party size and rampage. See the define block: deliberately small, so the
+// user's explicit 40/30/30 still reads as 40/30/30 in the case they specified it
+// for (solo, rampage off -> 0).
+//
+// Counts only UPRIGHT players, matching every other player pick in the finale: a
+// downed teammate is not applying pressure and should not make the objective
+// harder for the ones still standing.
+function finale_band_shift()
+{
+	shift = 0;
+
+	n = 0;
+	players = GetPlayers();
+	for ( i = 0; i < players.size; i++ )
+	{
+		p = players[ i ];
+		if ( isdefined( p ) && isplayer( p ) && isalive( p )
+		     && !( p laststand::player_is_in_laststand() ) )
+			n++;
+	}
+	if ( n > 1 )
+		shift += ( n - 1 ) * TOD_FINALE_BAND_SHIFT_PLAYER;
+
+	if ( IS_TRUE( level.tod_rampage_on ) )
+		shift += TOD_FINALE_BAND_SHIFT_RAMP;
+
+	if ( shift > TOD_FINALE_BAND_SHIFT_MAX )
+		shift = TOD_FINALE_BAND_SHIFT_MAX;
+	return shift;
+}
+
+// PUBLIC (also read by _tod_bosses, so ELITES follow the same distribution as
+// the horde) -> the band this spawn belongs to: 0 beginning / 1 middle / 2 gate.
+//
+// ONE ROLL FUNCTION FOR BOTH so trash and elites can never drift apart — the
+// user described a single distribution for "them and elites", and two copies of
+// this arithmetic would be two things to retune and one to forget.
+function finale_roll_band()
+{
+	shift = finale_band_shift();
+	gate  = TOD_FINALE_BAND_GATE_PCT + shift;
+	mid   = TOD_FINALE_BAND_MID_PCT;
+
+	r = RandomInt( 100 );
+	if ( r < gate )
+		return 2;
+	if ( r < gate + mid )
+		return 1;
+	return 0;                           // the remainder — beginning of the bridge
+}
+
+// -> the candidates sitting in band `b`. Empty is a legitimate answer (a band
+// may hold no risers on this road, or none currently offered by stock); the
+// caller falls through rather than forcing a bad spawn.
+function finale_band_spots( spots, b )
+{
+	out = [];
+	for ( i = 0; i < spots.size; i++ )
+	{
+		sp = spots[ i ];
+		if ( !isdefined( sp ) || !isdefined( sp.origin ) )
+			continue;
+		if ( finale_road_band( sp.origin[ 1 ] ) != b )
+			continue;
+		out[ out.size ] = sp;
+	}
+	return out;
+}
+
+// v16.9 — the per-round SPAWN BUDGET (stock's max_zombie_func hook, consulted
+// by get_zombie_count_for_round for the round total AND by _tod_luck for its
+// per-kill normalization AND by _tod_doors for its party-size ratio — a
+// uniform divisor leaves that ratio untouched). Stock's curve verbatim
+// everywhere except the spire, where it is cut by TOD_SPIRE_BUDGET_DIV —
+// see the define's comment for why the budget, not the trickle, is the
+// spire's round clock.
+function tod_max_zombies( max_num, n_round )
+{
+	n = zombie_utility::default_max_zombie_func( max_num, n_round );
+	if ( IS_TRUE( level.tod_spire_active ) )
+	{
+		n = int( n / TOD_SPIRE_BUDGET_DIV );
+		if ( n < TOD_SPIRE_BUDGET_MIN )
+			n = TOD_SPIRE_BUDGET_MIN;
+	}
+	return n;
+}
+
 // Per-round spawn delay: stock curve at 0.8x, floor 0.3s (was 0.5x/0.15 —
 // "rounds are actually too aggressive", user 2026-08-20; the seamless-round
 // twist stays, the trickle just breathes more).
@@ -362,7 +768,24 @@ function tod_spawn_delay( n_round )
 	// zombie_vars and deadlocked the spire's first round — the choice rides
 	// stock's world_is_paused flag now, _tod_finale::choice_phase.)
 	if ( IS_TRUE( level.tod_spire_active ) )
+	{
+		// v16.15 — THE WARDEN TRIALS run the hottest floor on the map, rampage
+		// or not (it is already below the rampage-spire floor). LOCKSTEP with
+		// _tod_spire.gsc's TOD_TRIAL_SPAWN_FLOOR, which also writes it straight
+		// into zombie_vars at the seal — the same mid-round reason as 0.18.
+		if ( IS_TRUE( level.tod_king_active ) && IS_TRUE( level.tod_rampage_on ) )
+			return TOD_SPIRE_KING_RAMPAGE_SPAWN_FLOOR;   // v18.75 — the King's rampage trickle
+		if ( IS_TRUE( level.tod_trial_active ) )
+			return TOD_SPIRE_TRIAL_SPAWN_FLOOR;
+		// RAMPAGE IN THE SPIRE (v14.20, user 2026-08-30: "lets also make sure
+		// rampage inducer works with Endless Spire"). The spire's 0.18 is
+		// already sustained-finale pressure, so rampage tightens it only to
+		// TOD_RAMPAGE_SPIRE_FLOOR rather than applying the full multiplier —
+		// 0.18 x 0.80 would be 0.144, below anything this map has ever run.
+		if ( IS_TRUE( level.tod_rampage_on ) )
+			return TOD_RAMPAGE_SPIRE_FLOOR;
 		return 0.18;
+	}
 
 	// v13.24 (user 2026-08-29, SECOND tone-down, driven by Workshop
 	// difficulty comments: "another 10% less aggressive" + "breather zone
@@ -377,8 +800,34 @@ function tod_spawn_delay( n_round )
 	// at every lobby size.
 	d = [[ level.tod_stock_spawn_delay_func ]]( n_round );
 	d = d * 0.83;
-	if ( d < 0.25 )
-		d = 0.25;
+	// RAMPAGE INDUCER (v14.20, user 2026-08-30: "I also want spawn
+	// aggressiveness to be buffed with rampage inducer. Not sure if we can make
+	// that dynamic").
+	//
+	// YES, IT IS DYNAMIC — but at ROUND granularity, not instantly. This
+	// resolver is consulted ONCE PER ROUND by stock (_zm.gsc:4502) and its
+	// result is stamped into zombie_vars["zombie_spawn_delay"] for the whole
+	// round, so a toggle lands on the NEXT round rollover. Under THE TWIST that
+	// is seconds away, which is why this is a resolver change and not a direct
+	// zombie_vars write: the spire's ascension needed the direct write only
+	// because it could not wait for a rollover (live-test lesson 2026-08-29).
+	//
+	// A MULTIPLIER, applied BEFORE the floor so the floor still binds. The
+	// floor tightens too (0.25 -> TOD_RAMPAGE_SPAWN_FLOOR 0.20) or the
+	// multiplier would be swallowed whole at depth, where stock's own curve has
+	// already decayed past it — but it stays ABOVE the spire's 0.18, which
+	// remains the hottest pacing on the map.
+	fl = 0.25;
+	if ( IS_TRUE( level.tod_rampage_on ) )
+	{
+		d = d * TOD_RAMPAGE_SPAWN_MULT;
+		fl = TOD_RAMPAGE_SPAWN_FLOOR;
+	}
+	if ( d < fl )
+		d = fl;
+	// The breather relief is applied AFTER the rampage squeeze on purpose: the
+	// lounges stay a real rest even in hard mode, just a less generous one
+	// (0.83 x 0.80 x 1.19 ~= 0.79x stock, against 0.99x normally).
 	if ( tod_player_in_breather() )
 		d = d * 1.19;
 
@@ -430,7 +879,15 @@ function tod_round_wait()
 		wait 0.1;
 	}
 
-	level thread zm_audio::sndMusicSystem_PlayState( "round_end" );
+	// NO ROUND-OVER JINGLE (2026-09-24, lead tester: "Audio overlap is still at
+	// start of game where you hear zombies music overlap with the music you have
+	// played"). A call to stock's music-state player for the "round_end" state
+	// lived here and played the "roundend1" music cue every time a round's last
+	// zombie SPAWNED — on top of _tod_atmosphere's own track, which owns the
+	// music channel. The early rounds are short, so it stacked right at the
+	// start. docs/24 (ER-11, 2026-08-21) already said to remove it: "the BO3
+	// round-over jingle plays over our loop every minute, contradicting the
+	// twist". There is no round end to announce on this map.
 }
 
 // Replaces the round_one_up fanfare block. Round 1 keeps the stock intro

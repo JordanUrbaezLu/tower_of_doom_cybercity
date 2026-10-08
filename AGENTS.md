@@ -1,0 +1,9 @@
+# Project instructions for Codex
+
+Read CLAUDE.md in this repository root in full before working on this project. It is the shared source of project instructions for Claude and Codex. Follow its project conventions, workflow requirements, and response preferences within the scope of the current task.
+
+Follow its references to additional documentation when relevant to the task. Keep shared project guidance in CLAUDE.md so both tools stay in sync.
+
+THE USER TESTS; NEVER LAUNCH THE GAME UNASKED (user 2026-09-16: "Stop starting and testing. The flow is you write logs and ill test. Thats how we solve an issue"). Write the code and the logs, build, stop. The user plays; you read their `console_mp.log` (archive it with `tools/capture_ai_logs.ps1`) and act on it. "Make sure" / "verify" means logs, not a launch. Only when the user's message explicitly asks for an agent-run match: launch through `tools/run_game.ps1`, handle Steam's launch dialog, and inspect the actual game and logs per the "Agent-operated native game verification" section in CLAUDE.md and `docs/132_native_game_verification.md`. Respect an active user match; never build while BlackOps3 is running.
+
+Default to including useful diagnostics when building gameplay or stateful UI features and fixing substantive bugs. They should run automatically with the existing dev mode, record important decisions/state changes and failure reasons with enough context to diagnose a completed playtest, and stay cheap and separate from gameplay. Verify representative output in the actual game and preserve the logs. Scale the logging to the feature; static text/art edits usually need none. Follow CLAUDE.md's "Dev-mode diagnostics for feature work" section for the shared conventions and the proven GSC logging pattern. The user explicitly requested this default on 2026-09-10.

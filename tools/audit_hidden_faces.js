@@ -31,6 +31,7 @@
 // ---------------------------------------------------------------------------
 'use strict';
 const fs = require('fs');
+const CB = require('./convex_brush');
 const path = require('path');
 
 const REPO = path.join(__dirname, '..');
@@ -56,15 +57,14 @@ for (let i = 0; i < lines.length; i++) {
     const g = /^\s*\(\s*(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s*\)\s*\(\s*(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s*\)\s*\(\s*(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s*\)\s+(\S+)/.exec(lines[j]);
     if (g) { f.push(g.slice(1, 10).map(Number)); mat = mat || g[10]; }
   }
-  if (f.length === 6 && mat && GROUP.test(label) && !UNLIT.test(mat)) {
-    const b = { label, mat, x1: f[5][0], x2: f[3][0], y1: f[2][1], y2: f[4][1], z1: f[0][2], z2: f[1][2] };
-    if (b.x2 > b.x1 && b.y2 > b.y1 && b.z2 > b.z1) B.push(b);
+  if(f.length>=4 && mat && GROUP.test(label) && !UNLIT.test(mat)) {
+    B.push({label,mat,...CB.hull(f.map(v=>CB.plane([v.slice(0,3),v.slice(3,6),v.slice(6,9)],mat)))});
   }
   label = null; i = j;
 }
 if (!B.length) { console.error(`no brushes matched ${GROUP}`); process.exit(1); }
 
-const inside = (b, x, y, z) => x > b.x1 && x < b.x2 && y > b.y1 && y < b.y2 && z > b.z1 && z < b.z2;
+const inside = (b, x, y, z) => x > b.x1 && x < b.x2 && y > b.y1 && y < b.y2 && z > b.z1 && z < b.z2 && b.planes.every(p=>CB.dot(p.n,[x,y,z])<p.d-0.01);
 
 // --- per-face occlusion -----------------------------------------------------
 const FACES = [
@@ -79,25 +79,21 @@ const FACES = [
 const rows = [];
 let totArea = 0, hidArea = 0;
 for (const b of B) {
-  const dx = b.x2 - b.x1, dy = b.y2 - b.y1, dz = b.z2 - b.z1;
-  const faceArea = { '-x': dy * dz, '+x': dy * dz, '-y': dx * dz, '+y': dx * dz, '-z': dx * dy, '+z': dx * dy };
-  let area = 0, hidden = 0, nHid = 0;
-  const hidNames = [];
-  for (const [name, spec, pt] of FACES) {
-    const [, a1, a2, c1, c2] = spec(b);
-    let covered = 0, total = 0;
-    for (let i = 0; i < N; i++) for (let k = 0; k < N; k++) {
-      const u = a1 + (a2 - a1) * (i + 0.5) / N, v = c1 + (c2 - c1) * (k + 0.5) / N;
-      const [px, py, pz] = pt(b, u, v);
-      total++;
-      for (const o of B) { if (o !== b && inside(o, px, py, pz)) { covered++; break; } }
+  let area=0,hidden=0,nHid=0;const hidNames=[];
+  for(const [fi,f] of b.faces.entries()) {
+    let covered=0,total=0;
+    // Triangle-fan barycentric samples lie on the ACTUAL polygon, including
+    // bevels and sloping surfaces. AABB faces no longer invent hidden area.
+    for(let t=1;t<f.vertices.length-1;t++)for(let i=0;i<N;i++)for(let j=0;j<N-i;j++) {
+      const u=(i+0.33)/N,v=(j+0.33)/N;if(u+v>=1)continue;
+      const p=f.vertices[0].map((x,k)=>x*(1-u-v)+f.vertices[t][k]*u+f.vertices[t+1][k]*v+f.n[k]);
+      total++;if(B.some(o=>o!==b && inside(o,...p)))covered++;
     }
-    area += faceArea[name];
-    if (covered === total) { hidden += faceArea[name]; nHid++; hidNames.push(name); }
+    area+=f.area;if(total && covered===total){hidden+=f.area;nHid++;hidNames.push(String(fi));}
   }
   totArea += area; hidArea += hidden;
   const pct = area ? (hidden / area) * 100 : 0;
-  if (pct >= MIN) rows.push({ label: b.label, mat: b.mat, pct, nHid, area, hidden, faces: hidNames.join(',') });
+  if (pct >= MIN) rows.push({ label: b.label, mat: b.mat, pct, nHid, nFaces:b.faces.length, area, hidden, faces: hidNames.join(',') });
 }
 
 rows.sort((a, b) => b.pct - a.pct || b.hidden - a.hidden);
@@ -111,11 +107,11 @@ if (!rows.length) {
   console.log('  ' + ''.padEnd(74, '-'));
   for (const r of rows.slice(0, 40))
     console.log('  ' + r.label.slice(0, 33).padEnd(34) + (r.pct.toFixed(0) + '%').padStart(8) +
-      (r.nHid + '/6').padStart(7) + '  ' + r.faces);
+      (r.nHid + '/' + r.nFaces).padStart(7) + '  ' + r.faces);
   if (rows.length > 40) console.log(`  ... and ${rows.length - 40} more at or above ${MIN}%`);
 }
 console.log(`\n  ${(hidArea / 1e6).toFixed(1)}M of ${(totArea / 1e6).toFixed(1)}M u^2 of face area is buried ` +
   `(${((hidArea / totArea) * 100).toFixed(1)}%).`);
 console.log('  ADVISORY, not a gate: a tenon keyed into a wall is SUPPOSED to be buried.');
-console.log('  What matters is a brush buried on ALL SIX faces (pure cost) or one whose');
+console.log('  What matters is a brush buried on ALL faces (pure cost) or one whose');
 console.log('  visible face is COPLANAR with a neighbour in another material (a z-fight).');

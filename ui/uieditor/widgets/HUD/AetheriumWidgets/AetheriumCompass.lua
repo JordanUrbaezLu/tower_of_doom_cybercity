@@ -33,5 +33,7 @@ CoD.AetheriumCompass.new = function ( menu, controller )
 	self.HorizontalCompass:setAlpha( 0.8 )
 	self:addElement( self.HorizontalCompass )
 
+
+	-- =========================================================================
 	return self
 end

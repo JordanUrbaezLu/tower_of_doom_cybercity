@@ -34,7 +34,7 @@ CoD.AetheriumPerks = {
 		-- cherry pipeline's field, since that is the one the perk actually sets.
 		name = "PhD FLOPPER",
 		cost = 2000,
-		description = "No fall or self-explosive damage; explode when downed",
+		description = "No fall or self-explosive damage; explode when downed; your frags blast like flops",   -- v16.48: PhD grenades
 		image = "i_tod_perk_phd",
 		specialty = "specialty_electriccherry",
 		clientFieldName = "electric_cherry"
@@ -46,15 +46,36 @@ CoD.AetheriumPerks = {
 		-- pattern). clientFieldName matches WISP_TEA_CLIENTFIELD
 		-- ("hudItems.perks.wisp_tea") in scripts/zm/_zm_perk_wisp_tea.gsh.
 		name = "WISP TEA",
-		cost = 300,   -- user 2026-08-30; LOCKSTEP with WISP_TEA_PERK_COST in _zm_perk_wisp_tea.gsh
-		description = "Chance on hitting zombies to summon a lethal wisp",
+		cost = 3000,   -- user 2026-09-03 (2000 -> 3000, the two-wisp price); LOCKSTEP with WISP_TEA_PERK_COST in _zm_perk_wisp_tea.gsh
+		-- v17.8 (user 2026-09-03): the wisps hunt the biggest thing in range
+		-- and up to TWO can be out at once. LOCKSTEP: "two wisps max" is the
+		-- word-form of WISP_TEA_MAX_WISPS in scripts/zm/_zm_perk_wisp_tea.gsh —
+		-- this line is the only place a player is ever told the cap.
+		--
+		-- KEPT TO ~50 CHARACTERS ON PURPOSE. PromptPerks' perkDesc box is
+		-- x 620..766 = 146px at a LEFT alignment with no wrap, no auto-scale
+		-- and no scroll (PromptPerks.lua) — a long line runs off the right of
+		-- the card rather than being clipped or shrunk. The old text was 49
+		-- characters and filled it; this says strictly more in one more
+		-- character. (The PhD row above is 82 and is very likely overflowing;
+		-- not touched here because nobody has judged it on screen yet.) The
+		-- pause-panel width gate in tools/lint_tod_lua.js does NOT cover this
+		-- table — it only reads tod_upgrade.lua's DETAIL rows.
+		description = "Hits may summon a boss-hunting wisp; two wisps max",
 		image = "i_tod_perk_wisptea",
 		specialty = "specialty_nomotionsensor",
 		clientFieldName = "wisp_tea"
 	},
+	-- DEADSHOT's row is GONE (v19.25). It was the perk bar's only entry with no
+	-- machine behind it: _tod_deadshot.csc wrote its dead_shot model directly
+	-- when the upgrade's toplayer field flipped. That module, the domain and
+	-- i_tod_perk_deadshot's zone line all went in the same commit, so an entry
+	-- here would name an image the .ff no longer carries and nothing would ever
+	-- set it. Deadshot the PERK has been retired since v14.16 (Wisp Tea took its
+	-- machine); this removes the UPGRADE that borrowed its crest.
 	{
 		name = "DOUBLE TAP",
-		cost = 3000,
+		cost = 3500,   -- user 2026-09-01 (3000 -> 3500); LOCKSTEP with tod_set_perk_costs() AND the #precache triggerstring pair, both in zm_tower_of_doom.gsc
 		description = "Bullets deal double damage",
 		image = "i_tod_perk_doubletap",
 		specialty = "specialty_doubletap2",
@@ -80,7 +101,7 @@ CoD.AetheriumPerks = {
 		name = "QUICK REVIVE",
 		cost = 1500,
 		-- [tod] The only party-dependent stock price: 500 solo, 1500 co-op.
-		-- PromptPerks.UpdatePerkInfo picks this when Engine.GetPlayerCount() <= 1.
+		-- PromptPerks reads the machine hint; soloCost marks this as variable-price.
 		soloCost = 500,
 		description = "Faster revives in co-op / Self-revive up to 3 times in solo",
 		image = "i_tod_perk_revive",
@@ -106,13 +127,14 @@ CoD.AetheriumPerks = {
 	{
 		-- v13.19: ELEMENTAL POP became DEATH PERCEPTION (user 2026-08-29) —
 		-- the see-the-horde-through-walls awareness perk (hellbound's proven
-		-- keyline module, ported). Same specialty, same clientfield; cost
+		-- keyline module, ported; EVERY enemy since v19.72 - bosses and elites
+		-- were skipped until then). Same specialty, same clientfield; cost
 		-- 2000 -> 1500; machine/effect/name/icon all swapped
 		-- (_tod_perk_electric_cherry.gsc/.csc carry the implementation).
 		-- (v13.4 history: Electric Cherry had become Elemental Pop.)
 		name = "DEATH PERCEPTION",
-		cost = 1500,
-		description = "Sense the horde through walls",
+		cost = 2000,   -- user 2026-08-30 (1500 -> 2000); LOCKSTEP with EC_COST in _tod_perk_electric_cherry.gsc
+		description = "See every enemy through walls, bosses and elites included",   -- v19.72 (was "Sense the horde through walls"; the prompt card's own copy is PERK_COPY in PromptPerks.lua)
 		-- FIXED 2026-08-25 (user: "electric cherry icon doesnt show up in HUD when
 		-- you get it"). This row was inert for two reasons and both are gone:
 		--

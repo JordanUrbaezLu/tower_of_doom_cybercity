@@ -65,8 +65,8 @@ SPRINTING (`IsSprinting`), multiplied in right after DMG REDUCTION in both of
 `_tod_bosses`' player-damage lanes (`tod_upgrades::sprint_armor_mult`); scope
 "class" (damage resistance persists through a tier-up, like DR).
 
-ASSAULT: 6 HEADSHOT 10 (+4%/Lv headshot dmg, additive with DAMAGE; was +10%/Lv
-when this doc was written, then 4% -> 3% -> 4% again on 2026-08-26) ·
+ASSAULT: 6 HEADSHOT 10 (+5%/Lv headshot dmg, additive with DAMAGE; was +10%/Lv
+when this doc was written, then 4% -> 3% -> 4% (2026-08-26) -> 5% on 2026-08-30) ·
 7 MAG SIZE 10 (+20% clip/Lv bottomless pool, MAG +N chip) · 8 SCAVENGER 5
 (+6 assault; kill counter, ONE round per 7/6/5/4/3/2 kills by level, never
 more than one round per shot — a same-frame multi-kill only counts; was 2/kill

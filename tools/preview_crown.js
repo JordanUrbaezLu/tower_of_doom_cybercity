@@ -36,40 +36,20 @@ const FILTER = new RegExp(arg('--filter', SHOW_ALL ? '.' : '^(crown|mast|terrace
 const OUT_PREFIX = arg('--out', path.join(REPO, 'docs', 'crown_preview'));
 
 // --- parse the .map --------------------------------------------------------
-// The generator's box() emits a fixed 6-plane template. Face order and which
-// coordinate is load-bearing on each line:
-//   1: z1 (3rd number)   2: z2 (3rd)   3: y1 (2nd)
-//   4: x2 (1st)          5: y2 (2nd)   6: x1 (1st)
-// Anything that does not match that template is a non-AABB brush and is
-// reported rather than silently dropped.
+// Read actual face halfspaces and reconstruct each selected convex hull.
+// Selected malformed solids fail loudly; no box-only fallback hides new forms.
+const CB = require('./convex_brush');
 function parseMap(text) {
-  const lines = text.split(/\r?\n/);
-  const brushes = [];
-  let label = null, oddities = 0;
-  for (let i = 0; i < lines.length; i++) {
-    const m = /^\/\/ brush \d+ [—-] (.*)$/.exec(lines[i]);
-    if (m) { label = m[1].trim(); continue; }
-    if (lines[i].trim() !== '{' || label === null) continue;
-    const faces = [];
-    let j = i + 1, mat = null;
-    for (; j < lines.length && lines[j].trim() !== '}'; j++) {
-      const f = /^\s*\(\s*(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s*\)\s*\(\s*(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s*\)\s*\(\s*(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s*\)\s+(\S+)/.exec(lines[j]);
-      if (f) { faces.push(f.slice(1, 10).map(Number)); mat = mat || f[10]; }
-    }
-    if (faces.length === 6) {
-      const b = {
-        label, mat,
-        z1: faces[0][2], z2: faces[1][2],
-        y1: faces[2][1], y2: faces[4][1],
-        x1: faces[5][0], x2: faces[3][0],
-      };
-      if (b.x2 > b.x1 && b.y2 > b.y1 && b.z2 > b.z1) brushes.push(b);
-      else oddities++;
-    } else if (faces.length) oddities++;
-    label = null;
-    i = j;
+  const brushes=[];let oddities=0,total=0;
+  const re=/^\/\/ brush \d+ [—-] (.*)\r?\n\{([\s\S]*?)^\}/gm;let m;
+  while((m=re.exec(text))) {
+    const planes=CB.readPlanes(m[2]);if(!planes.length)continue;
+    total++;
+    if(!FILTER.test(m[1]))continue;
+    try {brushes.push({label:m[1],mat:planes[0].mat,...CB.hull(planes)});}
+    catch(e){throw Error(`${m[1]}: ${e.message}`);}
   }
-  return { brushes, oddities };
+  return {brushes,oddities,total};
 }
 
 // --- palette ---------------------------------------------------------------
@@ -207,23 +187,19 @@ function rasterize(polys, W, H, bg) {
     const c = bg(t);
     for (let x = 0; x < W; x++) { const o = (y * W + x) * 3; px[o] = c[0]; px[o + 1] = c[1]; px[o + 2] = c[2]; }
   }
-  for (const p of polys) {
-    const rgb = [parseInt(p.fill.slice(1, 3), 16), parseInt(p.fill.slice(3, 5), 16), parseInt(p.fill.slice(5, 7), 16)];
-    const vs = p.poly;
-    let ymin = Infinity, ymax = -Infinity;
-    for (const v of vs) { ymin = Math.min(ymin, v[1]); ymax = Math.max(ymax, v[1]); }
-    const y0 = Math.max(0, Math.ceil(ymin)), y1 = Math.min(H - 1, Math.floor(ymax));
-    for (let y = y0; y <= y1; y++) {
-      const xs = [];
-      for (let i = 0, n = vs.length; i < n; i++) {
-        const a = vs[i], b = vs[(i + 1) % n];
-        if ((a[1] <= y && b[1] > y) || (b[1] <= y && a[1] > y))
-          xs.push(a[0] + (y - a[1]) / (b[1] - a[1]) * (b[0] - a[0]));
-      }
-      xs.sort((m, n) => m - n);
-      for (let k = 0; k + 1 < xs.length; k += 2) {
-        const xa = Math.max(0, Math.ceil(xs[k])), xb = Math.min(W - 1, Math.floor(xs[k + 1]));
-        for (let x = xa; x <= xb; x++) { const o = (y * W + x) * 3; px[o] = rgb[0]; px[o + 1] = rgb[1]; px[o + 2] = rgb[2]; }
+  const depth=new Float64Array(W*H);depth.fill(Infinity);
+  for(const p of polys) {
+    const rgb=[1,3,5].map(i=>parseInt(p.fill.slice(i,i+2),16));
+    const edge=(a,b,x,y)=>(x-a[0])*(b[1]-a[1])-(y-a[1])*(b[0]-a[0]);
+    for(let t=1;t<p.poly.length-1;t++) {
+      const [a,b,c]=[p.poly[0],p.poly[t],p.poly[t+1]],den=edge(a,b,c[0],c[1]);if(Math.abs(den)<1e-8)continue;
+      const x0=Math.max(0,Math.floor(Math.min(a[0],b[0],c[0]))),x1=Math.min(W-1,Math.ceil(Math.max(a[0],b[0],c[0])));
+      const y0=Math.max(0,Math.floor(Math.min(a[1],b[1],c[1]))),y1=Math.min(H-1,Math.ceil(Math.max(a[1],b[1],c[1])));
+      for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++) {
+        const u=edge(b,c,x+0.5,y+0.5)/den,v=edge(c,a,x+0.5,y+0.5)/den,w=1-u-v;
+        if(u< -1e-8||v< -1e-8||w< -1e-8)continue;
+        const z=1/(u/a[2]+v/b[2]+w/c[2]),i=y*W+x;
+        if(z<depth[i]){depth[i]=z;px[i*3]=rgb[0];px[i*3+1]=rgb[1];px[i*3+2]=rgb[2];}
       }
     }
   }
@@ -263,19 +239,34 @@ function render(brushes, cam, W, H, title, sub1) {
   for (const b of brushes) {
     const col = colorOf(b.mat);
     if (!col) continue;
-    const c = CORNERS(b);
+    const c = b.vertices || CORNERS(b);
     const cen = [(b.x1 + b.x2) / 2, (b.y1 + b.y2) / 2, (b.z1 + b.z2) / 2];
-    for (const f of FACES) {
+    const faces=b.faces?b.faces.map(f=>({idx:f.vertices.map(p=>c.indexOf(p)),n:f.n,mat:f.mat,k:0.97+0.07*f.n[2]+0.02*f.n[0]-0.03*f.n[1]})):FACES;
+    for (const f of faces) {
       // backface cull against the view direction toward this face's centre
-      const fc = f.idx.reduce((a, i) => [a[0] + c[i][0] / 4, a[1] + c[i][1] / 4, a[2] + c[i][2] / 4], [0, 0, 0]);
+      const fc = f.idx.reduce((a, i) => [a[0] + c[i][0] / f.idx.length, a[1] + c[i][1] / f.idx.length, a[2] + c[i][2] / f.idx.length], [0, 0, 0]);
       const view = norm(sub(fc, cam.eye));
       if (dot(f.n, view) > -0.02) continue;
-      const pts = f.idx.map(i => cam.project(c[i]));
+      // Clip a face crossing behind the camera before projecting it. Dropping
+      // the whole face made the hall floor disappear when standing on it.
+      let polygon=f.idx.map(i=>c[i]);
+      if(cam.fwd) {
+        const clipped=[];
+        for(let i=0;i<polygon.length;i++) {
+          const a=polygon[i],b=polygon[(i+1)%polygon.length];
+          const da=dot(sub(a,cam.eye),cam.fwd)-2,db=dot(sub(b,cam.eye),cam.fwd)-2;
+          if(da>=0)clipped.push(a);
+          if((da>=0)!==(db>=0)){const t=da/(da-db);clipped.push(a.map((v,k)=>v+(b[k]-v)*t));}
+        }
+        polygon=clipped;
+      }
+      if(polygon.length<3)continue;
+      const pts = polygon.map(p => cam.project(p));
       if (pts.some(p => p === null)) continue;
       polys.push({
         d: Math.hypot(...sub(cen, cam.eye)),
-        fill: shade(col, f.k),
-        poly: pts.map(p => [p[0], p[1]]),
+        fill: shade(colorOf(f.mat || b.mat) || col, f.k),
+        poly: pts.map(p => [p[0], p[1], p[2]]),
         pts: pts.map(p => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' '),
       });
     }
@@ -295,7 +286,7 @@ function render(brushes, cam, W, H, title, sub1) {
 }
 
 // --- main ------------------------------------------------------------------
-const { brushes: all, oddities } = parseMap(fs.readFileSync(MAP_IN, 'utf8'));
+const { brushes: all, oddities, total } = parseMap(fs.readFileSync(MAP_IN, 'utf8'));
 const sel = all.filter(b => FILTER.test(b.label));
 if (!sel.length) { console.error(`no brushes matched ${FILTER}`); process.exit(1); }
 
@@ -309,7 +300,7 @@ const span = Math.max(ex.x2 - ex.x1, ex.y2 - ex.y1, ex.z2 - ex.z1);
 
 const W = 1400, H = 1000;
 const drawn = sel.filter(b => colorOf(b.mat));
-const stamp = `${drawn.length} drawn / ${sel.length} selected / ${all.length} in map` +
+const stamp = `${drawn.length} drawn / ${sel.length} selected / ${total} in map` +
   `  •  x[${ex.x1},${ex.x2}] y[${ex.y1},${ex.y2}] z[${ex.z1},${ex.z2}]`;
 
 // THE TWO VIEWS THAT DECIDE THE DESIGN, both at real in-game eye positions
@@ -374,8 +365,27 @@ const detailCam = makeCamera(
 // NOTE the hall is at HYC = 8608 and does NOT move with the crown's CR_CY.
 const interiorCam = makeCamera([0, (8608 - 620) * SGN, 19392 + EYE],
   [0, (8608 + 700) * SGN, 19392 + 1500], 72, W, H);
+// HALL — the same floor position but looking DOWN THE NAVE at eye height (v16.35,
+// the basilica): what a player sees stepping through the gate — piers, canopies,
+// the sanctuary steps and the reredos. The interior view above looks UP on
+// purpose (the crown is its subject); this one judges the room. Best run with
+//   --filter "^(crown (hall|wall|gate|cornice)|uplink dais|extraction pad)"
+// so the circlet overhead does not paint over the plan and aerial views.
+const hallCam = makeCamera([0, (7880 + 90) * SGN, 19392 + EYE],
+  [0, (8608 + 640) * SGN, 19392 + 140], 80, W, H);
+// HALL AERIAL — a three-quarter view from over the south-west corner, high
+// enough to read the whole plan at once but low enough to keep the section.
+// High and far enough that the sightline clears the 576 wall with room to
+// spare — the first cut at +1150 / 1500 out grazed the wall top and showed
+// only the reredos.
+const hallAirCam = makeCamera([-2000, (7880 - 1300) * SGN, 19392 + 2700],
+  [0, 8608 * SGN, 19392 + 60], 50, W, H);
 
 const views = [
+  ['hall', render(sel, hallCam, W, H,
+    'CROWN HALL — down the nave from the gate (eye height 64)', stamp)],
+  ['hallair', render(sel, hallAirCam, W, H,
+    'CROWN HALL — aerial three-quarter from the south-west', stamp)],
   ['gate', render(sel, gateCam, W, H,
     'CROWN — THE MOUTH (on the causeway, 900 units out)', stamp)],
   ['detail', render(sel, detailCam, W, H,
@@ -404,6 +414,17 @@ const views = [
     makeOrtho([0, 0, -1], [0, 1, 0], (H * 0.86) / span, W, H, centre), W, H,
     'CROWN — plan (from above)', stamp)],
 ];
+
+// Explicit camera for smaller generated structures, without using crown-scale
+// viewpoints. This renders the actual map brushes, with approximate materials.
+if (arg('--eye', '') && arg('--target', '')) {
+  const point = flag => arg(flag, '').split(',').map(Number);
+  const eye = point('--eye'), target = point('--target');
+  if (eye.length !== 3 || target.length !== 3 || [...eye, ...target].some(n => !Number.isFinite(n)))
+    throw new Error('--eye and --target need three comma-separated coordinates');
+  views.push(['inspection', render(sel, makeCamera(eye, target, 72, W, H), W, H,
+    'GENERATED GEOMETRY — inspection view (not an in-game screenshot)', stamp)]);
+}
 
 fs.mkdirSync(path.dirname(OUT_PREFIX), { recursive: true });
 for (const [name, view] of views) {

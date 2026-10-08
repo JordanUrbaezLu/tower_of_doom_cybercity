@@ -1,0 +1,9035 @@
+iwfx 2
+
+{
+	name "win_shower_0";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetCylinder runRelToWorld;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 20.000000 48.000000;
+	spawnFrustumCullRadius 25.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 16 0;
+	spawnDelayMsec 0 0;
+	lifeSpanMsec 1700 300;
+	spawnOrgX 0.000000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 150.000000;
+	spawnOffsetHeight 230.000000 80.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 0.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 18.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startRandom;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 60.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 -0.400000
+			1.000000 -0.400000
+		}
+	};
+	velGraph0Y 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph0Z 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	sizeGraph1 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.784314 0.274510
+			1.000000 1.000000 0.784314 0.274510
+		}
+		{
+			0.000000 1.000000 0.784314 0.274510
+			1.000000 1.000000 0.784314 0.274510
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 0;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 4.000000;
+	falloffBeginAngle 65;
+	falloffEndAngle 85;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	billboardSprite
+	{
+		"gfx_light_phosphorous_em"
+	};
+}
+
+{
+	name "win_shower_1";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetCylinder runRelToWorld;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 20.000000 48.000000;
+	spawnFrustumCullRadius 25.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 16 0;
+	spawnDelayMsec 150 0;
+	lifeSpanMsec 1700 300;
+	spawnOrgX 0.000000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 150.000000;
+	spawnOffsetHeight 230.000000 80.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 0.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 18.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startRandom;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 60.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 -0.400000
+			1.000000 -0.400000
+		}
+	};
+	velGraph0Y 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph0Z 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	sizeGraph1 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 0;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 4.000000;
+	falloffBeginAngle 65;
+	falloffEndAngle 85;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	billboardSprite
+	{
+		"gfx_light_phosphorous_em"
+	};
+}
+
+{
+	name "win_shower_2";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetCylinder runRelToWorld;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 20.000000 48.000000;
+	spawnFrustumCullRadius 25.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 16 0;
+	spawnDelayMsec 300 0;
+	lifeSpanMsec 1700 300;
+	spawnOrgX 0.000000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 150.000000;
+	spawnOffsetHeight 230.000000 80.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 0.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 18.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startRandom;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 60.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 -0.400000
+			1.000000 -0.400000
+		}
+	};
+	velGraph0Y 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph0Z 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	sizeGraph1 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.784314 0.274510
+			1.000000 1.000000 0.784314 0.274510
+		}
+		{
+			0.000000 1.000000 0.784314 0.274510
+			1.000000 1.000000 0.784314 0.274510
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 0;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 4.000000;
+	falloffBeginAngle 65;
+	falloffEndAngle 85;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	billboardSprite
+	{
+		"gfx_light_phosphorous_em"
+	};
+}
+
+{
+	name "win_shower_3";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetCylinder runRelToWorld;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 20.000000 48.000000;
+	spawnFrustumCullRadius 25.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 16 0;
+	spawnDelayMsec 450 0;
+	lifeSpanMsec 1700 300;
+	spawnOrgX 0.000000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 150.000000;
+	spawnOffsetHeight 230.000000 80.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 0.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 18.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startRandom;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 60.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 -0.400000
+			1.000000 -0.400000
+		}
+	};
+	velGraph0Y 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph0Z 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	sizeGraph1 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 0;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 4.000000;
+	falloffBeginAngle 65;
+	falloffEndAngle 85;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	billboardSprite
+	{
+		"gfx_light_phosphorous_em"
+	};
+}
+
+{
+	name "win_shower_4";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetCylinder runRelToWorld;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 20.000000 48.000000;
+	spawnFrustumCullRadius 25.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 16 0;
+	spawnDelayMsec 600 0;
+	lifeSpanMsec 1700 300;
+	spawnOrgX 0.000000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 150.000000;
+	spawnOffsetHeight 230.000000 80.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 0.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 18.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startRandom;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 60.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 -0.400000
+			1.000000 -0.400000
+		}
+	};
+	velGraph0Y 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph0Z 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	sizeGraph1 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.784314 0.274510
+			1.000000 1.000000 0.784314 0.274510
+		}
+		{
+			0.000000 1.000000 0.784314 0.274510
+			1.000000 1.000000 0.784314 0.274510
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 0;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 4.000000;
+	falloffBeginAngle 65;
+	falloffEndAngle 85;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	billboardSprite
+	{
+		"gfx_light_phosphorous_em"
+	};
+}
+
+{
+	name "win_shower_5";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetCylinder runRelToWorld;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 20.000000 48.000000;
+	spawnFrustumCullRadius 25.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 16 0;
+	spawnDelayMsec 750 0;
+	lifeSpanMsec 1700 300;
+	spawnOrgX 0.000000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 150.000000;
+	spawnOffsetHeight 230.000000 80.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 0.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 18.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startRandom;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 60.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 -0.400000
+			1.000000 -0.400000
+		}
+	};
+	velGraph0Y 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph0Z 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	sizeGraph1 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 0;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 4.000000;
+	falloffBeginAngle 65;
+	falloffEndAngle 85;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	billboardSprite
+	{
+		"gfx_light_phosphorous_em"
+	};
+}
+
+{
+	name "win_shower_6";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetCylinder runRelToWorld;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 20.000000 48.000000;
+	spawnFrustumCullRadius 25.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 16 0;
+	spawnDelayMsec 900 0;
+	lifeSpanMsec 1700 300;
+	spawnOrgX 0.000000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 150.000000;
+	spawnOffsetHeight 230.000000 80.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 0.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 18.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startRandom;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 60.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 -0.400000
+			1.000000 -0.400000
+		}
+	};
+	velGraph0Y 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph0Z 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	sizeGraph1 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.784314 0.274510
+			1.000000 1.000000 0.784314 0.274510
+		}
+		{
+			0.000000 1.000000 0.784314 0.274510
+			1.000000 1.000000 0.784314 0.274510
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 0;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 4.000000;
+	falloffBeginAngle 65;
+	falloffEndAngle 85;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	billboardSprite
+	{
+		"gfx_light_phosphorous_em"
+	};
+}
+
+{
+	name "win_shower_7";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetCylinder runRelToWorld;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 20.000000 48.000000;
+	spawnFrustumCullRadius 25.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 16 0;
+	spawnDelayMsec 1050 0;
+	lifeSpanMsec 1700 300;
+	spawnOrgX 0.000000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 150.000000;
+	spawnOffsetHeight 230.000000 80.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 0.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 18.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startRandom;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 60.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 -0.400000
+			1.000000 -0.400000
+		}
+	};
+	velGraph0Y 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph0Z 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	sizeGraph1 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 0;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 4.000000;
+	falloffBeginAngle 65;
+	falloffEndAngle 85;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	billboardSprite
+	{
+		"gfx_light_phosphorous_em"
+	};
+}
+
+{
+	name "win_shower_8";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetCylinder runRelToWorld;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 20.000000 48.000000;
+	spawnFrustumCullRadius 25.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 16 0;
+	spawnDelayMsec 1200 0;
+	lifeSpanMsec 1700 300;
+	spawnOrgX 0.000000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 150.000000;
+	spawnOffsetHeight 230.000000 80.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 0.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 18.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startRandom;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 60.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 -0.400000
+			1.000000 -0.400000
+		}
+	};
+	velGraph0Y 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph0Z 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	sizeGraph1 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.784314 0.274510
+			1.000000 1.000000 0.784314 0.274510
+		}
+		{
+			0.000000 1.000000 0.784314 0.274510
+			1.000000 1.000000 0.784314 0.274510
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 0;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 4.000000;
+	falloffBeginAngle 65;
+	falloffEndAngle 85;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	billboardSprite
+	{
+		"gfx_light_phosphorous_em"
+	};
+}
+
+{
+	name "win_shower_9";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetCylinder runRelToWorld;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 20.000000 48.000000;
+	spawnFrustumCullRadius 25.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 16 0;
+	spawnDelayMsec 1350 0;
+	lifeSpanMsec 1700 300;
+	spawnOrgX 0.000000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 150.000000;
+	spawnOffsetHeight 230.000000 80.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 0.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 18.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startRandom;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 60.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 -0.400000
+			1.000000 -0.400000
+		}
+	};
+	velGraph0Y 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph0Z 30.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	sizeGraph1 3.800000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.600000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.060000 1.000000
+			0.750000 0.900000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 0;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 4.000000;
+	falloffBeginAngle 65;
+	falloffEndAngle 85;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	billboardSprite
+	{
+		"gfx_light_phosphorous_em"
+	};
+}
+
+{
+	name "win_pillar";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetCylinder runRelToWorld;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 40.000000 90.000000;
+	spawnFrustumCullRadius 25.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 10 0;
+	spawnDelayMsec 0 0;
+	lifeSpanMsec 1800 400;
+	spawnOrgX 0.000000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 30.000000;
+	spawnOffsetHeight 0.000000 320.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 0.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 0.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startRandom;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 30.000000
+	{
+		{
+			0.000000 0.700000
+			1.000000 0.700000
+		}
+		{
+			0.000000 1.300000
+			1.000000 1.300000
+		}
+	};
+	velGraph0Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph0Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 90.000000
+	{
+		{
+			0.000000 0.700000
+			1.000000 1.200000
+		}
+		{
+			0.000000 0.700000
+			1.000000 1.200000
+		}
+	};
+	sizeGraph1 90.000000
+	{
+		{
+			0.000000 0.700000
+			1.000000 1.200000
+		}
+		{
+			0.000000 0.700000
+			1.000000 1.200000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.784314 0.274510
+			1.000000 1.000000 0.784314 0.274510
+		}
+		{
+			0.000000 1.000000 0.784314 0.274510
+			1.000000 1.000000 0.784314 0.274510
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.150000 0.280000
+			0.600000 0.200000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.150000 0.280000
+			0.600000 0.200000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 0;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 20.000000;
+	falloffBeginAngle 65;
+	falloffEndAngle 85;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	billboardSprite
+	{
+		"gfx_light_bokeh_soft_em"
+	};
+}
+
+{
+	name "win_glitter_0";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetCylinder runRelToWorld;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 20.000000 40.000000;
+	spawnFrustumCullRadius 25.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 10 0;
+	spawnDelayMsec 200 0;
+	lifeSpanMsec 2200 400;
+	spawnOrgX 0.000000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 170.000000;
+	spawnOffsetHeight 200.000000 120.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 0.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 8.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startRandom;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 20.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 -0.300000
+			1.000000 -0.300000
+		}
+	};
+	velGraph0Y 24.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph0Z 24.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 1.600000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.700000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.700000
+		}
+	};
+	sizeGraph1 1.600000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.700000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.700000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.080000 0.900000
+			0.180000 0.450000
+			0.280000 1.000000
+			0.400000 0.550000
+			0.520000 0.950000
+			0.660000 0.500000
+			0.800000 0.800000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.080000 0.900000
+			0.180000 0.450000
+			0.280000 1.000000
+			0.400000 0.550000
+			0.520000 0.950000
+			0.660000 0.500000
+			0.800000 0.800000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 0;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 0.000000;
+	falloffBeginAngle 65;
+	falloffEndAngle 85;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	billboardSprite
+	{
+		"gfx_light_phosphorous_em"
+	};
+}
+
+{
+	name "win_glitter_1";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetCylinder runRelToWorld;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 20.000000 40.000000;
+	spawnFrustumCullRadius 25.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 10 0;
+	spawnDelayMsec 600 0;
+	lifeSpanMsec 2200 400;
+	spawnOrgX 0.000000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 170.000000;
+	spawnOffsetHeight 200.000000 120.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 0.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 8.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startRandom;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 20.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 -0.300000
+			1.000000 -0.300000
+		}
+	};
+	velGraph0Y 24.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph0Z 24.000000
+	{
+		{
+			0.000000 -1.000000
+			1.000000 -1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 1.600000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.700000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.700000
+		}
+	};
+	sizeGraph1 1.600000
+	{
+		{
+			0.000000 1.000000
+			1.000000 0.700000
+		}
+		{
+			0.000000 1.000000
+			1.000000 0.700000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.080000 0.900000
+			0.180000 0.450000
+			0.280000 1.000000
+			0.400000 0.550000
+			0.520000 0.950000
+			0.660000 0.500000
+			0.800000 0.800000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.080000 0.900000
+			0.180000 0.450000
+			0.280000 1.000000
+			0.400000 0.550000
+			0.520000 0.950000
+			0.660000 0.500000
+			0.800000 0.800000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 0;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 0.000000;
+	falloffBeginAngle 65;
+	falloffEndAngle 85;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	billboardSprite
+	{
+		"gfx_light_phosphorous_em"
+	};
+}
+
+{
+	name "win_band";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetNone runRelToEffect;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 0.000000 0.000000;
+	spawnFrustumCullRadius 0.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 1 0;
+	spawnDelayMsec 0 0;
+	lifeSpanMsec 700 0;
+	spawnOrgX 2.000000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 0.000000;
+	spawnOffsetHeight 0.000000 0.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 0.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 0.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startFixed;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph0Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph0Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 750.000000
+	{
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+	};
+	sizeGraph1 750.000000
+	{
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.784314 0.274510
+			1.000000 1.000000 0.784314 0.274510
+		}
+		{
+			0.000000 1.000000 0.784314 0.274510
+			1.000000 1.000000 0.784314 0.274510
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.060000 0.700000
+			0.500000 0.400000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.060000 0.700000
+			0.500000 0.400000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 0.441379
+	{
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 1;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 0.000000;
+	falloffBeginAngle 88;
+	falloffEndAngle 89;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	orientedSprite
+	{
+		"gfx_ring_hvy_em"
+	};
+}
+
+{
+	name "win_ring_0";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetNone runRelToEffect;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 0.000000 0.000000;
+	spawnFrustumCullRadius 0.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 1 0;
+	spawnDelayMsec 0 0;
+	lifeSpanMsec 600 0;
+	spawnOrgX 2.400000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 0.000000;
+	spawnOffsetHeight 0.000000 0.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 0.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 0.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startFixed;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph0Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph0Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 551.200000
+	{
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+	};
+	sizeGraph1 551.200000
+	{
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.050000 0.900000
+			0.500000 0.500000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.050000 0.900000
+			0.500000 0.500000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 0.441379
+	{
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 1;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 0.000000;
+	falloffBeginAngle 88;
+	falloffEndAngle 89;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	orientedSprite
+	{
+		"gfx_ui_ring_thin"
+	};
+}
+
+{
+	name "win_ring_1";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetNone runRelToEffect;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 0.000000 0.000000;
+	spawnFrustumCullRadius 0.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 1 0;
+	spawnDelayMsec 0 0;
+	lifeSpanMsec 600 0;
+	spawnOrgX 2.400000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 0.000000;
+	spawnOffsetHeight 0.000000 0.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 30.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 0.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startFixed;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph0Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph0Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 551.200000
+	{
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+	};
+	sizeGraph1 551.200000
+	{
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.050000 0.900000
+			0.500000 0.500000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.050000 0.900000
+			0.500000 0.500000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 0.441379
+	{
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 1;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 0.000000;
+	falloffBeginAngle 88;
+	falloffEndAngle 89;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	orientedSprite
+	{
+		"gfx_ui_ring_thin"
+	};
+}
+
+{
+	name "win_ring_2";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetNone runRelToEffect;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 0.000000 0.000000;
+	spawnFrustumCullRadius 0.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 1 0;
+	spawnDelayMsec 0 0;
+	lifeSpanMsec 600 0;
+	spawnOrgX 2.400000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 0.000000;
+	spawnOffsetHeight 0.000000 0.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 60.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 0.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startFixed;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph0Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph0Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 551.200000
+	{
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+	};
+	sizeGraph1 551.200000
+	{
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.050000 0.900000
+			0.500000 0.500000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.050000 0.900000
+			0.500000 0.500000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 0.441379
+	{
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 1;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 0.000000;
+	falloffBeginAngle 88;
+	falloffEndAngle 89;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	orientedSprite
+	{
+		"gfx_ui_ring_thin"
+	};
+}
+
+{
+	name "win_ring_3";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetNone runRelToEffect;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 0.000000 0.000000;
+	spawnFrustumCullRadius 0.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 1 0;
+	spawnDelayMsec 0 0;
+	lifeSpanMsec 600 0;
+	spawnOrgX 2.400000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 0.000000;
+	spawnOffsetHeight 0.000000 0.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 90.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 0.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startFixed;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph0Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph0Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 551.200000
+	{
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+	};
+	sizeGraph1 551.200000
+	{
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.050000 0.900000
+			0.500000 0.500000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.050000 0.900000
+			0.500000 0.500000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 0.441379
+	{
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 1;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 0.000000;
+	falloffBeginAngle 88;
+	falloffEndAngle 89;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	orientedSprite
+	{
+		"gfx_ui_ring_thin"
+	};
+}
+
+{
+	name "win_ring_4";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetNone runRelToEffect;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 0.000000 0.000000;
+	spawnFrustumCullRadius 0.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 1 0;
+	spawnDelayMsec 0 0;
+	lifeSpanMsec 600 0;
+	spawnOrgX 2.400000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 0.000000;
+	spawnOffsetHeight 0.000000 0.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 120.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 0.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startFixed;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph0Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph0Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 551.200000
+	{
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+	};
+	sizeGraph1 551.200000
+	{
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.050000 0.900000
+			0.500000 0.500000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.050000 0.900000
+			0.500000 0.500000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 0.441379
+	{
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 1;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 0.000000;
+	falloffBeginAngle 88;
+	falloffEndAngle 89;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	orientedSprite
+	{
+		"gfx_ui_ring_thin"
+	};
+}
+
+{
+	name "win_ring_5";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetNone runRelToEffect;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 0.000000 0.000000;
+	spawnFrustumCullRadius 0.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 1 0;
+	spawnDelayMsec 0 0;
+	lifeSpanMsec 600 0;
+	spawnOrgX 2.400000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 0.000000;
+	spawnOffsetHeight 0.000000 0.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 150.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 0.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startFixed;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph0Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph0Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 551.200000
+	{
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+	};
+	sizeGraph1 551.200000
+	{
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+		{
+			0.000000 0.080000
+			0.120000 0.450000
+			0.300000 0.720000
+			0.550000 0.900000
+			1.000000 1.000000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+		{
+			0.000000 1.000000 0.920000 0.620000
+			1.000000 1.000000 0.920000 0.620000
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.050000 0.900000
+			0.500000 0.500000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.050000 0.900000
+			0.500000 0.500000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 0.441379
+	{
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 1;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 0.000000;
+	falloffBeginAngle 88;
+	falloffEndAngle 89;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	orientedSprite
+	{
+		"gfx_ui_ring_thin"
+	};
+}
+
+{
+	name "win_floor";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetNone runRelToEffect;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 0.000000 0.000000;
+	spawnFrustumCullRadius 0.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 1 0;
+	spawnDelayMsec 0 0;
+	lifeSpanMsec 1600 0;
+	spawnOrgX 1.500000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 0.000000;
+	spawnOffsetHeight 0.000000 0.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 0.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity 0.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startFixed;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph0Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph0Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 254.400000
+	{
+		{
+			0.000000 0.500000
+			0.300000 1.000000
+			1.000000 1.100000
+		}
+		{
+			0.000000 0.500000
+			0.300000 1.000000
+			1.000000 1.100000
+		}
+	};
+	sizeGraph1 254.400000
+	{
+		{
+			0.000000 0.500000
+			0.300000 1.000000
+			1.000000 1.100000
+		}
+		{
+			0.000000 0.500000
+			0.300000 1.000000
+			1.000000 1.100000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.784314 0.274510
+			1.000000 1.000000 0.784314 0.274510
+		}
+		{
+			0.000000 1.000000 0.784314 0.274510
+			1.000000 1.000000 0.784314 0.274510
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.080000 0.350000
+			0.500000 0.220000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.080000 0.350000
+			0.500000 0.220000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 0.441379
+	{
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.034483 1.000000
+			0.068966 1.000000
+			0.103448 1.000000
+			0.137931 1.000000
+			0.172414 1.000000
+			0.206897 1.000000
+			0.241379 1.000000
+			0.275862 1.000000
+			0.310345 1.000000
+			0.344828 1.000000
+			0.379310 1.000000
+			0.413793 1.000000
+			0.448276 1.000000
+			0.482759 1.000000
+			0.517241 1.000000
+			0.551724 1.000000
+			0.586207 1.000000
+			0.620690 1.000000
+			0.655172 1.000000
+			0.689655 1.000000
+			0.724138 1.000000
+			0.758621 1.000000
+			0.793103 1.000000
+			0.827586 1.000000
+			0.862069 1.000000
+			0.896552 1.000000
+			0.931035 1.000000
+			0.965517 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.034483 0.000000
+			0.068966 0.000000
+			0.103448 0.000000
+			0.137931 0.000000
+			0.172414 0.000000
+			0.206897 0.000000
+			0.241379 0.000000
+			0.275862 0.000000
+			0.310345 0.000000
+			0.344828 0.000000
+			0.379310 0.000000
+			0.413793 0.000000
+			0.448276 0.000000
+			0.482759 0.000000
+			0.517241 0.000000
+			0.551724 0.000000
+			0.586207 0.000000
+			0.620690 0.000000
+			0.655172 0.000000
+			0.689655 0.000000
+			0.724138 0.000000
+			0.758621 0.000000
+			0.793103 0.000000
+			0.827586 0.000000
+			0.862069 0.000000
+			0.896552 0.000000
+			0.931035 0.000000
+			0.965517 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 1;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 0.000000;
+	falloffBeginAngle 88;
+	falloffEndAngle 89;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	orientedSprite
+	{
+		"gfx_light_bokeh_soft_em"
+	};
+}
+
+{
+	name "win_rise";
+	editorFlags useRandVel0 useRandVel1 useRandScale useRandomChildSizeScaleGraph useRandColor useRandAlpha inheritParentMovementGraphEnable useRandomAttractorGraph useRandRotDelta useRandSize0 useRandSize1 useRandIntensity useRandRadius useRandFov;
+	flags spawnRelative spawnOffsetCylinder runRelToWorld;
+	extraFlags;
+	spawnRange 0.000000 5000.000000;
+	fadeInRange 4000.000000 1000.000000;
+	fadeOutRange 24.000000 56.000000;
+	spawnFrustumCullRadius 25.000000;
+	spawnLooping 1000 0;
+	spawnLoopingSpawnCount 1 0;
+	spawnOneShot 20 0;
+	spawnDelayMsec 0 0;
+	lifeSpanMsec 2000 500;
+	spawnOrgX 0.000000 0.000000;
+	spawnOrgY 0.000000 0.000000;
+	spawnOrgZ 0.000000 0.000000;
+	spawnOffsetRadius 0.000000 80.000000;
+	spawnOffsetHeight 0.000000 20.000000;
+	spawnOffsetCylindricalAxis 0.000000;
+	spawnAnglePitch 0.000000 0.000000;
+	spawnAngleYaw 0.000000 0.000000;
+	spawnAngleRoll 0.000000 0.000000;
+	angleVelPitch 0.000000 0.000000;
+	angleVelYaw 0.000000 0.000000;
+	angleVelRoll 0.000000 0.000000;
+	initialRot 0.000000 0.000000;
+	rotationAxis 0.000000 0.000000 0.000000 1.000000;
+	gravity -2.000000 0.000000;
+	elasticity 1.000000 0.000000;
+	windinfluence 0.000000;
+	atlasBehavior startRandom;
+	atlasIndex 0;
+	atlasFps 0;
+	atlasLoopCount 1;
+	atlasColIndexBits 0;
+	atlasRowIndexBits 0;
+	atlasEntryCount 1;
+	atlasIndexRange 0;
+	velGraph0X 40.000000
+	{
+		{
+			0.000000 0.700000
+			1.000000 0.700000
+		}
+		{
+			0.000000 1.300000
+			1.000000 1.300000
+		}
+	};
+	velGraph0Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph0Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1X 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Y 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	velGraph1Z 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	rotGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			1.000000 0.000000
+		}
+	};
+	sizeGraph0 6.000000
+	{
+		{
+			0.000000 0.500000
+			0.200000 1.000000
+			1.000000 0.400000
+		}
+		{
+			0.000000 0.500000
+			0.200000 1.000000
+			1.000000 0.400000
+		}
+	};
+	sizeGraph1 6.000000
+	{
+		{
+			0.000000 0.500000
+			0.200000 1.000000
+			1.000000 0.400000
+		}
+		{
+			0.000000 0.500000
+			0.200000 1.000000
+			1.000000 0.400000
+		}
+	};
+	scaleGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	childSizeScaleGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	colorGraph 1.000000
+	{
+		{
+			0.000000 1.000000 0.784314 0.274510
+			1.000000 1.000000 0.784314 0.274510
+		}
+		{
+			0.000000 1.000000 0.784314 0.274510
+			1.000000 1.000000 0.784314 0.274510
+		}
+	};
+	alphaGraph 1.000000
+	{
+		{
+			0.000000 0.000000
+			0.150000 0.800000
+			0.600000 0.600000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.150000 0.800000
+			0.600000 0.600000
+			1.000000 0.000000
+		}
+	};
+	lightIntensityGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			0.333333 1.000000
+			0.666667 1.000000
+			1.000000 1.000000
+		}
+	};
+	lightRadiusGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	lightFovGraph 0.000000
+	{
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+		{
+			0.000000 0.000000
+			0.333333 0.000000
+			0.666667 0.000000
+			1.000000 0.000000
+		}
+	};
+	inheritParentMovementGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorGraph 1.000000
+	{
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+		{
+			0.000000 1.000000
+			1.000000 1.000000
+		}
+	};
+	attractorLocalPosition 0.000000 0.000000 0.000000;
+	lightingFrac 0.000000;
+	collOffset 0.000000 0.000000 0.000000;
+	collRadius 0.000000;
+	fxOnImpact "";
+	fxOnDeath "";
+	displacement 0;
+	emission "";
+	emitDist 1.000000 0.000000;
+	emitDistVariance 0.000000 0.000000;
+	emitDensity 1.000000 0.000000;
+	emitSizeForDensity 1.000000;
+	attachment "";
+	attachmentDensity 1.000000 0.000000;
+	attachmentSizeForDensity 1.000000;
+	trailSplitDist 0;
+	trailScrollTime 0.000000;
+	trailRepeatDist 0;
+	trailFadeInDist 0.000000;
+	trailFadeOutDist 0.000000;
+	alphafadetimemsec 0;
+	maxwind_mag 0;
+	maxwind_life 0;
+	maxwind_interval 1;
+	billboardTopWidth 0.000000;
+	billboardBottomWidth 0.000000;
+	elemSpawnSound
+	{
+	};
+	elemFollowSound
+	{
+	};
+	cloudDensity 1024 0;
+	spotLightFovInnerFraction 0;
+	spotLightStartRadius 0;
+	spotLightEndRadius 0;
+	alphaDissolve 1.000000;
+	zFeather 0.000000;
+	falloffBeginAngle 65;
+	falloffEndAngle 85;
+	lfSourceDir 0 0 0;
+	lfSourceSize 0;
+	billboardPivot 0.000000 -0.000000;
+	levelOfDetail 0;
+	billboardSprite
+	{
+		"gfx_light_phosphorous_em"
+	};
+}

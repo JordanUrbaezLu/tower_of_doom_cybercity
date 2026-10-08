@@ -54,6 +54,7 @@
 #using scripts\shared\flag_shared;
 #using scripts\shared\laststand_shared;
 #using scripts\shared\util_shared;
+#using scripts\shared\ai\zombie_utility;                 // spawn_zombie + get_current_zombie_count (v17.47 road seed wave)
 
 #using scripts\zm\_zm_score;
 #using scripts\zm\_zm_utility;
@@ -64,14 +65,17 @@
 #using scripts\zm\zm_tower_of_doom\_tod_perk_scatter;    // derez_burst + play_sound_at_origin (host-based FX/SFX)
 #using scripts\zm\zm_tower_of_doom\_tod_atmosphere;      // finale_track_start (the music channel)
 #using scripts\zm\zm_tower_of_doom\_tod_bosses;          // finale_pressure_start (the ambush)
+#using scripts\zm\zm_tower_of_doom\_tod_gameover;   // end_screen_push (v19.58, the end-screen lines in the map typeface)
 #using scripts\zm\zm_tower_of_doom\_tod_upgrade_ui;      // set_finale_warn (the road banner)
+#using scripts\zm\zm_tower_of_doom\_tod_rocket;          // v19.68r THE ROCKETS: ride_extract, the extract ship's send-off (docs/170)
 
 #insert scripts\shared\shared.gsh;
 
-// Models: all carved T7 props already in the Mod Tools GDT DB (source_data/
-// acc_t7_props_*.gdt, binaries verified on disk 2026-08-21). Script-spawned
+// Models: carved T7 props already in the Mod Tools GDT DB (source_data/
+// acc_t7_props_*.gdt, binaries verified on disk 2026-08-21), plus the v19.69
+// uplink terminal (map-owned, source_data/tod_fan_props.gdt). Script-spawned
 // (SetModel) + `xmodel,` zone lines — never baked misc_models.
-#precache( "model", "p7_zm_sta_dragon_network_data_terminal" );
+#precache( "model", "tod_uplink_terminal" );
 // THE WIN SCREEN ART (2026-08-25). MATERIALS, not images: the game-over screen
 // is a server HUDELEM and SetShader takes a material. The 2d_blend wrappers
 // live in source_data/tod_ui_images.gdt beside the images they point at.
@@ -191,6 +195,67 @@
 // since v10 deleted the gather-and-hold flow, and this keeps it that way.
 #define TOD_FINALE_ARRIVE_RAD     1536
 
+// THE ROAD CULL (v17.37, user 2026-09-04: "the final run across the bridge. We
+// planned on having zombie spawn on other side of bridge when the extraction
+// starts. Thats not working ... I can just run across no problem ... Could be
+// im at max AI already").
+//
+// THE DIAGNOSIS IS THE USER'S AND IT IS RIGHT. The ambush was never a spawn
+// bug: _tod_endless_rounds::finale_spawn_selection picks the riser AHEAD of a
+// random living player and tod_spawn_delay drops the trickle to its floor, but
+// both are RATE controls. level.zombie_ai_limit (ai_limit_for_party, 30-45 by
+// party size since v18.11 and 45 on rampage, _tod_corpse_cleanup) caps
+// how many trash zombies STAND AT ONCE, and under the endless-rounds twist a
+// deep run sits at that cap permanently — 45 zombies spread over 19,200 units
+// of tower that no longer has anybody in it. Every one of them holds a slot,
+// none of them can reach the causeway in 90 seconds, and the spawner has
+// nothing left to put in front of the party. "Max aggressiveness on spawns"
+// against a full cap buys exactly nothing.
+//
+// So the last mile takes the map back: WIPE at the buy (in finale_run — the
+// same wipe_the_map() the seal already runs, now at both ends of the road), and
+// then KEEP it clear with this cull, because one wipe only buys the first few
+// seconds: the party outruns what spawns behind them and the cap silently
+// refills with stragglers over a 90-second road.
+//
+// DISTANCE ONLY, never geometry: a zombie is culled when it is further than
+// this from EVERY living player. That covers the tower (19,000 units below),
+// the base, and anything the party has left behind on the road, and it can
+// never touch the wave in front of them. 2500 is well past the fog and past
+// the longest sightline on the causeway, so nothing vanishes on screen.
+// ELITES ARE EXEMPT (ignore_enemy_count, the field every one of them sets):
+// they are outside this cap by definition, the pressure loop owns their roof,
+// and a Panzer despawning behind you is a robbery, not a relief.
+#define TOD_FINALE_CULL_DIST      2500
+#define TOD_FINALE_CULL_TICK      2
+//
+// v17.47 (user 2026-09-04: "the new ones still take time to come in ... player
+// can just run the bridge no problem") — THE CULL WAS KILLING THE AMBUSH. The
+// band picker in _tod_endless_rounds sends 40% of road spawns to the third
+// nearest the crown gate, up to ~7000 units AHEAD of a party that has just
+// bought; distance-only, the cull above reaped every one of them within 2 s of
+// rising, before it could close a single step. "It can never touch the wave in
+// front of them" was wrong for the whole life of the cull. NOW: anything ON THE
+// ROAD (z above TOD_FINALE_ROAD_Z_MIN) at or ahead of the FRONT-MOST living
+// player — less a short grace behind him — is exempt; the tower, the base and
+// the stragglers behind the party are culled exactly as before.
+// TOD_FINALE_ROAD_Z_MIN is the same 18928 the lane-band filter in
+// _tod_endless_rounds::finale_spawn_selection uses for "on the road" (the
+// undercroft, the road's deepest lane, sits at TOP2 - 384 = 19008) — LOCKSTEP.
+#define TOD_FINALE_ROAD_Z_MIN     18928
+#define TOD_FINALE_CULL_BEHIND    512
+// THE SEED WAVE (v17.47, same report). After the wipe the cap is empty and the
+// trickle refills it one riser at a time, so the party was walking a road that
+// only STARTED filling as they left it. At the buy, TOD_FINALE_SEED_N trash rise
+// at once on road risers between MIN and MAX ahead of the party's front (capped
+// at the crown gate, lane-lottery slabs excluded, under the ai_limit like every
+// spawn). Direct zombie_utility::spawn_zombie, the way stock's own
+// round_spawning does it; not counted against the round budget on purpose —
+// the finale's rounds are irrelevant and this is the road's own wave.
+#define TOD_FINALE_SEED_N         12
+#define TOD_FINALE_SEED_MIN_AHEAD 400
+#define TOD_FINALE_SEED_MAX_AHEAD 2200
+
 // How close a player has to be to the TERRACE uplink for it to start pulsing.
 // 900 covers the terrace and the mouth of the causeway without firing while
 // somebody is still on the crown stair below.
@@ -238,8 +303,18 @@ function prop( model, org, yaw )
 
 function spawn_props()
 {
-	// the uplink console on the dais
-	level.tod_finale_uplink = prop( "p7_zm_sta_dragon_network_data_terminal", tod_crown_data::uplink_org(), tod_crown_data::uplink_yaw() );
+	// THE UPLINK TERMINAL (v19.69, user 2026-10-02: "Replace the activation for run
+	// for the crown model to the Door Terminal Idea prop"). Nikolai's terminal from
+	// his Meshy pack (`tod_uplink_terminal`, tools/fan_props/build_fan_props.py): an
+	// 84-tall console whose screen and keyboard face model +X, footprint centred on
+	// its origin. At uplink_yaw() 0 that is EAST — toward the crown stair the party
+	// climbs onto the terrace by. The Stalingrad data terminal it replaced showed its
+	// screen at model -X, i.e. to the terrace's empty west end: everyone arriving saw
+	// the back of the one thing they had to use. Trigger, clip, beacon and glow are
+	// unchanged (the glow plays on tag_origin, which the new model carries).
+	level.tod_finale_uplink = prop( "tod_uplink_terminal", tod_crown_data::uplink_org(), tod_crown_data::uplink_yaw() );
+	finale_log( "UPLINK_MODEL rev=fan_props_2 model=tod_uplink_terminal org=" + tod_crown_data::uplink_org()
+		+ " yaw=" + tod_crown_data::uplink_yaw() + " spawned=" + isdefined( level.tod_finale_uplink ) );
 
 	// DO NOT REPLACE THIS WITH A WORLD BRUSH. Tried and REVERTED 2026-08-27: an
 	// "extraction obelisk" built from cboxes on uplink_org()'s own coordinates
@@ -261,13 +336,12 @@ function spawn_props()
 	// script_noteworthy "clip", DisconnectPaths'd.
 	//
 	// ONE BOX, NOT THE ALTAR'S THREE. The altar needed three because its mesh
-	// FLARES to 104 wide at chest height; this terminal is a single console and
-	// there is no measurement to justify widening it. I could not read its
-	// bounds reliably — the model is a Greyhound export whose binary layout my
-	// altar parser does not fit, and the fallback scan returned identical
-	// distributions on all three axes, which is nonsense — so rather than size a
-	// clip off a number I do not trust, this uses the standard vendor box and
-	// leaves the terrace's open floor to absorb any overhang.
+	// FLARES to 104 wide at chest height; this terminal is a single console. The
+	// v19.69 terminal is MEASURED (art/fan_props/manifest.json, from the shipped
+	// binary): about 46 deep x 48 wide x 84 tall, centred on its origin — the same
+	// vending-machine footprint class as the 48 x 34 x 78 Stalingrad terminal this
+	// box was sized for (PyCoD read that one fine in 2026-10: x -26.6..21.6,
+	// y -14.0..20.1, z 0..78.4). The terrace's open floor absorbs any overhang.
 	//
 	// DisconnectPaths is MANDATORY: the navmesh ignores entity collision
 	// entirely, so without it the horde paths straight through the terminal.
@@ -540,8 +614,23 @@ function uplink_hint_loop()
 		shown_cost = cost;
 		switch ( key )
 		{
-			case "nopower":   self SetHintString( "^1NO POWER^7 - you must turn on the power first" ); break;
-			case "buy":       self SetHintString( "Hold ^3[{+activate}]^7 ^2CALL EXTRACTION ^2[Cost: " + cost + "]" ); break;
+			// v19.3 — LEAD WITH THE NOUN, and do NOT reintroduce the stock-style
+			// wording this used to carry. ZMCursorHintNew::classifyHint tests for
+			// the generic must-turn-on-the-power sentence at STEP 1, before the
+			// TOD_NOUNS pass at step 3, so a hint phrased that way is routed to
+			// PromptPowerRequired — a card that reads no hint text at all. The
+			// uplink lost its title, its icon and this copy. The teleporter solved
+			// the same problem the same way; see its 'power required' literal.
+			// (The offending sentence is deliberately NOT quoted here: this repo
+			// has already had a scanner read a quoted word out of a comment and
+			// treat it as live data — memory `comments-are-data-to-a-scanner`.)
+			case "nopower":   self SetHintString( "^5UPLINK^7 - ^1power required" ); break;
+			// GRAMMAR (v14.58): "Hold [btn] <TITLE> - <detail> [Cost: N]" — see
+			// PromptDefault.lua. The card splits on the FIRST " - ", so the
+			// title band reads CALL EXTRACTION and the line under it says what
+			// buying actually does. It used to be the noun and a price with no
+			// explanation of either.
+			case "buy":       self SetHintString( "Hold ^3[{+activate}]^7 ^2CALL EXTRACTION^7 - opens the road to the crown ^2[Cost: " + cost + "]" ); break;
 			case "charging":  self SetHintString( "^1RUN FOR THE CROWN^7" ); break;
 			// "ready" now means the song is over and the ending is WAITING on a
 			// survivor reaching the citadel — so this has to say go, not stand by.
@@ -648,10 +737,20 @@ function finale_run( buyer )
 	// wait_unpaused().
 	level.tod_upgrades_suppressed = true;
 
+	// THE MAP LETS GO. Every zombie still standing in the tower is 19,000 units
+	// from a road nobody will walk again, and each one holds a slot under
+	// level.zombie_ai_limit that the ambush needs (TOD_FINALE_CULL_DIST carries
+	// the whole diagnosis). The seal already ENDS the road with this exact call;
+	// the road now starts with it too, so the first wave in front of the party
+	// spawns into an empty cap instead of queueing behind a tower full of zombies
+	// that can no longer reach anyone.
+	wipe_the_map();
+
 	// THE AMBUSH — max spawn rate plus all three boss types cycling, every bit
 	// of it under the existing actor caps. See _tod_bosses::finale_pressure_loop
 	// for why this raises no limit.
 	tod_bosses::finale_pressure_start();
+	level thread road_seed_wave();           // v17.47: the road is populated BEFORE the party reaches it
 
 	// THE ONE ANNOUNCEMENT (user: "we just need one announcement once extraction
 	// starts and that is for everyone to get to the crown"). Banner up, one
@@ -677,6 +776,8 @@ function finale_run( buyer )
 	// a progress bar needs the span.
 	level.tod_finale_song_start = GetTime();
 	level.tod_finale_song_end   = GetTime() + int( song_secs() * 1000 );
+	level.tod_finale_utc_start  = GetUTC();   // v19.76: wall time, for finale_clock_log
+	finale_clock_log( "START" );
 
 	// THE BEAT SYSTEM (v12.13, docs/41). All of these key off the song fields
 	// just published, all die on "tod_finale_sealed" or "end_game", and every
@@ -690,6 +791,7 @@ function finale_run( buyer )
 	level thread beat_protectors_flare();    // A2: the approach gets its fight
 	level thread arrival_watch();            // A4: the citadel accepts you
 	level thread heartbeat_run();            // rider: the crown's heartbeat
+	level thread road_cull_run();            // the cap stays clear for the road ahead
 
 	t_end = GetTime() + int( road_secs() * 1000 );
 	while ( GetTime() < t_end )
@@ -708,7 +810,9 @@ function finale_run( buyer )
 	//    middle and then close the door so it doesnt kill anyone."
 	// 3. Stragglers die AFTER the door is shut, so the seal is visibly what
 	//    took them rather than an unexplained death mid-road.
-	// 4. Wipe the map LAST, once nothing else can add to it.
+	// 4. Wipe the map, once nothing else can add to it.
+	// 5. Put the count-in pillars out LAST: the count is settled the moment the
+	//    door is shut, and its glow used to burn through the whole hold-out.
 	warn_banner( false );
 	gather_to_centre();
 	crown_door_close();
@@ -730,6 +834,7 @@ function finale_run( buyer )
 	level.tod_beat_prot_armed = undefined;
 	kill_stragglers();
 	wipe_the_map();
+	pillar_countin_clear();   // 5. the count-in is settled — put the pillars out
 
 	// NOBODY MADE IT. Without this the siege ran its full length in an empty
 	// sealed hall and then printed YOU ESCAPED THE TOWER (peer review, and the
@@ -739,9 +844,11 @@ function finale_run( buyer )
 	// into it yet, so say it explicitly.
 	if ( !anyone_sealed_in() )
 	{
+		finale_log( "SEAL nobody upright inside the crown -> end_game" );
 		level notify( "end_game" );
 		return;
 	}
+	finale_log( "SEAL holdout begins" );
 
 	level.tod_finale_state = "holdout";
 	level.tod_crown_sealed = true;     // read by the endless-rounds spawn filter
@@ -778,14 +885,17 @@ function finale_run( buyer )
 		// so they read as the siege's own progress bar - and unlike on the road,
 		// everyone can actually see them from in here.
 		quarter = hold / 4.0;
+		finale_clock_log( "SEAL hold_s=" + hold );
 		for ( i = 0; i < 4; i++ )
 		{
 			wait quarter;
 			ignite_pylon( i );
+			finale_clock_log( "PYLON " + ( i + 1 ) );
 		}
 	}
 
 	// --- the song ends: you made it -----------------------------------------
+	finale_clock_log( "READY" );
 	level.tod_finale_state = "ready";
 	level notify( "tod_finale_charged" );
 	for ( i = 0; i < level.tod_finale_pylons.size; i++ )
@@ -854,7 +964,19 @@ function choice_phase()
 	tod_atmosphere::channel_stop();
 	level thread choice_banners();
 	level notify( "tod_choice_begin" );
-	level thread extract_use_loop();
+	// v19.68r THE ROCKETS (docs/170): the extract SHIP stands over this pad and carries its own EXTRACT prompt
+	// (_tod_rocket::rockets_arm, the same string), so the pad's trigger stands down - it is inside the ship's
+	// clip. Without the rockets (no rocket data in the generated crown file) the pad is the way out, as before.
+	if ( IS_TRUE( level.tod_rockets_ready ) )
+	{
+		if ( isdefined( level.tod_finale_pad_trig ) )
+		{
+			level.tod_finale_pad_trig SetHintString( "" );
+			level.tod_finale_pad_trig TriggerEnable( false );
+		}
+	}
+	else
+		level thread extract_use_loop();
 
 	level waittill( "tod_extract" );
 	level.tod_choice_pending = undefined;
@@ -862,6 +984,42 @@ function choice_phase()
 	if ( level flag::exists( "world_is_paused" ) )
 		level flag::clear( "world_is_paused" );
 	level thread depart();
+}
+
+// DEV ONLY - HARNESS #8 (docs/170, the rockets' test path): THE CHOICE opened as if the crown fight had just
+// been won, so both rides can be tried without the whole finale. The band music latched off (choice_phase
+// stops the channel), the crown a playable zone, the party on the gather ring in the hall, the pylons and the
+// pad green - then the REAL choice_phase: the wipe, the pause, the banners, and the ships coming down.
+// Delete with the harness.
+function dev_open_choice()
+{
+	level.tod_finale_music = true;
+	if ( level flag::exists( "enter_roof" ) )
+		level flag::set( "enter_roof" );   // roof_zone (the crown: stair, terrace, causeway, hall) is live
+	players = GetPlayers();
+	n = 0;
+	for ( i = 0; i < players.size; i++ )
+	{
+		p = players[ i ];
+		if ( !isdefined( p ) || !isplayer( p ) || !isalive( p ) )
+			continue;
+		p SetOrigin( gather_spot( n ) );
+		p SetPlayerAngles( ( 0, n * 90 + 180, 0 ) );   // face the middle
+		n++;
+	}
+	level.tod_finale_state = "ready";
+	if ( isdefined( level.tod_finale_pylons ) )
+	{
+		for ( i = 0; i < level.tod_finale_pylons.size; i++ )
+			tod_perk_lights::set_glow( level.tod_finale_pylons[ i ], TOD_GLOW_GREEN );
+	}
+	if ( isdefined( level.tod_finale_pad ) )
+	{
+		level.tod_finale_pad SetModel( "p7_out_mech_spawn_pad_light_green" );
+		tod_perk_lights::set_glow( level.tod_finale_pad, TOD_GLOW_GREEN );
+	}
+	finale_log( "DEV_OPEN_CHOICE players=" + n + " rockets=" + IS_TRUE( level.tod_rockets_ready ) );
+	level thread choice_phase();
 }
 
 // Re-arming a use path on the exfil pad is safe NOW and only now: the deleted
@@ -923,6 +1081,7 @@ function choice_banners()
 		e FadeOverTime( 1 );
 		e.alpha = 1;
 		elems[ elems.size ] = e;
+		p tod_upgrade_ui::banner_track( e );   // steps aside while this player holds the scoreboard (2026-09-27)
 	}
 
 	level util::waittill_any( "tod_extract", "tod_ascend" );
@@ -1141,9 +1300,58 @@ function kill_stragglers()
 			continue;
 		p DisableInvulnerability();
 		p.lives = 0;              // no self-revive out of this one
-		p.bleedout_time = 0;      // no crawling, no waiting
 		p DoDamage( p.health + 1000, p.origin );
+		// AFTER the damage, exactly as stock orders it (_zm.gsc:2097-2101). In
+		// co-op the hit puts an upright straggler into last stand, and stock's
+		// Laststand_Bleedout writes the FULL bleedout_time as its first act —
+		// a zero written BEFORE the damage was overwritten, so the straggler
+		// got a ~30 s crawl and the containment watch teleported them into the
+		// sealed hall to be revived (bug review 2026-09-22, F06).
+		p.bleedout_time = 0;      // no crawling, no waiting
+		p thread straggler_bleed_zero();   // belt: re-assert a frame later if last stand landed late
+		finale_log( "STRAGGLER player=" + p GetEntityNumber() + " killed at seal" );
 	}
+}
+
+function straggler_bleed_zero()   // self = the straggler
+{
+	self endon( "disconnect" );
+	wait 0.05;
+	if ( isdefined( self ) && ( self laststand::player_is_in_laststand() ) )
+		self.bleedout_time = 0;
+}
+
+// Dev log for the crown run. Assembled outside the developer block, printed
+// inside it (the proven pattern).
+// v19.76 — THE PAUSE PROBE (lead tester Nikolai, Oct 2026: "on solo you can pause
+// during the boss fight and it will continue to play the music when you un pause it
+// would show you Extract or Ascend"). Half of that is settled in the data: every
+// music alias carried an empty Pauseable column, so the closing song played on
+// through a solo pause while the fight's clock stood still, and the two came apart
+// (tod_music_finale is Pauseable since v19.76). This line settles the other half -
+// whether the GAME clock (GetTime, every wait in this file) runs through a pause:
+// GetUTC is wall time, so a pause shows as real_s well ahead of game_s. Printed in
+// every developer run, tod_dev or not: about seven lines per finale.
+function finale_clock_log( tag )
+{
+	if ( !isdefined( level.tod_finale_song_start ) || !isdefined( level.tod_finale_utc_start ) )
+		return;
+	game_s = ( GetTime() - level.tod_finale_song_start ) / 1000.0;
+	real_s = GetUTC() - level.tod_finale_utc_start;
+	line = "[TOD_FINALE] CLOCK " + tag + " game_s=" + game_s + " real_s=" + real_s + " drift_s=" + ( real_s - game_s );
+	/#
+	PrintLn( line );
+	#/
+}
+
+function finale_log( msg )
+{
+	if ( !IS_TRUE( level.tod_dev ) )
+		return;
+	line = "[TOD_FINALE] ms=" + GetTime() + " " + msg;
+	/#
+	PrintLn( line );
+	#/
 }
 
 // -> true if at least one UPRIGHT player is inside the Crown right now. The seal
@@ -1156,7 +1364,14 @@ function anyone_sealed_in()
 		p = players[ i ];
 		if ( !isdefined( p ) || !isplayer( p ) || !isalive( p ) )
 			continue;
-		if ( p laststand::player_is_in_laststand() )
+		// A crawler does not count — UNLESS stock's solo Quick Revive is about
+		// to stand them up (waiting_to_revive is stock's own marker, set for
+		// the 10 s self-revive and nowhere else). all_living_in_crown() counts
+		// a crawler as inside, so a solo player who went down at the gate and
+		// crawled in was sealed and then handed GAME OVER by finale_run while
+		// their banked revive was seconds away (bug review 2026-09-22, F01).
+		// Stock's own out-of-bounds kill carves out the same case (_zm.gsc:2092).
+		if ( p laststand::player_is_in_laststand() && !IS_TRUE( p.waiting_to_revive ) )
 			continue;
 		if ( tod_crown_data::in_crown( p.origin ) )
 			return true;
@@ -1188,6 +1403,10 @@ function crown_containment_watch()
 			p = players[ i ];
 			if ( !isdefined( p ) || !isplayer( p ) || !isalive( p ) )
 				continue;
+			// v19.68r: a rocket rider is off the ground by design, and the riders the crash sets down at the Spire
+			// are where they belong (docs/170) - pulling either back into the hall would break the ride.
+			if ( IS_TRUE( p.tod_rocket_riding ) || IS_TRUE( level.tod_ascend_by_rocket ) )
+				continue;
 			if ( tod_crown_data::in_hall( p.origin ) )
 				continue;
 			// He respawned outside. Put him in the fight rather than leaving him
@@ -1207,6 +1426,74 @@ function crown_containment_watch()
 // This is also a REAL requirement, not a flourish: everything still alive out
 // there is holding a slot under stock's 31-actor gate, and the hold-out needs
 // those slots to put enemies in the hall.
+// THE ROAD CULL — TOD_FINALE_CULL_DIST carries why this exists at all. Runs
+// only between the buy and the seal: after the seal every zombie is inside the
+// hall with the party by construction (the sealed-crown filter in
+// finale_spawn_selection), so there is nothing left behind to cull.
+function road_cull_run()
+{
+	level endon( "end_game" );
+	level endon( "tod_finale_sealed" );
+
+	for ( ;; )
+	{
+		wait TOD_FINALE_CULL_TICK;
+
+		// THE FOCUS SET IS EVERY LIVING PLAYER, crawlers included. A downed
+		// player is a place his team is coming back to, and the wave around him
+		// is the reason that revive is hard — culling it would quietly make going
+		// down safer than staying up. (Contrast finale_spawn_selection, which
+		// excludes laststand from the SPAWN focus, for the opposite reason.)
+		alive = [];
+		players = GetPlayers();
+		for ( i = 0; i < players.size; i++ )
+		{
+			p = players[ i ];
+			if ( isdefined( p ) && isplayer( p ) && isalive( p ) )
+				alive[ alive.size ] = p;
+		}
+		if ( alive.size == 0 )
+			continue;
+
+		// THE FRONT OF THE PARTY on the road (v17.47, see TOD_FINALE_ROAD_Z_MIN).
+		// Only players actually up on the road envelope count; a player still on
+		// the crown stair below leaves it undefined and the cull runs as before.
+		front_y = undefined;
+		for ( j = 0; j < alive.size; j++ )
+		{
+			if ( alive[ j ].origin[ 2 ] <= TOD_FINALE_ROAD_Z_MIN )
+				continue;
+			if ( !isdefined( front_y ) || alive[ j ].origin[ 1 ] > front_y )
+				front_y = alive[ j ].origin[ 1 ];
+		}
+
+		ai = GetAISpeciesArray( "all" );
+		for ( i = 0; i < ai.size; i++ )
+		{
+			e = ai[ i ];
+			if ( !isdefined( e ) || !isalive( e ) )
+				continue;
+			if ( IS_TRUE( e.ignore_enemy_count ) )   // every elite sets it — they are not on this cap
+				continue;
+			// AHEAD OF THE PARTY ON THE ROAD = THE WAVE. Never culled (v17.47).
+			if ( isdefined( front_y ) && e.origin[ 2 ] > TOD_FINALE_ROAD_Z_MIN
+			     && e.origin[ 1 ] >= front_y - TOD_FINALE_CULL_BEHIND )
+				continue;
+			near = false;
+			for ( j = 0; j < alive.size; j++ )
+			{
+				if ( DistanceSquared( e.origin, alive[ j ].origin ) <= ( TOD_FINALE_CULL_DIST * TOD_FINALE_CULL_DIST ) )
+				{
+					near = true;
+					break;
+				}
+			}
+			if ( !near )
+				e Kill();
+		}
+	}
+}
+
 function wipe_the_map()
 {
 	ai = GetAISpeciesArray( "all" );
@@ -1327,14 +1614,116 @@ function spawn_floor_phases()
 	level endon( "end_game" );
 	level endon( "tod_finale_sealed" );
 
-	level.tod_finale_spawn_floor = 0.4;   // the overture — the one moment you get to LOOK at it
+	set_spawn_floor( 0.4 );   // the overture — the one moment you get to LOOK at it
 	while ( song_t() < TOD_PHASE2_SECS )
 		wait 0.25;
-	level.tod_finale_spawn_floor = 0.2;   // the build
+	set_spawn_floor( 0.2 );   // the build
 	while ( song_t() < TOD_PHASE3_SECS )
 		wait 0.25;
-	level.tod_finale_spawn_floor = 0.1;   // the sustained section: full pressure
+	set_spawn_floor( 0.1 );   // the sustained section: full pressure
 	level.tod_finale_pressure_tick = 4;   // and tighter boss top-ups with it
+}
+
+// v17.47: the floor is written STRAIGHT INTO zombie_vars as well as published
+// for the resolver. Stock consults func_get_zombie_spawn_delay ONCE per round
+// (_zm.gsc:4502) and sleeps on zombie_vars["zombie_spawn_delay"] for the whole
+// of it, so until now every phase change here landed on the NEXT round flip —
+// the road ran at whatever the last round stamped. The spire's ascension and
+// the Warden seal do exactly this direct write for the same reason
+// (_tod_spire.gsc, "a mid-round change lands late").
+function set_spawn_floor( f )
+{
+	level.tod_finale_spawn_floor = f;
+	if ( isdefined( level.zombie_vars ) )
+		level.zombie_vars[ "zombie_spawn_delay" ] = f;
+}
+
+// THE SEED WAVE (v17.47) — see the TOD_FINALE_SEED_* block. Runs once, at the
+// buy, right after the wipe has emptied the cap.
+function road_seed_wave()
+{
+	level endon( "end_game" );
+	level endon( "tod_finale_sealed" );
+
+	if ( !isdefined( level.zombie_spawners ) || level.zombie_spawners.size == 0 )
+		return;
+	if ( !isdefined( level.zm_loc_types ) )
+		return;
+	spots = level.zm_loc_types[ "zombie_location" ];
+	if ( !isdefined( spots ) || spots.size == 0 )
+		return;
+
+	// The party's front, upright players on the road envelope only (the same
+	// read as road_cull_run). Nobody up there yet = no wave to seed.
+	front_y = undefined;
+	players = GetPlayers();
+	for ( i = 0; i < players.size; i++ )
+	{
+		p = players[ i ];
+		if ( !isdefined( p ) || !isplayer( p ) || !isalive( p ) )
+			continue;
+		if ( p laststand::player_is_in_laststand() )
+			continue;
+		if ( p.origin[ 2 ] <= TOD_FINALE_ROAD_Z_MIN )
+			continue;
+		if ( !isdefined( front_y ) || p.origin[ 1 ] > front_y )
+			front_y = p.origin[ 1 ];
+	}
+	if ( !isdefined( front_y ) )
+		return;
+
+	y_lo = front_y + TOD_FINALE_SEED_MIN_AHEAD;
+	y_hi = front_y + TOD_FINALE_SEED_MAX_AHEAD;
+	gate_y = tod_crown_data::gate_org()[ 1 ];   // nothing past the crown gate (v14.48's rule)
+	if ( y_hi > gate_y )
+		y_hi = gate_y;
+
+	cand = [];
+	for ( i = 0; i < spots.size; i++ )
+	{
+		sp = spots[ i ];
+		if ( !isdefined( sp ) || !isdefined( sp.origin ) )
+			continue;
+		if ( sp.origin[ 2 ] <= TOD_FINALE_ROAD_Z_MIN )
+			continue;
+		if ( sp.origin[ 1 ] < y_lo || sp.origin[ 1 ] > y_hi )
+			continue;
+		// A sealed lane's risers are the stranded-actor trap — the same AABB
+		// test _tod_endless_rounds::finale_spawn_selection applies.
+		if ( isdefined( level.tod_lane_seal_mins ) && isdefined( level.tod_lane_seal_maxs ) )
+		{
+			sealed = false;
+			for ( b = 0; b < level.tod_lane_seal_mins.size; b++ )
+			{
+				mn = level.tod_lane_seal_mins[ b ];
+				mx = level.tod_lane_seal_maxs[ b ];
+				if ( sp.origin[ 0 ] >= mn[ 0 ] && sp.origin[ 0 ] <= mx[ 0 ]
+				  && sp.origin[ 1 ] >= mn[ 1 ] && sp.origin[ 1 ] <= mx[ 1 ] )
+				{
+					sealed = true;
+					break;
+				}
+			}
+			if ( sealed )
+				continue;
+		}
+		cand[ cand.size ] = sp;
+	}
+	if ( cand.size == 0 )
+		return;
+
+	for ( n = 0; n < TOD_FINALE_SEED_N; n++ )
+	{
+		// Under the cap like every spawn — this raises no limit.
+		while ( zombie_utility::get_current_zombie_count() >= level.zombie_ai_limit )
+			wait 0.1;
+		spawner = level.zombie_spawners[ RandomInt( level.zombie_spawners.size ) ];
+		sp = cand[ RandomInt( cand.size ) ];
+		guy = zombie_utility::spawn_zombie( spawner, spawner.targetname, sp );
+		if ( isdefined( guy ) )
+			guy thread zombie_utility::round_spawn_failsafe();
+		wait 0.15;
+	}
 }
 
 // --- A2: THE NARROWS DROP ---------------------------------------------------
@@ -1454,8 +1843,18 @@ function acceptance_show()
 }
 
 // The four hall pillars count the party in: one burns red per living player,
-// each snaps green as that many teammates make it inside. Ends at the seal
-// with whatever it last showed — green for everyone who made it.
+// each snaps green as that many teammates make it inside.
+//
+// IT GOES OUT AT THE SEAL (v17.37, user 2026-09-04: "there is a green glow sfx
+// in the room during the fight on top of a piller. lets remove that as well").
+// This thread's endon fires at the seal, so it STOPPED updating and left its
+// last frame lit — a green aura burning over a crossing pier for the whole
+// hold-out, long after it meant anything. A count-in is a thing you read while
+// people are still arriving; once the door is shut the count is settled and
+// the glow is just an FX nobody can turn off. An endon is not a cleanup: any
+// thread that leaves world state behind needs someone to clear it, and that is
+// pillar_countin_clear() in the seal block (heartbeat_run does its own, by
+// polling instead of endon-ing — the other half of this lesson).
 function pillar_countin()
 {
 	level endon( "end_game" );
@@ -1471,6 +1870,7 @@ function pillar_countin()
 	}
 	if ( hosts.size == 0 )
 		return;
+	level.tod_pillar_hosts = hosts;   // the seal puts these out — pillar_countin_clear()
 
 	shown = [];
 	for ( i = 0; i < hosts.size; i++ )
@@ -1508,6 +1908,25 @@ function pillar_countin()
 				tod_perk_scatter::play_sound_at_origin( hosts[ i ].origin, "zmb_cha_ching", 3 );
 		}
 		wait 0.25;
+	}
+}
+
+// The seal's half of pillar_countin: every host dark AND deleted, so nothing
+// can relight them and they stop costing an entity for the rest of the match
+// (the ~1024-gentity budget is this map's binding constraint). Safe to call
+// twice and safe if the count-in never ran.
+function pillar_countin_clear()
+{
+	if ( !isdefined( level.tod_pillar_hosts ) )
+		return;
+	hosts = level.tod_pillar_hosts;
+	level.tod_pillar_hosts = undefined;
+	for ( i = 0; i < hosts.size; i++ )
+	{
+		if ( !isdefined( hosts[ i ] ) )
+			continue;
+		tod_perk_lights::set_glow( hosts[ i ], 0 );
+		hosts[ i ] Delete();
 	}
 }
 
@@ -1708,8 +2127,46 @@ function exfil_hint_loop()
 			// the case the state fell to default, which tells the party the uplink
 			// is "back at the TERRACE" - through a door they cannot open (peer
 			// review 2026-08-25).
+			// "^3HOLD THE CROWN^7" until 2026-09-11. User: "it says hold the
+			// crown, but that confuses people. They think they need to hold
+			// something ... they are just defending for a certain amount of
+			// time." HOLD reads as "hold out" to anyone fluent in zombies and
+			// as "press and hold" to everyone else, and this map spends the
+			// word that second way on every buy prompt in it — so players stood
+			// at the pad hunting for the thing to hold. DEFEND cannot be read
+			// two ways, and the detail line says the part the old string never
+			// did: that this ends on a clock, not on an objective.
+			//
+			// STILL A STATUS LINE: no [{+activate}] token, so PromptDefault
+			// hides the whole footer and there is nothing to press. The " - "
+			// splits it into the title band DEFEND THE CROWN over one detail
+			// line, the grammar every other hint in the map uses.
+			//
+			// TOD_NOUNS in ZMCursorHintNew.lua carried "hold the crown" and now
+			// carries "defend the crown". THE OBVIOUS REASON FOR THAT IS WRONG
+			// TWICE OVER, so here is what is actually true — checked against
+			// classifyHint, not assumed:
+			//
+			//   1. A stale noun would NOT have misrouted this line.
+			//      classifyHint's last statement returns DefaultHint anyway, so
+			//      an unclaimed status string lands on the same card. And
+			//      nothing gates the pairing: reverting the noun on 2026-09-11
+			//      left lint_tod_hints passing at 96/190, exit 0.
+			//   2. "defend the crown" is not even what claims this string.
+			//      The nouns are scanned IN ORDER and "extract" sits five
+			//      entries earlier — it matches "extraction" in the detail line
+			//      below, so the loop returns at "extract" and never reaches
+			//      the crown nouns at all.
+			//
+			// It stays paired because the noun tracks the TITLE, and the title
+			// is the half that survives a reword of the detail. Drop the detail
+			// line's "extraction" and "defend the crown" becomes the claimant
+			// for real. What the table buys either way is CLAIM ORDER: nouns
+			// match at step 3, ahead of the perk-machine and Pack-a-Punch tests
+			// at 4 and 5 — so a future reword containing a perk name, or the
+			// words pack and punch, is misrouted without a matching noun.
 			case "holdout":
-			case "charging":   self SetHintString( "^3HOLD THE CROWN^7" ); break;
+			case "charging":   self SetHintString( "^3DEFEND THE CROWN^7 - survive until extraction arrives" ); break;
 			// v14: extract_use_loop stamps this trigger's hint itself the moment
 			// the choice opens — the case exists so the default's "back at the
 			// TERRACE" line can never overwrite it.
@@ -1725,7 +2182,10 @@ function exfil_hint_loop()
 			// "activate the Uplink" with no hint that it is all the way back where
 			// they started. That is the whole road as a walk of shame, and the user hit it:
 			// "game couldn't end cause of some uplink issue".
-			default:           self SetHintString( "^3UPLINK^7 is back at the TERRACE" ); break;
+			// " - " added v14.58 so PromptDefault splits this into the title
+			// UPLINK over the detail line, instead of running the whole
+			// sentence through the narrow title band as one string.
+			default:           self SetHintString( "^3UPLINK^7 - it is back at the TERRACE" ); break;
 		}
 	}
 }
@@ -1751,8 +2211,18 @@ function depart()
 		p.ignoreme = true;
 	}
 
-	level thread depart_show();
-	wait TOD_FINALE_DEPART_SECS;
+	// v19.68r THE ROCKETS (docs/170; user 2026-10-02: "if you extract same thing but the extract ship goes
+	// straight up and the game ends few seconds later"): the extract ship IS the send-off - the party boards, it
+	// lifts off and climbs straight up, and ride_extract returns at its END beat a few seconds into the climb
+	// (the ship keeps climbing behind the end screen). No ship (the pool refused it) = the old send-off.
+	rode = false;
+	if ( IS_TRUE( level.tod_rockets_ready ) )
+		rode = tod_rocket::ride_extract();
+	if ( !rode )
+	{
+		level thread depart_show();
+		wait TOD_FINALE_DEPART_SECS;
+	}
 
 	level.tod_finale_state = "done";
 	level.tod_escaped = true;
@@ -1849,12 +2319,20 @@ function escaped_game_over( player, game_over, survived )
 	// roughly -242..-18 — and this line used to sit at -100, i.e. straight
 	// through the middle of the artwork. +40 clears the banner's bottom edge
 	// with ~58 to spare.
-	survived.y += 40;
+	// 2026-09-27: +40 -> +10. The game-end scoreboard is FORCED up under this
+	// screen now, and with four players its column header tops out at 397 of
+	// 720 - the +40 line (720-y ~420) sat on it. +10 still clears the banner's
+	// bottom edge (-18) by the text's own half-height.
+	survived.y += 10;
 	survived.foreground = true;
 	survived.fontScale = 2;
 	survived.alpha = 0;
 	survived.color = ( 1.0, 1.0, 1.0 );
 	survived.hidewheninmenu = true;
+
+	// v19.58: "YOU SURVIVED N ROUNDS" in the map's typeface, under the banner
+	// (the end scoreboard draws it; the stock line is faded out).
+	player tod_gameover::end_screen_push( survived, 2, 0 );
 
 	if ( player isSplitScreen() )
 	{

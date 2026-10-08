@@ -145,6 +145,8 @@ player, not the gun, but keeping them would shrink the gamble; I recommend
 they reset (it also means SPRINT Lv5 tireless is genuinely lost, which is
 what makes the T2 card a real decision for a skirmisher).
 
+> ⚠️ **The Scope column below is v9-era and has been INVERTED since v15 (2026-08-31).** Persistence is the DEFAULT now — `add_domain` sets `scope = "class"` and only the explicit `set_scope( key, "gun" )` list in `register_domains` resets on a promotion, so DAMAGE, BOUNTY, SPRINT, SPRINT FIRE, HEADSHOT, GIANT SLAYER, SCAVENGER, BULLET FEED, LEECH, CLEAVE and RUN AND GUN all SURVIVE it, and SCAVENGER's assault-only carve-out is gone. `domain_survives_tier()` is the one authority; read the `set_scope` calls, never this table.
+
 | id | Domain | Gate today | Scope | Bound to | Note |
 |---|---|---|---|---|---|
 | 2 | DMG REDUCTION | shared | **CLASS — kept** | — | user |
@@ -165,7 +167,7 @@ what makes the T2 card a real decision for a skirmisher).
 | 13 | LEECH | slasher | GUN — reset | any melee | |
 | 14 | CLEAVE | slasher | GUN — reset | any melee | |
 | 22 | CHAIN LUNGE | slasher | GUN — reset | any melee (reads the held blade) | re-rollable on every tier |
-| 23 | RUN AND GUN | skirm | GUN — reset | any | |
+| 23 | RUN AND GUN | skirm | GUN — reset | any | v16.36: REQUIRES SPRINT FIRE (id 21) owned before it can roll — `set_requires( "runandgun", "sprintfire" )` |
 | 7 | MAG SIZE | assault (twin m) | GUN — reset | `t9_krig6` ONLY | ladder exists only on the Krig |
 | 15 | FIRE RATE | skirm (twin f) | GUN — reset | `t9_mp5` ONLY | |
 | 16 | HANDLING | skirm (twin h) | GUN — reset | `t9_mp5` ONLY | |
@@ -204,7 +206,47 @@ All of:
    unlinked asset would strand the swap; `reconcile_twin` has the same
    guard);
 4. not already holding a Gift of Death / Death Machine powerup gun (the swap
-   would fight the powerup's restore).
+   would fight the powerup's restore);
+5. **THE FLOOR GATE** (added v14.35, 2026-08-30 — user: *"You must also reach
+   floor 10 to get 2nd tier class upgrade and floor 20 for 3rd tier. I dont want
+   players able to be tier 2 or 3 before even opening the first door to the
+   tower."*) — `tier_floor_ok( player )`: the player's own climb high-water is at
+   or above `tier_floor_req( tier + 1 )`, **floor 10 for T2 and floor 30 for T3** (T3 was floor 20 until 2026-09-02 — docs/72)
+   (`TOD_TIER2_FLOOR` / `TOD_TIER3_FLOOR`).
+
+**Why the gate was needed when (2) looks like it already covers it.** It did —
+by accident. The first Pack-a-Punch reachable while climbing IS the floor-10
+breather vendor (the crown machine sits above all 50 laps), so the normal route
+already implied floor 10. Two things leaked through:
+
+* the **free-PaP powerup** sets `tod_pap_owned` wherever it drops, so one lucky
+  base-arena drop made a tier-1 player eligible with no doors bought;
+* **tier 3 needed no extra climb at all** — you could PaP the T2 gun at the same
+  floor-10 machine and promote again on the spot.
+
+**The high-water** (`_tod_gauge::floor_reached`, fed by the 0.35 s gauge poll
+into `player.tod_floor_best`): per-player, alive-and-playing only, and
+**monotonically rising**. Consequences worth knowing before touching it:
+
+* the gate asks *have you been there*, not *are you there now* — the promotion
+  can be taken at a base station or on a teleporter pad once earned;
+* nothing re-checks the floor after a card is dealt, and nothing needs to: a
+  card legal when dealt stays legal;
+* **spectators are excluded on purpose.** A dead player's `.origin` rides the
+  spectate camera, so sampling them would hand a body in the base arena the
+  climber's floor — the exact free ride being closed. Last stand still samples
+  (`sessionstate` stays `"playing"`, `isalive` TRUE): a downed player really is
+  on that floor;
+* `real_floor_of()` carries an 8-unit epsilon because a player standing on a
+  landing sits at the exact z boundary between two floors, and clamps at floor
+  50 so the crown, causeway and Endless Spire report the top rather than
+  running off the end.
+
+`tier_up()` re-asks `tier_card_eligible()` before promoting, so the gate covers
+the round event, the station's deferred cards and the redeals from one edit. The
+spire's `grant_all` calls `tod_gauge::mark_top_reached()` first — ascending
+players are far above floor 50 anyway, but a grant must not lose a race with the
+poll. It is **not** waived by `level.tod_dev`.
 
 ### 4.2 Roll — inside `roll_options()`
 
@@ -215,8 +257,16 @@ if ( tier_card_eligible( player ) && RandomInt( 100 ) < tier_card_pct() )
     opts[ 1 ] = make_tier_option( player )      // the RIGHT card, always
 ```
 
-- `tier_card_pct()` = `TOD_TIER_CARD_PCT` **10**; dev flag → **100** (every
+- `tier_card_pct()` = `TOD_TIER_CARD_PCT` **20** (was 10 until v9.42); dev flag → **100** (every
   deal shows it, so the swap flow is testable in one session).
+- **v16.56 (2026-09-02) — THE FULL-BAR PROMOTION.** The roll is now
+  `tier_card_roll()`: a player whose luck bar is at or above
+  `TOD_UPG_GUAR_TIER_BAR` (100, the full visible bar — same number as the
+  ULTIMATE floor) AND who passes the FULL `tier_card_eligible()` (PaP'd, next
+  gun linked, **floor gate cleared** — the user's explicit condition) is dealt
+  the TIER card 100% of the time. Below the bar, or floor-blocked, the 20%
+  draw stands (a floor-blocked draw is still shown LOCKED, v14.39). Both deal
+  paths (roll_options and the maxed-player pre-roll) ask the same function.
 - **Right slot on purpose.** The LEFT card is focused by default and a
   timeout locks the focused card; a timeout must never swap a gun the player
   did not choose.
@@ -357,7 +407,7 @@ parity pass (LOC_NORM, move 1.0, recoil ×1.15, ADS ×1.20) and the PaP rule
 (+25%) run exactly as for the T1 guns. `damage`/`damageMin` stay INT (the
 float-damage = 0 trap). Hit-location multipliers are never a tier lever.
 
-With the script-side DAMAGE domain (+12%/Lv, ×2.2 at Lv10) on top, a T3 PaP
+With the script-side DAMAGE domain (+10%/Lv, ×2.0 at Lv10) on top, a T3 PaP
 with DAMAGE maxed lands at ~×4.3 of today's T1 base — which is the point:
 the ceiling of the run moves up by ~2×, but only for players who re-earn it.
 
@@ -371,8 +421,8 @@ magazines) is copied from the port.
 **Melee** has no DPS; the slasher's doctrine is "one-shot deep into the
 round curve" (the knife is exempt from the uniform PaP rule: 1700 base /
 20000 PaP). The melee ladder doubles per step so each tier buys ~7 more
-one-shot rounds (BO3 zombie HP ×1.1/round from 10): T1 knife 1700/20000 →
-T2 katana **20000/40000** → T3 Stormbreaker **40000/80000**.
+one-shot rounds (BO3 zombie HP ×1.1/round from 10): T1 bat 1600/3200 →
+T2 wakizashi **3200/6400** → T3 Stormbreaker **5440/10880**.
 `MELEE_TIER_DMG` table, same file. Swing speed / lunge are the melee "feel"
 levers per tier (CHAIN LUNGE's `TOD_LUNGE_DMG` must read the held blade's
 `meleeDamage` instead of the knife's 20000 constant — Phase 2 slasher item).
@@ -471,10 +521,10 @@ Every new unique is script-side (0 assets).
 
 | Class | T1 | T2 | T3 |
 |---|---|---|---|
-| SKIRMISHER | **MAC-10** `t9_mac10` (CW) | MP5 `t9_mp5` | **MP7** `t6_mp7` (BO2 — "MP117 Redactor") |
+| SKIRMISHER | **MSMC** `t6_msmc` (BO2) | MP5 `t9_mp5` | **MP7** `t6_mp7` (BO2 — "MP117 Redactor") |
 | ASSAULT | **Enfield** `t5_enfield` (BO1) | Krig 6 `t9_krig6` | **AK-47** `t9_ak47` (CW) |
-| HEAVY | Stoner 63 `t9_stoner63` | **HK21** `t5_hk21` (BO1 — 125-rd belt) | **Death Machine** `t6_death_machine` (BO2 — "Meat Grinder") |
-| SLASHER | Combat Knife `t9_me_knife_american` | **Katana** — *PORT NEEDED* (§9.5) | **STORMBREAKER** `leviathan` (the installed Leviathan Axe port, renamed) |
+| HEAVY | **Mk 48** `t6_mk48` (BO2) | **HK21** `t5_hk21` (BO1 — 125-rd belt) | **Death Machine** `t6_death_machine` (BO2 — "Meat Grinder") |
+| SLASHER | **Baseball bat** `t9_me_baseballbat` (BOCW) | **Wakizashi** `t9_me_wakizashi` (BOCW — the katana) | **STORMBREAKER** `leviathan` (the installed Leviathan Axe port, renamed) |
 
 ### 9.1 SKIRMISHER — speed
 
@@ -508,8 +558,8 @@ Every new unique is script-side (0 assets).
 | 2 | Katana | LEECH, CLEAVE, KNIFE SPEED **k reused** (12 assets; `gun_keys` += the katana stem), CHAIN LUNGE, SPRINT | **DRAW CUT** (id 31, S, max 3): a swing within 0.4s of sprinting deals +50/+100/+150% — script: `IsSprinting` timestamp → multiplier on MOD_MELEE in `upgrade_damage_cb` |
 | 3 | STORMBREAKER | LEECH, CLEAVE, KNIFE SPEED **k** (12 assets; `gun_keys` += `leviathan`), CHAIN LUNGE, SPRINT, **THOR'S THUNDER** (20, its exclusive; `grant` = Lv1 on arrival, then rolls to Lv5) | (Thor's Thunder IS its unique — no new id) |
 
-Melee damage per tier follows `MELEE_TIER_DMG` (§6): katana 20000/40000,
-Stormbreaker 40000/80000 (the port ships 5000/20000 — overridden).
+Melee damage per tier follows `MELEE_TIER_DMG` (§6): katana 3200/6400,
+Stormbreaker 5440/10880 (the port ships 5000/20000 — overridden).
 
 ### 9.5 Ports: what exists, what must be sourced
 
@@ -520,7 +570,7 @@ Stormbreaker 40000/80000 (the port ships 5000/20000 — overridden).
 | Enfield | **installed 2026-08-22** from `Skye_BO1_Enfield.zip` — `skye_t5_enfield.gdt`: `t5_enfield` (30-rd, 160 dmg, 750 rpm, locHead 5.0 → LOC_NORM) / `t5_enfield_up_zm` ("E2N-F13LD", 40-rd) | the `_up_zm` form's `altWeapon "t5_enfield_shotty_zm"` (a Masterkey) is BLANKED in the generator: boot trap + parity. Mixed naming: base has no `_zm`, PaP does — the knife precedent in the generator's form table |
 | HK21 | **installed 2026-08-22** from `Skye_BO1_HK21.zip` — `skye_t5_hk21.gdt`: `t5_hk21` (125-rd, 310 dmg, 536 rpm, moveSpeedScale 0.9 → 1.0, locTorsoUpper 2.0 → 1) / `t5_hk21_up` | `altWeapon` empty ✓; the README row is `t5_hk21,t5_hk21_up,,2750,lmg,…` |
 | AK-47 | yes — `skye_t9_ak-47.gdt` (also holds `t9_rpk`) | t9 pipeline |
-| Death Machine | yes — `skye_t6_death_machine.gdt` | screen spin-up fields + `altWeapon`; BO2 sound set |
+| Death Machine | yes — `skye_t6_death_machine.gdt` | screen spin-up fields + `altWeapon`; BO2 sound set. **v16.6 (2026-09-01): `spinMinigunOnADS` 0 -> 1 via `tune.str`** — holding AIM pre-spins the barrels (spinUpTime 0.25, spinDownTime 0.5) so the trigger fires instantly; engine field, feel unverified until played |
 | Stormbreaker | yes — `<tools>\_custom\wetegg\leviathanaxe\leviathanaxe.gdt` (`leviathan_zm` / `leviathan_up_zm`, `_zm` runtime-strip like the knife; meleeDamage 5000/20000) | **It links only because `bin\converter_gdt_dirs_0.txt` line 1 is `_custom`** — a Mod Tools verify resets that file and the axe silently drops from every build (map 1's `apply_bin_patches.ps1` lesson); do NOT also vendor it (a second definition = gdtdb duplicate). **The live GDT is map-1-patched** (`continuousFire 1` paired with map 1's `_acc_leviathan_swing.gsc` — without that script holding attack makes the engine reject the re-fire; `moveSpeedScale 1.07`, `meleeChargeRange 0`); the pristine pack copy `leviathanaxe.gdt.acc-balance0709-orig` (fireTime 0.6, meleeTime 0.65, continuousFire 0, move 1.0, chargeRange 100) is the generator's source. SOUND: no alias CSV anywhere — the GDT references stock MP fire-axe aliases (`wpn_melee_fireaxe_*`) that may not be in the ZM banks; verify in-game, else author rows. Stock `is_melee_weapon()` is false for it (same as the combat knife — harmless). Credit WetEgg / M5_Prodigy / J.G. / DeLeon / Santa Monica Studio before publish |
 | AK-47 (note) | — | **map 1 patched `skye_t9_ak-47.gdt` in place** (recoil ×1.75, maxAmmo 10/11, moveSpeedScale 0.93, hipSpread ×1.25); the generator reads the pristine `.acc-orig` backup so the roster recoil bump (×1.15) is not stacked on a hidden ×1.75. Map 1 ran it at balance ×0.27 — our TIER_DPS normalization replaces that |
 | Death Machine (note) | — | loop-fire minigun: the GDT's audio is `startFireSound`/`loopFireSound`/`loopFireEndSound` (wavs `fire_start_plr`, `fire_loop_plr/npc`, `fire_stop_plr/npc`, no `_npc` start wav) — `gen_tod_sounds.js`'s t9 shot recipe does not apply; its alias rows are hand-authored in Phase 2f. `moveSpeedScale 0.65` → parity 1.0; `blocksProne 1` |
@@ -680,9 +730,9 @@ time across sessions (tasklist for `linker_modtools.exe` / `BlackOps3.exe`).
 | Knob | Default | Where |
 |---|---|---|
 | `TOD_TIER_MAX` | 3 | `_tod_upgrades.gsc` |
-| `TOD_TIER_CARD_PCT` | 10 (dev 100) | `_tod_upgrades.gsc` |
+| `TOD_TIER_CARD_PCT` | 20 (dev_upgrades 100; a full luck bar deals it outright) | `_tod_upgrades.gsc` |
 | `TOD_TIER_PITY_PCT` | 0 (off) | `_tod_upgrades.gsc` |
 | `TIER_DPS` | [1, 1.5625, 2.4414] (damage only) | `gen_tod_twins.js` |
-| `MELEE_TIER_DMG` | [[1700,20000],[20000,40000],[40000,80000]] | `gen_tod_twins.js` |
+| `MELEE_TIER_DMG` | {1:[1600,3200], 2:[3200,6400], 3:[5440,10880]} (lockstep with `register_melee_dmg()`) | `gen_tod_twins.js` |
 | ledger guard | throw > 200 registrations | `gen_tod_twins.js` |
 | domain `scope` / `gun_keys` | per `add_domain` row | `register_domains` |

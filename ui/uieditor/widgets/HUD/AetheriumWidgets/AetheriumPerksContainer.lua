@@ -127,7 +127,7 @@ CoD.AetheriumPerksContainer.new = function ( menu, controller )
 	self.PerkList = LUI.UIList.new( menu, controller, 2, 0, nil, false, false, 0, 0, false, false )
 	self.PerkList:makeFocusable()
 	self.PerkList:setLeftRight( false, false, -180, 180 )  -- Center horizontally (360px total for 20 perks)
-	self.PerkList:setTopBottom( true, false, 666, 694 )  -- Position at 666px from top (28px tall)
+	self.PerkList:setTopBottom( true, false, 662, 694 )  -- 32px tall (v17.9: item grew 28->32 when TodScaleHud was dropped from the loadout; same bottom edge)
 	self.PerkList:setWidgetType( CoD.AetheriumPerkItem )
 	self.PerkList:setHorizontalCount( 20 )  -- Max 20 perks displayed horizontally
 	self.PerkList:setSpacing( 2 )  -- 2px spacing between perks
@@ -135,5 +135,8 @@ CoD.AetheriumPerksContainer.new = function ( menu, controller )
 	self.PerkList:setDataSource( "AetheriumPerks" )
 	self:addElement( self.PerkList )
 
+	LUI.OverrideFunction_CallOriginalSecond( self, "close", function( element )
+		element.PerkList:close()
+	end )
 	return self
 end

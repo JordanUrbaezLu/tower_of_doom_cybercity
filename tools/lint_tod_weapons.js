@@ -26,13 +26,28 @@ const REPO = path.join(__dirname, '..');
 const zpkgPath = path.join(REPO, 'zone_source', 'tod_twins.zpkg');
 const csvPath = path.join(REPO, 'gamedata', 'weapons', 'zm', 'zm_levelcommon_weapons.csv');
 const classesPath = path.join(REPO, 'scripts', 'zm', 'zm_tower_of_doom', '_tod_classes.gsc');
+const mageGshPath = path.join(REPO, 'scripts', 'zm', 'zm_tower_of_doom', '_tod_mage.gsh');
 
 const errors = [];
+
+// ---- 0. THE MAGE GATE (docs/114) -------------------------------------------
+// THIS LINT PARSES TEXT, NOT BEHAVIOUR. The register_gun scan below does not
+// strip comments and does not know `if ( TOD_MAGE_ENABLED )` from a live
+// statement, so it would demand the staff assets the generator was told not to
+// emit -- nine errors, on every build, -GscOnly included. Verified 2026-09-07.
+//
+// READ THE FLAG, NEVER HARDCODE THE SKIP. The day the header says 1, this lint
+// must start demanding those assets in the same build. A permanent
+// `if (cls === 'mage') continue` would be a check that passes the wrong
+// question: green forever, including the build that shipped a broken class.
+const MAGE_ON = fs.existsSync(mageGshPath) &&
+  /^\s*#define\s+TOD_MAGE_ENABLED\s+1\b/m.test(fs.readFileSync(mageGshPath, 'utf8'));
+const GATED = MAGE_ON ? new Set() : new Set(['mage']);
 
 // ---- 1. what the map actually LINKS (the zone package = the asset truth) ----
 const linkedRaw = new Set(
   fs.readFileSync(zpkgPath, 'utf8').split(/\r?\n/)
-    .filter(l => l.startsWith('weapon,')).map(l => l.slice(7).trim()).filter(Boolean)
+    .filter(l => /^weapon(?:full)?,/.test(l)).map(l => l.split(',')[1].trim()).filter(Boolean)
 );
 // The engine STRIPS a trailing "_zm" from an asset name, so the script name and
 // the weapons-table name are the asset name without it (see the evidence block in
@@ -58,6 +73,7 @@ const reGun = /register_gun\(\s*"([^"]+)"\s*,\s*(\d+)\s*,\s*"([^"]+)"\s*,\s*"([^
 for (let m; (m = reGun.exec(gsc)); ) {
   const [, cls, tier, stem, upSuffix, axesRaw] = m;
   const letters = [...axesRaw.matchAll(/,\s*"([a-z])"/g)].map(x => x[1]);
+  if (GATED.has(cls)) continue;   // registered behind a compile-time gate that is OFF
   guns.push({ cls, tier: +tier, stem, upSuffix, letters, baseTail: '', upTail: '' });
 }
 if (!guns.length) errors.push('parsed ZERO register_gun lines — the regex has drifted from the source');
@@ -77,7 +93,7 @@ const variantName = (g, isUp, suffix) =>
 // Every ladder combination the upgrade system can walk to. Level caps come from
 // the generator's AXIS table, mirrored here; a mismatch shows up as a missing
 // asset rather than passing silently.
-const AXIS_LEVELS = { f: 3, h: 3, r: 2, m: 3, k: 5, p: 2 };
+const AXIS_LEVELS = { f: 3, h: 3, r: 2, m: 3, k: 5, p: 2, q: 1, d: 1 };
 function combos(letters) {
   if (!letters.length) return ['_b'];
   let out = [''];
@@ -121,6 +137,19 @@ for (const g of guns) {
     }
     // the BASE form is the one PaP looks up; the _up form is the row's target
     const baseName = variantName(g, false, suffix);
+    // A GUN WITH AN EMPTY up_suffix HAS NO PACKED FORM ON PURPOSE, so it owes
+    // no weapons-table row and "PaP refuses it" is the DESIGN, not a defect.
+    // The MAGE staff is the first (user 2026-09-07: "let's not let it [PaP]"),
+    // shipped base-only to fit three rungs into a full registration ledger.
+    //
+    // THIS IS NARROW BY CONSTRUCTION AND MUST STAY NARROW. It keys on the
+    // REGISTERED SUFFIX being empty, which only a deliberate register_gun call
+    // can produce -- it does NOT skip a gun whose PaP row merely went missing,
+    // which is the entire bug this check exists to catch (the Enfield and all
+    // three blades, silently un-packable for weeks). Every gun that declares a
+    // packed form is still held to the same rule.
+    const baseOnly = ( g.upSuffix === "" || g.upSuffix === undefined );
+    if (baseOnly) continue;
     rowsChecked++;
     if (!rowFor.has(baseName))
       errors.push(`${g.cls} T${g.tier} ${g.stem}: "${baseName}" is linked but has NO weapons-table row — the gun works, PaP silently refuses it`);
@@ -152,7 +181,7 @@ const linkedAllRaw = new Set();
   }
   for (const f of files)
     for (const l of fs.readFileSync(f, 'utf8').split(/\r?\n/))
-      if (l.startsWith('weapon,')) linkedAllRaw.add(l.slice(7).trim());
+      if (/^weapon(?:full)?,/.test(l)) linkedAllRaw.add(l.split(',')[1].trim());
 }
 const linkedAll = { has: n => linkedAllRaw.has(n) || linkedAllRaw.has(n + '_zm') };
 
@@ -175,4 +204,5 @@ if (errors.length) {
 }
 console.log(`weapon/PaP names OK — ${guns.length} guns, ${checked} GSC-requested names, ` +
             `${rowsChecked} base variants + ${secChecked} secondaries all have weapons-table rows, ` +
-            `${csvLines.length} CSV rows, all resolve to linked assets`);
+            `${csvLines.length} CSV rows, all resolve to linked assets` +
+            (MAGE_ON ? '' : '  [mage: GATED OFF, its guns not checked]'));

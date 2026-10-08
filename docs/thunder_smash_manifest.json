@@ -1,0 +1,24 @@
+{
+  "sources": {
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\_custom\\wetegg\\leviathanaxe\\leviathanaxe.gdt.acc-balance0709-orig": "30a647b3c37ebb019f7f7f117381185386d8b0f74cc85347fb9e461d36cbc5c7",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\_custom\\wetegg\\leviathanaxe\\xanims\\vm_fireaxe_idle.xanim_bin": "4c5607e53f52e6b23d7b4e01fd640ee83ebbc34ba21bf5976ac91e850f82f8b1",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_baseball_bat\\vm_t9_bat_melee_in.xanim_bin": "7b26f20f493bbe1dc6f39154c6c1300fb7a80bf258024da8eb2a73c66c1c825e",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_baseball_bat\\vm_t9_bat_melee_out.xanim_bin": "971e620936493ecc8f21a75955c43331591ba6dceb8d130d14e550ea44d53c42",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\model_export\\tod_baseball_bat\\wpn_t9_baseballbat_anim.xmodel_bin": "f3038c53d7ee7284b503a7e0504a1268e8aca0045222e9ec0e426b3fbbf501e1"
+  },
+  "files": {
+    "xanim_export/tod_thunder_smash/tod_thunder_smash_cast.XANIM_BIN": "93233abd505f955a8b3752009ca1071becfc5e74431a223df2dcdca6792b6742",
+    "model_export/tod_thunder_smash/tod_thunder_smash_rig.XMODEL_BIN": "f3038c53d7ee7284b503a7e0504a1268e8aca0045222e9ec0e426b3fbbf501e1",
+    "source_data/tod_thunder_smash.gdt": "e0814a9fce6df11bfb68ba801936a1d35516100677ee06dcf5f115ae100eaf96"
+  },
+  "frames": 63,
+  "fps": 30,
+  "impact_frame": 29,
+  "impact_ms": 967,
+  "animation_ms": 2100,
+  "donor_in_frames": 10,
+  "donor_out_frames": 35,
+  "bones": 76,
+  "weapon_registrations_added": 0,
+  "native_verified": false
+}

@@ -1,0 +1,16 @@
+{
+  "note": "Regression baseline for lint_tod_assets.js GATE B. Lower is better. NEVER raise a number to make the lint green - fix the art, or replace the matching 'why' entry with the reason the new number is correct. GATE A (missing art) has no baseline: it is always a hard fail. `--update-baseline` carries this block forward and names any number that went up.",
+  "updated": "2026-09-21",
+  "why": {
+    "deadSlugs": "0 - every CARD_SLUG entry maps to a live domain. v16.86 cleared the last four (11 echo_rounds, 12 regen, 30 meat_grinder, 34 momentum). Above 0 means a domain was retired without its slug: remove the slug AND its card zone lines together, the v16.80/v16.86 pattern.",
+    "deadCards": "0 - no zoned card lacks a slug that declares it.",
+    "deadPlates": "11 - ACCEPTED BY CONVENTION, not an oversight, and the 11th has a reason as this block demands. Pause plates for retired domains (r09 mobility, r11 echo, r12 regen, r22 lunge, r27 killreload, r28 impact, r30 grinder, r32 sprintarmor, r34 momentum, r40 perkslots, and r47 deadshot since v19.25) stay zoned. r47 JOINED THEM WHEN DEADSHOT WAS RETIRED (2026-09-21, user: \"not liked or helpful\") and it is the one part of that domain deliberately NOT retired with the rest: PAUSE_PLATE_MAX is a CONTIGUOUS ceiling at 56, so unzoning r47 would force the ceiling down to 46 and cost the nine rows above it (48..56, every Mage row plus MYSTICAL HANDS) their plates - a white square or a downgrade on live domains to save one dead 300x44 image. They are ~52 KB of load RAM each, ~0.55 MB total. Do not add a 12th without a reason here.",
+    "unnamed": "179 - ADVISORY bucket: zoned i_tod_* art no Lua LITERAL names. Most is reached by a constructed name this lint does not model (gauge cells, luck strips, badges, spire tiles, banners drawn from GSC via materials). The 8 TCLS tier cards are NOT in here - they are gated by GATE A since v16.88a. A real subset is genuinely never drawn (the composite-lane frame/icon set behind USE_CARD_SET_ART, the keyed hint plates, i_tod_card_base) - about 1 MB of disk / 14 MB of load RAM, left alone deliberately: clearing it needs the slug-and-line pairing per image and there is no per-image reachability proof yet. See docs/86 section 9. 2026-09-21: 209 -> 179 as DEADSHOT's card and perk crest were unzoned with the domain; the baseline is tightened to the real number rather than left slack."
+  },
+  "counts": {
+    "deadSlugs": 0,
+    "deadCards": 0,
+    "deadPlates": 11,
+    "unnamed": 179
+  }
+}

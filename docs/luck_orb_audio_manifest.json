@@ -1,0 +1,68 @@
+{
+  "archive": "Origins-Soul-Box-OriginsSoulBox-v1.0.0.zip",
+  "archive_sha256": "bbe7b7a84f9050d1bca1399341eaea4b5bc6b54fe3cd2f1ca2d07dbb6a5602db",
+  "credits": [
+    "Fanatic",
+    "Scobalula",
+    "HarryBo21",
+    "Treyarch"
+  ],
+  "sounds": {
+    "tod_luck_soul_release": {
+      "source_alias": "snd_ori_soul_flush",
+      "archive_member": "Origins-Soul-Box-OriginsSoulBox-v1.0.0/sound_assets/zmb/zmb_blops/evt/zombie_moon/_sidequest/sq/evt_souls_flush.wav",
+      "file": "sound_assets/tod/luck/evt_souls_flush.wav",
+      "sha256": "2ae890d9a1b388434738d87e0fc28d55e163f421b2d43c6d61d95e36777f87ba",
+      "seconds": 1.1733333333333333
+    },
+    "tod_luck_soul_travel": {
+      "source_alias": "snd_ori_charge_soul_full_loop",
+      "archive_member": "Origins-Soul-Box-OriginsSoulBox-v1.0.0/sound_assets/zmb/zmb_blops/evt/zombie_moon/_sidequest/sq/evt_souls_full_loop.wav",
+      "file": "sound_assets/tod/luck/evt_souls_full_loop.wav",
+      "sha256": "a6a0bb84635575c1e06cc57473034660d2c711c96ff010f9b1f7422c7572cd6d",
+      "seconds": 1.8310625
+    },
+    "tod_luck_soul_arrive": {
+      "source_alias": "snd_ori_soul_impact",
+      "archive_member": "Origins-Soul-Box-OriginsSoulBox-v1.0.0/sound_assets/zmb/zmb_blops/evt/zombie_moon/_sidequest/sq/evt_tube_stop.wav",
+      "file": "sound_assets/tod/luck/evt_tube_stop.wav",
+      "sha256": "64ca12622b43e3af7090ee671e4a450393a8386c5a45bcd75f302282cff0ea51",
+      "seconds": 0.9706666666666667
+    },
+    "tod_luck_soul_full": {
+      "source_alias": "snd_ori_charge_soul_full",
+      "archive_member": "Origins-Soul-Box-OriginsSoulBox-v1.0.0/sound_assets/zmb/zmb_blops/evt/zombie_moon/_sidequest/sq/evt_souls_full.wav",
+      "file": "sound_assets/tod/luck/evt_souls_full.wav",
+      "sha256": "bdd37dff7a282de480b6df7cccbd4eba69462e90c625fa8836d80b1fe69eb77e",
+      "seconds": 4.256958333333333
+    },
+    "tod_luck_box_open": {
+      "source_alias": "snd_ori_soul_box_open",
+      "archive_member": "Origins-Soul-Box-OriginsSoulBox-v1.0.0/sound_assets/zmb/level/zm_tomb/fpbox/challenge_box_open.wav",
+      "file": "sound_assets/tod/luck/challenge_box_open.wav",
+      "sha256": "8accbe524cadd43ee98b28765b214b3b3829c898fb8ca29b755c4f8b23baa603",
+      "seconds": 3.5653333333333332
+    },
+    "tod_luck_box_close": {
+      "source_alias": "snd_ori_soul_box_close",
+      "archive_member": "Origins-Soul-Box-OriginsSoulBox-v1.0.0/sound_assets/zmb/level/zm_tomb/fpbox/challenge_box_close_r3.wav",
+      "file": "sound_assets/tod/luck/challenge_box_close_r3.wav",
+      "sha256": "cd1b2133a5a3571b4433658b3f6b0469e254e20814d195145a0bf049d56f035c",
+      "seconds": 2.5459791666666667
+    },
+    "tod_luck_box_fire": {
+      "source_alias": "snd_ori_soul_box_fire_lp",
+      "archive_member": "Origins-Soul-Box-OriginsSoulBox-v1.0.0/sound_assets/zmb/level/zm_tomb/fpbox/challenge_box_fire_r3.wav",
+      "file": "sound_assets/tod/luck/challenge_box_fire_r3.wav",
+      "sha256": "bd83fe7d318272f10dc6982a824f00dae870ba4141e56b2b92bc0f21c42a37d7",
+      "seconds": 4.991979166666667
+    },
+    "tod_luck_box_disappear": {
+      "source_alias": "snd_ori_soul_box_disappear",
+      "archive_member": "Origins-Soul-Box-OriginsSoulBox-v1.0.0/sound_assets/zmb/level/zm_tomb/fpbox/disappear.wav",
+      "file": "sound_assets/tod/luck/disappear.wav",
+      "sha256": "610178267a81c68a4717ef8a95aa4dafb90558e609775f5f45a821bc4e227412",
+      "seconds": 4.943833333333333
+    }
+  }
+}

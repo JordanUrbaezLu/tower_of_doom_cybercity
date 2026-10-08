@@ -36,7 +36,7 @@ function __init__()
 	clientfield::register( "clientuimodel", "todMagBonus", VERSION_SHIP, 1, "int", undefined, !CF_HOST_ONLY, !CF_CALLBACK_ZERO_ON_NEW_ENT );   // dead field, 7 -> 1 (2026-08-22)
 	// 13 -> 14 bits in LOCKSTEP with the .gsc register (v13.9 reduced/red bit —
 	// mismatched widths here are the boot-fatal clientfield desync).
-	clientfield::register( "clientuimodel", "todDmgNum",  VERSION_SHIP, 14, "int", undefined, !CF_HOST_ONLY, !CF_CALLBACK_ZERO_ON_NEW_ENT );
+	clientfield::register( "clientuimodel", "todDmgNum",  VERSION_SHIP, 15, "int", undefined, !CF_HOST_ONLY, !CF_CALLBACK_ZERO_ON_NEW_ENT );   // 14 -> 15 (2026-09-09): scale bit, LOCKSTEP with the GSC
 	// THE FINALE ROAD BANNER (v10.26) — mirrors the server registration in
 	// _tod_upgrade_ui.gsc bit for bit. A mismatch here is a silent desync, not
 	// an error: the field simply never arrives.
@@ -51,4 +51,32 @@ function __init__()
 	// proven bits either way — but the two files claim to be twins, so they read
 	// as twins.
 	clientfield::register( "clientuimodel", "todFinaleWarn", VERSION_SHIP, 1, "int", undefined, !CF_HOST_ONLY, !CF_CALLBACK_ZERO_ON_NEW_ENT );
+	// RAMPAGE INDUCER (v14.20) — mirrors the .gsc twin BIT FOR BIT and in the
+	// SAME ORDER. A width or order mismatch here is not an error, it is a
+	// silent desync: the field simply never arrives. Appended last in both VMs.
+	clientfield::register( "clientuimodel", "todRampage",  VERSION_SHIP, 1, "int", undefined, !CF_HOST_ONLY, !CF_CALLBACK_ZERO_ON_NEW_ENT );
+	// v17.93 FULL STEAM wind, player-only — LOCKSTEP with the .gsc twin (see there).
+	clientfield::register( "toplayer", "todSteamWind", VERSION_SHIP, 1, "int", &steam_wind_cb, !CF_HOST_ONLY, CF_CALLBACK_ZERO_ON_NEW_ENT );
+}
+
+// v17.93 FULL STEAM's wind, on THIS machine only. self = the player whose
+// field changed — NOT necessarily the local player: the host's client VM sees
+// every player's toplayer fields, and a spectator sees the spectated player's
+// (the Death Perception outline leak of 2026-08-30, _tod_perk_electric_cherry
+// .csc). The local guard is what makes "player-only" true.
+// CLIENT-SIDE StopLoopSound TAKES THE HANDLE PlayLoopSound RETURNED (memory
+// loop-sound-stop-by-handle; stock _hive_gun.csc:120) — never a fade time.
+// The alias is 2D + LOOPING (sound/aliases/tod_ui.csv), so played here it is
+// non-positional for the owner and inaudible to everyone else.
+function steam_wind_cb( localClientNum, oldVal, newVal, bNewEnt, bInitialSnap, fieldName, bWasTimeJump )
+{
+	if ( self != GetLocalPlayer( localClientNum ) )
+		return;
+	if ( isdefined( self.tod_steam_wind_snd ) )
+	{
+		self StopLoopSound( self.tod_steam_wind_snd );
+		self.tod_steam_wind_snd = undefined;
+	}
+	if ( isdefined( newVal ) && newVal > 0 )
+		self.tod_steam_wind_snd = self PlayLoopSound( "tod_full_steam_wind" );   // LOCKSTEP: TOD_LMGS_SFX in _tod_upgrades.gsc
 }

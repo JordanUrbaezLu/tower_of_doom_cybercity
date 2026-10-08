@@ -1,0 +1,7 @@
+{
+  "why": {
+    "_rule": "Every family listed under families must carry a reason here. The target is ZERO: gen_tower_map.js closes every perch the model finds (PERCH CAPS + PERCH SEAL) before it writes the .map. Never add a family to make the gate green; fix the generator.",
+    "_v19.71": "2026-10-03 baseline written at the perch pass: 0 perch faces (v19.70's map had 1,499 in 115 families - every ammo crate, the Rampage switch, the power terminal, the invisible rail caps, the trial-hall fences/lamps/pillars/lintels, the lap-door lintels, the gallery caps, the hoop recess, the rocket wreck)."
+  },
+  "families": {}
+}

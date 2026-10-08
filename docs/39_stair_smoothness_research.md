@@ -651,6 +651,8 @@ lit.** Bake: no new lightmap charts. Navmesh: see G1a/G1b.
     compilers do; nobody ran a build.
 *Two material sub-options, and they are a real decision:*
 
+  > **UPDATE 2026-09-02 (v16.61a): G1a ADOPTED.** The G1b `clip_player` wedges shipped 2026-08-27 and were walked for six days; the AI-side half turned out to be the root cause of the user's "Deadshot bounces tracking a zombie up stairs" (zombies were still climbing the 16 stepped treads — the only BO3 stair AI climbs on stepped collision). `MAT.rampClip` is plain `clip` now; the lounges' window voids kept `clip_player` under a new `MAT.winClip`. The horde walk G1a asks for is the v16.61a test. Record: CHANGELOG v16.61a, memory `stair-ramp-clip`.
+
   **G1a — `clip` (cuts navmesh; zombies walk the ramp too).** This is
   Treyarch's shipped configuration. 20.556° against `maxWalkableSlope 46`, and a
   planar surface is *strictly better-conditioned* navmesh input than 16 treads.

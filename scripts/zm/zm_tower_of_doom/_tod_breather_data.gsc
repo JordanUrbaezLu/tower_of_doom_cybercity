@@ -11,20 +11,45 @@
 // mid-slab z of each breather lounge, ascending (laps 10/20/30/40)
 function breather_zs() { return array( 3648, 7488, 11328, 15168 ); }
 
+// Shared room detection for the arrival chime and spawn-pressure relief.
+function lounge_index_at( o )
+{
+    zs = breather_zs();
+    for ( j = 0; j < zs.size; j++ )
+    {
+        if ( o[ 2 ] < zs[ j ] - 64 || o[ 2 ] > zs[ j ] + 256 ) continue;
+        if ( o[ 0 ] >= -900 && o[ 0 ] <= -200 && o[ 1 ] >= -1550 && o[ 1 ] <= -400 ) return j;
+    }
+    return -1;
+}
+
 // PACK-A-PUNCH — W wall, facing east into the room
-function pap_org( z ) { return ( -744, -680, z ); }
-function pap_trig( z ) { return ( -688, -680, z ); }
+function pap_org( z ) { return ( -780, -704, z ); }
+function pap_trig( z ) { return ( -724, -704, z ); }
 function pap_yaw() { return 90; }
 
 // UPGRADE STATION — N wall (entrance side), facing south into the room
-function station_org( z ) { return ( -500, -460, z ); }
-function station_trig( z ) { return ( -500, -516, z ); }
+function station_org( z ) { return ( -520, -436, z ); }
+function station_trig( z ) { return ( -520, -492, z ); }
 function station_yaw() { return 359.999; }
 
 // AMMO CRATE — E wall, facing west (its collision clip in the .map is cut
 // from this same origin: label "ammo crate body", lint MODEL_CLIP_COLUMNS)
-function crate_org( z ) { return ( -310, -700, z ); }
-function crate_yaw() { return 270; }
+function crate_org( z ) { return ( -294, -700, z ); }
+function crate_yaw() { return 90; }
+
+// THE CRATE TRIGGER RECIPE (v17.38; re-centred 2026-09-24) — read by
+// _tod_ammo_crate::spawn_trigger for EVERY crate in the map (tower and spire):
+// the trigger_radius_use sits crate_trig_out() in FRONT of the crate origin
+// (front = yaw + 90) and crate_trig_lat() along the front turned +90 (the clip
+// box's own centre line), crate_trig_lift() up (above the clip top, so a standing
+// player's sight line clears the crate from its long sides), with this radius.
+// The generator asserts the same numbers against every other vendor trigger in
+// the lounges and the hub halls, so they live here, once.
+function crate_trig_out()  { return 33; }
+function crate_trig_lat()  { return 0; }
+function crate_trig_lift() { return 60; }
+function crate_trig_r()    { return 100; }
 
 // BASE AMMO CRATE — core WEST face at the base arena, ABSOLUTE coords (no
 // mirror frame; the base is authored absolute). v14.3: origin lives in the
@@ -32,8 +57,54 @@ function crate_yaw() { return 270; }
 // brush and asserts it clear of the lap-1 E flight — the Workshop navmesh
 // report (Pinkbrotha4310 2026-08-30) is the reason this rides the no-drift
 // contract instead of a hand-typed GSC literal.
-function base_crate_org() { return ( -320, 0, 0 ); }
-function base_crate_yaw() { return 270; }
+function base_crate_org() { return ( -294, 0, 0 ); }
+function base_crate_yaw() { return 90; }
+
+// THE BASE UPGRADE STATION (v19.71) — the Heavenly Gift Altar, flush against the
+// core's south face (BASE_STATION in the generator, which also emits its perch cap).
+// _tod_upgrades.gsc station_spawn reads these; it hand-typed (0,-320) until v19.71.
+function base_station_org() { return ( 0, -276, 0 ); }
+function base_station_trig() { return ( 0, -316, 0 ); }
+function base_station_yaw() { return 359.999; }
+
+// THE CYBERCITY SIGN (v19.69) — Nikolai's neon sign on the core WEST face, over
+// the spawn band. The anchor is the model's back plane / horizontal centre /
+// bottom edge, 0.5 proud of the face; the generator (BASE_SIGN) asserts it clear
+// of the lap-2 W flight, the base ammo chest and the face's corners from the
+// model's measured size. _tod_base_sign.gsc reads both.
+function base_sign_org() { return ( -256.5, 0, 160 ); }
+function base_sign_yaw() { return 180; }
+
+// THE POWER TERMINAL (v19.69) — Nikolai's Grid Terminal V5 on the power hall's
+// east end wall, replacing the stock lever. The anchor is the model's back plane /
+// horizontal centre / floor, 0.5 proud of the wall; the generator (POWER_TERM)
+// emits its clip, the stock switch trigger / handle / fx struct and asserts it
+// clear of the hall walls, the song-hunt bear and the POWER word. Read by
+// _tod_power_terminal.gsc.
+function base_power_terminal_org() { return ( 1619.5, -464, 0 ); }
+function base_power_terminal_yaw() { return 180; }
+
+// THE RAMPAGE INDUCER (v18.99g) — the BO6 aether canister on its cyan
+// pedestal against the base arena south wall, across from Quick Revive.
+// _tod_rampage.gsc reads all three; the generator cuts the pedestal brush
+// ("base inducer plinth") from the same constants and ASSERTS the trigger
+// origin is outside it, because a use-trigger whose origin is inside a
+// solid never prompts — which is exactly how v18.99f shipped dead.
+function base_inducer_org()  { return ( -280, -516, 0 ); }
+function base_inducer_trig() { return ( -280, -516, 0 ); }
+function base_inducer_yaw()  { return 90; }
+function base_inducer_trig_r() { return 96; }
+// 2026-10-02: the trigger rides above the body clip (INDUCER_CLIP_H) - read this,
+// never a script literal, so the two heights cannot drift.
+function base_inducer_trig_lift() { return 44; }
+
+// THE HOOP (v19.18) — the bat target cut into the core south face above the
+// base upgrade station. _tod_corpse_cleanup::hoop_watch scores a flung body
+// whose spine enters this box; the generator cut the recess and rim from the
+// same numbers, so the target the player sees IS the volume the script tests.
+// lo.y includes the rim standoff so a body entering the mouth counts.
+function base_hoop_lo() { return ( -48, -272, 200 ); }
+function base_hoop_hi() { return ( 48, -192, 296 ); }
 
 // TELEPORTER — the pad out on the spur platform, and where up-riders land
 // (160u up the gantry toward the room: outside the pad's 120u gather,

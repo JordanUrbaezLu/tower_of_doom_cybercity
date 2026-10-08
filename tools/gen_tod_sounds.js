@@ -43,10 +43,16 @@ const OUT = path.join(__dirname, '..', 'sound', 'aliases', 'tod_weapons.csv');
 const GUNS = [
   { asset: 't9_krig6',    wavDir: 't9_krig6',    skipFire: [],             enabled: true },
   { asset: 't9_mp5',      wavDir: 't9_mp5',      skipFire: [],             enabled: true },
-  { asset: 't9_stoner63', wavDir: 't9_stoner63', skipFire: ['trig_pull'],  enabled: true },
+  // RETIRED v19.10 (2026-09-15): the heavy's T1 is the MK 48 (t6_mk48, a BO2
+  // port whose rows are hand-authored in tod_ports.csv). The Stoner is in no
+  // ladder, no zone line and no script - these 75 alias rows and their wavs
+  // were pure bank weight. Flip enabled back to true if it ever returns.
+  { asset: 't9_stoner63', wavDir: 't9_stoner63', skipFire: ['trig_pull'],  enabled: false },
   // MAC-10 (skirmisher T1): full t9 fire set (shot1-6, trig_pull1-6, mech1-6,
   // sub, pap_flux) + 12 foley wavs matching the GDT's 12 foley aliases 1:1.
-  { asset: 't9_mac10',    wavDir: 't9_mac10',    skipFire: [],             enabled: true },   // Phase 2a
+  // RETIRED v19.10 (2026-09-15): the skirmisher's T1 is the MSMC (t6_msmc).
+  // Same story as the Stoner above - 84 dead alias rows and their wavs.
+  { asset: 't9_mac10',    wavDir: 't9_mac10',    skipFire: [],             enabled: false },   // Phase 2a (retired)
   // AK-47 (assault T3): the fire template IS t9_ak47 (identity rename); 17 foley wavs.
   { asset: 't9_ak47',     wavDir: 't9_ak47',     skipFire: [],             enabled: true },   // Phase 2e
   // PER-CLASS SECONDARIES (2026-08-23). Only the two CW (t9) sidearms ride this
@@ -171,12 +177,11 @@ for (const gun of GUNS) {
     + (unbound.length ? '   [no wav, will be silent: ' + unbound.join(', ') + ']' : ''));
 }
 
-// The Streetsweeper stays linked (zone weapon lines) though nothing can reach
-// it yet — keep its proven rows so the linker never loses them.
-const KEEP_RE = /^wpn_t9_streetsweeper/;
-const kept = lines.slice(1).filter(l => KEEP_RE.test(l));
-out.push(...kept);
-report.push('streetsweeper copied: ' + kept.length);
+// The Streetsweeper's 30 rows were carried here by a KEEP block from 2026-08
+// ("stays linked though nothing can reach it yet"). It never became reachable
+// — it was the retired MEDIC class's gun — and its two zone lines went on
+// 2026-09-03 (docs/86 §8), so the rows go with them; every alias it carried
+// was self-referential (copied from the previous CSV, no GDT asks for it).
 
 // ---- SIMPLE PORTS — the secondary ladder's non-t9 guns (2026-08-24) --------
 // The recipe above only fits SKYE CW (t9) ports: they all ship the same fire

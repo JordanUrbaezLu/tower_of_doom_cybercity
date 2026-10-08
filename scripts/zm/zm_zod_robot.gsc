@@ -336,15 +336,23 @@ function zod_robot_spawn_fx( v_ground_position )
 	e_fx_model delete();
 }
 
+// Shared by Civil Protector and Tower drop-in landings. Armored sprinters
+// deliberately lack boss flags, so landing immunity must also read their flag.
+// Keep this specific to entrance damage; do not change global enemy balance.
+function landing_splash_immune( actor )
+{
+	if ( !isdefined( actor ) || !IsAlive( actor ) ) return true;
+	return ( IS_TRUE( actor.is_boss ) || IS_TRUE( actor.acc_is_boss )
+	      || IS_TRUE( actor.acc_is_mini_boss ) || IS_TRUE( actor.tod_is_sprinter )
+	      || isdefined( actor.tod_boss_kind ) );
+}
+
 function zod_robot_do_landing_damage( v_origin, e_attacker, n_radius )
 {
 	a_ai_zombies = array::get_all_closest( v_origin, getAITeamArray( "axis" ), undefined, undefined, n_radius );
 	foreach ( ai_zombie in a_ai_zombies )
 	{
-		// [acc] BOSS FILTER (2026-07-06 sweep): the insta-kill splash (health+10000) must never hit a
-		// boss - calling the Civil Protector next to a live Brutus/Phantom/Rogue was a free boss kill.
-		// Same exclusion as _acc_civil_protector::landing_kill_splash (the multi-boss fix, 2026-07-03).
-		if ( IS_TRUE( ai_zombie.is_boss ) || IS_TRUE( ai_zombie.acc_is_boss ) || IS_TRUE( ai_zombie.acc_is_mini_boss ) )
+		if ( landing_splash_immune( ai_zombie ) )
 			continue;
 		if ( isDefined( e_attacker ) )
 			ai_zombie doDamage( ai_zombie.health + 10000, ai_zombie.origin, e_attacker );

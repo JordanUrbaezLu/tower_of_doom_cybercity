@@ -1,0 +1,123 @@
+{
+  "sources": {
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\_custom\\_wetegg\\models\\sat\\t10_zm_machine_d_mod\\t10_zm_machine_d_mod.gdt": "b4fa790a8e4c1d76b77bde1578e6684375ce5f4dc8d3728468e17f29aa5c557b",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\_custom\\_wetegg\\models\\sat\\t10_zm_machine_d_mod\\xanims\\t10_fxanim_zm_machine_d_mod_intro.xanim_bin": "9fb4c6627f027c2bbd8ab2ffeffef407d23cec33587d2ae99e07fbbff0ddd11d",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\_custom\\_wetegg\\models\\sat\\t10_zm_machine_d_mod\\xmodels\\t10_zm_machine_d_mod_cowboy_fxanim_on.xmodel_bin": "b47c49b430f88f77ec8fdd15be96820e3875e49e64faafde624b2a3f4d7fffd8",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\_custom\\_wetegg\\models\\sat\\t10_zm_machine_d_mod\\xanims\\t10_fxanim_zm_machine_d_mod_loop.xanim_bin": "81bbfcf668c39b53a58ad4a26a6fcb8fd50c929e2afac28a5e6fc9bf6a13380c",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\_custom\\_wetegg\\models\\sat\\t10_zm_machine_d_mod\\xanims\\t10_fxanim_zm_machine_d_mod_outro.xanim_bin": "8d6027466d26f3f0a9fad44d43d285322e5ecdcdb51d4c9fd1710b321f96792b",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\_custom\\_wetegg\\models\\sat\\sat_zm_machine_w_mod\\sat_zm_machine_w_mod.gdt": "a326947108ddd1b1c9317d0a95ed843dbf3bb8d022fa4296fed628c9b5312fb1",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\_custom\\_wetegg\\models\\sat\\sat_zm_machine_w_mod\\xanims\\anim_2f28cb2f33eaab2f.xanim_bin": "b90d66e53ad572ba99f2072878c5aff58ed9f7c1ab74f935265feb8b3c32357d",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\_custom\\_wetegg\\models\\sat\\sat_zm_machine_w_mod\\xmodels\\sat_zm_machine_w_mod_fxanim_on.xmodel_bin": "25143f137746f3c76642ac6d5d6ca1d4006ee8daf1eca6a7f2d7642f9c284297",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\perk_machine_fix_20260922\\vendor\\SATPerksCode\\share\\raw\\fx\\_wetegg\\sat\\perks\\fx_double_tap_zombie_eye_glow_red.efx": "8543b3f41afc6453a07a37031b574d2e4b2a91eb5a81dd089e7fd60ce17b0ba1",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\perk_machine_fix_20260922\\vendor\\SATPerksCode\\share\\raw\\fx\\_wetegg\\sat\\perks\\fx_wisp_tea_activate.efx": "20b338224dd04f5024f32bcb880f42479e2b383e29f9921dc0378f23035befc8",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\perk_machine_fix_20260922\\vendor\\SATPerksCode\\share\\raw\\fx\\_wetegg\\sat\\perks\\fx_mule_kick_bullet_fire_fx.efx": "e916b5e814fcf9a59641eee52be6a2349d499cb8a6a107bbffe00140c15125f7",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\perk_machine_fix_20260922\\assets\\SATPerksAssets\\sound_assets\\_wetegg\\sat\\perks\\sound_357ee90578d7b033.wav": "6487e0bdef7869e5c9a0537225a235a6185bb0683b3624be7b1f3cbd702d9f44",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\perk_machine_fix_20260922\\assets\\SATPerksAssets\\sound_assets\\_wetegg\\sat\\perks\\sound_3dece82250a72ae3.wav": "cdf7212d92545c3129757cb843ac064eea8bce596e755ff8062455920bc3547d",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\perk_machine_fix_20260922\\assets\\SATPerksAssets\\sound_assets\\_wetegg\\sat\\perks\\sound_5ade0dcb4d79f3d3.wav": "5dd7bedf655fd9caaa9f962a959e2a62e8651813a71d3b20376fadeb19bd6fe3",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\perk_machine_fix_20260922\\assets\\SATPerksAssets\\sound_assets\\_wetegg\\sat\\perks\\sound_4ddfde3cf62fb02c.wav": "3b3dbd65dc85538d6ea9efbb7fae3ce4b3165f205c3835ace307ecd63068f071",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\perk_machine_fix_20260922\\assets\\SATPerksAssets\\sound_assets\\_wetegg\\sat\\perks\\sound_3f26b4dc9c90bd59.wav": "982a07f1fdf3a632b38777193c4d22d0c4d0dfbffa10f833e933caadf66ed10b",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\perk_machine_fix_20260922\\assets\\SATPerksAssets\\sound_assets\\_wetegg\\sat\\perks\\sound_65ab2d264fa45af6.wav": "013fa95a3f35b2a361d6d16ed98d0a5b147df063aced6ebb064483aaefc26c21",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\perk_machine_fix_20260922\\assets\\SATPerksAssets\\sound_assets\\_wetegg\\sat\\perks\\sound_430556a2f18d920b.wav": "27d70a5d8bfb6b45c572358b1db78ab27400a0f039cf9e85285b7ab011f4274b",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\perk_machine_fix_20260922\\assets\\SATPerksAssets\\sound_assets\\_wetegg\\sat\\perks\\sound_10b1f28d169fba80.wav": "1e5de40d470ccec89bad55cd95ded21e743d9e51235061703481360996e1e098",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\perk_machine_fix_20260922\\assets\\SATPerksAssets\\sound_assets\\_wetegg\\sat\\perks\\sound_1086a29e95494a7d.wav": "1f01e55a9bc853f321f03e683c4451150b6b52dc34dec1166a789f3d9831ddfc",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\perk_machine_fix_20260922\\assets\\SATPerksAssets\\sound_assets\\_wetegg\\sat\\perks\\sound_4d4f3604e469be9a.wav": "ffb9aa76a8df77e0cf61b9551f61d0e828d88d5ba8077fd5b638d38fa50c3c76",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\perk_machine_fix_20260922\\assets\\SATPerksAssets\\sound_assets\\_wetegg\\sat\\perks\\sound_61abea5bba35d33f.wav": "2282d0b050335c49dad877cb14289b0a5499410584b1101771d4c682bc257aa5",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\perk_machine_fix_20260922\\assets\\SATPerksAssets\\sound_assets\\_wetegg\\sat\\perks\\sound_7fbf6df4da142694.wav": "9fb4751879caf1401567f882c5cf874e618f83544550bdbc2aaa4a93f7bf5d45",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\perk_machine_fix_20260922\\assets\\SATPerksAssets\\sound_assets\\_wetegg\\sat\\perks\\sound_29996edc59aa8421.wav": "14ff958b4a45f8a30d76566c473ec00d95d08af3b91f78ab895773223faa5b93",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\perk_machine_fix_20260922\\assets\\SATPerksAssets\\sound_assets\\_wetegg\\sat\\perks\\sound_2f2b0dc178ff7e17.wav": "2c46e19f4af86cd773dae3a924116e0be8166dc9781571bf6e19ff69fec18eb0"
+  },
+  "shots": [
+    [
+      1,
+      "le"
+    ],
+    [
+      8,
+      "ri"
+    ],
+    [
+      15,
+      "le"
+    ],
+    [
+      21,
+      "ri"
+    ],
+    [
+      24,
+      "le"
+    ],
+    [
+      27,
+      "ri"
+    ],
+    [
+      34,
+      "le"
+    ],
+    [
+      35,
+      "ri"
+    ],
+    [
+      42,
+      "le"
+    ],
+    [
+      43,
+      "ri"
+    ],
+    [
+      49,
+      "le"
+    ],
+    [
+      52,
+      "ri"
+    ],
+    [
+      59,
+      "le"
+    ],
+    [
+      61,
+      "ri"
+    ],
+    [
+      67,
+      "le"
+    ],
+    [
+      70,
+      "ri"
+    ]
+  ],
+  "files": {
+    "model_export/tod_perk_machines/sat_zm_machine_w_mod_fxanim_on.xmodel_bin": "25143f137746f3c76642ac6d5d6ca1d4006ee8daf1eca6a7f2d7642f9c284297",
+    "model_export/tod_perk_machines/t10_zm_machine_d_mod_cowboy_fxanim_on.xmodel_bin": "b47c49b430f88f77ec8fdd15be96820e3875e49e64faafde624b2a3f4d7fffd8",
+    "share/raw/fx/_wetegg/sat/perks/fx_double_tap_zombie_eye_glow_red.efx": "8543b3f41afc6453a07a37031b574d2e4b2a91eb5a81dd089e7fd60ce17b0ba1",
+    "share/raw/fx/_wetegg/sat/perks/fx_wisp_tea_activate.efx": "20b338224dd04f5024f32bcb880f42479e2b383e29f9921dc0378f23035befc8",
+    "share/raw/fx/tod/perks/doubletap_muzzle.efx": "3ffa1bc3cdfe0c8caa924a4f538d3993e87c6982453d4964980fda828f755a5d",
+    "sound/aliases/tod_perk_machines.csv": "bc8bb03b6db9ef751dd6de850c6d95da7e4c693e957b3a5360e2ba1c559fb847",
+    "sound_assets/_wetegg/sat/perks/sound_1086a29e95494a7d.wav": "1f01e55a9bc853f321f03e683c4451150b6b52dc34dec1166a789f3d9831ddfc",
+    "sound_assets/_wetegg/sat/perks/sound_10b1f28d169fba80.wav": "1e5de40d470ccec89bad55cd95ded21e743d9e51235061703481360996e1e098",
+    "sound_assets/_wetegg/sat/perks/sound_29996edc59aa8421.wav": "14ff958b4a45f8a30d76566c473ec00d95d08af3b91f78ab895773223faa5b93",
+    "sound_assets/_wetegg/sat/perks/sound_2f2b0dc178ff7e17.wav": "2c46e19f4af86cd773dae3a924116e0be8166dc9781571bf6e19ff69fec18eb0",
+    "sound_assets/_wetegg/sat/perks/sound_357ee90578d7b033.wav": "6487e0bdef7869e5c9a0537225a235a6185bb0683b3624be7b1f3cbd702d9f44",
+    "sound_assets/_wetegg/sat/perks/sound_3dece82250a72ae3.wav": "cdf7212d92545c3129757cb843ac064eea8bce596e755ff8062455920bc3547d",
+    "sound_assets/_wetegg/sat/perks/sound_3f26b4dc9c90bd59.wav": "982a07f1fdf3a632b38777193c4d22d0c4d0dfbffa10f833e933caadf66ed10b",
+    "sound_assets/_wetegg/sat/perks/sound_430556a2f18d920b.wav": "27d70a5d8bfb6b45c572358b1db78ab27400a0f039cf9e85285b7ab011f4274b",
+    "sound_assets/_wetegg/sat/perks/sound_4d4f3604e469be9a.wav": "ffb9aa76a8df77e0cf61b9551f61d0e828d88d5ba8077fd5b638d38fa50c3c76",
+    "sound_assets/_wetegg/sat/perks/sound_4ddfde3cf62fb02c.wav": "3b3dbd65dc85538d6ea9efbb7fae3ce4b3165f205c3835ace307ecd63068f071",
+    "sound_assets/_wetegg/sat/perks/sound_5ade0dcb4d79f3d3.wav": "5dd7bedf655fd9caaa9f962a959e2a62e8651813a71d3b20376fadeb19bd6fe3",
+    "sound_assets/_wetegg/sat/perks/sound_61abea5bba35d33f.wav": "2282d0b050335c49dad877cb14289b0a5499410584b1101771d4c682bc257aa5",
+    "sound_assets/_wetegg/sat/perks/sound_65ab2d264fa45af6.wav": "013fa95a3f35b2a361d6d16ed98d0a5b147df063aced6ebb064483aaefc26c21",
+    "sound_assets/_wetegg/sat/perks/sound_7fbf6df4da142694.wav": "9fb4751879caf1401567f882c5cf874e618f83544550bdbc2aaa4a93f7bf5d45",
+    "source_data/tod_perk_machines.gdt": "d5423c1d8cb6568f309fba0a420410080d658dc86d2931674ac420f87457efc5",
+    "xanim_export/tod_perk_machines/anim_2f28cb2f33eaab2f.xanim_bin": "b90d66e53ad572ba99f2072878c5aff58ed9f7c1ab74f935265feb8b3c32357d",
+    "xanim_export/tod_perk_machines/t10_fxanim_zm_machine_d_mod_intro.xanim_bin": "9fb4c6627f027c2bbd8ab2ffeffef407d23cec33587d2ae99e07fbbff0ddd11d",
+    "xanim_export/tod_perk_machines/t10_fxanim_zm_machine_d_mod_loop.xanim_bin": "81bbfcf668c39b53a58ad4a26a6fcb8fd50c929e2afac28a5e6fc9bf6a13380c",
+    "xanim_export/tod_perk_machines/t10_fxanim_zm_machine_d_mod_outro.xanim_bin": "8d6027466d26f3f0a9fad44d43d285322e5ecdcdb51d4c9fd1710b321f96792b"
+  },
+  "native_verified": false
+}

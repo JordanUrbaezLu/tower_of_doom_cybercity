@@ -1,0 +1,26 @@
+{
+  "at": "2026-09-13T02:37:56.469342-04:00",
+  "scope": "Dev/god/automatic max Mage baseline test",
+  "native_verified": false,
+  "game_launched": false,
+  "game_running": false,
+  "build": {
+    "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\usermaps\\zm_tower_of_doom\\zone\\zm_tower_of_doom.ff",
+    "sha256": "9a66757b694cdcf52f11ee659f185d26fecbf0d9bb0df2fafd074e5d02b7ac1d",
+    "bytes": 176396544,
+    "modified": "2026-09-13T02:23:39.864500-04:00"
+  },
+  "launch_tool": "tools/run_game.ps1",
+  "result": "Steam launch requested, but no BlackOps3 process started. Regular guarded focus refused input; administrator focus prompt was canceled by Windows. No Continue/game input was sent.",
+  "prelaunch_archive": "tmp/elite_tracking/runs/20260913_022816_265_f4e9f837",
+  "prelaunch_archive_scope": "Previous session only; not evidence for this build",
+  "screenshots": [
+    "tmp/bo6_ice_staff/launch_desktop.png"
+  ],
+  "test_flags_armed": [
+    "tod_dev",
+    "tod_god",
+    "tod_dev_maxed",
+    "tod_dev_mage_test"
+  ]
+}

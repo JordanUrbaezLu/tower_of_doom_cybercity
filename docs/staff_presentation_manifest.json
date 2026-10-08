@@ -1,0 +1,114 @@
+{
+  "sources": {
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\model_export\\tod_staff_anim\\tod_vm_staff_elements_skeleton.XMODEL_BIN": "222fbc7d35921d4003a52734286ec3e7017f0f50c2d02cc41684b0041c1661fd",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\tod_staff_view.xmodel_bin": "b9f183ff8f1d7ec51fd985140cea4a118e9a43499d3018e3e03d5e55bad34c75",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\tod_staff_tip_water_view.xmodel_bin": "09950c580efefb6db1208cd6402f849b59fda6aa9e2e7e5d2750ca95bece5b93",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\tod_staff_tip_fire_view.xmodel_bin": "08be4b1796003d502a1d2b9dd5719bc9ea8dafde360c4af0b334c981bbdf8f97",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops III 455130\\model_export\\sla\\tod_staff\\tod_staff_tip_lightning_view.xmodel_bin": "bc80fc42a5deb08154ff798285535d3ca1dd8ba77e4d7d8f2fb33610b8696fe9",
+    "C:\\Users\\jorda\\Repositories\\test+map\\xanim_export\\tod_staff\\vm_zom_staff_idle.XANIM_BIN": "cc534e20ecf47fd22f20c21f161d1c7c89612a101a26544c41fef70951c0f20b",
+    "C:\\Users\\jorda\\Repositories\\test+map\\docs\\staff_ice_alignment_report.json": "354d990c7aa7eb21dc62a71a669c7105fc7a33f60f7bf2327e3dc983e2ee270a",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\staff_pap_20260921\\extracted\\T7 Assets V2.7\\T7 Assets\\model_export\\_midgetblaster\\weapons\\t7\\wpn_t7_zmb_hd_staff_tip_fire_upg_world\\wpn_t7_zmb_hd_staff_tip_fire_upg_world_LOD0.XMODEL_BIN": "d1a413b688edbd9329e3ac80c10b095eb57e349f8cb7c4a5b01298967508102b",
+    "C:\\Users\\jorda\\Repositories\\test+map\\xanim_export\\tod_staff\\vm_zom_staff_t7_fire_upg_first_raise.XANIM_BIN": "4f33cf490f6e6fc243d1c4267b845321e16e91f7695b20779b3539cfe4e1d543",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\tmp\\staff_pap_20260921\\extracted\\T7 Assets V2.7\\T7 Assets\\model_export\\_midgetblaster\\weapons\\t7\\wpn_t7_zmb_hd_staff_tip_lightning_upg_world\\wpn_t7_zmb_hd_staff_tip_lightning_upg_world_LOD0.XMODEL_BIN": "7fad118b2579a29cddc72d1a0c480bd1f684753ab21884d2a8892260071a5a99",
+    "C:\\Users\\jorda\\Repositories\\test+map\\xanim_export\\tod_staff\\vm_zom_staff_t7_lightning_upg_first_raise.XANIM_BIN": "6855af535a7aed19ae6cc195844b34e4212d9e2edd317a7bc852d3e4002c84dd",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\model_export\\tod_bo6_ice\\tod_bo6_ice_vm.XMODEL_BIN": "c98558914f706d1cde44bf51d8af0418d8c08d55b4dd3299b2f56d180405c900",
+    "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_idle.cast": "4154fd0ec5eca0f479ce1909f263c605764111668b1f7b8e9d9f6c18c043f6b6",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\model_export\\tod_staff_anim\\tod_vm_staff_ice_skeleton.XMODEL_BIN": "2a3ad92c9ff53866aa17b06df0bc5356cdcd41a972c43baaec5208b627583337",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\xanim_export\\tod_staff_approved\\tod_vm_staff_ice_fit_t7_water_first_raise.XANIM_BIN": "992df920b7a5a2140915a4e5fcfe98ab026261818b9a4de3005496c2f70bc620",
+    "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_first_raise.cast": "dc13c7d194f1c300472e3cc5200437b4705b9f59db95e0e1a242973a91ba03d3",
+    "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_first_raise.cast": "8794e57a3714c57ff8e8d53d340548742b170f74696531ab865630c8b67898f7"
+  },
+  "files": {
+    "model_export/tod_staff_pap/tod_staff_fire_pap_tip.XMODEL_BIN": "6d4f2efb9e37d772f8a58d0047f16d54f1e9fba04ba3552f1a3c4f4bc28835fc",
+    "xanim_export/tod_staff_pap/tod_staff_fire_pap_first_raise.XANIM_BIN": "cbbabbbd664f2e373b33d3b38e70bdaa56c197024f199530d99efb9d35c1926e",
+    "model_export/tod_staff_pap/tod_staff_lightning_pap_tip.XMODEL_BIN": "7366872d50587f9cb19a29f83eb73f98a664314353baac2cefbf8484e4dcde5c",
+    "xanim_export/tod_staff_pap/tod_staff_lightning_pap_first_raise.XANIM_BIN": "7f69fef441d505bac109f5d5c8a2f8fcd51b0431c4ae88e9a07f6dd42ee5d74b",
+    "model_export/tod_staff_pap/tod_staff_ice_body_vm.XMODEL_BIN": "618d70c69293026931e2cabe7557ec54a158ada199d4fee33e5f28511c477eef",
+    "model_export/tod_staff_pap/tod_staff_ice_tip_vm.XMODEL_BIN": "e4763370788608f91df5bf1ec5a9e8e899aff63ea510c81d87e35af98f62d3de",
+    "model_export/tod_staff_pap/tod_staff_ice_pap_tip_vm.XMODEL_BIN": "0e87a9504d962c34a643cdab2f983f7229bf255ae2ef960cffab6960f4c94a65",
+    "model_export/tod_staff_pap/tod_staff_ice_body_wm.XMODEL_BIN": "1e466a2e6665ec055ce0162d053bc92e7a4d1be9bc175b7c8760482d5ac0d6bf",
+    "model_export/tod_staff_pap/tod_staff_ice_tip_wm.XMODEL_BIN": "9cbee9ee385871e7db98c09bbea90f1fe20def7311c8ddcf4dfc7c595ca1e65c",
+    "model_export/tod_staff_pap/tod_staff_ice_pap_tip_wm.XMODEL_BIN": "f8770f082dc9acfc85cba3ad19fcac2abbc71fb6ca7d11843d80d6fdb1437267",
+    "model_export/tod_staff_pap/tod_staff_ice_flourish_skeleton.XMODEL_BIN": "d1ba5eb5ac277059725e555998c03d850ce9d578b4d56403b9a3a185adfe0ef0",
+    "xanim_export/tod_staff_pap/tod_staff_ice_first_raise.XANIM_BIN": "fdb0318299c243293407c389c3a4b986b8415f8aeb9d8fe744f5dbbde080650d",
+    "xanim_export/tod_staff_pap/tod_staff_ice_pap_first_raise.XANIM_BIN": "71152afe620edc43193bea87f8dbf2521bee9091650c359cdf2af9f808e3d09c",
+    "source_data/tod_staff_pap.gdt": "95dfff5e980b2553d0e7de172f75fb0023023e69b8f49887ef8988dcc67199fc"
+  },
+  "geometry": {
+    "tod_staff_fire_pap_tip": {
+      "vertices": 2401,
+      "triangles": 2592,
+      "bones": 1,
+      "source": "T7 Assets V2.7/T7 Assets/model_export/_midgetblaster/weapons/t7/wpn_t7_zmb_hd_staff_tip_fire_upg_world/wpn_t7_zmb_hd_staff_tip_fire_upg_world_LOD0.XMODEL_BIN"
+    },
+    "tod_staff_lightning_pap_tip": {
+      "vertices": 3865,
+      "triangles": 4002,
+      "bones": 1,
+      "source": "T7 Assets V2.7/T7 Assets/model_export/_midgetblaster/weapons/t7/wpn_t7_zmb_hd_staff_tip_lightning_upg_world/wpn_t7_zmb_hd_staff_tip_lightning_upg_world_LOD0.XMODEL_BIN"
+    },
+    "tod_staff_ice_body_vm": {
+      "vertices": 37937,
+      "triangles": 46266,
+      "bones": 61,
+      "reconstruction_error": 0.0
+    },
+    "tod_staff_ice_tip_vm": {
+      "vertices": 13123,
+      "triangles": 13576,
+      "bones": 17,
+      "reconstruction_error": 0.0
+    },
+    "tod_staff_ice_pap_tip_vm": {
+      "vertices": 13123,
+      "triangles": 13576,
+      "bones": 17,
+      "reconstruction_error": 0.0
+    },
+    "tod_staff_ice_body_wm": {
+      "vertices": 37937,
+      "triangles": 46266,
+      "bones": 61,
+      "reconstruction_error": 0.0
+    },
+    "tod_staff_ice_tip_wm": {
+      "vertices": 13123,
+      "triangles": 13576,
+      "bones": 17,
+      "reconstruction_error": 0.0
+    },
+    "tod_staff_ice_pap_tip_wm": {
+      "vertices": 13123,
+      "triangles": 13576,
+      "bones": 17,
+      "reconstruction_error": 0.0
+    }
+  },
+  "clips": {
+    "tod_staff_fire_pap_first_raise": {
+      "frames": 55,
+      "fps": 30,
+      "bones": 217,
+      "sound": "wpn_firestaff_1straise"
+    },
+    "tod_staff_lightning_pap_first_raise": {
+      "frames": 49,
+      "fps": 30,
+      "bones": 217,
+      "sound": "wpn_lightningstaff_1straise"
+    },
+    "tod_staff_ice_first_raise": {
+      "frames": 49,
+      "fps": 30,
+      "bones": 151,
+      "sound": "wpn_tod_bo6_ice_first_raise"
+    },
+    "tod_staff_ice_pap_first_raise": {
+      "frames": 49,
+      "fps": 30,
+      "bones": 151,
+      "sound": "wpn_tod_bo6_ice_first_raise"
+    }
+  },
+  "native_verified": false
+}

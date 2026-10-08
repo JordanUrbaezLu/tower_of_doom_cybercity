@@ -1,0 +1,8 @@
+# Global Python 3.14 packages the repo's tools import (docs/174). Pinned to the old laptop's versions
+# (2026-10-08). The build gates need lupa (Lua 5.1 UI tests), numpy, pillow, scipy and soundfile.
+# The full freeze of the old laptop is in the bundle: python\global-freeze.txt.
+lupa==2.8
+numpy==2.5.3
+pillow==12.3.0
+scipy==1.18.1
+soundfile==0.14.0

@@ -90,6 +90,8 @@ The Mod Tools build is **4 stages**; `build_map.ps1` runs them headless (no Laun
 - Link order matters: geometry/gfx assets convert **before** scriptparsetree GSC compiles. A geometry-asset error aborts the build before GSC is ever tested — clear geometry errors first.
 - The linker **stops at the first error** and compiles `#using`'d modules in order. A clean run validates everything up to the break point.
 - `cod2map64` warns "NavVolume generation is skipped" when there's no `nav_volume` brush — harmless for ground-only zombies.
+- **STALE LIGHTING BAKE = generated brushes that draw BLACK or NOT AT ALL while template brushes look fine (Shadowlight, 2026-09-06, hit at least four times).** The `.led` is indexed by surface. Relink (`-SkipBake` / `-GscOnly`) after ANY `.map` change and every surface past the divergence has no lightmap: "black except at grazing angles" (specular only), or simply absent, floor present. Looks like a rendering/occlusion bug; it is a stale artefact. **Rule: a build script must refuse the skip-bake path unless the `.map` hashes identical to the one the last bake saw** (Shadowlight's `build.ps1` writes `<map>.led.mapsha` after each bake and compares). Two sessions sharing one install make this trap automatic: whoever relinks after the other's geometry change ships it.
+- **STALE OCCLUSION CACHE = walls, floor and ceiling that VANISH BY VIEW ANGLE (Shadowlight, 2026-09-06).** The linker's `UmbraConvert` step builds the occlusion-culling tome at LINK time from tiles cached PER MAP NAME under `<tools>\share\assetconvert\umbra\cod2map\<map>\`, and never invalidates them. A map whose first build under its name was tiny/empty (a renamed control map) keeps linking `UmbraConvert: computing 0 tiles` / `N tiles loaded from cache` — a tome for the old geometry applied to the new: big triangular holes in walls, whole walls and the floor disappearing depending on where you stand, while collision still works. Looks like bad brushes or z-fighting; is neither. **Fix: delete that cache directory before every build** (`build.ps1` step 1b does). The linker also caches the finished tome by BSP content, so an unchanged BSP relinks with no Umbra lines at all — expected. Removing the `umbra_volume` entity makes it WORSE (`UMBRA volume NOT set`); keep it.
 
 ### The LED lightmap-atlas ceiling (durable reference)
 
@@ -243,6 +245,96 @@ Carve gotchas (all reusable):
 - **NEVER `SetScale` a live AI / boss reskin — it's a `0xC0000005` CTD.** Reskin a boss with a headless `SetModel` (Detach the charred head, Attach a stock head) at scale 1.0; distinguish it with an eye-tint clientfield + a `.csc` body-glow FX instead of size.
 - Register the carved GDT + `model_export` folders in your external-assets manifest + CREDITS (they're game-rip, **not** for redistribution).
 
+**From-scratch props — WORKING, 23 shipped in game 2026-09-06** (Shadowlight Arena: 12 pickups — mag,
+horned helmet, shoes, boots, 3 armor tiers, tire, potion, drum mag, lightning bolt, mystery mark — and 11
+room-furniture pieces: fireplace, chandelier, lantern, table, stool, bar, bookshelf, barrel, crate, trophy,
+portal ring; each solid one backed by a worldspawn `clip` brush since the navmesh ignores entity collision). No rip,
+no hand modelling and no third-party service: Blender 5.2 headless builds the mesh + a procedural
+material, bakes colour / tangent normal / gloss, writes `XMODEL_EXPORT` v6, `export2bin` →
+`.xmodel_bin`, a generated GDT, one `xmodel,` zone line, then a `misc_model` in the `.map` or a
+script-spawned pickup. **A prop is ONE Python file**; tools live in test+map: `tools/make_prop.py`
+(driver), `tools/prop_lib.py` (geometry + material helpers), `tools/cod_xmodel.py` (writer),
+`tools/regen_props_gdt.py` (GDT repair), `tools/props/<prop>.py` (the prop). Detail ceiling is
+patience, not the pipeline — the helmet carries dents, rivets, a strap and horns in 21k triangles
+with steel/horn/leather masked into one material. **Full playbook** in that repo's
+`docs/17_custom_props_pipeline.md`; the facts that were NOT obvious, verified against the install:
+- **TRI corners are CLOCKWISE vs the normal** (200/200 on a stock export); Blender is CCW → swap corners 1/2.
+- **UV V is flipped** (`v = 1 - v`). `VERT` is position only; normal/colour/UV are per face-corner.
+- 1 Blender unit = 1 game unit (player 72). One `tag_origin` bone with an identity block is enough.
+- GDT = the carve recipe above (`lit_plus`, `$white_ao`, `$gray_32_one_channel`, `glossRangeMax 13`,
+  images `_c` diffuseMap / `_n` normalMap / `_g` glossMap with gloss = 1 − roughness), all four LOD
+  slots → the same bin. `BulletCollisionLOD High` → solid with no clip brushes, but the collision
+  mesh is **as dense as LOD0** (~27k triangles for a detailed prop). Use `"None"` — the stock
+  majority, 2522 uses vs 676 — for pickups, decoration and anything you never shoot; the linker
+  lists every offender in `zone_source/all/assetinfo/<map>_bulletreport.csv`, so read that after
+  adding props.
+- **The linker never refreshes the asset DB** — run `gdtdb.exe /update` (cwd `<tools>\gdtdb`) after
+  syncing the GDT; it exits 1 with `Duplicate 'image' asset` noise from other packs. Noise; filter it,
+  and run it under `ErrorActionPreference Continue` or its stderr kills the build script.
+- **The agent looks at the rendered `preview.png` before building** — that is the self-check,
+  but ONLY for silhouette/geometry: emission blows the preview out, and the bake captures
+  colour/normal/roughness only, so judge COLOUR from the baked `_images/i_<name>_c.png`.
+- **`rstrip("}
+")` on a GDT is a trap** — it strips a character SET, so appending a prop ate
+  the closing `	}` of the previously-last entry and the linker then reported
+  `xmodel '<other prop>' is missing` while its material/image entries were fine. The error
+  names the victim, never the writer. Keep a from-scratch GDT regenerator around
+  (test+map `tools/regen_props_gdt.py`) and lock the file if props build in parallel.
+- **RIGGED custom characters on the stock skeleton** (built 2026-09-06, see test+map
+  `docs/18_custom_characters.md`): animations bind by bone NAME, so a mesh skinned to a bit-exact
+  copy of the stock zombie skeleton (78 bones, read out of the Mod Tools' own
+  `model_export/t7_characters/zombies/zombies/c_zom_der_zombie_body1_lod0.xmodel_bin` with the
+  blender-cod PyCoD reader) plays every stock zombie anim. Swap it on at spawn: chain
+  `level.zombie_init_done`, wait 0.3 s, `DetachAll(); SetModel(body); self.no_gib = true`. The
+  GDT xmodel entry must carry `hitBoxModel xmodel_multiplayer\multiPlayer_HitBoxModelChar.xmodel_bin`
+  **and `"type" "animated"`** - without `type animated` the converter emits a RIGID xmesh (vertices
+  parented to single bones, no skinning): torso and legs stay stiff while single-bone parts
+  move. Offline tell: `share/assetconvert/xmesh/v6/<model>_f0_..._geo_<hash>` = skinned,
+  `..._geo_rigid_<hash>` = not. A 14-body bisect cost half a day to learn this; read the cache.
+  **`surfaceType` must be a real engine surface** (`flesh`, `cloth`, `metal`...): an unknown one
+  (`"bone"`) makes the linker throw a MODAL "SANITY CHECK FAILURE" dialog and the headless build
+  hangs until a human clicks it.
+- **The same recipe works on ANY stock skeleton** (2026-09-06, test+map roster v2: wolf on the
+  hellhound rig, bear on the Panzer rig, robot officer on the SoE Civil Protector rig, witch on the
+  Avogadro rig). Dump the rig from the pack's own source (`tools/dump_skeleton.py` SOURCES lists
+  the install-side paths; 58 / 255 / 186 / 115 bones), build the body in that rig's bind pose, and
+  `SpawnActor(aitype, org, ang, targetname, true)` + `DetachAll(); SetModel(body)` at runtime.
+  **Facing differs per rig:** zombie and hellhound bind poses face -y, Panzer / robot / Avogadro
+  face +x. Per-AI rules: `level.dog_health` BEFORE the dog SpawnActor; Panzer attacks are removed
+  by re-registering the BT script API by name (`mechzShouldShootFlame` -> never); the Avogadro pack
+  fires `"avo_send_bolt"` on the actor at release, so a custom projectile is one `waittill`.
+  **A bare SpawnActor'd pack AI that "just stands there"** has one of three causes, each already
+  solved in a shipped map: (a) the aitype GDT's `defaultGoalRadius` is 2048 (Panzer, SoE robot) so
+  every nearby goal is "reached" - set `goalRadius = 64` on the actor; (b) the pack's per-actor setup
+  only runs on the spawner path - call it yourself (`mechz_spiki::acc_setup_mechz`,
+  `zm_ai_avogadro::avogadro_spawn(boss, true)`); (c) the archetype never hunts or fires on its own
+  (companion robot) - drive `favoriteenemy` + `SetGoal` and `MagicBullet(self.weapon, ...)` from script.
+  **Fur / spikes:** loose 3D tufts explode the smart-project into ~18k UV islands and the bake
+  goes black; attached fringe strips (triangle teeth on a web strip) stay at ~6 islands per loop.
+  **The bake atlas is island-count bound, not triangle bound:** Blender `smart_project`'s
+  `island_margin=0.015` (SCALED) hands every UV island a ~60 px cell at 2048, so a 1,500-island
+  body bakes as dots on black. Use `island_margin=0.005, margin_method='FRACTION'` (~10 px, just
+  over the 8 px bake dilation) and keep ornament single-sided / consolidated. Judge from the baked
+  `_c.png`, never from a preview that renders the live material.
+- **Custom AI animations without Blender** (2026-09-06, test+map `tools/make_anim.py`): stock AI xanims
+  are 30 fps, one PART per bone, WORLD-space per frame, closure frame = frame 0 with `tag_origin`
+  advanced (root motion -> ground speed via the mocomp; measure the stock speed with PyCoD
+  `LoadFile_Bin` and match it or the AI skates). Plug in by copying the aitype's `.ai_am` alias table
+  under `usermaps/<map>/animtables/` - the usermap copy SHADOWS share/raw at link time (the `.deps`
+  records which path won) - and re-pointing the locomotion aliases. Two enemies on one aitype share a
+  table: give one a full aitype block copy in your own GDT (derived `[ "parent" ]` entries cannot
+  cross GDT files) with its own `animMappingTableName`.
+- **Hovering / spinning / glowing pick-up drops** (proven same day): `script_model` +
+  `RotateYaw(360, t)` loop + eased `MoveZ(±amp, t, t/2, t/2)` loop run TOGETHER on one
+  entity; glow = the stock powerup FX (`level._effect["powerup_on" | "_solo" | "_caution"
+  | "_red"]` — four colours free, a rarity palette) via `PlayFXOnTag`; pickup =
+  `trigger_radius_use` with ONE constant hint. A from-scratch prop's origin is its FLOOR
+  point, so play the glow on a `tag_origin` helper `LinkTo`'d at half the model height or
+  it hangs under the item. See test+map `_sla_items.gsc`.
+- In scope hands-off: hard-surface props (crates, mags, helmets, balls, altars, machines) with baked
+  procedural textures and rigged bodies on any stock skeleton. Out: viewmodel weapons with anims
+  and custom animations (keep porting those).
+
 ---
 
 ## 7. Dev/test mode (ONE hardcoded flag, not a console)
@@ -295,6 +387,8 @@ Reusable dev behaviors (all gated on `level.acc_dev`):
 | `unexpected TOKEN_USING` | `#using` after `#namespace` | `#namespace` last |
 | `unexpected TOKEN_CONDITIONAL` | ternary not fully paren-wrapped | `( cond ? a : b )` |
 | god mode / damage effects stop working | a player-damage callback `return`ed a value ≠ `-1` | read-only hooks must `return -1` |
+| gdtdb `GDT ParseError … Unknown token` on a `//` line, then linker `Object reference not set` on every weapon field | a `.gdt` tolerates NO comment lines (the asset DB parser has no comment syntax) — the entry is dropped and the linker links a null weapon | keep the commentary in the generator script / doc; the `.gdt` is `{ "name" ( "x.gdf" ) { fields } }` only |
+| a custom / ported gun takes no attachments — `GetWeapon(name,[att])` returns the BARE gun (`weapon.attachments.size` 0) | it has no `au_<attachmentUnique base>_<type>` attachment-unique assets the engine can find. Known-good on a projectile weapon: `attachmentUnique` = runtime name + one `au_<name>_<type>` (`attachmentunique.gdf`, clone `au_smg_standard_none`) per type, zone `attachment,<type>` + `attachmentunique,<au>`. A Skye-ported BULLET weapon with the same wiring still took nothing; suspect its `acv_<type>` cosmetic-variant refs to stock assets not in the fastfile (being tested, sla 2026-09-06). Judge by `attachments.size` and the variant’s stats — `supportedAttachments` can read empty on a working gun | set `attachmentUnique`, declare the `au_` uniques, blank the port’s `acv_*` fields, rebuild |
 
 ---
 
@@ -309,6 +403,7 @@ Reusable dev behaviors (all gated on `level.acc_dev`):
 - `tools/run_game.ps1` / `PLAY_NORMAL.bat` — DRM-safe launch (the canonical command).
 - `tools/check_external_assets.ps1` — must be all-green before a build (game-rip packs aren't in git).
 - Model carve: `tools/xmodel_bin_inspect.js`, `tools/gen_t7_carve_gdt.js`, `tools/add_prop_clips.js` (§6).
+- From-scratch props (Blender headless → xmodel → GDT): `tools/make_prop.py`, `tools/cod_xmodel.py`, `tools/props/*.py` in test+map (§6).
 - Atmosphere: `tools/gen_reflection_probes.js`, `tools/gen_neon_lights.js`.
 - Local stock-scripts mirror (agents/greps depend on it):
   `git clone --depth 1 https://github.com/zeroy99/bo3_modtools tmp/bo3_stock_ref`
@@ -364,3 +459,22 @@ UI code. The LUI-bearing fastfiles are `core_patch.ff` (richest — holds `modif
 `Loading`), `core_ui.ff`, `core_frontend.ff`, `core_frontend_patch.ff`. Note `BlackOps3.exe` and
 `linker_modtools.exe` are Arxan-packed, so string analysis of them proves nothing in either
 direction.
+
+## Weapon-price registry is separate from weapon asset registrations (Tower, 2026-09-08)
+
+A fresh fastfile and a passing weapon asset ledger do not establish a booting
+match. Stock CSC `_zm_weapons::include_weapon` stores one `level.weapon_costs`
+entry per distinct weapon-name string, including upgraded names from the CSV.
+`on_player_connect` calls native SetWeaponCosts for each one. Tower's 304 keys
+produced 43 `Too many weapon costs added to weapon cost list` script exceptions
+at match startup even though the map packed only 235 authored weapon assets.
+Unused stock CSV rows count too. Removing 33 unobtainable stock gun rows reduced
+the table to 238 keys while preserving all 95 generated PaP mappings. The new
+240-key build budget leaves room for script/stock additions; it is conservative,
+not proof of the native limit. Count BOTH name columns and deduplicate exact
+keys. Check before generator outputs are written and on every build. Native
+boot verification of the correction is still pending as of this entry.
+
+Follow-up 2026-09-09: the user resumed play on the unchanged build. These cost
+exceptions therefore do not establish the cause of the original load stall.
+The table cleanup is still pending rebuild and runtime verification.

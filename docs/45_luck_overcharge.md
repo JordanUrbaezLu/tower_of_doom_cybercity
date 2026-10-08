@@ -7,11 +7,20 @@ guaranteed to be ultimates rarity."
 
 ## The system (shipped v14.9 — full record in CHANGELOG)
 
+Sound cap (v18.46, 2026-09-08): `TOD_LUCK_OVER_ZAP_LIMIT` limits the cue to
+seven actual plays per overcharge, at the existing three-second spacing.
+The bar animation continues after the sound stops. The existing no-upgrade-
+headroom mute still applies; muted opportunities do not consume plays, and
+regaining headroom does not refill the allowance. Leaving 150 and reaching it
+again starts a fresh allowance. This supersedes the unlimited repetition in
+the original sound brief below.
+
 | piece | where | contract |
 |---|---|---|
 | secret tracking to 150 | `_tod_luck.gsc` TOD_LUCK_OVERMAX | set_bar's true clamp; HUD + pips still cap at TOD_LUCK_MAX 100 (pip crossings clamped to seg 10 both sides — the band is silent AND invisible) |
 | odds in the band | `_tod_upgrades.gsc` roll_rarity | reads the raw bar; 101..149 quietly improves both dice |
 | both-ULTIMATE at 150 | `_tod_upgrades.gsc` guarantee_both_ultimate, TOD_UPG_GUAR_BOTH_BAR | every non-tier slot promoted, v14.6 redeal PER SLOT, tier card exempt, band-honesty clamp kept |
+| TIER card at 100 (v16.56) | `_tod_upgrades.gsc` tier_card_guaranteed / tier_card_roll, TOD_UPG_GUAR_TIER_BAR | full visible bar + FULL tier eligibility (PaP + floor gate + next gun) = the promotion is dealt, not rolled; floor-blocked players keep the 20% locked draw |
 | animation | `_tod_luck.gsc` overcharge_driver → `_tod_upgrade_ui.gsc` set_luck_over_frame → `tod_upgrade.lua` LuckBar | todUpgLuck **11..14** = the four frames (4-bit field's spare values, ZERO new clientuimodel bits); ~7 Hz server-driven, random, never repeats (LUI models only notify on CHANGE) |
 | sound | same driver | `tod_luck_overmax_zap` fired via PlayLocalSound every 20 frame ticks = **3.0s** (v14.9b — the v14.9 1.05s crackle bed was rejected by the user: "a semi deep zzz and plays every few seconds"); NEVER a looping alias (stuck-loop doctrine); per-client, a teammate's overcharge never buzzes in your ears |
 | exit | driver polls | any drop below 150 (down −25, event spend, spire reset, direct writers included) ends both within 0.15s |

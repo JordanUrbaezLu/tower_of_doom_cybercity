@@ -8,3 +8,30 @@
 *.png binary
 *.jpg binary
 *.jpeg binary
+*.gif binary
+*.webp binary
+*.wav binary
+*.mp3 binary
+*.flac binary
+*.ogg binary
+*.exr binary
+*.tif binary
+*.tiff binary
+*.tga binary
+*.dds binary
+*.psd binary
+*.iwi binary
+*.xmodel_bin binary
+*.xanim_bin binary
+*.cast binary
+*.ttf binary
+*.otf binary
+*.zip binary
+*.7z binary
+*.rar binary
+
+# Blender masters and the fan FBX sources ride Git LFS (docs/174, 2026-10-08): GitHub refuses any
+# file over 100 MB (reference_two.blend is 128 MB) and every re-save of a master is a full copy.
+# Free tier = 10 GiB storage + 10 GiB download / month; the 22 files were ~1.0 GB when added.
+*.blend filter=lfs diff=lfs merge=lfs -text
+*.fbx filter=lfs diff=lfs merge=lfs -text

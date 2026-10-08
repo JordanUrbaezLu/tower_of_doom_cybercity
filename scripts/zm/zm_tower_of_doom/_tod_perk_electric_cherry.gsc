@@ -10,9 +10,27 @@
 // material mc/hud_keyline_zm_player, DR_CULL_NEVER = draws through walls),
 // driven by a private clientfield pair —
 //   "tod_dp_owner" (toplayer, int): the local ownership gate, flipped on
-//   buy/loss. "tod_dp_ping" (actor, counter): a 2s pulse on every trash
-//   zombie; counter callbacks re-fire on EVERY increment, so late buys, perk
-//   loss and fresh spawns all converge within one pulse.
+//   buy/loss. "tod_dp_ping" (actor, counter): a 2s pulse on every ENEMY (the
+//   horde only until v19.72, see below); counter callbacks re-fire on EVERY
+//   increment, so late buys, perk loss and fresh spawns all converge within
+//   one pulse.
+//
+// v19.72 (2026-10-03, user: "Can death perception be buffed to all enemies not
+// just zombies?") — EVERY ENEMY. The pulse used to skip the boss triad
+// (is_boss / acc_is_boss / acc_is_mini_boss), and that triad is every elite
+// this map spawns: the Panzer (the Warden King and the spire Wardens are
+// Panzers), the Rogue Protector, the hellhound and the Reaver. Armored
+// sprinters were already in (promoted horde, no triad). Elites now ride the
+// same pulse behind gates of their own, dp_elite_hold(): seen on an EARLIER
+// pulse (they are direct SpawnActors, and a counter field throws on an
+// entity's spawn frame - the v17.92 rule in the loop), not mid drop-in
+// (tod_dropping: Ghosted at the landing point while the proxy falls), and for
+// a hound, not still hidden (ignoreme until hound_spawn_in's reveal - HOUNDS
+// ONLY: the Protector's companion archetype sets ignoreme for life). The
+// client half now clears an outline the moment its enemy dies: a dead
+// Protector / hound / Reaver stays an Actor entity for its corpse linger and
+// would otherwise glow through walls. Logs [TOD_DP] (tod_dev) and [TOD_DP_C]
+// (client, developer runs).
 // Client half = the NEW _tod_perk_electric_cherry.csc (lineage name kept,
 // same doctrine as below). Machine = the SATPerks
 // t10_zm_machine_death_perception(_on) pair (payload installed at
@@ -98,6 +116,8 @@
 // #usings; harmless and other systems reference that pipeline.)
 #using scripts\zm\_zm_perks;
 #using scripts\zm\_zm_utility;
+#using scripts\shared\callbacks_shared;          // v17.99 — on_connect( &dp_register_stats )
+#using scripts\zm\gametypes\_globallogic_score;  // v17.99 — initPersStat (the same pair _zm_perk_wisp_tea.gsc carries)
 
 #insert scripts\zm\_zm_perks.gsh;
 
@@ -106,7 +126,7 @@
 // it; HasPerk/SetPerk work natively). KEEP verbatim — stock name, not a map id.
 #define EC_PERK                "specialty_combat_efficiency"
 #define EC_ALIAS               "tod_electric_cherry"
-#define EC_COST                1500   // 3000 -> 2000 (2026-08-27) -> 1500 (Death Perception, user 2026-08-29)
+#define EC_COST                2000   // 3000 -> 2000 (2026-08-27) -> 1500 (2026-08-29) -> 2000 (user 2026-08-30; a 200 went in first from a mistyped ask and was corrected within the hour). LOCKSTEP: the DEATH PERCEPTION cost row in AetheriumPerks.lua.
 #define EC_BOTTLE_WEAPON       "zombie_perk_bottle_cherry"   // stock cherry bottle (rides in with the stock module; no new asset)
 #define EC_RADIANT_MACHINE     "vending_tod_electric_cherry" // unique radiant name (NOT the stamin-up default — avoids the machine-identity collision)
 #define EC_MACHINE_LIGHT_FX    "tod_ec_machine_light"
@@ -126,7 +146,8 @@
 #define EC_ON_MODEL            "t10_zm_machine_death_perception_on"
 
 // --- DEATH PERCEPTION tuning (v13.19) ---------------------------------------
-#define DP_PULSE_SECS          2      // horde-outline refresh cadence (hellbound-proven)
+#define DP_PULSE_SECS          2      // outline refresh cadence (hellbound-proven)
+#define DP_REV                 "all_enemies_1"   // v19.72 - the [TOD_DP] LOOP_START marker
 
 #namespace tod_perk_electric_cherry;
 
@@ -160,6 +181,23 @@ function __init__()
     // which (with .alias) is what makes stock auto-thread perk_machine_think
     // for this machine (_zm_perks.gsc:98-100).
     zm_perks::register_perk_host_migration_params( EC_PERK, EC_RADIANT_MACHINE, EC_MACHINE_LIGHT_FX );
+    // v17.99 — THE BUY THREW IN STOCK'S STAT LANE. give_perk (_zm_perks.gsc:762)
+    // runs zm_stats::increment_client_stat( perk + "_drank" ) -> incPersStat ->
+    // `self.pers[ stat ] += 1`, and stock initPersStat's only its own perks'
+    // _drank slots (armorvest/quickrevive/fastreload/staminup/doubletap2/
+    // widowswine/deadshot/electriccherry). combat_efficiency is not among them,
+    // so every Death Perception buy threw `pair 'undefined' and '1'` and
+    // give_perk never reached its tail: perk_history, perks_active, the
+    // "perk_acquired" notify and perk_think( perk ). PhD rides electriccherry
+    // (initialised); Wisp Tea's module registers its own on connect — this is
+    // that exact recipe (_zm_perk_wisp_tea.gsc::registerStats). initPersStat is
+    // idempotent, so ordering against stock's player_stats_init is irrelevant.
+    callback::on_connect( &dp_register_stats );
+}
+
+function dp_register_stats()
+{
+    self globallogic_score::initPersStat( EC_PERK + "_drank", false );
 }
 
 // ---------------------------------------------------------------------------
@@ -243,33 +281,46 @@ function give_electric_cherry()
     // (Function names keep the ec_ lineage — the perk framework and radiant
     // names reference them; the PLAYER-facing name is Death Perception.)
     self clientfield::set_to_player( "tod_dp_owner", 1 );
+    started = false;
     if ( !IS_TRUE( level.tod_dp_loop ) )
     {
         level.tod_dp_loop = true;
         level thread dp_pulse_loop();
+        started = true;
     }
+    if ( IS_TRUE( level.tod_dev ) )
+        dp_log( "GIVE player=" + dp_str( self.name ) + " loop_started=" + started );
 }
 
 function take_electric_cherry( b_pause, str_perk, str_result )
 {
     self clientfield::set_to_player( "tod_dp_owner", 0 );
+    if ( IS_TRUE( level.tod_dev ) )
+        dp_log( "TAKE player=" + dp_str( self.name ) + " pause=" + dp_str( b_pause ) + " result=" + dp_str( str_result ) );
 }
 
 // ---------------------------------------------------------------------------
-// DEATH PERCEPTION — the horde-outline pulse (v13.19, hellbound port)
+// DEATH PERCEPTION — the outline pulse (v13.19, hellbound port; every enemy
+// since v19.72)
 // ---------------------------------------------------------------------------
 
-// One level-wide pulse: every trash zombie's counter ticks every
-// DP_PULSE_SECS. The CSC callback fires per client per tick and
-// applies/clears the keyline against the LOCAL ownership gate — an
-// ex-holder's outlines clear on the next pulse, a fresh spawn appears within
-// one. Boss triad excluded (bosses own their own presentation; also keeps
-// the pulse cheap) — the same acc_* guard trio the EP effect shipped with
-// (this map's vendored bosses set exactly these fields).
+// One level-wide pulse: every enemy's counter ticks every DP_PULSE_SECS. The
+// CSC callback fires per client per tick and applies/clears the keyline
+// against the LOCAL ownership gate — an ex-holder's outlines clear on the
+// next pulse, a fresh spawn appears within one, and (v19.72, client half) an
+// outline clears when its enemy dies.
+//
+// TWO LANES, ONE PING. The horde lane is unchanged since v17.92. The ELITE
+// lane (v19.72) is everything carrying the boss triad or a tod_boss_kind —
+// the exact set this loop used to skip — and dp_elite_hold() says when one is
+// ready. Nothing here reads or writes gameplay state: the only writes are the
+// counter and three dp_* bookkeeping fields on the actor.
 function dp_pulse_loop()
 {
     level endon( "end_game" );
 
+    dp_log( "LOOP_START rev=" + DP_REV + " pulse_s=" + DP_PULSE_SECS );
+    last_sig = "";
     for ( ;; )
     {
         wait DP_PULSE_SECS;
@@ -277,17 +328,132 @@ function dp_pulse_loop()
         team = "axis";
         if ( isdefined( level.zombie_team ) )
             team = level.zombie_team;
-        zombies = GetAITeamArray( team );
-        pinged = 0;
-        for ( i = 0; i < zombies.size; i++ )
+        ais = GetAITeamArray( team );
+        horde = 0;
+        elites = 0;
+        held_new = 0;
+        held_drop = 0;
+        held_hidden = 0;
+        for ( i = 0; i < ais.size; i++ )
         {
-            z = zombies[ i ];
+            z = ais[ i ];
             if ( !isdefined( z ) || !IsAlive( z ) )
                 continue;
-            if ( IS_TRUE( z.is_boss ) || IS_TRUE( z.acc_is_boss ) || IS_TRUE( z.acc_is_mini_boss ) )
+
+            // THE ELITE LANE (v19.72): Panzer (+ the Warden King, + the spire
+            // Wardens), Rogue Protector, hellhound, Reaver.
+            if ( dp_is_elite( z ) )
+            {
+                hold = dp_elite_hold( z );
+                if ( hold != "" )
+                {
+                    if ( hold == "new" )
+                        held_new++;
+                    else if ( hold == "dropping" )
+                        held_drop++;
+                    else
+                        held_hidden++;
+                    continue;
+                }
+                z clientfield::increment( "tod_dp_ping" );
+                elites++;
+                if ( !IS_TRUE( z.tod_dp_lit ) )
+                {
+                    z.tod_dp_lit = true;
+                    if ( IS_TRUE( level.tod_dev ) )
+                        dp_log( "ELITE_ON kind=" + dp_kind( z ) + " ent=" + z GetEntityNumber() + " waited_ms=" + ( GetTime() - z.tod_dp_seen_ms ) );
+                }
+                continue;
+            }
+
+            // THE HORDE LANE (incl. armored sprinters — promoted horde, no triad).
+            // v17.92 — a "counter" clientfield cannot be incremented on the frame an
+            // entity is spawned (the engine throws, by name: 15 times in one match).
+            // A zombie that has not finished emerging is at best a frame old and
+            // is not worth pinging anyway.
+            if ( !IS_TRUE( z.completed_emerging_into_playable_area ) )
                 continue;
             z clientfield::increment( "tod_dp_ping" );
-            pinged++;
+            horde++;
+        }
+
+        // Change-gated on the elite picture (the horde count moves every pulse).
+        if ( IS_TRUE( level.tod_dev ) )
+        {
+            sig = "" + elites + "/" + held_new + "/" + held_drop + "/" + held_hidden;
+            if ( sig != last_sig )
+            {
+                last_sig = sig;
+                dp_log( "PULSE elites=" + elites + " held_new=" + held_new + " held_dropping=" + held_drop + " held_hidden=" + held_hidden + " horde=" + horde );
+            }
         }
     }
+}
+
+// The ELITE set is the one this loop skipped until v19.72: the boss triad every
+// elite spawner stamps on its spawn frame (_tod_bosses Panzer + Protector,
+// _tod_hellhounds, _tod_reaver), or a tod_boss_kind (_tod_stray's own elite
+// test reads the same pair).
+function dp_is_elite( z )
+{
+    return ( IS_TRUE( z.is_boss ) || IS_TRUE( z.acc_is_boss ) || IS_TRUE( z.acc_is_mini_boss ) || isdefined( z.tod_boss_kind ) );
+}
+
+// "" = outline it this pulse; otherwise WHY it waits. Three holds, in order:
+//
+//   "new"      — the first pulse that SEES an elite only stamps it. Elites are
+//                direct SpawnActors placed at any moment, so this pulse may be
+//                the elite's spawn frame, and a counter clientfield throws
+//                there (v17.92). The horde lane's completed_emerging test does
+//                NOT cover this: the Reaver sets that flag on its spawn frame.
+//                Costs at most one pulse (2 s) after the reveal.
+//   "dropping" — drop_in (Panzer, Protector, the King, the Wardens) holds the
+//                real actor Ghosted at the landing point while a proxy falls.
+//                An outline there would show him standing on his mark before
+//                he has landed. A stuck-relocation drop sets the same flag.
+//   "hidden"   — a hellhound is Hidden + ignoreme until hound_spawn_in's
+//                reveal. HOUNDS ONLY: archetype_zod_companion sets ignoreme on
+//                the Rogue Protector for life, so a general ignoreme test would
+//                hide every Protector forever.
+function dp_elite_hold( z )
+{
+    if ( !isdefined( z.tod_dp_seen_ms ) )
+    {
+        z.tod_dp_seen_ms = GetTime();
+        return "new";
+    }
+    if ( IS_TRUE( z.tod_dropping ) )
+        return "dropping";
+    if ( isdefined( z.tod_boss_kind ) && z.tod_boss_kind == "hellhound" && IS_TRUE( z.ignoreme ) )
+        return "hidden";
+    return "";
+}
+
+function dp_kind( z )
+{
+    if ( IS_TRUE( z.tod_king ) )
+        return "king";
+    if ( isdefined( z.tod_boss_kind ) )
+        return z.tod_boss_kind;
+    return "elite";
+}
+
+function dp_str( v )
+{
+    if ( !isdefined( v ) )
+        return "undef";
+    return "" + v;
+}
+
+// Dev-only, state changes only (GIVE / TAKE / LOOP_START / ELITE_ON once per
+// elite / PULSE when the elite picture changes). The line is assembled outside
+// the developer block, PrintLn stays inside it (CLAUDE.md dev-log rule).
+function dp_log( msg )
+{
+    if ( !IS_TRUE( level.tod_dev ) )
+        return;
+    line = "[TOD_DP] ms=" + GetTime() + " " + msg;
+    /#
+    PrintLn( line );
+    #/
 }

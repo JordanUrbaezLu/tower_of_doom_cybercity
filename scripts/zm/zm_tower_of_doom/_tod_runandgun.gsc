@@ -1,23 +1,26 @@
 // =============================================================================
 // _tod_runandgun.gsc — RUN AND GUN, the SKIRMISHER's ammo upgrade (user
-// 2026-08-22: "if you shoot while you run you take up less bullets — 3 levels").
+// 2026-08-22: "if you shoot while you run you take up less bullets — 3 levels";
+// v16.50, user 2026-09-02: "make run and gun 5 tiers. 16% 28% 38% 46% 52%").
 //
 // HOW IT PLAYS
 //   While you are ON THE MOVE (running at speed or sprinting — not standing,
 //   not creeping in ADS) every shot has a chance to cost no ammo: the round
 //   is put straight back in the mag the instant it fires.
-//   Lv1 20% / Lv2 35% / Lv3 50%. Standing still pays full price. Pairs with
+//   Lv1 16% / Lv2 28% / Lv3 38% / Lv4 46% / Lv5 52% — a STAGE TABLE (steps
+//   12/10/8/6, diminishing), not a per-level rate; read rng_pct(). Was
+//   20/35/50 over 3 levels until v16.50. Standing still pays full price. Pairs with
 //   SPRINT FIRE (domain 21) — sprint-firing is the purest form of "run".
 //
 // THE DAMAGE HALF LIVES ELSEWHERE (v14.11, user 2026-08-30: "Run and gun
 // should increase damage while running too. At the same rates"): moving shots
-// also hit +20/35/50% harder, applied in _tod_upgrades::unique_damage_mult.
+// also hit +16/28/38/46/52% harder, applied in _tod_upgrades::unique_damage_mult.
 // It CANNOT live here (that module never imports us — the KB cycle rule), so
 // the numbers and the movement test are LOCKSTEP DUPLICATES: this file's
-// TOD_RNG_PCT_BASE/PER_LV/MIN_SPEED and is_running() must always agree with
-// _tod_upgrades' TOD_UPG_RNG_DMG_BASE/PER_LV/MIN_SPEED and its inline moving
+// TOD_RNG_PCT_L1..L5 / MIN_SPEED and is_running() must always agree with
+// _tod_upgrades' TOD_UPG_RNG_DMG_L1..L5 / MIN_SPEED and its inline moving
 // check, or the card's two halves trigger on different definitions of
-// "moving". Change one file, change the other.
+// "moving". Change one file, change the other (and DETAIL[23] in the Lua).
 //
 // ENGINE LEVERS
 //   * `self waittill( "weapon_fired", weapon )` — the engine notifies the
@@ -42,8 +45,14 @@
 #insert scripts\shared\shared.gsh;
 
 #define TOD_RNG_DOMAIN        "runandgun"
-#define TOD_RNG_PCT_BASE      20     // Lv1: 20% of moving shots are free...
-#define TOD_RNG_PCT_PER_LV    15     // ...+15%/Lv -> Lv2 35%, Lv3 50%
+// THE LADDER (v16.50): % of moving shots that are free, by level. LOCKSTEP
+// with TOD_UPG_RNG_DMG_L1..L5 in _tod_upgrades.gsc (x0.01) and DETAIL[23] in
+// tod_upgrade.lua. Domain max 5 in add_domain — a 6th level would read L5.
+#define TOD_RNG_PCT_L1        16
+#define TOD_RNG_PCT_L2        28
+#define TOD_RNG_PCT_L3        38
+#define TOD_RNG_PCT_L4        46
+#define TOD_RNG_PCT_L5        52
 #define TOD_RNG_MIN_SPEED     120    // u/s 2D: faster than an ADS creep, slower than a run (base run ~190)
 
 #namespace tod_runandgun;
@@ -92,7 +101,13 @@ function shot_watch()
 		if ( !( self is_running() ) )
 			continue;
 
-		pct = TOD_RNG_PCT_BASE + ( lvl - 1 ) * TOD_RNG_PCT_PER_LV;
+		pct = rng_pct( lvl );
+		// DARK UPGRADE (v17.10): 52% -> 100% (was 77, user 2026-09-05). One table
+		// feeds BOTH halves of this domain (free shots and the damage bonus), so
+		// the step lands on both by construction -- which is what the card
+		// promises. LOCKSTEP: TOD_DARK_RNG_ADD 0.48 in _tod_upgrades.gsc.
+		if ( tod_upgrades::has_dark( self, TOD_RNG_DOMAIN ) )
+			pct += 48;
 		if ( RandomInt( 100 ) >= pct )
 			continue;
 
@@ -102,6 +117,17 @@ function shot_watch()
 		if ( isdefined( cap ) && cap > 0 && clip < cap )
 			self SetWeaponAmmoClip( w, clip + 1 );
 	}
+}
+
+// The stage table. Clamped at both ends so a level past the domain max (or a
+// stale 0) can never index off the ladder.
+function rng_pct( lvl )
+{
+	if ( lvl <= 1 ) return TOD_RNG_PCT_L1;
+	if ( lvl == 2 ) return TOD_RNG_PCT_L2;
+	if ( lvl == 3 ) return TOD_RNG_PCT_L3;
+	if ( lvl == 4 ) return TOD_RNG_PCT_L4;
+	return TOD_RNG_PCT_L5;
 }
 
 // "Running" = sprinting, or moving at run speed on the ground plane.

@@ -20,7 +20,7 @@ session, FIVE times now — never left dormant).
 ## The ladder to walk (from WIRING.md §10)
 choice banners up + hall quiet -> EXTRACT hold (verify old ending still
 lands) on run A; run B: ASCEND hold -> teleport + arrival banner -> grant
-audit (T3 gun PaP'd, domains maxed in pause menu, 10 perks, ammo/health) ->
+audit (v16.36: PERK SLOTS at 5 in the pause menu, all 9 perks, ammo/health; the class gun, PaP state and every other domain UNCHANGED) ->
 music = Neon Static -> door 1 buyable @3000 (party-scaled), sequential ->
 crates materialize floors 5+ -> hub 10 (PaP powers on, 2 perk pads occupied
 some hubs, crate) -> a down + respawn on the spire -> boss cadence + Panzer

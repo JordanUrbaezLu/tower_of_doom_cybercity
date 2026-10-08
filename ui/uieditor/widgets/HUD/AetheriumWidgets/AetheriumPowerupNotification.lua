@@ -1,3 +1,4 @@
+require( "ui.uieditor.widgets.HUD.AetheriumWidgets.TodUIOwnership" )
 -- Aetherium Power-up Notification Widget
 -- Displays notification when power-ups are picked up
 
@@ -33,6 +34,7 @@ end
 CoD.AetheriumPowerupNotification = InheritFrom(LUI.UIElement)
 CoD.AetheriumPowerupNotification.new = function(menu, controller)
 	local self = LUI.UIElement.new()
+    CoD.TodUIOwnership.Attach( self )
 	
 	if PreLoadFunc then
 		PreLoadFunc(self, controller)
@@ -63,8 +65,13 @@ CoD.AetheriumPowerupNotification.new = function(menu, controller)
 	self.powerupIcon:setAlpha(0)  -- Hidden by default
 	self:addElement(self.powerupIcon)
 	
-	-- Power-up text
-	self.powerupText = LUI.UIText.new()
+	-- Power-up text. [tod v19.58] the map's typeface (drop-in for UIText; engine
+	-- text only if the glyph widget is unavailable).
+	local okLabel, label = false, nil
+	if CoD.TodGlyphText and CoD.TodGlyphText.Label then
+		okLabel, label = pcall(CoD.TodGlyphText.Label)
+	end
+	self.powerupText = (okLabel and label) or LUI.UIText.new()
 	self.powerupText:setLeftRight(true, false, 574, 748)
 	self.powerupText:setTopBottom(true, false, 525, 541)
 	self.powerupText:setText(Engine.Localize(""))
@@ -182,6 +189,8 @@ CoD.AetheriumPowerupNotification.new = function(menu, controller)
 		PostLoadFunc(self, controller)
 	end
 	
+
+	-- =========================================================================
 	return self
 end
 

@@ -228,6 +228,27 @@ making it easier now that we have an endless mode" — THE SPIRE IS THE MAP'S
 HARD MODE by design now. Tune its pacing against that role: the 0.18 floor's
 contrast with the (gentler) base curve is the point, not an accident.
 
+**v16.9 (2026-09-01) — THE TRICKLE IS NOT THE CLOCK AT DEPTH.** First real
+spire run: "each round was like 15 minutes. We need to triple the speed."
+The 0.18 floor was already binding and could not help: `round_spawning`
+stalls on `zombie_ai_limit` (45) whenever that many stand, and stock's budget
+past round 10 grows as round² (round 40 = 168 solo / 888 for four; round 50 =
+249 / 1374). Once the party cannot out-kill the cap, round time = budget ÷
+kill rate, full stop. The lever is therefore the BUDGET:
+`_tod_endless_rounds::tod_max_zombies` is installed on stock's
+`level.max_zombie_func` hook and divides the curve by `TOD_SPIRE_BUDGET_DIV`
+while `tod_spire_active`; outside the spire it is stock verbatim. The divisor
+shipped at 3 and the user dialed it to **2** (floor 12) the same session,
+before any test ("Make it 1/2 and not 1/3") — read the define, not this line.
+`_tod_luck`'s fair-share normalization and `_tod_doors`' party-size ratio both
+resolve through the same hook, so luck-per-kill scales up with the smaller
+round by the same factor (a full clear still lands +40) and the door ratio is
+unchanged. The round already running at ascension is clamped in
+`_tod_spire::ascend` (the hook is only consulted at each round's top — same
+lesson as the 0.18 direct write). Upgrade events (every 4 rounds) and the
++0.28%/round speed curve arrive proportionally sooner in wall-clock terms,
+which is the intended compounding from §6a, not a side effect to fix.
+
 ## §6 What keeps running (nothing new to build)
 
 Endless rounds (the twist IS the mode), zombie speed curve (+0.28%/round
@@ -293,6 +314,8 @@ proposals you sent")
 5. Music: **dedicated Suno 5.5 track** (see §7 — decision superseded the
    reuse recommendation).
 6. "Power ups maxed" = upgrade domains + T3 PaP gun: **confirmed.**
+   **SUPERSEDED v16.36 (user 2026-09-02):** the grant no longer maxes anything but PERK SLOTS — the party keeps the build it beat the tower with, every perk is PERMANENT (re-given on revive/respawn), and a WON TRIAL deals the upgrade cards (CHANGELOG v16.37).
+   **SUPERSEDED AGAIN v17.56 (user 2026-09-04):** the spire has NO perk machines — "all the perks at every floor" (§ quotes above) was made moot by perma perks, so the v14.0 machine migration was retired whole: `_tod_perk_scatter::retire_all` parks the set at the ascension, the generator emits no perk anchors for the spire, hub vendors are PaP + crate only.
 
 Step-1 art exploration prompt + step-2 batch prompt + the Suno prompt were
 delivered in chat 2026-08-29; step-2 runs after the user picks a direction

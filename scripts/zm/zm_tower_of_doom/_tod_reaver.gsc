@@ -60,13 +60,14 @@
 
 #using scripts\zm\zm_tower_of_doom\_tod_bosses;   // boss_hp / pick_spawn_point / anchor_player / reward / pause+stuck watchers
 #using scripts\zm\zm_tower_of_doom\_tod_luck;     // boss LAST-HIT luck
+#using scripts\zm\zm_tower_of_doom\_tod_corpse_cleanup; // v17.96 — corpse_remove: a dead Reaver leaves the actor pool (stock-only usings, no cycle)
 
 // --- cadence: anchored to the round the LAP 20 breather door was bought
 // (_tod_doors::breather_unlock stamps level.tod_enemy_unlock_round["reaver"]),
 // then every 4th round. Never a global grid — a fast climber and a slow climber
 // must get the same fight relative to their own unlock. ---------------------
 #define TOD_REAVER_INTERVAL      4
-#define TOD_REAVER_INTERVAL_DEV  2     // dev: repeats twice as often for testing
+// RETIRED v16.87: TOD_REAVER_INTERVAL_DEV 2 (dev no longer changes cadence)
 #define TOD_REAVER_MAX_ALIVE     3     // concurrency roof — the AI budget must keep
                                        // feeding zombies (endless rounds depend on it)
 
@@ -119,7 +120,10 @@ function reaver_due( round )
 	if ( round < start )
 		return 0;
 
-	interval = ( ( IS_TRUE( level.tod_dev ) ) ? TOD_REAVER_INTERVAL_DEV : TOD_REAVER_INTERVAL );
+	// [v16.87] Ship cadence in every build — the dev interval is gone (user:
+	// dev must not add elites). LOCKSTEP with _tod_bosses / _tod_hellhounds /
+	// _tod_sprinter; the full note is on panzer_due in _tod_bosses.gsc.
+	interval = TOD_REAVER_INTERVAL;
 	if ( ( ( round - start ) % interval ) != 0 )
 		return 0;
 
@@ -154,13 +158,19 @@ function round_watch()
 			continue;
 
 		n = reaver_due( r );
+		// RAMPAGE (v14.20): the wave and its clamp both take the multiplier, so
+		// delivery is exactly 2x (min(2n,2R) == 2*min(n,R)). TOD_REAVER_MAX_ALIVE
+		// itself is NOT scaled — the director's standing gate below still admits
+		// at most 3 reavers at once; rampage only makes the wave re-feed longer.
+		m = tod_bosses::elite_mult();
+		n = n * m;
 		// SET-TO-MAX, NEVER SUM, capped at the concurrency roof (v10.4): += banked
 		// an unbounded backlog off unfinished waves — the ~30-protector bug of the
 		// 2026-08-23 playtest, in reaver form. A new wave RAISES the debt to its
 		// own size at most; the punishment for not clearing one is the reavers
-		// still standing, not a queue.
-		if ( n > TOD_REAVER_MAX_ALIVE )
-			n = TOD_REAVER_MAX_ALIVE;
+		// still standing, not a queue. Doubling a BOUNDED number keeps it bounded.
+		if ( n > ( TOD_REAVER_MAX_ALIVE * m ) )
+			n = TOD_REAVER_MAX_ALIVE * m;
 		if ( n > 0 && n > level.tod_reaver_debt )
 			level.tod_reaver_debt = n;
 	}
@@ -200,6 +210,13 @@ function director()
 
 		// Never spawn into the upgrade-choice freeze (players are frozen).
 		if ( IS_TRUE( level.tod_upgrade_pause ) )
+			continue;
+
+		// COMBINED ELITE ROOF (v14.20) — see _tod_bosses::elites_over_roof().
+		// This director used to check only its OWN type, so it could add reavers
+		// to an already-full board of panzers, protectors and hounds. Held debt
+		// is not lost; it drains on the next tick.
+		if ( tod_bosses::elites_over_roof() )
 			continue;
 
 		if ( level.tod_reaver_debt > 0 && level.tod_reaver_alive_n < TOD_REAVER_MAX_ALIVE )
@@ -260,6 +277,11 @@ function spawn_reaver()
 	boss.ignore_nuke = true;
 	boss.allow_zombie_to_target_ai = 0;
 	boss.disableAmmoDrop = true;
+	// v17.94: under a world pause the pause watcher parks this tree at its
+	// idle branch (zombie_think_done = false) — rate 0.05 + ignoreall did not
+	// stop a Fury from bamfing onto a frozen player during the Warden King's
+	// dark deals. Full record on _tod_bosses::boss_pause_watch.
+	boss.tod_bt_idle_on_pause = true;
 
 	boss thread reaver_tune();
 	boss thread death_watch();
@@ -279,11 +301,18 @@ function reaver_tune()
 	if ( !isdefined( self ) || !isalive( self ) )
 		return;
 
-	// Hunt immediately (the pack only sets this on its own find-flesh path).
-	self.zombie_think_done = 1;
+	// Hunt immediately (the pack only sets this on its own find-flesh path)...
+	// ...unless the pause watcher has PARKED this Fury meanwhile (v17.94): a
+	// meteor in flight when a world pause began lands into the freeze, and
+	// this one-second-late write would lift the park. The un-park writes 1.
+	if ( !IS_TRUE( self.tod_bt_parked ) )
+		self.zombie_think_done = 1;
 
 	rn = ( ( isdefined( level.round_number ) ) ? level.round_number : 1 );
-	hp = tod_bosses::boss_hp( rn, TOD_REAVER_HP_ANCHOR, TOD_REAVER_HP_BASE, TOD_REAVER_HP_EXP );
+	// x elite_hp_mult (v18.2): the -10% elite pass, one owner in _tod_bosses.
+	hp = int( tod_bosses::boss_hp( rn, TOD_REAVER_HP_ANCHOR, TOD_REAVER_HP_BASE, TOD_REAVER_HP_EXP ) * tod_bosses::elite_hp_mult() );
+	if ( hp < 1 )
+		hp = 1;
 	self.maxhealth = hp;
 	self.health = hp;
 
@@ -298,10 +327,20 @@ function death_watch()
 {
 	level endon( "end_game" );
 
+	source = tod_luck::track_source( self );
 	self waittill( "death", attacker );
 
 	// COOP CRASH GUARD (map 1): the corpse can be reaped the same frame the
 	// death notify fires — any self deref then throws and ends the match.
-	tod_luck::boss_kill( attacker, "reaver" );   // LAST HIT takes the luck
-	tod_bosses::grant_elite_reward( "REAVER", attacker );   // v14.5: killer-only 500 (×2x ×BOUNTY)
+	org = source.org;
+	if ( isdefined( self ) )
+		org = self.origin;   // v18.96: the bottle roll's spot (guarded — same-frame reap)
+	tod_luck::boss_kill( attacker, "reaver", org );
+	tod_bosses::grant_elite_reward( "REAVER", attacker, org );   // v14.5: killer-only 500 (×2x ×BOUNTY) + v18.96 bottle roll
+
+	// v17.96 — THE BODY LEAVES THE POOL (see _tod_bosses::death_watch for the
+	// measurement). The vendored fury death is a model swap + NotSolid and
+	// nothing ever Deleted it; apothiconDeathTerminate is empty.
+	if ( isdefined( self ) )
+		self thread tod_corpse_cleanup::corpse_remove( tod_bosses::elite_corpse_linger() );
 }

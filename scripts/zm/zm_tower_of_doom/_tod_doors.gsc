@@ -20,8 +20,32 @@
 #using scripts\zm\_zm_utility;
 #using scripts\zm\zm_tower_of_doom\_tod_door_data;
 #using scripts\zm\zm_tower_of_doom\_tod_luck;   // door buys pay luck (v5)
+#using scripts\zm\zm_tower_of_doom\_tod_perk_scatter;   // v16.11: derez_burst on the door slide (import graph cycle-free — docs/61 verified perk_scatter never reaches _tod_doors)
 
 #insert scripts\shared\shared.gsh;
+
+// v16.11 — DOOR GATES THAT OPEN (facelift §2; the frame geometry is
+// gen_tower_map.js DOORS `gate`). A lap door no longer blinks away: on the buy
+// the slab SLIDES INTO THE CORE like a pocket door — MoveX toward x=0 by
+// TOD_DOOR_SLIDE_DIST (the slab is 160 wide, core face to the railing's inner face; 168 puts it fully inside the
+// 512-square core, which is solid, so it is never seen again even before the
+// Hide) over TOD_DOOR_SLIDE_SECS, with the map's own de-rez burst at the
+// doorway and stock's heavy-door cue (the alias _zm_blockers plays for every
+// stock door, so it is in every zombies sound bank). The slab stays Solid and
+// the paths stay cut until the slide ends, then the old Hide / NotSolid /
+// ConnectPaths sequence runs unchanged — every consumer of "the door is open"
+// sees exactly what it saw before, TOD_DOOR_SLIDE_SECS later. LAP DOORS ONLY: the roof,
+// power and bay slabs sit in other walls and keep the instant open.
+// TOD_DOOR_SLIDE 0 restores the blink for every door (-GscOnly).
+// v16.56 (user 2026-09-02: "the sliding doors ... need to be a bit quicker.
+// People will get annoyed and die from it moving too slow"): 1.2 -> 0.5 s.
+// THE SLAB IS SOLID FOR THE WHOLE SLIDE (Hide/NotSolid/ConnectPaths only run
+// on movedone), so the slide length IS a wall the buyer stands at with the
+// horde behind them — every tenth of a second here is paid at the door.
+#define TOD_DOOR_SLIDE        1
+#define TOD_DOOR_SLIDE_DIST   168   // the slab's width + 8. LOCKSTEP with gen_tower_map DOORS: 160 wide, CORE..PX, nothing on the railing since v19.56 (v19.54's rail-band caps made it 180 / 188 - rejected, they overlapped the railing)
+#define TOD_DOOR_SLIDE_SECS   0.5
+#define TOD_DOOR_SLIDE_SOUND  "zmb_heavy_door_open"
 
 #namespace tod_doors;
 
@@ -85,6 +109,12 @@ function door_buy_setup( d )
 	// run the open path without the buy closure's locals.
 	d.tod_slab = slab;
 	d.tod_flag = flag;
+	// v16.11: the slide. Lap doors sit on the east flight (org x=+336, odd
+	// floors) or the west flight (x=-336, even floors); "into the core" is
+	// toward x=0 either way. Only enter_lapN doors slide (see the header).
+	d.tod_org = info.org;
+	d.tod_is_lap = IsSubStr( flag, "enter_lap" );
+	d.tod_slide_dx = ( ( info.org[ 0 ] > 0 ) ? -TOD_DOOR_SLIDE_DIST : TOD_DOOR_SLIDE_DIST );
 	if ( flag != "" )
 	{
 		if ( !isdefined( level.tod_doors_by_flag ) )
@@ -313,7 +343,7 @@ function buy_trigger_wait( d, cost, slab, flag )
 		player zm_score::minus_to_player_score( price );
 		player PlaySound( "zmb_cha_ching" );
 		d.tod_bought = true;
-		tod_luck::door_buy( player );   // LUCK +8 to the buyer (v5 luck bar)
+		tod_luck::door_buy( player, d.tod_org );   // generated doorway centre; brush origins are 0,0,0
 
 		if ( flag != "" && level flag::exists( flag ) )
 		{
@@ -322,11 +352,7 @@ function buy_trigger_wait( d, cost, slab, flag )
 		}
 
 		if ( isdefined( slab ) )
-		{
-			slab Hide();
-			slab NotSolid();
-			slab ConnectPaths();
-		}
+			level thread open_slab( d, slab );   // v16.11: slides, then the old Hide/NotSolid/ConnectPaths
 
 		// retire BOTH triggers (clear the prompt on the now-open door)
 		for ( i = 0; i < d.tod_trigs.size; i++ )
@@ -339,6 +365,34 @@ function buy_trigger_wait( d, cost, slab, flag )
 		}
 		return;
 	}
+}
+
+// ---------------------------------------------------------------------------
+// v16.11 — the one open path every door takes (see the TOD_DOOR_SLIDE header).
+// Threaded by its callers so the slide never delays the trigger retire
+// or the flag set. Falls through to the instant open for non-lap doors, for
+// a door door_buy_setup never stamped (dev path before init), or with the
+// define off.
+// ---------------------------------------------------------------------------
+function open_slab( d, slab )
+{
+	if ( !isdefined( slab ) )
+		return;
+	if ( TOD_DOOR_SLIDE && isdefined( d ) && IS_TRUE( d.tod_is_lap ) && isdefined( d.tod_slide_dx ) )
+	{
+		if ( isdefined( d.tod_org ) )
+		{
+			tod_perk_scatter::derez_burst( d.tod_org );
+			zm_utility::play_sound_at_pos( TOD_DOOR_SLIDE_SOUND, d.tod_org );
+		}
+		slab MoveX( d.tod_slide_dx, TOD_DOOR_SLIDE_SECS );
+		slab waittill( "movedone" );
+		if ( !isdefined( slab ) )
+			return;
+	}
+	slab Hide();
+	slab NotSolid();
+	slab ConnectPaths();
 }
 
 // ---------------------------------------------------------------------------
@@ -372,11 +426,7 @@ function force_open_by_flag( flag )
 		breather_unlock( d.tod_flag );   // harmless for enter_tpbay (no enemy row)
 	}
 	if ( isdefined( d.tod_slab ) )
-	{
-		d.tod_slab Hide();
-		d.tod_slab NotSolid();
-		d.tod_slab ConnectPaths();
-	}
+		level thread open_slab( d, d.tod_slab );   // v16.11: same slide as a purchase
 	for ( i = 0; i < d.tod_trigs.size; i++ )
 	{
 		if ( isdefined( d.tod_trigs[ i ] ) )
@@ -485,11 +535,7 @@ function dev_open_all_doors()
         {
             slab = GetEnt( d.target, "targetname" );
             if ( isdefined( slab ) )
-            {
-                slab Hide();
-                slab NotSolid();
-                slab ConnectPaths();
-            }
+                level thread open_slab( d, slab );   // v16.11: slides if door_buy_setup stamped this ent, else the instant open
         }
 
         d.tod_bought = true;

@@ -188,7 +188,7 @@ appear — re-run `--update` ONLY if the numbers are understood (expect
 spireDetached 0).
 
 ## 10. Live-verify ladder (the user's run)
-choice both ways -> grant audit (tiers/PaP/domains/perks all land) -> climb
+choice both ways -> grant audit (v16.36: perk slots + perks land, build otherwise untouched; a down + revive keeps the perks; a trial win deals cards) -> climb
 window churn (doors sequential, crates materialize) -> hub vendors (PaP + 2
 perks + crate) -> a down/respawn on the spire -> wipe screen -> summit
 extraction screen. Boss cadence + Panzer music override on the spire.

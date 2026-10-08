@@ -41,20 +41,213 @@ function in_hall( org )
 	if ( y < 7840 || y > 9376 ) return false;
 	return ( org[ 2 ] > 19328 );
 }
-function exfil_org()       { return ( 0, 9112, 19400 ); }
+function exfil_org()       { return ( 0, 9112, 19432 ); }
 function exfil_radius()    { return 96; }
 function hall_center()     { return ( 0, 8608, 19392 ); }
+function rocket_enabled()   { return true; }
+function rocket_len()       { return 440; }
+function rocket_feet_r()    { return 106.6; }
+function rocket_bell_x()    { return 21.85; }
+function rocket_body_r()
+{
+	a = [];
+	a[ 0 ] = 104.27;
+	a[ 1 ] = 100.25;
+	a[ 2 ] = 45.53;
+	a[ 3 ] = 43.66;
+	a[ 4 ] = 48.92;
+	a[ 5 ] = 56.29;
+	a[ 6 ] = 87.93;
+	a[ 7 ] = 59.5;
+	a[ 8 ] = 59.5;
+	a[ 9 ] = 60.1;
+	a[ 10 ] = 60.97;
+	a[ 11 ] = 59.84;
+	a[ 12 ] = 59.73;
+	a[ 13 ] = 61.13;
+	a[ 14 ] = 61.33;
+	a[ 15 ] = 60.33;
+	a[ 16 ] = 61.91;
+	a[ 17 ] = 62.53;
+	a[ 18 ] = 62.81;
+	a[ 19 ] = 61.49;
+	a[ 20 ] = 62.67;
+	a[ 21 ] = 63.06;
+	a[ 22 ] = 64.1;
+	a[ 23 ] = 62.61;
+	a[ 24 ] = 62.6;
+	a[ 25 ] = 62.35;
+	a[ 26 ] = 61.95;
+	a[ 27 ] = 60.13;
+	a[ 28 ] = 58.7;
+	a[ 29 ] = 55.69;
+	a[ 30 ] = 55.22;
+	a[ 31 ] = 52.6;
+	a[ 32 ] = 50.3;
+	a[ 33 ] = 47.59;
+	a[ 34 ] = 43.71;
+	a[ 35 ] = 38.51;
+	a[ 36 ] = 34.21;
+	a[ 37 ] = 28.95;
+	a[ 38 ] = 22.29;
+	a[ 39 ] = 14.02;
+	a[ 40 ] = 6.06;
+	return a;
+}
+function rocket_org( kind )
+{
+	if ( kind == "spire" ) return ( 0, 8608, 19408 );
+	return ( 0, 9112, 19424 );
+}
+function rocket_yaw( kind )
+{
+	if ( kind == "spire" ) return -39.8;
+	return -44.4;
+}
+function rocket_trigs( kind )
+{
+	a = [];
+	if ( kind == "spire" )
+	{
+		a[ 0 ] = ( 0, 8445.4, 19432 );
+		a[ 1 ] = ( 114.98, 8493.02, 19432 );
+		a[ 2 ] = ( 162.6, 8608, 19432 );
+		a[ 3 ] = ( 114.98, 8722.98, 19432 );
+		a[ 4 ] = ( 0, 8770.6, 19432 );
+		a[ 5 ] = ( -114.98, 8722.98, 19432 );
+		a[ 6 ] = ( -162.6, 8608, 19432 );
+		a[ 7 ] = ( -114.98, 8493.02, 19432 );
+		return a;
+	}
+	if ( kind == "extract" )
+	{
+		a[ 0 ] = ( 0, 8949.4, 19432 );
+		a[ 1 ] = ( 114.98, 8997.02, 19432 );
+		a[ 2 ] = ( 162.6, 9112, 19432 );
+		a[ 3 ] = ( 114.98, 9226.98, 19432 );
+		a[ 4 ] = ( 0, 9274.6, 19432 );
+		a[ 5 ] = ( -114.98, 9226.98, 19432 );
+		a[ 6 ] = ( -162.6, 9112, 19432 );
+		a[ 7 ] = ( -114.98, 8997.02, 19432 );
+		return a;
+	}
+	return a;
+}
+function rocket_trig_r()    { return 84; }
+function rocket_trig_h()    { return 96; }
+function rocket_cam_right( kind )
+{
+	if ( kind == "spire" ) return ( -0.64, -0.77, 0 );
+	return ( 0.6, -0.8, 0 );
+}
+function rocket_clip_target( kind ) { return "tod_rocket_clip_" + kind; }
+function rocket_keys( kind )
+{
+	a = [];
+	if ( kind == "spire" )
+	{
+		a[ 0 ] = ( 0, 8608, 19408 );
+		a[ 1 ] = ( 0, 8608, 21000 );
+		a[ 2 ] = ( 442.75, 8239.59, 22582.49 );
+		a[ 3 ] = ( 1563.82, 7306.73, 23424.52 );
+		a[ 4 ] = ( 2838.66, 6245.93, 23132.08 );
+		a[ 5 ] = ( 3670.75, 5553.54, 21842.03 );
+		a[ 6 ] = ( 9664.32, 566.26, 419.46 );
+		return a;
+	}
+	if ( kind == "extract" )
+	{
+		a[ 0 ] = ( 0, 9112, 19424 );
+		a[ 1 ] = ( 0, 9112, 20600 );
+		a[ 2 ] = ( 420, 8700, 22700 );
+		a[ 3 ] = ( 700, 8400, 24200 );
+		a[ 4 ] = ( 800, 8300, 26000 );
+		a[ 5 ] = ( 820, 8280, 36000 );
+		return a;
+	}
+	return a;
+}
+function rocket_tans( kind )
+{
+	a = [];
+	if ( kind == "spire" )
+	{
+		a[ 0 ] = ( 0, 0, 1 );
+		a[ 1 ] = ( 0, 0, 1 );
+		a[ 2 ] = ( 0.49, -0.41, 0.77 );
+		a[ 3 ] = ( 0.76, -0.63, 0.17 );
+		a[ 4 ] = ( 0.67, -0.55, -0.5 );
+		a[ 5 ] = ( 0.26, -0.22, -0.94 );
+		a[ 6 ] = ( 0.26, -0.22, -0.94 );
+		return a;
+	}
+	if ( kind == "extract" )
+	{
+		a[ 0 ] = ( 0, 0, 1 );
+		a[ 1 ] = ( 0, 0, 1 );
+		a[ 2 ] = ( 0.2, -0.2, 0.96 );
+		a[ 3 ] = ( 0.12, -0.12, 0.99 );
+		a[ 4 ] = ( 0, 0, 1 );
+		a[ 5 ] = ( 0, 0, 1 );
+		return a;
+	}
+	return a;
+}
+function rocket_land_keys( kind )
+{
+	a = [];
+	if ( kind == "spire" )
+	{
+		a[ 0 ] = ( 2600, 6300, 28000 );
+		a[ 1 ] = ( 900, 7800, 23800 );
+		a[ 2 ] = ( 0, 8608, 21900 );
+		a[ 3 ] = ( 0, 8608, 19408 );
+		return a;
+	}
+	if ( kind == "extract" )
+	{
+		a[ 0 ] = ( -2400, 6600, 28000 );
+		a[ 1 ] = ( -860, 8240, 24200 );
+		a[ 2 ] = ( -500, 8620, 23000 );
+		a[ 3 ] = ( 0, 9112, 22200 );
+		a[ 4 ] = ( 0, 9112, 19424 );
+		return a;
+	}
+	return a;
+}
+function rocket_land_tans( kind )
+{
+	a = [];
+	if ( kind == "spire" )
+	{
+		a[ 0 ] = ( -0.5, 0.45, -0.74 );
+		a[ 1 ] = ( -0.35, 0.32, -0.88 );
+		a[ 2 ] = ( 0, 0, -1 );
+		a[ 3 ] = ( 0, 0, -1 );
+		return a;
+	}
+	if ( kind == "extract" )
+	{
+		a[ 0 ] = ( 0.5, 0.4, -0.77 );
+		a[ 1 ] = ( 0.25, 0.3, -0.92 );
+		a[ 2 ] = ( 0.45, 0.45, -0.77 );
+		a[ 3 ] = ( 0, 0, -1 );
+		a[ 4 ] = ( 0, 0, -1 );
+		return a;
+	}
+	return a;
+}
 function gate_org()        { return ( 0, 7860, 19392 ); }
 function mast_tip_org()    { return ( 0, 0, 21312 ); }
-function station_org()     { return ( -664, 8308, 19392 ); }
-function station_trig_org(){ return ( -624, 8308, 19392 ); }
+function station_org()     { return ( -704, 8608, 19392 ); }
+function station_trig_org(){ return ( -664, 8608, 19392 ); }
 function station_yaw()     { return 90; }
 
 // THE HALL AMMO CRATE (v12) — spawned by _tod_ammo_crate.gsc, which reads
 // these instead of hardcoding, so the crate and its generator-emitted
 // collision clip (label "crown hall ammo crate body") can never drift.
-function crown_crate_org() { return ( 676, 8308, 19392 ); }
-function crown_crate_yaw() { return 270; }
+function crown_crate_org() { return ( 686, 8308, 19392 ); }
+function crown_crate_yaw() { return 90; }
 
 // The finale's four QUARTER-PROGRESS beacons — one ignites per quarter of
 // the closing song (_tod_finale::ignite_pylon). These are the CIRCLET's
@@ -80,18 +273,18 @@ function pylon_orgs()
 function sconce_orgs()
 {
 	a = [];
-	a[ 0 ] = ( -726, 8088, 19592 );
-	a[ 1 ] = ( 726, 8088, 19592 );
-	a[ 2 ] = ( -726, 8296, 19592 );
-	a[ 3 ] = ( 726, 8296, 19592 );
-	a[ 4 ] = ( -726, 8504, 19592 );
-	a[ 5 ] = ( 726, 8504, 19592 );
-	a[ 6 ] = ( -726, 8712, 19592 );
-	a[ 7 ] = ( 726, 8712, 19592 );
-	a[ 8 ] = ( -726, 8920, 19592 );
-	a[ 9 ] = ( 726, 8920, 19592 );
-	a[ 10 ] = ( -726, 9128, 19592 );
-	a[ 11 ] = ( 726, 9128, 19592 );
+	a[ 0 ] = ( -726, 8048, 19592 );
+	a[ 1 ] = ( 726, 8048, 19592 );
+	a[ 2 ] = ( -726, 8236, 19592 );
+	a[ 3 ] = ( 726, 8236, 19592 );
+	a[ 4 ] = ( -726, 8420, 19592 );
+	a[ 5 ] = ( 726, 8420, 19592 );
+	a[ 6 ] = ( -726, 8796, 19592 );
+	a[ 7 ] = ( 726, 8796, 19592 );
+	a[ 8 ] = ( -726, 8980, 19592 );
+	a[ 9 ] = ( 726, 8980, 19592 );
+	a[ 10 ] = ( -726, 9168, 19592 );
+	a[ 11 ] = ( 726, 9168, 19592 );
 	return a;
 }
 function sconce_yaws()
@@ -132,9 +325,10 @@ function beat_flare_orgs()
 	return a;
 }
 function beat_flare_trigger_y()    { return 6720; }   // leader crossing J4
-// A4: the hold-out opener Panzer crashes into the hall here — clear of the
-// 160 gather ring, the dais, the pillars, the crate and the station.
-function siege_panzer_org()        { return ( 280, 8850, 19392 ); }
+// A4: the hold-out opener Panzer crashes into the hall here — on open nave
+// floor: 317u from hall_center (gather ring 160), 92u short of the
+// sanctuary foot, 136u inside the east pier line (v16.35 basilica).
+function siege_panzer_org()        { return ( 192, 8860, 19392 ); }
 // THE CROWN'S HEARTBEAT rider: the girandole — same coordinate as its
 // baked light (the ruby drop-pendant under the vortex bell).
 function girandole_org()           { return ( 0, 8624, 14336 ); }
@@ -154,15 +348,15 @@ function avenue_pylon_orgs()
 	a[ 7 ] = ( 360, 4208, 19928 );
 	return a;
 }
-// A4 pillar count-in hosts: above each hall pillar cap (cap tops at +176;
-// the baked quarter lights sit at +260 — the host at +200 splits the gap).
+// A4 pillar count-in hosts: the FOUR CROSSING PIERS of the basilica
+// (v16.35), 16u above the beam top (+216) and well under the +260 lights.
 function hall_pillar_orgs()
 {
 	a = [];
-	a[ 0 ] = ( -448, 8160, 19592 );
-	a[ 1 ] = ( 448, 8160, 19592 );
-	a[ 2 ] = ( -448, 9056, 19592 );
-	a[ 3 ] = ( 448, 9056, 19592 );
+	a[ 0 ] = ( -384, 8424, 19624 );
+	a[ 1 ] = ( 384, 8424, 19624 );
+	a[ 2 ] = ( -384, 8792, 19624 );
+	a[ 3 ] = ( 384, 8792, 19624 );
 	return a;
 }
 // THE LANE LOTTERY (B1). Parallel arrays, index = tod_lane_seal_<i>:

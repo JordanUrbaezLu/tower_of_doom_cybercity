@@ -1,0 +1,53 @@
+{
+  "sources": {
+    "C:\\Users\\jorda\\Documents\\BO3_tools\\Greyhound\\exported_files\\black_ops_3\\xmodels\\wpn_t7_zmb_hd_staff_crystal_fire_world\\wpn_t7_zmb_hd_staff_crystal_fire_world_LOD0.XMODEL_BIN": "671196310156ff739228ff16f2879878d02b025af7800cd8a0c69b817fb7a1df",
+    "C:\\Users\\jorda\\Documents\\BO3_tools\\Greyhound\\exported_files\\black_ops_3\\xmodels\\wpn_t7_zmb_hd_staff_crystal_fire_view\\wpn_t7_zmb_hd_staff_crystal_fire_view_LOD0.XMODEL_BIN": "671196310156ff739228ff16f2879878d02b025af7800cd8a0c69b817fb7a1df",
+    "C:\\Users\\jorda\\Documents\\BO3_tools\\Greyhound\\exported_files\\black_ops_3\\xmodels\\wpn_t7_zmb_hd_staff_crystal_lightning_world\\wpn_t7_zmb_hd_staff_crystal_lightning_world_LOD0.XMODEL_BIN": "b5697e85c6446183a7689339f3d14c0e427bb99a3f4556fb95599c483ccc43dc",
+    "C:\\Users\\jorda\\Documents\\BO3_tools\\Greyhound\\exported_files\\black_ops_3\\xmodels\\wpn_t7_zmb_hd_staff_crystal_lightning_view\\wpn_t7_zmb_hd_staff_crystal_lightning_view_LOD0.XMODEL_BIN": "b5697e85c6446183a7689339f3d14c0e427bb99a3f4556fb95599c483ccc43dc"
+  },
+  "files": {
+    "model_export/tod_staff_crystal/tod_staff_crystal_fire_world.XMODEL_BIN": "671196310156ff739228ff16f2879878d02b025af7800cd8a0c69b817fb7a1df",
+    "model_export/tod_staff_crystal/tod_staff_crystal_fire_view.XMODEL_BIN": "83cc9e40c8aec6e400fe690e38a2efca3112cc3717321cb35b59b77bb8f8a53e",
+    "model_export/tod_staff_crystal/tod_staff_crystal_lightning_world.XMODEL_BIN": "b5697e85c6446183a7689339f3d14c0e427bb99a3f4556fb95599c483ccc43dc",
+    "model_export/tod_staff_crystal/tod_staff_crystal_lightning_view.XMODEL_BIN": "9981d1c0176eaa798b5680d15659370408b244b45bf6c168ea2d3cbba86c3afe",
+    "source_data/tod_staff_crystal.gdt": "aa3ec05ddcffaefe007063a9134e073d43d07189f5e78a447b9a1ed81b1d32da"
+  },
+  "geometry": {
+    "tod_staff_crystal_fire_world": {
+      "bones": [
+        "tag_clip_fire"
+      ],
+      "materials": [
+        "mtl_wpn_t7_zmb_hd_staff_crystal_fire"
+      ],
+      "triangles": 120
+    },
+    "tod_staff_crystal_fire_view": {
+      "bones": [
+        "tag_tod_staff_crystal"
+      ],
+      "materials": [
+        "mtl_wpn_t7_zmb_hd_staff_crystal_fire"
+      ],
+      "triangles": 120
+    },
+    "tod_staff_crystal_lightning_world": {
+      "bones": [
+        "tag_clip_lightning"
+      ],
+      "materials": [
+        "mtl_wpn_t7_zmb_hd_staff_crystal_lighting"
+      ],
+      "triangles": 36
+    },
+    "tod_staff_crystal_lightning_view": {
+      "bones": [
+        "tag_tod_staff_crystal"
+      ],
+      "materials": [
+        "mtl_wpn_t7_zmb_hd_staff_crystal_lighting"
+      ],
+      "triangles": 36
+    }
+  }
+}

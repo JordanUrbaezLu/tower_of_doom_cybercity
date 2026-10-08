@@ -44,43 +44,107 @@ function init()
 {
 	level thread power_glow_watch();
 	level thread bo7_machine_assets_pass();   // v13.3b — see the pass's header
-	level thread solo_qr_power_gate();        // v13.5 — see its header
+	level thread solo_qr_price_fix();         // v18.15 — a PRICE fix, not a gate; see its header
 }
 
-// v13.5 (user live report 2026-08-28: "Why am I able to buy QR when I never
-// turned on power ... Also why does QR say 1500 when on solo it should be
-// 500"). NOT a dev/god leak — both are STOCK behaviors, verified in source:
+// SOLO QUICK REVIVE IS A PRICE FIX, NOT A GATE (v18.15).
 //
-// 1. SOLO QR IS SELF-POWERED FROM SPAWN by stock design: its power-override
-//    think skips the power wait entirely on solo (_zm_perk_quick_revive.gsc
-//    :165-168 `else if ( !solo_mode )`) and marks its triggers powered at
-//    :202. Classic-zombies tradition — but THIS map's rule is "every perk
-//    dark and unbuyable until the switch", so solo QR is re-gated here by
-//    flipping the trigger's own .power_on field, which drives stock's native
-//    refusal AND the kit's Power Required card (_zm_perks.gsc:480/:661) —
-//    correct copy for free, no custom hint lane.
-// 2. THE 1500-ON-SOLO PRICE is an init-order latch: stock registers QR's cost
-//    via revive_cost_override(), which prices by GetPlayers().size — and at
-//    registration the count is ZERO, so solo evaluates as "not solo" and
-//    1500 sticks. Stock's own repricer (update_quick_revive) only runs from
-//    the HOT-JOIN check, which is a no-op in a solo game. Both (string,cost)
-//    pairs were already precached in the entry script (:149-150 — someone
-//    expected solo-500), so re-pricing to 500 renders fine; the hint restamps
-//    at the power flip this gate creates.
-// 3. Solo QR's think parks forever after its early power pass, so nothing
-//    stock re-lights the machine at the real power-on — this gate also swaps
-//    the _on mesh so solo QR lights with the rest of the roster.
-// Co-op: untouched — stock's native gating already does all of this.
-// KNOWN EDGE, accepted: a hot-join into a solo-started game pre-power flips
-// QR to stock co-op handling mid-run; stock's own transition owns it then.
-function solo_qr_power_gate()
+// THE RULE, from the user 2026-09-07 after playing v18.14: "You should be able
+// to buy a quick revive before turning on power on the solo. It should still be
+// five hundred, and it should still work." That is also exactly what stock
+// does, and it is classic-zombies tradition. This function exists ONLY to make
+// the price and the sign correct; it must never stand between the player and
+// the machine.
+//
+// TWO BUGS AND ONE SELF-INFLICTED REGRESSION, in order, because the shape of
+// the mistake matters more than the fix:
+//
+// 1. v13.5/v13.6 tried to GATE this, to satisfy an older reading of the map
+//    rule "every perk dark and unbuyable until the switch". It gated it by
+//    writing `t.power_on = false` on the vending trigger, believing that field
+//    "drives stock's native refusal AND the kit's Power Required card".
+//    IT DRIVES NEITHER. In _zm_perks.gsc the buy loop (~:537-609) tests
+//    HasPerk, custom_perk_validation, points and the perk limit and NEVER reads
+//    .power_on; the field is read only at the end of vending_trigger_post_think
+//    (~:659-665) — the "machine was powered down WHILE DRINKING" safety —
+//    as `if ( !IS_TRUE( self.power_on ) ) { wait 1; perk_pause( ... ); }`.
+//    So the sale went through and the perk was UnsetPerk'd a second later. In
+//    solo the give hook had already run (self.lives = 1, solo_lives_given++)
+//    and take_quick_revive_perk has an EMPTY body, so the player was left
+//    holding a life with no perk: player_laststand (_zm.gsc:2521-2527) needs
+//    BOTH, so the next down skipped last stand entirely and ended the run.
+//    That is the Workshop report (fckspencer 2026-09-07, "quick revive not
+//    working on solo ... i just die, no effect from quick revive").
+//
+// 2. v18.14 fixed the poisoning by TAKING THE TRIGGER OFF THE AIR until power
+//    (TriggerEnable(false)). The perk stopped being stolen — and stopped being
+//    BUYABLE, which nobody had asked for. The user found it in one session:
+//    "that's a new regression just introduced." The error was treating a stale
+//    design note in this file's own header as the requirement, instead of
+//    asking what the behaviour should be. A ten-day-old bug does not license a
+//    behaviour change smuggled in beside its fix.
+//
+// SO, NOW: no gate of any kind. .power_on is LEFT TRUE where stock stamps it
+// (_zm_perk_quick_revive.gsc:202), which is what keeps the post-purchase pause
+// from ever arming — that single non-write is the whole fix for bug 1. Do NOT
+// write that field false here again, for any reason.
+//
+// WHAT IS STILL WORTH DOING, and why it has to wait for stock:
+//   * THE PRICE. Stock registers QR's cost through revive_cost_override(),
+//     which prices by GetPlayers().size — and at registration that count is
+//     ZERO, so solo evaluates as "not solo" and 1500 sticks. Stock's own
+//     repricer (update_quick_revive) runs only from the HOT-JOIN check, a
+//     no-op in a solo game. The value is LATCHED onto the trigger as t.cost
+//     (_zm_perks.gsc ~:496-500), so the fix must land on the trigger, not on
+//     the _custom_perks table, and must land AFTER the latch.
+//   * THE SIGN. Stock stamps the buy hint ONCE (~:528-531) with that same 1500
+//     local and never re-stamps it — the think then parks in waittill("trigger")
+//     forever. So v13.6 corrected the CHARGE and left the SIGN reading 1500,
+//     which is the half the player actually reads. Re-stamped here with the
+//     same hint_string and 500: one extra DISTINCT triggerstring for the match
+//     (500 is a compile-time constant, so it can never mint a second).
+//   * THE MESH. Solo QR is genuinely powered and selling from round 1, so it
+//     should LOOK powered; coherence_pass already lights it off the same true
+//     .power_on. The explicit SetModel is the immediate one, so the machine is
+//     never briefly dark on a machine you can already use.
+//
+// The 10 s cap on the stamp wait is so a surprise flow can never hang us; if it
+// expires we still write the price, which is strictly better than not.
+// Co-op (v19.11 + 2026-09-24): the same re-assert with 1500, but only AFTER the
+// power switch — see the co-op wait below. (This line used to say co-op was
+// "untouched"; v19.11 changed that and the header did not follow.)
+function solo_qr_price_fix()
 {
 	level endon( "end_game" );
 
-	while ( GetPlayers().size == 0 )
-		wait 0.25;
-	if ( GetPlayers().size != 1 )
-		return;
+	// v19.11 — CO-OP WAS PRICED 500 (Workshop / user 2026-09-15: "QR is broken
+	// ... For coop it says 500. We just need two prices 500 solo and 1500
+	// coop"). The gate below used to be `GetPlayers().size != 1` evaluated the
+	// instant the FIRST player existed — and in co-op the host exists alone for
+	// a moment before the second client finishes connecting, so a two-player
+	// game passed the solo test and this function then re-asserted 500 onto the
+	// trigger for 20 s, stamping over stock's correct 1500. THE PARTY SIZE IS NOT
+	// KNOWN UNTIL STOCK SAYS SO: _zm.gsc waits for every expected player, sets
+	// "all_players_connected", and only THEN decides "solo_game" from the
+	// settled count. Wait for that flag and read that decision — the same two
+	// facts stock's own laststand / solo-revive lanes run on.
+	//
+	// TWO PRICES, ONE PER BRANCH, BOTH ASSERTED THE SAME WAY. Solo keeps the
+	// 500 fix exactly as it was. Co-op now runs the same re-assert loop with
+	// 1500 — stock already lands 1500 there, but stock's own cost function
+	// (revive_cost_override -> use_solo_revive) prices by the LIVE player count
+	// at whatever instant it is called, and the whole point of this pass is
+	// that nothing about this price may depend on a moment. The pair
+	// (hint_string, 1500) is the string stock itself mints, so the co-op branch
+	// costs no triggerstring slot.
+	while ( !level flag::exists( "all_players_connected" ) )
+		wait 0.25;   // stock inits the flag in zm::init; never wait on a flag before it exists
+	level flag::wait_till( "all_players_connected" );
+	solo = ( level flag::exists( "solo_game" ) && level flag::get( "solo_game" ) );
+	price = 1500;
+	if ( solo )
+		price = 500;
+	qr_price_dev_log( "party settled: players=" + GetPlayers().size + " solo_game=" + solo + " -> price " + price );
 
 	t = undefined;
 	triggers = GetEntArray( "zombie_vending", "targetname" );
@@ -92,37 +156,98 @@ function solo_qr_power_gate()
 	if ( !isdefined( t ) )
 		return;
 
-	// v13.6 REWORK — the first version FAILED IN GAME (user: "QR is still on
-	// even without power ... it still shows 1500 on solo") and both halves
-	// failed the same way: I WROTE BEFORE STOCK'S ONE-SHOT STAMPS RAN, and a
-	// latch does not re-read what it latched.
-	//  * power: stock's solo QR pass stamps t.power_on = TRUE at ~+3.0s
-	//    (_zm_perk_quick_revive.gsc:202) — my false, written at player-connect
-	//    (~+0.5s), was overwritten three seconds later.
-	//  * cost: stock evaluates the QR cost FUNC at think start (players.size
-	//    still 0 -> "not solo" -> 1500) and LATCHES it onto the trigger as
-	//    t.cost (_zm_perks.gsc:496-500). My write went to the _custom_perks
-	//    TABLE — a value nothing re-reads after the latch.
-	// So: WAIT for stock's stamps (t.power_on becoming true is the observable
-	// end of its pass; 10s cap so a surprise flow can never hang us), THEN
-	// override the LATCHED trigger fields themselves.
+	// CO-OP WAITS FOR THE SWITCH (2026-09-24, lead tester: "When at quick revive
+	// it shows you can purchase it even without power yet you cannot, make it so
+	// it prompts you to turn on power"). Unpowered co-op QR is parked in stock's
+	// vending_trigger_think at `level waittill( perk + "_power_on" )` wearing
+	// stock's "You must turn on the power first!" hint, which the prompt router
+	// draws as the POWER REQUIRED card. The v19.11 co-op branch did not wait:
+	// the stamp wait below timed out after 10 s (t.power_on stays false until
+	// power), and the re-assert then stamped the BUY hint — a "Hold to buy" card
+	// on a machine whose buy loop was not listening yet. Solo is unaffected
+	// (stock powers solo QR from round 1; the user's rule, see the header).
+	if ( !solo )
+	{
+		qr_price_dev_log( "co-op: waiting for power before re-stamping the price" );
+		level flag::wait_till( "power_on" );
+		qr_price_dev_log( "co-op: power on, re-stamping " + price );
+	}
+
+	// Wait out stock's one-shot stamps — t.power_on going true is the observable
+	// end of its solo pass (~+3.0s) — then override the LATCHED field.
 	for ( i = 0; i < 40 && !IS_TRUE( t.power_on ); i++ )
 		wait 0.25;
 
-	t.cost = 500;   // the latched field the hint substitution and the charge both read
+	t.cost = price;   // the latched field the hint substitution and the charge both read
 	if ( isdefined( level._custom_perks ) && isdefined( level._custom_perks[ "specialty_quickrevive" ] ) )
-		level._custom_perks[ "specialty_quickrevive" ].cost = 500;   // consistency for any later reader
+		level._custom_perks[ "specialty_quickrevive" ].cost = price;   // consistency for any later reader
 
-	t.power_on = false;   // stock's stamp is done; nothing overwrites this now (its think parks forever)
-
-	while ( !( level flag::exists( "power_on" ) && level flag::get( "power_on" ) ) )
-		wait( 0.25 );
-
+	// Belt and braces: a LIVE trigger must never carry a false .power_on, or every
+	// purchase gets paused a second later. Stock stamps it true; this covers the
+	// path where its pass did not finish inside the cap above.
 	t.power_on = true;
-	if ( isdefined( t.machine ) && isdefined( level.machine_assets )
+
+	// AND THE SIGN IS RE-ASSERTED, NOT STAMPED ONCE (v18.16). v18.15 wrote the
+	// price and the hint a single time and shipped; the user photographed the
+	// machine still reading 1500 on the very next build. The reason is a race we
+	// cannot observe from here: stock's own stamp is the LAST line of a long
+	// preamble in vending_trigger_think — after the QR block waits for
+	// "start_zombie_round_logic", after SetHintString(&"ZOMBIE_NEED_POWER"), and
+	// after a variable-length choke loop that waits one network frame PER VENDING
+	// TRIGGER (level._perkmachinenetworkchoke). Our own start is gated on stock
+	// stamping t.power_on from a different thread. Which lands last depends on
+	// machine count and frame timing, so a single write is a coin flip, and it
+	// came up tails in play.
+	//
+	// Re-asserting for 20 s is the honest fix: it cannot lose, and it costs
+	// NOTHING against the 250-triggerstring cap because the cap counts DISTINCT
+	// STRINGS — forty writes of the same (hint_string, 500) pair are one slot,
+	// the same slot the first write already took. 20 s is far past anything stock
+	// does at round-one init, and the loop then stops rather than running all
+	// match.
+	//
+	// t.cost is re-written each pass for the same reason. It is the field the
+	// CHARGE reads, and stock latches its own value into it in that same preamble
+	// — so whichever of us went first, the player is charged 500.
+	//
+	// The _custom_perks entry is left at the int 500 set above: it is what stock
+	// reads if anything ever re-derives the cost, and an int there beats the
+	// registered &revive_cost_override pointer, which prices by GetPlayers().size
+	// at whatever moment it happens to be called.
+	for ( i = 0; i < 40; i++ )   // 40 x 0.5s = 20s
+	{
+		if ( !isdefined( t ) )
+			return;
+		if ( t.cost != price )
+			qr_price_dev_log( "re-assert: trigger cost was " + t.cost + ", writing " + price );
+		t.cost = price;
+		if ( isdefined( level._custom_perks ) && isdefined( level._custom_perks[ "specialty_quickrevive" ] )
+		  && isdefined( level._custom_perks[ "specialty_quickrevive" ].hint_string ) )
+			t SetHintString( level._custom_perks[ "specialty_quickrevive" ].hint_string, price );
+		wait 0.5;
+	}
+
+	if ( isdefined( level._custom_perks ) && isdefined( level._custom_perks[ "specialty_quickrevive" ] )
+	  && isdefined( level._custom_perks[ "specialty_quickrevive" ].hint_string ) )
+		t SetHintString( level._custom_perks[ "specialty_quickrevive" ].hint_string, price );
+	qr_price_dev_log( "done: trigger cost " + t.cost + " (solo=" + solo + ")" );
+
+	if ( solo && isdefined( t.machine ) && isdefined( level.machine_assets )
 	  && isdefined( level.machine_assets[ "specialty_quickrevive" ] )
 	  && isdefined( level.machine_assets[ "specialty_quickrevive" ].on_model ) )
 		t.machine SetModel( level.machine_assets[ "specialty_quickrevive" ].on_model );
+}
+
+// v19.11 — dev log for the price decision above. Assembled outside the
+// developer block, printed inside it (the proven pattern, CLAUDE.md).
+function qr_price_dev_log( msg )
+{
+	if ( !IS_TRUE( level.tod_dev ) )
+		return;
+	line = "[TOD_QR_PRICE] ms=" + GetTime() + " " + msg;
+	/#
+	PrintLn( line );
+	#/
 }
 
 function power_glow_watch()
@@ -256,6 +381,13 @@ function bo7_stamp_sweep( offs )
 		if ( !isdefined( level.machine_assets ) || !isdefined( level.machine_assets[ spec ] ) )
 			continue;
 		powered = ( lvl_powered || IS_TRUE( t.power_on ) );
+		// NO SOLO QUICK REVIVE CARVE-OUT HERE (v18.15). v18.14 added a
+		// level.tod_qr_gated_dark latch so the machine would read dark while that
+		// version held it unbuyable; the gate is gone, so the latch is gone with
+		// it. Solo QR is powered and selling from round 1, and .power_on is true,
+		// so this line lights it — which is correct: a machine you can use should
+		// not look switched off. Retire a thing WHOLE, or the next reader inherits
+		// a dead field that still looks load-bearing.
 		want = ( powered ? level.machine_assets[ spec ].on_model : level.machine_assets[ spec ].off_model );
 		if ( !isdefined( want ) )
 			continue;

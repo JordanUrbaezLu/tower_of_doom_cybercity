@@ -1,4 +1,14 @@
 // =============================================================================
+// ⚠️ DORMANT SINCE v14.19b (2026-08-30) — nothing calls init(). The BO7 drink
+// cans (tod_set_perk_cans, v14.17) brought notetrack-driven foley riding the
+// gesture anim itself, and the user retired this scripted lane to avoid
+// glass-bottle audio layering over can audio ("we would need to remove our
+// custom audio then"). The ONE switch is the commented init() call in
+// _tod_main.gsc; the tod_perk_open/tod_perk_gulp aliases + wavs stay packed
+// (harmless, and pulling them is a bank rebuild for nothing). Everything
+// below is the working recipe as retired — including the hard-won timing
+// lesson — for if the drinks ever go back to silent bottles.
+// =============================================================================
 // _tod_perk_drink.gsc — the perk BUY sound: a bottle cap popping, then a gulp.
 //
 // (user 2026-08-29: "I basically need a sound of opening a glass bottle soda

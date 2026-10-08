@@ -106,6 +106,14 @@ const cases = [];
   const f = path.join(SCRATCH, 'wall.map');
   fs.writeFileSync(f, src.slice(0, deck.start) + bad + '\n' + src.slice(deck.start));
   cases.push({ name: 'MISPLACED WALL — invisible clip on the spine', file: f, expect: /misplaced walls   [1-9]/ });
+  // Same real road position with a sloped top: the old six-axial-plane parser
+  // silently dropped this. A convex crown blocker must still be detected.
+  const slopeTop = ` ( ${cx-40} ${cy-30} ${zTop+40} ) ( ${cx-40} ${cy+30} ${zTop+40} ) ( ${cx+40} ${cy+30} ${zTop+80} ) ${t}`;
+  const sloped = bad.replace('SELFTEST misplaced wall','crown SELFTEST sloped wall')
+    .replace(/^.*\( 94\.5 419\.5 .*$/m,slopeTop);
+  const sf=path.join(SCRATCH,'sloped-wall.map');
+  fs.writeFileSync(sf,src.slice(0,deck.start)+sloped+'\n'+src.slice(deck.start));
+  cases.push({name:'CONVEX WALL — sloped clip on the spine',file:sf,expect:/misplaced walls   [1-9]/});
 }
 
 // --- 3. SEVER THE ROAD: delete a whole flat piece --------------------------
@@ -173,6 +181,38 @@ cases.push({ name: 'STACKED FLOORS — columns carry multiple floors', file: MAP
              // the stacking has collapsed back to one-floor-per-column.
              // v14: 6+ digit counts pass too — the spire adds ~100k surfaces.
              expectOut: /floor surfaces    (?:(?:2[5-9]|[3-9])\d{4}|\d{6,})/ });
+
+// --- 4b. PER-FACE MATERIALS (v19.69, the surface refresh, docs/169) --------
+// A brush may now carry a different material on each face (a tread's riser glow
+// and its soffit). Its class must come from its TOP face, and an unknown material
+// on ANY face must still abort. Both cases fail the pre-v19.69 lint, which read
+// the LAST face line (box()'s -x face) and checked only that one material.
+function perFace(text, labelRe, fn) {
+  let n = 0;
+  const out = text.replace(/^(\/\/ brush \d+ — (.*)\n\{\n guid "[^"]+"\n)((?: \(.*\n){6})\}/gm, (all, head, label, body) => {
+    if (!labelRe.test(label)) return all;
+    const faces = body.split('\n').filter(Boolean);
+    const zOf = l => { const v = l.match(/\( (\S+) (\S+) (\S+) \)/g).map(p => p.slice(2, -2).split(' ').map(Number)); return v.every(q => q[2] === v[0][2]) ? v[0][2] : null; };
+    const zs = faces.map(zOf), top = zs.indexOf(Math.max(...zs.filter(z => z !== null)));
+    n++;
+    return head + faces.map((l, k) => fn(l, k, top)).join('\n') + '\n}';
+  });
+  return { text: out, n };
+}
+{
+  const { text, n } = perFace(src, /^lap[1-3] [EWNS] step \d+$/, (l, k, top) => k === top ? l : l.replace(/\) (mwiii_\S+|tod_\S+) /, ') mwiii_vertigo_retro_synth_blue '));
+  if (n < 90) throw new Error(`self-test: expected 96 lap 1-3 treads, rewrote ${n}`);
+  const f = path.join(SCRATCH, 'perface_top.map');
+  fs.writeFileSync(f, text);
+  cases.push({ name: 'PER-FACE — every non-top face of 96 treads made BLOCK, the climb still walks', file: f, expectPass: true });
+}
+{
+  const { text, n } = perFace(src, /^lap7 E step 9$/, (l, k, top) => k === 2 ? l.replace(/\) (mwiii_\S+|tod_\S+) /, ') tod_bogus_material ') : l);
+  if (n !== 1) throw new Error(`self-test: expected the one lap7 E step 9, rewrote ${n}`);
+  const f = path.join(SCRATCH, 'perface_unknown.map');
+  fs.writeFileSync(f, text);
+  cases.push({ name: 'PER-FACE — an unknown material on a SIDE face aborts', file: f, expect: /unclassified material[\s\S]*tod_bogus_material/ });
+}
 
 // --- 5. CONTROL: the real map must still pass ------------------------------
 cases.push({ name: 'CONTROL — the shipping map', file: MAP, expectPass: true });

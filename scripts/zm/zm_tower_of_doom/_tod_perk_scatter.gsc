@@ -39,10 +39,14 @@
 
 #using scripts\shared\flag_shared;   // v13.5: the Deadshot yaw exception branches on power_on
 #using scripts\shared\util_shared;
+#using scripts\zm\_zm_score;
+#using scripts\zm\_zm_utility;
 
 #insert scripts\shared\shared.gsh;
+#insert scripts\zm\zm_tower_of_doom\_tod_toast.gsh;
 
 #using scripts\zm\zm_tower_of_doom\_tod_bosses;       // panzer_due (shuffle = round after a Panzer round)
+#using scripts\zm\zm_tower_of_doom\_tod_upgrade_ui;   // toast (v19.58, PERK SLOTS FULL in the map typeface)
 #using scripts\zm\zm_tower_of_doom\_tod_perk_lights;  // glow re-pulse after a move (the latch rule)
 
 #precache( "fx", "_custom/acc/fx_acc_derez_blink" );
@@ -64,6 +68,8 @@
 // this is a safety net, not a driver.
 #define TOD_SCATTER_COHERE_SEC    5    // first check, after the opening glide has landed
 #define TOD_SCATTER_COHERE_TOL    96
+#define TOD_SCATTER_PARK          ( 10240, 0, -4000 )   // v17.56 retire_all: under the spire arena (SP_X, SP_Y) — the dead tower is unreachable, the void is certain
+#define TOD_PERK_SLOTMSG_MS       2500  // throttle for the PERK SLOTS FULL line (the perk trigger is a HOLD)
 
 #namespace tod_perk_scatter;
 
@@ -167,6 +173,7 @@ function init()
 	level.tod_scatter_pads = build_pads();
 	level.tod_scatter_where = [];      // spec -> pad index
 	level.tod_scatter_machines = [];   // spec -> the "zombie_vending" trigger
+	level.tod_scatter_change_claimed = []; // spec -> claimed for the whole match, never a pad/player
 
 	if ( !isdefined( level._effect ) )
 		level._effect = [];
@@ -203,6 +210,62 @@ function tod_perk_buy_allowed( player )
 		return false;
 	if ( IS_TRUE( player.tod_menu_frozen ) )
 		return false;
+	// PERK SLOTS FULL — RESTORED v17.3 with the cap. A cap of 4 is a rule
+	// players meet in the first minutes and nothing else teaches it.
+	//
+	// WE ADD THE TEXT AND LET STOCK DO THE REFUSING — note the deliberate
+	// absence of a `return false` here. Stock's own cap test runs one step
+	// later (_zm_perks.gsc:585) and already plays evt_perk_deny plus a "sigh"
+	// VO; its explanatory iprintln is commented out, which is the whole gap.
+	// Returning false from THIS hook would `continue` at _zm_perks.gsc:566 —
+	// BEFORE that sound — and refuse silently, which is worse than what we
+	// started with. So: print the missing WHY, return true, let stock keep the
+	// feedback it already has.
+	//
+	// A HUD toast is the lane (v19.58 tod_upgrade_ui::toast, the map's typeface;
+	// IPrintLnBold before it - both cache-free), NEVER a SetHintString and never
+	// a reworded machine prompt: the
+	// cursor-hint router matches on TEXT and every distinct hint string mints
+	// a PERMANENT engine slot against a 250 cap. Throttled because the perk
+	// trigger is a HOLD — an unthrottled print machine-guns while USE is held.
+	// NO #using OF _zm_utility, DELIBERATELY. The obvious call here is
+	// zm_utility::can_player_purchase_perk(), and it would not LINK from this
+	// file: v17.3's first attempt died with "Unresolved external
+	// 'zm_utility::can_player_purchase_perk'" while every lint stayed green —
+	// lint_tod_arity resolves symbols inside OUR tree, not stock externals, and
+	// CLAUDE.md already says the linker is the only gate for this class.
+	// Root cause NOT established, and two obvious theories were disproved:
+	// header order (_tod_reaver.gsc:58 puts the same #using after its #insert
+	// and builds) and a missing/typo'd import (_tod_powerups.gsc:1005 calls the
+	// same function with the same import and ships). _tod_bosses already pulls
+	// _zm_utility in transitively, so this file's explicit #using was a second
+	// path to the same module — DISPROVED TOO: _tod_reaver.gsc imports BOTH
+	// _zm_utility (58) and _tod_bosses (61), i.e. the identical double path,
+	// and has always built.
+	//
+	// SO THE CAUSE IS UNKNOWN, and that is deliberately what this comment says.
+	// Three theories were tested and every one failed; naming a fourth as "the
+	// likely reason" would point the next reader somewhere a two-line grep
+	// refutes, which is a failure this repo has paid for twice already (the
+	// stale "SOUND HOOK DELIBERATELY UNWIRED" note, and the dead cursor-hint
+	// image guard that two files reasoned from for months).
+	//
+	// THE FIX STANDS ON ITS OWN MERITS, INDEPENDENT OF THE CAUSE: read the
+	// limit the way stock's own helper does, INLINE: level.perk_purchase_limit, replaced by
+	// the per-player hook when one is set. That is _zm_utility.gsc:5876-5884
+	// verbatim, it needs NO import, and it cannot regress on a symbol that
+	// will not link. One fewer module dependency for a two-line read.
+	lim = level.perk_purchase_limit;
+	if ( isdefined( level.get_player_perk_purchase_limit ) )
+		lim = player [[ level.get_player_perk_purchase_limit ]]();
+	if ( isdefined( lim ) && isdefined( player.num_perks ) && player.num_perks >= lim )
+	{
+		if ( !isdefined( player.tod_slotmsg_ms ) || ( GetTime() - player.tod_slotmsg_ms ) >= TOD_PERK_SLOTMSG_MS )
+		{
+			player.tod_slotmsg_ms = GetTime();
+			player tod_upgrade_ui::toast( TOD_TOAST_PERK_SLOTS_FULL );   // v19.58: map typeface
+		}
+	}
 	return true;
 }
 
@@ -229,6 +292,8 @@ function qr_clip_watch()
 	for ( ;; )
 	{
 		wait 0.5;
+		if ( IS_TRUE( level.tod_scatter_retired ) )
+			return;   // v17.56: retire_all opened the clip for good
 		if ( !isdefined( level.tod_scatter_machines ) )
 			continue;
 		t = level.tod_scatter_machines[ "specialty_quickrevive" ];
@@ -275,12 +340,18 @@ function round_watcher()
 		// EVERY 4 (5, 9, 13, ...), decoupled from the Panzer entirely — the
 		// tie to his round was flavour, not load-bearing, and it is exactly
 		// what made the cadence drift from what the user believed it was.
+		if ( IS_TRUE( level.tod_scatter_retired ) )
+			return;   // v17.56: nothing left to shuffle once the party ascends
 		if ( r > 4 && ( ( r - 1 ) % 4 ) == 0 )
 		{
 			// Never shuffle INTO the upgrade-choice freeze (round starts
 			// trigger both; unstick_players would SetOrigin frozen pickers —
 			// verify pass 2026-08-20).
-			while ( IS_TRUE( level.tod_upgrade_pause ) )
+			// v16.26: a reshuffle due mid-TRIAL waits for the win — the hall's two
+			// pads are inside the seal, and a machine de-rezzing out of a sealed
+			// boss fight (to a hub the party cannot reach) is a mercy revoked
+			// mid-swing. tod_trial_active is _tod_spire's; read-only here.
+			while ( IS_TRUE( level.tod_upgrade_pause ) || IS_TRUE( level.tod_trial_active ) )
 				wait 0.25;
 			level thread apply_scatter( false );
 		}
@@ -354,6 +425,8 @@ function coherence_watch()
 	wait TOD_SCATTER_COHERE_SEC;
 	for ( ;; )
 	{
+		if ( IS_TRUE( level.tod_scatter_retired ) )
+			return;   // v17.56: the parked set must not be "re-aligned" back into the world
 		if ( isdefined( level.tod_scatter_machines ) )
 		{
 			keys = GetArrayKeys( level.tod_scatter_machines );
@@ -470,6 +543,56 @@ function capture_and_open()
 	// Opening layout: random per run, applied while the class-draft/
 	// blackscreen still hides the map (silent — no FX).
 	apply_scatter( true );
+	level thread loose_change_watch();
+}
+
+// Stock _zm_perks::check_for_change (1744): prone in the bump trigger,
+// flat 100 points + purchase sound, first player only; no power/buy/aim gate.
+// Our bump entities already follow move_machine/coherence_watch. Keep the
+// claim by the scatter's stable perk key (one machine per perk), so moving,
+// replacing a model, dying or joining cannot refill it. Do NOT also start
+// stock spare_change: that would create a second, independent payout lane.
+function loose_change_watch()
+{
+	level endon( "end_game" );
+	for ( ;; )
+	{
+		wait 0.1;
+		if ( IS_TRUE( level.tod_scatter_retired ) || IS_TRUE( level.intermission ) )
+			return;
+		if ( IS_TRUE( level.tod_upgrade_pause ) )
+			continue;
+		players = GetPlayers();
+		keys = GetArrayKeys( level.tod_scatter_machines );
+		foreach ( spec in keys )
+		{
+			if ( IS_TRUE( level.tod_scatter_change_claimed[ spec ] ) )
+				continue;
+			t = level.tod_scatter_machines[ spec ];
+			if ( !isdefined( t ) || !isdefined( t.bump ) )
+				continue;
+			m = machine_for( t );
+			if ( !isdefined( m ) || IS_TRUE( m.ishidden ) )
+				continue;
+			// No phantom payout while QR flies away or a shuffled model lands.
+			if ( DistanceSquared( m.origin, t.bump.origin - ( 0, 0, TOD_SCATTER_BUMP_Z ) ) > 16 * 16 )
+				continue;
+			foreach ( player in players )
+			{
+				if ( !zm_utility::is_player_valid( player ) )
+					continue;
+				if ( IS_TRUE( player.tod_menu_frozen ) || player GetStance() != "prone" )
+					continue;
+				if ( !player IsTouching( t.bump ) )
+					continue;
+				// Commit BEFORE score/sound; no wait between checking and claiming.
+				level.tod_scatter_change_claimed[ spec ] = true;
+				player zm_score::add_to_player_score( 100 );
+				zm_utility::play_sound_at_pos( "purchase", player.origin );
+				break;
+			}
+		}
+	}
 }
 
 // Every zombie_vending trigger EXCEPT Mule Kick (fixed on the roof, never
@@ -499,6 +622,9 @@ function scatter_vending_triggers()
 function apply_scatter( b_initial )
 {
 	level endon( "end_game" );
+
+	if ( IS_TRUE( level.tod_scatter_retired ) )
+		return;   // v17.56: the machines left the world with the tower
 
 	pads = level.tod_scatter_pads;
 	machines = level.tod_scatter_machines;
@@ -656,6 +782,67 @@ function shuffle( arr )
 	return arr;
 }
 
+// ---------------------------------------------------------------------------
+// RETIRE (v17.56, user 2026-09-04: "carefully remove all perks from the spire
+// because during the endless spire you have all perks perma"). Called by
+// _tod_spire at the ascension in place of the v14.0 migration: every machine
+// is PERMA-GRANTED up there, so a vending machine in the spire was a prop that
+// could take 4000 points for a perk the player already held. The roster
+// (level.tod_scatter_machines keys) is what perma_perks_give reads, so the
+// trigger entities STAY — parked, disabled and hidden — and only the
+// machines' presence in the world goes. Per machine, in move_machine's own
+// two-phase order: the clip's nav cut is opened BEFORE anything moves
+// (ConnectPaths is not refcounted; a clip moved while cut leaves the cut
+// behind forever), then trigger + model + clip + bump + FX host all go to a
+// park point far under the spire arena (nothing renders or sounds from there;
+// the glow clientfield rides the model, so the model must move, not just
+// Hide). The trigger is disabled as well so a stock perk_think can never wake
+// on it. The latch stops the round shuffle, the coherence re-align (which
+// would drag the parked set back to its trigger) and the QR clip watch.
+// Idempotent; ships silent. Park point: TOD_SCATTER_PARK (define block).
+// ---------------------------------------------------------------------------
+function retire_all()
+{
+	if ( IS_TRUE( level.tod_scatter_retired ) )
+		return;
+	level.tod_scatter_retired = true;
+
+	if ( !isdefined( level.tod_scatter_machines ) )
+		return;
+	keys = GetArrayKeys( level.tod_scatter_machines );
+	for ( i = 0; i < keys.size; i++ )
+	{
+		t = level.tod_scatter_machines[ keys[ i ] ];
+		if ( !isdefined( t ) )
+			continue;
+		park = TOD_SCATTER_PARK + ( i * 128, 0, 0 );   // a row, so the parked clips never stack
+
+		if ( isdefined( t.clip ) )
+		{
+			t.clip ConnectPaths();   // phase 1: open the cut at the live pad
+			t.clip.origin = park;
+		}
+		t TriggerEnable( false );
+		t.origin = park + ( 0, 0, TOD_SCATTER_TRIG_Z );
+		if ( isdefined( t.bump ) )
+			t.bump.origin = park + ( 0, 0, TOD_SCATTER_BUMP_Z );
+
+		m = machine_for( t );
+		if ( isdefined( m ) )
+		{
+			if ( isdefined( level.tod_perk_anim_retire ) )
+				m [[ level.tod_perk_anim_retire ]]();
+			m.origin = park;
+			m Hide();
+			if ( isdefined( m.s_fxloc ) )
+				m.s_fxloc.origin = park;
+		}
+		if ( ( i % 4 ) == 3 )
+			wait 0.05;
+	}
+	dev_print( "perk_scatter: retired " + keys.size + " machines (spire ascension)" );
+}
+
 function make_move( t, pad_idx, spec )
 {
 	mv = SpawnStruct();
@@ -677,6 +864,9 @@ function move_machine( t, pad, spec, b_silent )
 	t.machine = machine_for( t );
 	if ( !isdefined( t.machine ) )
 		return;
+
+	if ( isdefined( level.tod_perk_anim_move ) )
+		t.machine [[ level.tod_perk_anim_move ]]( ( IS_TRUE( b_silent ) ? 0.05 : TOD_SCATTER_GLIDE_SEC + 0.05 ) );
 
 	old_org = t.machine.origin;
 	yaw = pad.yaw;
@@ -803,7 +993,7 @@ function debug_dump( b_initial )
 		for ( j = 0; j < players.size; j++ )
 		{
 			if ( isdefined( players[ j ] ) )
-				players[ j ] IPrintLn( "[scatter] " + tag + " " + keys[ i ] + " -> " + pad.disp );
+				players[ j ] tod_quiet_print_to( "[scatter] " + tag + " " + keys[ i ] + " -> " + pad.disp );
 		}
 	}
 }
@@ -822,7 +1012,7 @@ function dev_print( msg )
 		return;
 	players = GetPlayers();
 	if ( players.size > 0 && isdefined( players[ 0 ] ) )
-		players[ 0 ] IPrintLn( "^3" + msg );
+		players[ 0 ] tod_quiet_print_to( "^3" + msg );
 }
 
 // ---------------------------------------------------------------------------
@@ -885,4 +1075,24 @@ function emitter_cleanup( life_sec )   // self = the temp emitter
 	wait life_sec;
 	if ( isdefined( self ) )
 		self Delete();
+}
+
+// ---------------------------------------------------------------------------
+// v17.97 — DEV PRINTS ARE MUTABLE. level.tod_dev_quiet (set beside tod_dev in
+// zm_tower_of_doom::tod_resolve_dev_flags) silences every bottom-left IPrintLn
+// in this file — screenshot sessions want dev + god with a clean HUD. Each
+// print site's own tod_dev gate is unchanged; this is one extra gate under it.
+// IPrintLnBold (real game toasts) is not routed here.
+function tod_quiet_print( msg )
+{
+	if ( IS_TRUE( level.tod_dev_quiet ) )
+		return;
+	IPrintLn( msg );
+}
+
+function tod_quiet_print_to( msg )   // self = the player to print to
+{
+	if ( IS_TRUE( level.tod_dev_quiet ) )
+		return;
+	self IPrintLn( msg );
 }

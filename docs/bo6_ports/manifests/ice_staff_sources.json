@@ -1,0 +1,3695 @@
+{
+  "source_root": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6",
+  "bank_sha256": {
+    "merged_global_stream_mp.all.json": "c7940b3e26454b20082077501847da6379bac98fab381e7fd308c50f03702270",
+    "weapon_t10_zm_ice_staff_npc.all.json": "4c1d2d1457a2db5fe1fc18dbe21d411a00ed357531819a20e03d29fcba1450b7",
+    "weapon_t10_zm_ice_staff_plr.all.json": "623232e0a236a5c5e3cfa3eb06f02491da811135b1fbd347378225c567aaa28c"
+  },
+  "direct_rows": 258,
+  "closure_rows": 260,
+  "recovered_names": {
+    "9ced0c38077f06f1": "wpn_ice_staff_base_fire_plr",
+    "46407137d6632d90": "wpn_ice_staff_base_fire_npc",
+    "6f060538e63059fb": "wpn_ice_staff_base_fire_plr_lfe",
+    "24fdd879a9d820dc": "wpn_ice_staff_base_fire_plr_tail",
+    "ba1fddb20cd0fbbb": "wpn_ice_staff_base_fire_npc_tail",
+    "4b4e0f8c99cbafb8": "wpn_ice_staff_upg_fire_plr",
+    "e66ce28cf16e7dd1": "wpn_ice_staff_upg_fire_npc",
+    "b87ffa119feff236": "wpn_ice_staff_upg_fire_plr_lfe",
+    "d68d393915d67583": "wpn_ice_staff_upg_fire_plr_tail",
+    "f4a9a0c78fa3d37c": "wpn_ice_staff_upg_fire_npc_tail",
+    "413683c3f71c6a31": "wpn_ice_staff_upg_charged_fire_plr",
+    "ea8ae8c3c60243d0": "wpn_ice_staff_upg_charged_fire_npc",
+    "49da2fca80b59100": "fly_ice_staff_pullout_plr",
+    "5bde72ca8b1cafd9": "fly_ice_staff_pullout_npc",
+    "c7dd70214c4de875": "fly_ice_staff_pullout_quick_npc",
+    "316adb48c62901e": "fly_ice_staff_putaway_plr",
+    "3957a4b4abc26443": "fly_ice_staff_putaway_npc",
+    "32b8582c395f859b": "fly_ice_staff_putaway_quick_npc"
+  },
+  "unresolved_aliases": [
+    "188c13967cce69be",
+    "1a72369c4196f83a",
+    "1aca1f7bf2e097a6",
+    "20d659708ecaee1",
+    "262957c9832ef3ad",
+    "3a47d146c52e203b",
+    "3b49e360dec1a55f",
+    "402dcaecf13f3c4c",
+    "5025308ee329ec0a",
+    "503d64a46f1b0f79",
+    "506a2e55bcaafc7d",
+    "5d5fd795918fb5a",
+    "5d85213572662f54",
+    "6044ee07b29cd303",
+    "6329aae25a397588",
+    "6a9bfc79015f175f",
+    "7a7e2a465833e196",
+    "807cb1c29082ab0",
+    "8180d4f172a435aa",
+    "87056cf19719bc85",
+    "88f26d3032be58c2",
+    "909825b9cccf6d63",
+    "9596cec6ba4d5ffe",
+    "9bf31a254dbae5e4",
+    "a55e4ae7301fe44b",
+    "b4dbee1e17fd976c",
+    "b9c83fadfe5f407d",
+    "be663758caf8fd7f",
+    "c17274e84e8097ce",
+    "c41d867bc1c4c1ab",
+    "cc7ed8339c52f10c",
+    "cd02e6a63e7a7ebb",
+    "ce0b4fe8d70ce4a4",
+    "d393fa5d1804016",
+    "eacb4a7a0af41379",
+    "f4d308d801e06761",
+    "fec4e959318bb95"
+  ],
+  "missing_secondary_aliases": [],
+  "animation_audio_seeds": [
+    "fly_ice_staff_alt_inspect_npc",
+    "fly_ice_staff_alt_inspect_plr",
+    "fly_ice_staff_alt_switch_in_npc",
+    "fly_ice_staff_alt_switch_in_plr",
+    "fly_ice_staff_alt_switch_out_npc",
+    "fly_ice_staff_alt_switch_out_plr",
+    "fly_ice_staff_first_raise_npc",
+    "fly_ice_staff_first_raise_plr",
+    "fly_ice_staff_inspect_npc",
+    "fly_ice_staff_inspect_plr",
+    "fly_ice_staff_pullout_quick_npc",
+    "fly_ice_staff_pullout_quick_plr",
+    "fly_ice_staff_putaway_quick_npc",
+    "fly_ice_staff_putaway_quick_plr",
+    "fly_ice_staff_reload_npc",
+    "fly_ice_staff_reload_plr"
+  ],
+  "missing_animation_audio_aliases": [],
+  "sounds": {
+    "iw9/wpn/ar_akilo/weap_akilo_fire_plr_lfe_01.tnn.100.48000.all": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "5d85213572662f54",
+        "6f060538e63059fb",
+        "b87ffa119feff236"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\iw9\\wpn\\ar_akilo\\weap_akilo_fire_plr_lfe_01.tnn.100.48000.all.wav",
+      "payload_exists": true,
+      "payload_sha256": "7005cec1e1588d8dbb0a1a727fefeef5843c2c83a5657ee065784c45fd6b3a00",
+      "wav": {
+        "channels": 1,
+        "sample_rate": 48000,
+        "frames": 20160,
+        "seconds": 0.42,
+        "peak": 0.951385498046875,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "5d85213572662f54",
+        "wpn_ice_staff_base_fire_plr_lfe",
+        "wpn_ice_staff_upg_fire_plr_lfe"
+      ]
+    },
+    "sound_1087eaf54b3b68c9": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "262957c9832ef3ad",
+        "5025308ee329ec0a"
+      ],
+      "secondary_aliases": [
+        "9bf31a254dbae5e4",
+        "c17274e84e8097ce"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_1087eaf54b3b68c9.wav",
+      "payload_exists": true,
+      "payload_sha256": "57ea4abfb324c78a56b05f3f2f7b3eb307ff95b22daf7174c2c3314029a34fb9",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 263040,
+        "seconds": 5.48,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "262957c9832ef3ad",
+        "5025308ee329ec0a"
+      ]
+    },
+    "sound_11674037afe60eec": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "402dcaecf13f3c4c",
+        "6044ee07b29cd303"
+      ],
+      "secondary_aliases": [
+        "d68d393915d67583",
+        "f4a9a0c78fa3d37c"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_11674037afe60eec.wav",
+      "payload_exists": true,
+      "payload_sha256": "62a5de45e359a8ea24b0e9e2e3f0572661b77e3c32065d597b108a3f7ebd7942",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 30720,
+        "seconds": 0.64,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "402dcaecf13f3c4c",
+        "6044ee07b29cd303"
+      ]
+    },
+    "sound_119068d43dbdcc02": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "3a47d146c52e203b",
+        "7a7e2a465833e196"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_119068d43dbdcc02.wav",
+      "payload_exists": true,
+      "payload_sha256": "274fa4fb41e99d8bb8dc27e2ef44d67ad5576830771257ed1249f49a5bc03ed2",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 22080,
+        "seconds": 0.46,
+        "peak": 0.52471923828125,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "3a47d146c52e203b",
+        "7a7e2a465833e196"
+      ]
+    },
+    "sound_11d82f15418d7abe": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "4b4e0f8c99cbafb8",
+        "e66ce28cf16e7dd1"
+      ],
+      "secondary_aliases": [
+        "506a2e55bcaafc7d",
+        "6329aae25a397588"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_11d82f15418d7abe.wav",
+      "payload_exists": true,
+      "payload_sha256": "a6db248849b280cd9288d19e5657ef5c3831dae733b676c0785bb1fdf1c44bf4",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 68160,
+        "seconds": 1.42,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_fire_plr",
+        "wpn_ice_staff_upg_fire_npc"
+      ]
+    },
+    "sound_1290f364a067edf": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "be663758caf8fd7f"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_1290f364a067edf.wav",
+      "payload_exists": true,
+      "payload_sha256": "70d75c5d143b5db35af2da391026547e8e747e2217326bf99a3e27377aa96fcb",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 282240,
+        "seconds": 5.88,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "be663758caf8fd7f"
+      ]
+    },
+    "sound_13167eeb9325cf19": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "402dcaecf13f3c4c",
+        "6044ee07b29cd303"
+      ],
+      "secondary_aliases": [
+        "d68d393915d67583",
+        "f4a9a0c78fa3d37c"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_13167eeb9325cf19.wav",
+      "payload_exists": true,
+      "payload_sha256": "e73a38e5b5703db9f2a61acfa8a6a976fe2cd4d172f528fa1535ddc7f9124f4a",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 25920,
+        "seconds": 0.54,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "402dcaecf13f3c4c",
+        "6044ee07b29cd303"
+      ]
+    },
+    "sound_1502e0e0c8be6db3": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "cd02e6a63e7a7ebb",
+        "d393fa5d1804016"
+      ],
+      "secondary_aliases": [
+        "1a72369c4196f83a",
+        "b9c83fadfe5f407d"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_1502e0e0c8be6db3.wav",
+      "payload_exists": true,
+      "payload_sha256": "ac27e82045771db7acd3b0940edc5fd21aac39f9165625acee8e0d5a15b4dc4f",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 42240,
+        "seconds": 0.88,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "cd02e6a63e7a7ebb",
+        "d393fa5d1804016"
+      ]
+    },
+    "sound_170753cfccc10630": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "402dcaecf13f3c4c"
+      ],
+      "secondary_aliases": [
+        "d68d393915d67583"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_170753cfccc10630.wav",
+      "payload_exists": true,
+      "payload_sha256": "815d8389f04c06ca83449309659f172eb7481078379fc190f64a2cfecf0deb53",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 31680,
+        "seconds": 0.66,
+        "peak": 0.999969482421875,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "402dcaecf13f3c4c"
+      ]
+    },
+    "sound_17924d4497b14ecc": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "b4dbee1e17fd976c"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_17924d4497b14ecc.wav",
+      "payload_exists": true,
+      "payload_sha256": "20efbc3233ee65aa232f2acc4a69cd33008ec27ae4c939a7824d157b21d14635",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 201600,
+        "seconds": 4.2,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "b4dbee1e17fd976c"
+      ]
+    },
+    "sound_17f20cb309a3783c": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1"
+      ],
+      "secondary_aliases": [
+        "5d85213572662f54"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_17f20cb309a3783c.wav",
+      "payload_exists": true,
+      "payload_sha256": "d6328f6e7775abed2cf49fc1b32f889c071b896d9f53f52b0e87b2ae529f5291",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 121920,
+        "seconds": 2.54,
+        "peak": 0.730133056640625,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1"
+      ]
+    },
+    "sound_193ca04fcf006a41": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "wpn_ice_staff_upg_fire_plr_claw_open"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_193ca04fcf006a41.wav",
+      "payload_exists": true,
+      "payload_sha256": "122a77c0b62a3f12ed33de3e55caea044c128c1dcdb4464bc161b6b36d1c8c91",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 26880,
+        "seconds": 0.56,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_fire_plr_claw_open"
+      ]
+    },
+    "sound_1a956199572b2396": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "be663758caf8fd7f"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_1a956199572b2396.wav",
+      "payload_exists": true,
+      "payload_sha256": "4472afa6f209ff0eb93dd1c912b3c50a4175d363b230e249fab664d2507a39a7",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 292800,
+        "seconds": 6.1,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "be663758caf8fd7f"
+      ]
+    },
+    "sound_1a9986af475dd955": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "413683c3f71c6a31",
+        "ea8ae8c3c60243d0"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_1a9986af475dd955.wav",
+      "payload_exists": true,
+      "payload_sha256": "1e7a42cc5d4d3dd025f32e0420c53a8c29cba996fef3784e23c68d3e3fb1fc4f",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 190080,
+        "seconds": 3.96,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_charged_fire_plr",
+        "wpn_ice_staff_upg_charged_fire_npc"
+      ]
+    },
+    "sound_1ca215621ef4b283": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "f4d308d801e06761"
+      ],
+      "secondary_aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1",
+        "24fdd879a9d820dc"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_1ca215621ef4b283.wav",
+      "payload_exists": true,
+      "payload_sha256": "fbf014f6066b7c7e10395e6509f0c1f1b3a56072310f4108f06ff466e460ba91",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 26880,
+        "seconds": 0.56,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "f4d308d801e06761"
+      ]
+    },
+    "sound_1fc13c67a6bb9d2b": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "be663758caf8fd7f"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_1fc13c67a6bb9d2b.wav",
+      "payload_exists": true,
+      "payload_sha256": "3ba90794e325dc5f6ce00008ea8548afd38870f6a3edbae56e946012910f87df",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 307200,
+        "seconds": 6.4,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "be663758caf8fd7f"
+      ]
+    },
+    "sound_20065b61fcdf8175": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "f4d308d801e06761"
+      ],
+      "secondary_aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1",
+        "24fdd879a9d820dc"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_20065b61fcdf8175.wav",
+      "payload_exists": true,
+      "payload_sha256": "6f73c3eca24533b71c368aa8bf2ab5624af43ba26066eb9df0a1af5922ffe399",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 37440,
+        "seconds": 0.78,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "f4d308d801e06761"
+      ]
+    },
+    "sound_206953550feea8fc": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "1a72369c4196f83a",
+        "b9c83fadfe5f407d"
+      ],
+      "secondary_aliases": [
+        "9596cec6ba4d5ffe",
+        "f4d308d801e06761"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_206953550feea8fc.wav",
+      "payload_exists": true,
+      "payload_sha256": "869922ae5b3ce1ae4add36264c5e67a4bf792c06dc02571d12f5337f0384e7fd",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 40320,
+        "seconds": 0.84,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "1a72369c4196f83a",
+        "b9c83fadfe5f407d"
+      ]
+    },
+    "sound_213f0013dafed05a": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "402dcaecf13f3c4c",
+        "6044ee07b29cd303"
+      ],
+      "secondary_aliases": [
+        "d68d393915d67583",
+        "f4a9a0c78fa3d37c"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_213f0013dafed05a.wav",
+      "payload_exists": true,
+      "payload_sha256": "4596497f21d6020a2d2eaf4220c42c357a814acc91938588e9afafe91546bdd6",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 30720,
+        "seconds": 0.64,
+        "peak": 0.90478515625,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "402dcaecf13f3c4c",
+        "6044ee07b29cd303"
+      ]
+    },
+    "sound_2228dcacb0967df3": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "24fdd879a9d820dc",
+        "ba1fddb20cd0fbbb"
+      ],
+      "secondary_aliases": [
+        "6f060538e63059fb"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_2228dcacb0967df3.wav",
+      "payload_exists": true,
+      "payload_sha256": "77343071fad84cb675fe444e4d0790989cc994e6d3ffeef983876bd47bae57be",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 128640,
+        "seconds": 2.68,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_base_fire_plr_tail",
+        "wpn_ice_staff_base_fire_npc_tail"
+      ]
+    },
+    "sound_2272f17e63a16888": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "503d64a46f1b0f79",
+        "807cb1c29082ab0"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_2272f17e63a16888.wav",
+      "payload_exists": true,
+      "payload_sha256": "e26b95e414369f081e621c957b4106c0ab1ed0cd42d290942275f7659c6e168f",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 71040,
+        "seconds": 1.48,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "503d64a46f1b0f79",
+        "807cb1c29082ab0"
+      ]
+    },
+    "sound_25324c5673ea7eff": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "402dcaecf13f3c4c",
+        "6044ee07b29cd303"
+      ],
+      "secondary_aliases": [
+        "d68d393915d67583",
+        "f4a9a0c78fa3d37c"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_25324c5673ea7eff.wav",
+      "payload_exists": true,
+      "payload_sha256": "da88d6d8f250f08f327aad292007d9bc385bcdd2de3133bf399fb56a6dc940c4",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 25920,
+        "seconds": 0.54,
+        "peak": 0.919830322265625,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "402dcaecf13f3c4c",
+        "6044ee07b29cd303"
+      ]
+    },
+    "sound_2572d3c2773b2157": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "f4d308d801e06761"
+      ],
+      "secondary_aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1",
+        "24fdd879a9d820dc"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_2572d3c2773b2157.wav",
+      "payload_exists": true,
+      "payload_sha256": "fec2e567ee954901d1f55e52fc9560dbd1f455a131d838ca50e0515ddfebe1df",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 27840,
+        "seconds": 0.58,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "f4d308d801e06761"
+      ]
+    },
+    "sound_29466eb1d86be41": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "24fdd879a9d820dc",
+        "ba1fddb20cd0fbbb"
+      ],
+      "secondary_aliases": [
+        "6f060538e63059fb"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_29466eb1d86be41.wav",
+      "payload_exists": true,
+      "payload_sha256": "d66c4dfc4e5c421b3c5b4b1ea7b02bbd1a5a2854b3a7c25547cf38143ce5ffe3",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 113280,
+        "seconds": 2.36,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_base_fire_plr_tail",
+        "wpn_ice_staff_base_fire_npc_tail"
+      ]
+    },
+    "sound_29b2abe05e378f95": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "ce0b4fe8d70ce4a4",
+        "f4d308d801e06761"
+      ],
+      "secondary_aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1",
+        "24fdd879a9d820dc",
+        "ba1fddb20cd0fbbb"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_29b2abe05e378f95.wav",
+      "payload_exists": true,
+      "payload_sha256": "f360edd0092b745c6c1d6b954e3645bbf5179901ce64837e8cb7aab237b04a1c",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 30720,
+        "seconds": 0.64,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "ce0b4fe8d70ce4a4",
+        "f4d308d801e06761"
+      ]
+    },
+    "sound_2da4c776dc94f7cf": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1"
+      ],
+      "secondary_aliases": [
+        "5d85213572662f54"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_2da4c776dc94f7cf.wav",
+      "payload_exists": true,
+      "payload_sha256": "89d79caabc508bc0f76579c066ed34fa51dda54e58e89bb70f17b881689e3836",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 120000,
+        "seconds": 2.5,
+        "peak": 0.80609130859375,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1"
+      ]
+    },
+    "sound_2df321e85a180179": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "b4dbee1e17fd976c"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_2df321e85a180179.wav",
+      "payload_exists": true,
+      "payload_sha256": "ac489d8e230e2bf7453dbf3614f1f281a542b00f850fbe90c6b2a58410b75cde",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 189120,
+        "seconds": 3.94,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "b4dbee1e17fd976c"
+      ]
+    },
+    "sound_2e3c106e3fd890df": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "b4dbee1e17fd976c"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_2e3c106e3fd890df.wav",
+      "payload_exists": true,
+      "payload_sha256": "bf7cfec414cdee02d00fe0ac7f669870a39a9c7c3851b87eeedd4fbd9d76b3ef",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 234240,
+        "seconds": 4.88,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "b4dbee1e17fd976c"
+      ]
+    },
+    "sound_2fa00f6a204f8ae9": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "a55e4ae7301fe44b"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_2fa00f6a204f8ae9.wav",
+      "payload_exists": true,
+      "payload_sha256": "4315afc5695e85d8c7a754242c73f3e4eafcac1fd36c3e8d3c62139a47566b92",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 172800,
+        "seconds": 3.6,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "a55e4ae7301fe44b"
+      ]
+    },
+    "sound_3291c975fa1fc01e": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "cd02e6a63e7a7ebb",
+        "d393fa5d1804016"
+      ],
+      "secondary_aliases": [
+        "1a72369c4196f83a",
+        "b9c83fadfe5f407d"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_3291c975fa1fc01e.wav",
+      "payload_exists": true,
+      "payload_sha256": "0327dae42443c433f19365ab50c58c44250292b14a34edfacaf4771658f47f13",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 70080,
+        "seconds": 1.46,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "cd02e6a63e7a7ebb",
+        "d393fa5d1804016"
+      ]
+    },
+    "sound_3321cd077ae5355e": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "24fdd879a9d820dc",
+        "ba1fddb20cd0fbbb"
+      ],
+      "secondary_aliases": [
+        "6f060538e63059fb"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_3321cd077ae5355e.wav",
+      "payload_exists": true,
+      "payload_sha256": "ea89ca8b3ec80679d36b4bdb4a69020c68563aba92943130ce4dbc5a12749498",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 113280,
+        "seconds": 2.36,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_base_fire_plr_tail",
+        "wpn_ice_staff_base_fire_npc_tail"
+      ]
+    },
+    "sound_344a0b3dfd00077f": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "506a2e55bcaafc7d",
+        "6329aae25a397588",
+        "cc7ed8339c52f10c",
+        "fec4e959318bb95"
+      ],
+      "secondary_aliases": [
+        "402dcaecf13f3c4c",
+        "6044ee07b29cd303",
+        "909825b9cccf6d63",
+        "ce0b4fe8d70ce4a4"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_344a0b3dfd00077f.wav",
+      "payload_exists": true,
+      "payload_sha256": "24caaa389578c72e3b98808a0523768c3f4dac3843da65289f128babbabd7b95",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 74880,
+        "seconds": 1.56,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "506a2e55bcaafc7d",
+        "6329aae25a397588",
+        "cc7ed8339c52f10c",
+        "fec4e959318bb95"
+      ]
+    },
+    "sound_34bbae55b43ebdba": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "b4dbee1e17fd976c"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_34bbae55b43ebdba.wav",
+      "payload_exists": true,
+      "payload_sha256": "de30279bdf0f3052b18cc9dc5d957e686b1fe427691949fc8551a0f4be0caa2b",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 194880,
+        "seconds": 4.06,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "b4dbee1e17fd976c"
+      ]
+    },
+    "sound_3547db294f8dda6e": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "5d5fd795918fb5a",
+        "6a9bfc79015f175f"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_3547db294f8dda6e.wav",
+      "payload_exists": true,
+      "payload_sha256": "728061d6b9325a9aa4a56dc590e14d7d507d687bb4df481108e795c5b4e0e2b9",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 22080,
+        "seconds": 0.46,
+        "peak": 0.620574951171875,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "5d5fd795918fb5a",
+        "6a9bfc79015f175f"
+      ]
+    },
+    "sound_375c84b52d9521a0": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "be663758caf8fd7f"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_375c84b52d9521a0.wav",
+      "payload_exists": true,
+      "payload_sha256": "8431694fdaefe421e2b9be91778e30833f3503dd029fd82252284e1301ba6496",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 292800,
+        "seconds": 6.1,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "be663758caf8fd7f"
+      ]
+    },
+    "sound_382fb03034d292a2": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "d68d393915d67583",
+        "f4a9a0c78fa3d37c"
+      ],
+      "secondary_aliases": [
+        "b87ffa119feff236"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_382fb03034d292a2.wav",
+      "payload_exists": true,
+      "payload_sha256": "14ea6c0dbb81b97b10068c77d334a1489cb19d51cf2467eef2f54fb93b676518",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 140160,
+        "seconds": 2.92,
+        "peak": 0.999969482421875,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_fire_plr_tail",
+        "wpn_ice_staff_upg_fire_npc_tail"
+      ]
+    },
+    "sound_384a4e0892704236": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "506a2e55bcaafc7d",
+        "6329aae25a397588",
+        "cc7ed8339c52f10c",
+        "fec4e959318bb95"
+      ],
+      "secondary_aliases": [
+        "402dcaecf13f3c4c",
+        "6044ee07b29cd303",
+        "909825b9cccf6d63",
+        "ce0b4fe8d70ce4a4"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_384a4e0892704236.wav",
+      "payload_exists": true,
+      "payload_sha256": "8f2ec01043e80bb19b64dfb9334d7c7364dbdaa771f6f3a976944b70f10ade26",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 84480,
+        "seconds": 1.76,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "506a2e55bcaafc7d",
+        "6329aae25a397588",
+        "cc7ed8339c52f10c",
+        "fec4e959318bb95"
+      ]
+    },
+    "sound_3a0d39942f663533": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "46407137d6632d90",
+        "9ced0c38077f06f1"
+      ],
+      "secondary_aliases": [
+        "cc7ed8339c52f10c",
+        "fec4e959318bb95"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_3a0d39942f663533.wav",
+      "payload_exists": true,
+      "payload_sha256": "6da819770c90793b6a51b4c986603d350d33a94102b3a3f7b57ef75b343caa72",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 96000,
+        "seconds": 2.0,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_base_fire_npc",
+        "wpn_ice_staff_base_fire_plr"
+      ]
+    },
+    "sound_3e008d9196e28d2a": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1"
+      ],
+      "secondary_aliases": [
+        "5d85213572662f54"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_3e008d9196e28d2a.wav",
+      "payload_exists": true,
+      "payload_sha256": "c9a33aa60d1faafb4a9e9760f4bb86ce4b3f6e84022718d1e9d5e0a7c3481b41",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 111360,
+        "seconds": 2.32,
+        "peak": 0.9620361328125,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1"
+      ]
+    },
+    "sound_40a37b0aa8816ef2": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "ce0b4fe8d70ce4a4",
+        "f4d308d801e06761"
+      ],
+      "secondary_aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1",
+        "24fdd879a9d820dc",
+        "ba1fddb20cd0fbbb"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_40a37b0aa8816ef2.wav",
+      "payload_exists": true,
+      "payload_sha256": "388531509c4185c0b6ffffcb4fcfc3411388f21b0af22f62098e097f00a45ecf",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 25920,
+        "seconds": 0.54,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "ce0b4fe8d70ce4a4",
+        "f4d308d801e06761"
+      ]
+    },
+    "sound_419418cd62e9d0a4": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "9bf31a254dbae5e4",
+        "c17274e84e8097ce"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_419418cd62e9d0a4.wav",
+      "payload_exists": true,
+      "payload_sha256": "35144d6d47e63eb42163ed0fc38020d0b47fc6a24e2ab2061e393595b147db77",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 263040,
+        "seconds": 5.48,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "9bf31a254dbae5e4",
+        "c17274e84e8097ce"
+      ]
+    },
+    "sound_421a463799b64cd0": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1"
+      ],
+      "secondary_aliases": [
+        "5d85213572662f54"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_421a463799b64cd0.wav",
+      "payload_exists": true,
+      "payload_sha256": "eedf45dd799622da20dbb9332e01389e0d6ad8bd400137fa408e48ea9579e57d",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 131520,
+        "seconds": 2.74,
+        "peak": 0.666778564453125,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1"
+      ]
+    },
+    "sound_4278ce8dc476c6a5": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "cd02e6a63e7a7ebb",
+        "d393fa5d1804016"
+      ],
+      "secondary_aliases": [
+        "1a72369c4196f83a",
+        "b9c83fadfe5f407d"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_4278ce8dc476c6a5.wav",
+      "payload_exists": true,
+      "payload_sha256": "cb201eb89aeee12266040908575a1ec6a31c12c94b2e633faeea4c0bacd6d8e6",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 33600,
+        "seconds": 0.7,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "cd02e6a63e7a7ebb",
+        "d393fa5d1804016"
+      ]
+    },
+    "sound_43e3188c4be288ed": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "402dcaecf13f3c4c"
+      ],
+      "secondary_aliases": [
+        "d68d393915d67583"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_43e3188c4be288ed.wav",
+      "payload_exists": true,
+      "payload_sha256": "23710598b775ce153e5b201654b72d272eb033187993e9f0d9ed53569ebd3f4e",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 32640,
+        "seconds": 0.68,
+        "peak": 0.95947265625,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "402dcaecf13f3c4c"
+      ]
+    },
+    "sound_44849a325d37a5e5": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "24fdd879a9d820dc",
+        "ba1fddb20cd0fbbb"
+      ],
+      "secondary_aliases": [
+        "6f060538e63059fb"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_44849a325d37a5e5.wav",
+      "payload_exists": true,
+      "payload_sha256": "bcd87bf3eb77a676977d705eac745994d8c951db8ca3b1c2e2841f5f27718c06",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 116160,
+        "seconds": 2.42,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_base_fire_plr_tail",
+        "wpn_ice_staff_base_fire_npc_tail"
+      ]
+    },
+    "sound_46d97b7eab6a33c0": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "506a2e55bcaafc7d",
+        "6329aae25a397588",
+        "cc7ed8339c52f10c",
+        "fec4e959318bb95"
+      ],
+      "secondary_aliases": [
+        "402dcaecf13f3c4c",
+        "6044ee07b29cd303",
+        "909825b9cccf6d63",
+        "ce0b4fe8d70ce4a4"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_46d97b7eab6a33c0.wav",
+      "payload_exists": true,
+      "payload_sha256": "8f1972040dc23e3d2935f65570688c4d994009d4d94085d36ecc4edf40f6f5ed",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 72000,
+        "seconds": 1.5,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "506a2e55bcaafc7d",
+        "6329aae25a397588",
+        "cc7ed8339c52f10c",
+        "fec4e959318bb95"
+      ]
+    },
+    "sound_46f987281a8d8407": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "46407137d6632d90",
+        "9ced0c38077f06f1"
+      ],
+      "secondary_aliases": [
+        "cc7ed8339c52f10c",
+        "fec4e959318bb95"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_46f987281a8d8407.wav",
+      "payload_exists": true,
+      "payload_sha256": "e29e38cae32da77c9a479c583de1038a42648baf0a50fb59207b6f014a59b983",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 98880,
+        "seconds": 2.06,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_base_fire_npc",
+        "wpn_ice_staff_base_fire_plr"
+      ]
+    },
+    "sound_474e053813ba8c0b": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "87056cf19719bc85"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_474e053813ba8c0b.wav",
+      "payload_exists": true,
+      "payload_sha256": "0a5adaa170f699a82d10f4f98b088824d409e836e606cecced2fd8193eb2c334",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 236160,
+        "seconds": 4.92,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "87056cf19719bc85"
+      ]
+    },
+    "sound_477400b9aaa71946": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "1a72369c4196f83a",
+        "b9c83fadfe5f407d"
+      ],
+      "secondary_aliases": [
+        "9596cec6ba4d5ffe",
+        "f4d308d801e06761"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_477400b9aaa71946.wav",
+      "payload_exists": true,
+      "payload_sha256": "3bcedbbaf2f756244e50ef93c60970626e14321056f2476885a9b6eaf67f7689",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 51840,
+        "seconds": 1.08,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "1a72369c4196f83a",
+        "b9c83fadfe5f407d"
+      ]
+    },
+    "sound_49ca066c2c5ee15e": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "wpn_ice_staff_upg_fire_plr_claw_open"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_49ca066c2c5ee15e.wav",
+      "payload_exists": true,
+      "payload_sha256": "b54b71a8b2c515558859bd59f654556f8439e51c16281869d441fec663cd8b92",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 26880,
+        "seconds": 0.56,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_fire_plr_claw_open"
+      ]
+    },
+    "sound_4aad4208da9f89c8": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "4b4e0f8c99cbafb8",
+        "e66ce28cf16e7dd1"
+      ],
+      "secondary_aliases": [
+        "506a2e55bcaafc7d",
+        "6329aae25a397588"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_4aad4208da9f89c8.wav",
+      "payload_exists": true,
+      "payload_sha256": "be04e51e8f12e849743ef9c216094ba5caf390ee00105df49f42d501454f5830",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 71040,
+        "seconds": 1.48,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_fire_plr",
+        "wpn_ice_staff_upg_fire_npc"
+      ]
+    },
+    "sound_4c655c6c5d7fbc66": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "402dcaecf13f3c4c"
+      ],
+      "secondary_aliases": [
+        "d68d393915d67583"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_4c655c6c5d7fbc66.wav",
+      "payload_exists": true,
+      "payload_sha256": "78f127aa7ee946235102b6eb1155e660874b43a99de1416b9f43246ffdbb1dcf",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 25920,
+        "seconds": 0.54,
+        "peak": 0.941162109375,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "402dcaecf13f3c4c"
+      ]
+    },
+    "sound_4f2bcfd0a0b7082d": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "8180d4f172a435aa"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_4f2bcfd0a0b7082d.wav",
+      "payload_exists": true,
+      "payload_sha256": "23fc4a012f0ea2c076586cb4a024e952ad8e3add09006525885415f505ca5cd1",
+      "wav": {
+        "channels": 1,
+        "sample_rate": 48000,
+        "frames": 481920,
+        "seconds": 10.04,
+        "peak": 0.189910888671875,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "8180d4f172a435aa"
+      ]
+    },
+    "sound_50ed429c4950ea": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "a55e4ae7301fe44b"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_50ed429c4950ea.wav",
+      "payload_exists": true,
+      "payload_sha256": "2e27461a3857af3181404c57dca45d61c0a508b36743ac64d910323ba5ca0999",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 168000,
+        "seconds": 3.5,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "a55e4ae7301fe44b"
+      ]
+    },
+    "sound_519737df492d4854": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "d68d393915d67583",
+        "f4a9a0c78fa3d37c"
+      ],
+      "secondary_aliases": [
+        "b87ffa119feff236"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_519737df492d4854.wav",
+      "payload_exists": true,
+      "payload_sha256": "e732567d502a0a62cf04d470bf4a5061b2efeb0f656dada07fc2089ec45e8661",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 122880,
+        "seconds": 2.56,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_fire_plr_tail",
+        "wpn_ice_staff_upg_fire_npc_tail"
+      ]
+    },
+    "sound_522255da413ea7ce": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "ce0b4fe8d70ce4a4",
+        "f4d308d801e06761"
+      ],
+      "secondary_aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1",
+        "24fdd879a9d820dc",
+        "ba1fddb20cd0fbbb"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_522255da413ea7ce.wav",
+      "payload_exists": true,
+      "payload_sha256": "efb0f521d7d260ced2ed432400b5ce5ee5989f728414209b56faede9e697c3a7",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 28800,
+        "seconds": 0.6,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "ce0b4fe8d70ce4a4",
+        "f4d308d801e06761"
+      ]
+    },
+    "sound_52ad1556eb954d18": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "ce0b4fe8d70ce4a4",
+        "f4d308d801e06761"
+      ],
+      "secondary_aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1",
+        "24fdd879a9d820dc",
+        "ba1fddb20cd0fbbb"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_52ad1556eb954d18.wav",
+      "payload_exists": true,
+      "payload_sha256": "d745872f7caf9810b38fcbe337a4dd5b827b397a6869efbf5b329c4b0a3063bd",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 34560,
+        "seconds": 0.72,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "ce0b4fe8d70ce4a4",
+        "f4d308d801e06761"
+      ]
+    },
+    "sound_5374c42d0f681fa8": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "cd02e6a63e7a7ebb",
+        "d393fa5d1804016"
+      ],
+      "secondary_aliases": [
+        "1a72369c4196f83a",
+        "b9c83fadfe5f407d"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_5374c42d0f681fa8.wav",
+      "payload_exists": true,
+      "payload_sha256": "2bfe31f4fe7476f2cc159bc4ed4d612452214dc7809d1cc2af842449f8ee1f7c",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 27840,
+        "seconds": 0.58,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "cd02e6a63e7a7ebb",
+        "d393fa5d1804016"
+      ]
+    },
+    "sound_53fd583a119bfcd8": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "413683c3f71c6a31",
+        "ea8ae8c3c60243d0"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_53fd583a119bfcd8.wav",
+      "payload_exists": true,
+      "payload_sha256": "de91a5efa723860df38cfcc8359bf7db0c7b310d98c83ae5b2bf3da8d963a2f0",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 221760,
+        "seconds": 4.62,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_charged_fire_plr",
+        "wpn_ice_staff_upg_charged_fire_npc"
+      ]
+    },
+    "sound_54aa01b8dc6e3a8f": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "a55e4ae7301fe44b"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_54aa01b8dc6e3a8f.wav",
+      "payload_exists": true,
+      "payload_sha256": "aab28fb92d4011170adf86a0f2822b61cc145e20ba492a05242717f0cd79280e",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 191040,
+        "seconds": 3.98,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "a55e4ae7301fe44b"
+      ]
+    },
+    "sound_555d11fa77a2a5f2": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "eacb4a7a0af41379"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_555d11fa77a2a5f2.wav",
+      "payload_exists": true,
+      "payload_sha256": "57606cca6a28f840b31233aa3174cff758f0ebb0d3c6b5cc0ba93ef2627de83b",
+      "wav": {
+        "channels": 1,
+        "sample_rate": 48000,
+        "frames": 547200,
+        "seconds": 11.4,
+        "peak": 0.30426025390625,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "eacb4a7a0af41379"
+      ]
+    },
+    "sound_579c222960c7879e": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "46407137d6632d90",
+        "9ced0c38077f06f1"
+      ],
+      "secondary_aliases": [
+        "cc7ed8339c52f10c",
+        "fec4e959318bb95"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_579c222960c7879e.wav",
+      "payload_exists": true,
+      "payload_sha256": "5541f9d3964ce51ce0d8e83031b39ba65597082531385c436166531037225a65",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 88320,
+        "seconds": 1.84,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_base_fire_npc",
+        "wpn_ice_staff_base_fire_plr"
+      ]
+    },
+    "sound_580145683f3a251b": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "1a72369c4196f83a",
+        "b9c83fadfe5f407d"
+      ],
+      "secondary_aliases": [
+        "9596cec6ba4d5ffe",
+        "f4d308d801e06761"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_580145683f3a251b.wav",
+      "payload_exists": true,
+      "payload_sha256": "5b24864657f4f2545c378f8b35c7cff89af13c04d3a7c01b02ac3fce36b5ad09",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 41280,
+        "seconds": 0.86,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "1a72369c4196f83a",
+        "b9c83fadfe5f407d"
+      ]
+    },
+    "sound_5896bcf602aac834": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "wpn_ice_staff_upg_fire_plr_claw_open"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_5896bcf602aac834.wav",
+      "payload_exists": true,
+      "payload_sha256": "f30acf372ff417739a3dced181037188a514c56f66e43c2fb7283419ae538693",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 20160,
+        "seconds": 0.42,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_fire_plr_claw_open"
+      ]
+    },
+    "sound_5a41726e811f6058": {
+      "source_banks": [
+        "merged_global_stream_mp.all.json"
+      ],
+      "aliases": [
+        "fly_ice_staff_first_raise_npc"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_5a41726e811f6058.wav",
+      "payload_exists": true,
+      "payload_sha256": "61239b7e2e4534fa057fc8faf154c7baf6dc53d76315b0505c7d72391add2b11",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 144960,
+        "seconds": 3.02,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "fly_ice_staff_first_raise_npc"
+      ]
+    },
+    "sound_5add44ab097d039c": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "402dcaecf13f3c4c"
+      ],
+      "secondary_aliases": [
+        "d68d393915d67583"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_5add44ab097d039c.wav",
+      "payload_exists": true,
+      "payload_sha256": "2faaa6dc28961c703c782d6ef682aa1069b306164091f35568c586419a897a45",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 36480,
+        "seconds": 0.76,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "402dcaecf13f3c4c"
+      ]
+    },
+    "sound_5b4b4cbf9dd6daf8": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "f4d308d801e06761"
+      ],
+      "secondary_aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1",
+        "24fdd879a9d820dc"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_5b4b4cbf9dd6daf8.wav",
+      "payload_exists": true,
+      "payload_sha256": "a8083cd6aea7d4e3f72c5f3dad6d126fd9f599889da8c299b8f7af7577773113",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 28800,
+        "seconds": 0.6,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "f4d308d801e06761"
+      ]
+    },
+    "sound_5e90b9cc99ec850d": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "wpn_ice_staff_upg_fire_plr_claw_close"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_5e90b9cc99ec850d.wav",
+      "payload_exists": true,
+      "payload_sha256": "20bbb359e8c40669b4d970e16247b1f38df00629c4b7971db5131681cac1c400",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 19200,
+        "seconds": 0.4,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_fire_plr_claw_close"
+      ]
+    },
+    "sound_5ee4e3f8928a6c2e": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "f4d308d801e06761"
+      ],
+      "secondary_aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1",
+        "24fdd879a9d820dc"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_5ee4e3f8928a6c2e.wav",
+      "payload_exists": true,
+      "payload_sha256": "a8e5b427be5f1d5a3ce26a67830004d011e57a51937b4e8a481e5d4507ac11c5",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 27840,
+        "seconds": 0.58,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "f4d308d801e06761"
+      ]
+    },
+    "sound_5fb145f7ab4115a3": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "ce0b4fe8d70ce4a4",
+        "f4d308d801e06761"
+      ],
+      "secondary_aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1",
+        "24fdd879a9d820dc",
+        "ba1fddb20cd0fbbb"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_5fb145f7ab4115a3.wav",
+      "payload_exists": true,
+      "payload_sha256": "c956bbcaad4b1a587367ea47dc755010afe159aadfd975e3a98636a7e2e85ac2",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 29760,
+        "seconds": 0.62,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "909825b9cccf6d63",
+        "9596cec6ba4d5ffe",
+        "ce0b4fe8d70ce4a4",
+        "f4d308d801e06761"
+      ]
+    },
+    "sound_5fd20fdab747836b": {
+      "source_banks": [
+        "merged_global_stream_mp.all.json"
+      ],
+      "aliases": [
+        "fly_ice_staff_first_raise_plr"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_5fd20fdab747836b.wav",
+      "payload_exists": true,
+      "payload_sha256": "01afa6764c2c769b80f81523f5114ddbd3a3e2ce2f95970ac9dbd268e772c674",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 242880,
+        "seconds": 5.06,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "fly_ice_staff_first_raise_plr"
+      ]
+    },
+    "sound_607824990e3a65b7": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "413683c3f71c6a31",
+        "ea8ae8c3c60243d0"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_607824990e3a65b7.wav",
+      "payload_exists": true,
+      "payload_sha256": "41c208865c2921a9c45d302b5187991806fb0e5ead335acee29c2de4a30cbd48",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 190080,
+        "seconds": 3.96,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_charged_fire_plr",
+        "wpn_ice_staff_upg_charged_fire_npc"
+      ]
+    },
+    "sound_6284f7e5e227eee8": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "24fdd879a9d820dc",
+        "ba1fddb20cd0fbbb"
+      ],
+      "secondary_aliases": [
+        "6f060538e63059fb"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_6284f7e5e227eee8.wav",
+      "payload_exists": true,
+      "payload_sha256": "5db2eb835cdcc65ec06dfac3b187ddfdff5f57f2a31e785744807a47371987e1",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 109440,
+        "seconds": 2.28,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_base_fire_plr_tail",
+        "wpn_ice_staff_base_fire_npc_tail"
+      ]
+    },
+    "sound_646f85ed236733a0": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "b4dbee1e17fd976c"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_646f85ed236733a0.wav",
+      "payload_exists": true,
+      "payload_sha256": "084d36e988269d26aef35a5d3bfb39272fca3a2192ec385ede3ecc6a6f3db640",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 199680,
+        "seconds": 4.16,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "b4dbee1e17fd976c"
+      ]
+    },
+    "sound_64776cad8be00f3d": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "402dcaecf13f3c4c",
+        "6044ee07b29cd303"
+      ],
+      "secondary_aliases": [
+        "d68d393915d67583",
+        "f4a9a0c78fa3d37c"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_64776cad8be00f3d.wav",
+      "payload_exists": true,
+      "payload_sha256": "9e09135b2a0a22a2a7b6931a197885962743795605f9eef43e8a2b0ffa1b7b14",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 34560,
+        "seconds": 0.72,
+        "peak": 0.904754638671875,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "402dcaecf13f3c4c",
+        "6044ee07b29cd303"
+      ]
+    },
+    "sound_64d67d05b943194d": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "1aca1f7bf2e097a6",
+        "c41d867bc1c4c1ab"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_64d67d05b943194d.wav",
+      "payload_exists": true,
+      "payload_sha256": "c60f70c6b552bc590c9bec22937fb7f4425c553046297b7750bff73162efb12f",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 178560,
+        "seconds": 3.72,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "1aca1f7bf2e097a6",
+        "c41d867bc1c4c1ab"
+      ]
+    },
+    "sound_653225d14426e7ab": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "88f26d3032be58c2"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_653225d14426e7ab.wav",
+      "payload_exists": true,
+      "payload_sha256": "0aa9521bab9e3cf24b85c9645ba96e0c823b2843fcf651657486cf6bf84b80ca",
+      "wav": {
+        "channels": 1,
+        "sample_rate": 48000,
+        "frames": 509760,
+        "seconds": 10.62,
+        "peak": 0.187957763671875,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "88f26d3032be58c2"
+      ]
+    },
+    "sound_677794a420ef4090": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "1a72369c4196f83a",
+        "b9c83fadfe5f407d"
+      ],
+      "secondary_aliases": [
+        "9596cec6ba4d5ffe",
+        "f4d308d801e06761"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_677794a420ef4090.wav",
+      "payload_exists": true,
+      "payload_sha256": "81071f956992634e6dc1c9accad2215ca1dc6f55928040c91be8e6efcdc2eb82",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 55680,
+        "seconds": 1.16,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "1a72369c4196f83a",
+        "b9c83fadfe5f407d"
+      ]
+    },
+    "sound_678327412b1e8e25": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "46407137d6632d90",
+        "9ced0c38077f06f1"
+      ],
+      "secondary_aliases": [
+        "cc7ed8339c52f10c",
+        "fec4e959318bb95"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_678327412b1e8e25.wav",
+      "payload_exists": true,
+      "payload_sha256": "6f8883bb24b88823eda1171f1e422a2c90c6c20b489f4ffe4e39d2ffa8107a6a",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 85440,
+        "seconds": 1.78,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_base_fire_npc",
+        "wpn_ice_staff_base_fire_plr"
+      ]
+    },
+    "sound_6a7f4c0ca1df3ccc": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "be663758caf8fd7f"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_6a7f4c0ca1df3ccc.wav",
+      "payload_exists": true,
+      "payload_sha256": "0ef5d6dbef134ee9ee4af6c23ca79a37fff078c87f7fb09d5e2aca3410c7a11c",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 314880,
+        "seconds": 6.56,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "be663758caf8fd7f"
+      ]
+    },
+    "sound_6b9199fbd0dfbccb": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "fly_ice_staff_shake_quick"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_6b9199fbd0dfbccb.wav",
+      "payload_exists": true,
+      "payload_sha256": "a1e3f4f0384a91e68d1e54c74fe3ef80440514351394389a0276a3c8326209eb",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 70080,
+        "seconds": 1.46,
+        "peak": 0.925079345703125,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "fly_ice_staff_shake_quick"
+      ]
+    },
+    "sound_6d4fafb91ae8c729": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1"
+      ],
+      "secondary_aliases": [
+        "5d85213572662f54"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_6d4fafb91ae8c729.wav",
+      "payload_exists": true,
+      "payload_sha256": "33c6f5ca685b91a7d03fbcceb4113a5a008f3af7f2dbf35797c47ab410bf477e",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 132480,
+        "seconds": 2.76,
+        "peak": 0.867889404296875,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "188c13967cce69be",
+        "20d659708ecaee1"
+      ]
+    },
+    "sound_6d63d768504ae8d3": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "4b4e0f8c99cbafb8",
+        "e66ce28cf16e7dd1"
+      ],
+      "secondary_aliases": [
+        "506a2e55bcaafc7d",
+        "6329aae25a397588"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_6d63d768504ae8d3.wav",
+      "payload_exists": true,
+      "payload_sha256": "1a67f49dd40edfc2eed02b4ccdf05b001efd541d671fc6441b24452f79c84c10",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 73920,
+        "seconds": 1.54,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_fire_plr",
+        "wpn_ice_staff_upg_fire_npc"
+      ]
+    },
+    "sound_6ef6e4ee1c1b42cd": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "1a72369c4196f83a",
+        "b9c83fadfe5f407d"
+      ],
+      "secondary_aliases": [
+        "9596cec6ba4d5ffe",
+        "f4d308d801e06761"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_6ef6e4ee1c1b42cd.wav",
+      "payload_exists": true,
+      "payload_sha256": "12643a0f22e6fa6f958f162228eff043d776921eb6786168fb92bd1f5123d5a2",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 64320,
+        "seconds": 1.34,
+        "peak": 0.95062255859375,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "1a72369c4196f83a",
+        "b9c83fadfe5f407d"
+      ]
+    },
+    "sound_738f2b9514f597bd": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "506a2e55bcaafc7d",
+        "6329aae25a397588",
+        "cc7ed8339c52f10c",
+        "fec4e959318bb95"
+      ],
+      "secondary_aliases": [
+        "402dcaecf13f3c4c",
+        "6044ee07b29cd303",
+        "909825b9cccf6d63",
+        "ce0b4fe8d70ce4a4"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_738f2b9514f597bd.wav",
+      "payload_exists": true,
+      "payload_sha256": "19beaeb2a78831ca385d4033e7b54194bd843773c06540958161f62884c5397a",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 81600,
+        "seconds": 1.7,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "506a2e55bcaafc7d",
+        "6329aae25a397588",
+        "cc7ed8339c52f10c",
+        "fec4e959318bb95"
+      ]
+    },
+    "sound_746eadae35274c90": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "a55e4ae7301fe44b"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_746eadae35274c90.wav",
+      "payload_exists": true,
+      "payload_sha256": "16a425d2970d6f1585d0d7ca251c5f91b148e9e91d6ae02bc8c7deadef49df7d",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 167040,
+        "seconds": 3.48,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "a55e4ae7301fe44b"
+      ]
+    },
+    "sound_74fe7ddc70f96b65": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "be663758caf8fd7f"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_74fe7ddc70f96b65.wav",
+      "payload_exists": true,
+      "payload_sha256": "846b7decdcf5544891e70f601e4eb409394971aea4b0fe3af99bc70a1247e7ea",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 316800,
+        "seconds": 6.6,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "be663758caf8fd7f"
+      ]
+    },
+    "sound_75bcc4a53f630c5": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "4b4e0f8c99cbafb8",
+        "e66ce28cf16e7dd1"
+      ],
+      "secondary_aliases": [
+        "506a2e55bcaafc7d",
+        "6329aae25a397588"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_75bcc4a53f630c5.wav",
+      "payload_exists": true,
+      "payload_sha256": "dc878fb784c4e8c17ed24173c5f0ab178949997eda05fcb6fed1ce040da03809",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 55680,
+        "seconds": 1.16,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_fire_plr",
+        "wpn_ice_staff_upg_fire_npc"
+      ]
+    },
+    "sound_7777a4b4e7f0d84b": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "506a2e55bcaafc7d",
+        "6329aae25a397588",
+        "cc7ed8339c52f10c",
+        "fec4e959318bb95"
+      ],
+      "secondary_aliases": [
+        "402dcaecf13f3c4c",
+        "6044ee07b29cd303",
+        "909825b9cccf6d63",
+        "ce0b4fe8d70ce4a4"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_7777a4b4e7f0d84b.wav",
+      "payload_exists": true,
+      "payload_sha256": "b188ca499d3c2cfb7c0c17c24659d3b5864775c49e83d78e0df787cca29576ed",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 78720,
+        "seconds": 1.64,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "506a2e55bcaafc7d",
+        "6329aae25a397588",
+        "cc7ed8339c52f10c",
+        "fec4e959318bb95"
+      ]
+    },
+    "sound_787f1ce0760fe728": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "46407137d6632d90",
+        "9ced0c38077f06f1"
+      ],
+      "secondary_aliases": [
+        "cc7ed8339c52f10c",
+        "fec4e959318bb95"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_787f1ce0760fe728.wav",
+      "payload_exists": true,
+      "payload_sha256": "94ff630bd315d1da5a722430c54e604cf1290992661ecaa5fb57a603c2abd70e",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 89280,
+        "seconds": 1.86,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_base_fire_npc",
+        "wpn_ice_staff_base_fire_plr"
+      ]
+    },
+    "sound_7a537be74c83232a": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "wpn_ice_staff_upg_fire_plr_claw_close"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_7a537be74c83232a.wav",
+      "payload_exists": true,
+      "payload_sha256": "3fb86d5ecb00b53639615fc1d65572e9897513badc677ddab2328ac218d94b1f",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 19200,
+        "seconds": 0.4,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_fire_plr_claw_close"
+      ]
+    },
+    "sound_7a8ad1dbe6cabba": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "be663758caf8fd7f"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_7a8ad1dbe6cabba.wav",
+      "payload_exists": true,
+      "payload_sha256": "fb69d5f0fb0b0dc58cf7ab8c40bdeaa247d637bdf0885f30cd603c0360ed24c7",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 334080,
+        "seconds": 6.96,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "be663758caf8fd7f"
+      ]
+    },
+    "sound_7c0545ef15347394": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "4b4e0f8c99cbafb8",
+        "e66ce28cf16e7dd1"
+      ],
+      "secondary_aliases": [
+        "506a2e55bcaafc7d",
+        "6329aae25a397588"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_7c0545ef15347394.wav",
+      "payload_exists": true,
+      "payload_sha256": "336f2c55b6196843d962866b81850b765df4dec99fe40a9bd9b7825f3629007c",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 80640,
+        "seconds": 1.68,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_fire_plr",
+        "wpn_ice_staff_upg_fire_npc"
+      ]
+    },
+    "sound_7e6d348d4f56e2d0": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "wpn_ice_staff_upg_fire_plr_claw_close"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_7e6d348d4f56e2d0.wav",
+      "payload_exists": true,
+      "payload_sha256": "6018b219f14d83957ed9cd058e8608f75a1dc94970ca7b380784274b728de376",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 22080,
+        "seconds": 0.46,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_fire_plr_claw_close"
+      ]
+    },
+    "sound_7e9e635999de2001": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "cd02e6a63e7a7ebb",
+        "d393fa5d1804016"
+      ],
+      "secondary_aliases": [
+        "1a72369c4196f83a",
+        "b9c83fadfe5f407d"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_7e9e635999de2001.wav",
+      "payload_exists": true,
+      "payload_sha256": "2196020c4730a9c83518bfd8d01bfde3bf3df5dfe5f9762184378da450059f2d",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 72000,
+        "seconds": 1.5,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "cd02e6a63e7a7ebb",
+        "d393fa5d1804016"
+      ]
+    },
+    "sound_9ef68ee1aba99e1": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "d68d393915d67583",
+        "f4a9a0c78fa3d37c"
+      ],
+      "secondary_aliases": [
+        "b87ffa119feff236"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_9ef68ee1aba99e1.wav",
+      "payload_exists": true,
+      "payload_sha256": "f8718df5f64e689c1ca1e7cd6f8b78f48a225d7181761b81a2b1976aa4e886d4",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 157440,
+        "seconds": 3.28,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_fire_plr_tail",
+        "wpn_ice_staff_upg_fire_npc_tail"
+      ]
+    },
+    "sound_a6ce31065b671bb": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "402dcaecf13f3c4c"
+      ],
+      "secondary_aliases": [
+        "d68d393915d67583"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_a6ce31065b671bb.wav",
+      "payload_exists": true,
+      "payload_sha256": "26c14ebc7920c631f8e1c4f30d05db5a8e6c5817c16ff549321668f17bada729",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 36480,
+        "seconds": 0.76,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "402dcaecf13f3c4c"
+      ]
+    },
+    "sound_d27b19b3a3abce7": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "d68d393915d67583",
+        "f4a9a0c78fa3d37c"
+      ],
+      "secondary_aliases": [
+        "b87ffa119feff236"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_d27b19b3a3abce7.wav",
+      "payload_exists": true,
+      "payload_sha256": "4bbac7b9d256cc45fe9089f460abbfbf63bdbe26fbd10277aebb4a140e583821",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 119040,
+        "seconds": 2.48,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_fire_plr_tail",
+        "wpn_ice_staff_upg_fire_npc_tail"
+      ]
+    },
+    "sound_e020b06445ef79": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "be663758caf8fd7f"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_e020b06445ef79.wav",
+      "payload_exists": true,
+      "payload_sha256": "61841ba9bdafe843500f40b6be037f836ba0cef997a9cbb5a94db087d6fb3a83",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 342720,
+        "seconds": 7.14,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "be663758caf8fd7f"
+      ]
+    },
+    "sound_ef9e91d729b887e": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "d68d393915d67583",
+        "f4a9a0c78fa3d37c"
+      ],
+      "secondary_aliases": [
+        "b87ffa119feff236"
+      ],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_ef9e91d729b887e.wav",
+      "payload_exists": true,
+      "payload_sha256": "a50ca3307febe6354cefddcfc2544cd136d23f7941a2a3fa325c8a63aea160e1",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 149760,
+        "seconds": 3.12,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "wpn_ice_staff_upg_fire_plr_tail",
+        "wpn_ice_staff_upg_fire_npc_tail"
+      ]
+    },
+    "sound_fdf4a489c9f4315": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "3b49e360dec1a55f"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\sound_fdf4a489c9f4315.wav",
+      "payload_exists": true,
+      "payload_sha256": "c2beb6f7ed6d4e0d6edeb060220a6b1f60660a519696dc5d9ae9d0ba3f97bf1a",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 401280,
+        "seconds": 8.36,
+        "peak": 0.62420654296875,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "3b49e360dec1a55f"
+      ]
+    },
+    "t10/wpn/zmb/staff_ice/fly_ice_staff_alt_inspect.tnn.75.48000.all": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "fly_ice_staff_alt_inspect_npc",
+        "fly_ice_staff_alt_inspect_plr"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\t10\\wpn\\zmb\\staff_ice\\fly_ice_staff_alt_inspect.tnn.75.48000.all.wav",
+      "payload_exists": true,
+      "payload_sha256": "ac15597b0cd301dae7c026d45166ddcfd1a31b7baf2d879d060fa6668cda8438",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 273600,
+        "seconds": 5.7,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "fly_ice_staff_alt_inspect_npc",
+        "fly_ice_staff_alt_inspect_plr"
+      ]
+    },
+    "t10/wpn/zmb/staff_ice/fly_ice_staff_alt_switch_in.tnn.75.48000.all": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "fly_ice_staff_alt_switch_in_npc",
+        "fly_ice_staff_alt_switch_in_plr"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\t10\\wpn\\zmb\\staff_ice\\fly_ice_staff_alt_switch_in.tnn.75.48000.all.wav",
+      "payload_exists": true,
+      "payload_sha256": "18603e765bb74e88bab9f434c7786891bf3bfb5e0e415ff6fdfd4fb10619364b",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 68160,
+        "seconds": 1.42,
+        "peak": 0.859771728515625,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "fly_ice_staff_alt_switch_in_npc",
+        "fly_ice_staff_alt_switch_in_plr"
+      ]
+    },
+    "t10/wpn/zmb/staff_ice/fly_ice_staff_alt_switch_out.tnn.75.48000.all": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "fly_ice_staff_alt_switch_out_npc",
+        "fly_ice_staff_alt_switch_out_plr"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\t10\\wpn\\zmb\\staff_ice\\fly_ice_staff_alt_switch_out.tnn.75.48000.all.wav",
+      "payload_exists": true,
+      "payload_sha256": "c6206324aec4641a149e5ecffd8d6ea14d38ecd3d1fce5b377613c95300e6c1a",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 84480,
+        "seconds": 1.76,
+        "peak": 0.7283935546875,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "fly_ice_staff_alt_switch_out_npc",
+        "fly_ice_staff_alt_switch_out_plr"
+      ]
+    },
+    "t10/wpn/zmb/staff_ice/fly_ice_staff_inspect.tnn.75.48000.all": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "fly_ice_staff_inspect_npc",
+        "fly_ice_staff_inspect_plr"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\t10\\wpn\\zmb\\staff_ice\\fly_ice_staff_inspect.tnn.75.48000.all.wav",
+      "payload_exists": true,
+      "payload_sha256": "eee5553788681a765eab5713562aa959e59c9d35c05d4cdbc086f11b1f765885",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 648960,
+        "seconds": 13.52,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "fly_ice_staff_inspect_npc",
+        "fly_ice_staff_inspect_plr"
+      ]
+    },
+    "t10/wpn/zmb/staff_ice/fly_ice_staff_pullout.tnn.75.48000.all": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "49da2fca80b59100",
+        "5bde72ca8b1cafd9"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\t10\\wpn\\zmb\\staff_ice\\fly_ice_staff_pullout.tnn.75.48000.all.wav",
+      "payload_exists": true,
+      "payload_sha256": "f57917f67a0009b070ef7473e12fd6323011e1eb13284790ecaca6e0bb6bd7d0",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 46080,
+        "seconds": 0.96,
+        "peak": 0.62286376953125,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "fly_ice_staff_pullout_plr",
+        "fly_ice_staff_pullout_npc"
+      ]
+    },
+    "t10/wpn/zmb/staff_ice/fly_ice_staff_pullout_quick.tnn.75.48000.all": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "c7dd70214c4de875",
+        "fly_ice_staff_pullout_quick_plr"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\t10\\wpn\\zmb\\staff_ice\\fly_ice_staff_pullout_quick.tnn.75.48000.all.wav",
+      "payload_exists": true,
+      "payload_sha256": "40b3c55ec4eb44a9d9128574bcdec57d2aa9b0b605b57e78e4860cc37121e447",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 79680,
+        "seconds": 1.66,
+        "peak": 0.861236572265625,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "fly_ice_staff_pullout_quick_npc",
+        "fly_ice_staff_pullout_quick_plr"
+      ]
+    },
+    "t10/wpn/zmb/staff_ice/fly_ice_staff_putaway.tnn.75.48000.all": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "316adb48c62901e",
+        "3957a4b4abc26443"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\t10\\wpn\\zmb\\staff_ice\\fly_ice_staff_putaway.tnn.75.48000.all.wav",
+      "payload_exists": true,
+      "payload_sha256": "e8698c7aadc2e7bc574ed7821eaf198c4b80238654288b5f68dec8e642141780",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 99840,
+        "seconds": 2.08,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "fly_ice_staff_putaway_plr",
+        "fly_ice_staff_putaway_npc"
+      ]
+    },
+    "t10/wpn/zmb/staff_ice/fly_ice_staff_putaway_quick.tnn.75.48000.all": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "32b8582c395f859b",
+        "fly_ice_staff_putaway_quick_plr"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\t10\\wpn\\zmb\\staff_ice\\fly_ice_staff_putaway_quick.tnn.75.48000.all.wav",
+      "payload_exists": true,
+      "payload_sha256": "bdb927490fc91ac67165a56cb5f1ff4a02af5a1baff47d9148155e9429ebf2ac",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 50880,
+        "seconds": 1.06,
+        "peak": 0.341461181640625,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "fly_ice_staff_putaway_quick_npc",
+        "fly_ice_staff_putaway_quick_plr"
+      ]
+    },
+    "t10/wpn/zmb/staff_ice/fly_ice_staff_reload.tnn.75.48000.all": {
+      "source_banks": [
+        "weapon_t10_zm_ice_staff_npc.all.json",
+        "weapon_t10_zm_ice_staff_plr.all.json"
+      ],
+      "aliases": [
+        "fly_ice_staff_reload_npc",
+        "fly_ice_staff_reload_plr"
+      ],
+      "secondary_aliases": [],
+      "payload": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\sounds\\t10\\wpn\\zmb\\staff_ice\\fly_ice_staff_reload.tnn.75.48000.all.wav",
+      "payload_exists": true,
+      "payload_sha256": "cf9d7ad73c546c002d0328f5b554cab548cd147b0ce4c178bd647a1a52973fc2",
+      "wav": {
+        "channels": 2,
+        "sample_rate": 48000,
+        "frames": 286080,
+        "seconds": 5.96,
+        "peak": 1.0,
+        "listened_in_bo3": false
+      },
+      "resolved_aliases": [
+        "fly_ice_staff_reload_npc",
+        "fly_ice_staff_reload_plr"
+      ]
+    }
+  },
+  "source_casts": [
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\att_t10_vm_ww_zmb_staffs_water_tip\\att_t10_vm_ww_zmb_staffs_water_tip_LOD0.cast",
+      "sha256": "bb9cc92a15d9869cf705e520abb7d3408f6840a0f54cd6396096f9c2a3e09386"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\att_t10_vm_ww_zmb_staffs_water_tip_dreward_att_t10_vm_ww_zmb_staffs_water_tip\\att_t10_vm_ww_zmb_staffs_water_tip_dreward_att_t10_vm_ww_zmb_staffs_water_tip_LOD0.cast",
+      "sha256": "9b89bb197a9a95964b30909b1d1be2bfc531a76eb15c9b1f1039f8d63c9647cd"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\att_t10_wm_ww_zmb_staffs_water_tip\\att_t10_wm_ww_zmb_staffs_water_tip_LOD0.cast",
+      "sha256": "c6ba4803d48f67dc0607d96023f57f100f39d6839a912591bbdb86e027d94e4b"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\att_t10_wm_ww_zmb_staffs_water_tip\\att_t10_wm_ww_zmb_staffs_water_tip_LOD1.cast",
+      "sha256": "3078e44bf6460b99a9166f0f4e84fe56370ffd3faf53bc11c90c31ce4725e744"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\att_t10_wm_ww_zmb_staffs_water_tip\\att_t10_wm_ww_zmb_staffs_water_tip_LOD2.cast",
+      "sha256": "243a569ee85951084deed119098ad3eb6cac271150fc92d615287649bbab391a"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\att_t10_wm_ww_zmb_staffs_water_tip\\att_t10_wm_ww_zmb_staffs_water_tip_LOD3.cast",
+      "sha256": "06ef0b2a6ec7106633f05e347806879f0866d6a48623b4db576eedcc3e069c36"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\att_t10_wm_ww_zmb_staffs_water_tip\\att_t10_wm_ww_zmb_staffs_water_tip_LOD4.cast",
+      "sha256": "54c42c30f6c381c8fdad8456945c490c84daac472e89ad3271b4a7c4f455e003"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\att_t10_wm_ww_zmb_staffs_water_tip_dreward_att_t10_wm_ww_zmb_staffs_water_tip\\att_t10_wm_ww_zmb_staffs_water_tip_dreward_att_t10_wm_ww_zmb_staffs_water_tip_LOD0.cast",
+      "sha256": "ede5e65b0f91bb2aaf338196211ddbf59552e140e266a8fe2269d939d5dcc762"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\att_t10_wm_ww_zmb_staffs_water_tip_dreward_att_t10_wm_ww_zmb_staffs_water_tip\\att_t10_wm_ww_zmb_staffs_water_tip_dreward_att_t10_wm_ww_zmb_staffs_water_tip_LOD1.cast",
+      "sha256": "40d130fd23fec405e2ffd422d241b36af0b3f3825594d5344156b582bd924b90"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\att_t10_wm_ww_zmb_staffs_water_tip_dreward_att_t10_wm_ww_zmb_staffs_water_tip\\att_t10_wm_ww_zmb_staffs_water_tip_dreward_att_t10_wm_ww_zmb_staffs_water_tip_LOD2.cast",
+      "sha256": "ca435b6da893a2dae58d35c65bc8239df25cff584887dace9505a584988e8e3b"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\att_t10_wm_ww_zmb_staffs_water_tip_dreward_att_t10_wm_ww_zmb_staffs_water_tip\\att_t10_wm_ww_zmb_staffs_water_tip_dreward_att_t10_wm_ww_zmb_staffs_water_tip_LOD3.cast",
+      "sha256": "9bea31016dbb4ac7927bf48aa64a05cc80d60edbfaf654270f0f53dd934036e2"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\att_t10_wm_ww_zmb_staffs_water_tip_dreward_att_t10_wm_ww_zmb_staffs_water_tip\\att_t10_wm_ww_zmb_staffs_water_tip_dreward_att_t10_wm_ww_zmb_staffs_water_tip_LOD4.cast",
+      "sha256": "2271c49ba991183f965f2264f8d19f0df41bc1a932f18645676c06dc3a03d2db"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_vm_ww_zmb_staffs\\wpn_t10_vm_ww_zmb_staffs_LOD0.cast",
+      "sha256": "f54c5c614c7f293280220b3cf33f4416a946e61610cbdc8e54bc71bb0facbb69"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_vm_ww_zmb_staffs_base\\wpn_t10_vm_ww_zmb_staffs_base_LOD0.cast",
+      "sha256": "68306383f6cb56698c2a887959b459d8371c576f8cb5c934773d1be6aa1586dc"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_vm_ww_zmb_staffs_dreward_wpn_t10_vm_ww_zmb_staffs\\wpn_t10_vm_ww_zmb_staffs_dreward_wpn_t10_vm_ww_zmb_staffs_LOD0.cast",
+      "sha256": "0d7a702f749424c0f50945b8da32505c8a10b1eb7e09f380d169d7a5dc67ec11"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs\\wpn_t10_wm_ww_zmb_staffs_LOD0.cast",
+      "sha256": "e45747120dd0843729be5471d4e580e46abe6c523b146458edd791952fe982ce"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs\\wpn_t10_wm_ww_zmb_staffs_LOD1.cast",
+      "sha256": "9526c1511a46b94bf77f89f127690c1cbec730e6e9b8c162e45e6567cdd907cc"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs\\wpn_t10_wm_ww_zmb_staffs_LOD2.cast",
+      "sha256": "766b11b1f3495ae8571329739e2790fd8f39a81873153e9a15253ab3d9205bbf"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs\\wpn_t10_wm_ww_zmb_staffs_LOD3.cast",
+      "sha256": "bde0e2a1c6fb7c4786a330c1391640a5ce63143593b6321e9de081cb4bd0617d"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_base\\wpn_t10_wm_ww_zmb_staffs_base_LOD0.cast",
+      "sha256": "68306383f6cb56698c2a887959b459d8371c576f8cb5c934773d1be6aa1586dc"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_base\\wpn_t10_wm_ww_zmb_staffs_base_LOD1.cast",
+      "sha256": "68306383f6cb56698c2a887959b459d8371c576f8cb5c934773d1be6aa1586dc"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_base\\wpn_t10_wm_ww_zmb_staffs_base_LOD2.cast",
+      "sha256": "68306383f6cb56698c2a887959b459d8371c576f8cb5c934773d1be6aa1586dc"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_base\\wpn_t10_wm_ww_zmb_staffs_base_LOD3.cast",
+      "sha256": "68306383f6cb56698c2a887959b459d8371c576f8cb5c934773d1be6aa1586dc"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_dreward_wpn_t10_wm_ww_zmb_staffs\\wpn_t10_wm_ww_zmb_staffs_dreward_wpn_t10_wm_ww_zmb_staffs_LOD0.cast",
+      "sha256": "a0a3d026846acb7f57cf223261cdcd1aed7fcb255b94f7d2006c3ea3b793ba1a"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_dreward_wpn_t10_wm_ww_zmb_staffs\\wpn_t10_wm_ww_zmb_staffs_dreward_wpn_t10_wm_ww_zmb_staffs_LOD1.cast",
+      "sha256": "dbc026c6dc596940ec849d7db8fef5eebd22df60559b7c83320bbe9978ca4efc"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_dreward_wpn_t10_wm_ww_zmb_staffs\\wpn_t10_wm_ww_zmb_staffs_dreward_wpn_t10_wm_ww_zmb_staffs_LOD2.cast",
+      "sha256": "6c77438752c5959ab3653d5d87253d89b10576a43af1f4c51382471bb5115db7"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_dreward_wpn_t10_wm_ww_zmb_staffs\\wpn_t10_wm_ww_zmb_staffs_dreward_wpn_t10_wm_ww_zmb_staffs_LOD3.cast",
+      "sha256": "c4f86ec2c0be428c6a121c4dd6b2f05a94a9d3ffa7a66848bfb91f0d2e1bdfab"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\wpn_t10_wm_ww_zmb_staffs_nocol_LOD0.cast",
+      "sha256": "1ef3b0fe917b1803cec43bf079afe4a1fa17b9b03f6b0ef8e1e78dcab44d9091"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\wpn_t10_wm_ww_zmb_staffs_nocol_LOD1.cast",
+      "sha256": "501768b50876ebdbd43f184516d4771197724b2b509c5c60b082174b9647f70f"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\wpn_t10_wm_ww_zmb_staffs_nocol_LOD2.cast",
+      "sha256": "8aa277501a557c282e3b8add5b8a1e9d2277323cffd08a28f8eb231619c68a23"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\models\\wpn_t10_wm_ww_zmb_staffs_nocol\\wpn_t10_wm_ww_zmb_staffs_nocol_LOD3.cast",
+      "sha256": "621835207f0c4dc1a426777f7c52566aaa68fad9970ca10f2ad00ebeaee564af"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_ads_down.cast",
+      "sha256": "5dad5c5283525c74e1741edd425c2f73ccbd7560cdf0378a791b319d8df73922"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_ads_fire.cast",
+      "sha256": "3cb86df5544c8614762270ef6299bb76c6cc9659c2f6e0062634d619d670c6a4"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_ads_up.cast",
+      "sha256": "b7d50739075f9210ea269519cc20f239fd23c3f26d75891a0e6b3eb31a517996"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_ads_down.cast",
+      "sha256": "c01b84591865edb0a6fcc57fec35111049f4968e2a87faae37170c617953ca4c"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_ads_fire.cast",
+      "sha256": "71bc5a190d16f86de83a3951a6dae52cf3f0f7772dcf091896c48e68f811173d"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_ads_up.cast",
+      "sha256": "f920dc087c513b67fc16b4de87b32aa7cb205beb5ea51136a445e51a98a1b99a"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_crawl_in.cast",
+      "sha256": "eaf44de613efd51e8b0300c68ee7993ef2bc1f43e149aaceac39ef57eb1c6846"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_crawl_left.cast",
+      "sha256": "494fe9892c61eaaece0cd395705b7978d3b55447d755ba6b2e728113c349aa39"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_crawl_right.cast",
+      "sha256": "92df2df92018ef802ecacdab9ec4debe0e957f6c1d98161e5e23f35acde95077"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_fire.cast",
+      "sha256": "0fdd3543764f39dcc6c27aa783e22f6d0fd90d4803b95278d597c6c7f47bcf8d"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_idle.cast",
+      "sha256": "78cf0ce45d3bb508257e3d5daad7c4ad4fa94ea2586e42d28945176635f32ade"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_idle_active.cast",
+      "sha256": "5e0bc0aaac642da13d38a9cd77edfffa1c4a96357170f7b3d0ead52f2c1cd89c"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_inspect.cast",
+      "sha256": "2a452dac0242798d6770bb4fe2136e330b294a5ab0e6ee195ca05510f91a42fe"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_jog_loop.cast",
+      "sha256": "69357163fccaf0a55064b564f1de911529024968ed6475b9d17cf3dc3deff8bc"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_jog_offset_additive.cast",
+      "sha256": "ac3a638d111e50b5d6c8e4f870f7dd04f2fd0c6e9b720fa4766c4ea71da486d7"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_jog_to_sprint.cast",
+      "sha256": "7b68551614734ae7b8244513bdb2994615557b47baf52561505c48de58523e7e"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_jog_to_super_sprint.cast",
+      "sha256": "e525e3415cf5e9222e5406756b3cc064332652d6ee3df756036889458fd5dcb8"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_jog_to_walk.cast",
+      "sha256": "f2b47df035c79101c7410dea6b9f576d274cd2b3073bafbcb7e138860355a03d"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_melee_hit_01.cast",
+      "sha256": "064bf328679e1d89a4d609d172464b4a4c27b9cb38a07da247d781850cb5db05"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_melee_hit_02.cast",
+      "sha256": "78ba7f5981f8c4f506001046de0990551da9a1156c467be31dd1c4613f087017"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_melee_hit_03.cast",
+      "sha256": "4aaa0b1c4378e9988444c8a9a14ba3eb479c16c8c211594ac129554130f34ef7"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_melee_miss_01.cast",
+      "sha256": "61162b707807f659d0220bb624663983eba90b7671176432a7b701f53ba6f973"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_melee_miss_02.cast",
+      "sha256": "4785eb4defd0e0fb78529b639fb4b4994e8c3c837b4ccb035fdbe74119b6c09f"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_melee_miss_03.cast",
+      "sha256": "b30f400238f348cd16e1b3e760882de3d6b15176f52833f2978d322e77a8f8db"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_omni_sprint_offset_additive_b.cast",
+      "sha256": "573043fff7f437b36c4c3ecebc50ed01aa60c01159920692366d28e870903007"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_omni_sprint_offset_additive_f.cast",
+      "sha256": "dfeab9fcb39706676a5d92b8f64f1abb776f5855b0adb114e9a17b2a0209c78e"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_omni_sprint_offset_additive_l.cast",
+      "sha256": "d303b3f5acffc40935ed654d493cd3a217cd8da227c72c89df204e994003e321"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_omni_sprint_offset_additive_r.cast",
+      "sha256": "e53d68b1d8241ecce9acac386410c0748f6fb31e398c7d25eadf145352f0b280"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_pose_l.cast",
+      "sha256": "f95af2106e28972b4a86b47467e02cd710c4c1abdc566bed442a74a04a5ee3e1"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_pose_r.cast",
+      "sha256": "70736a2b1df3748bf60a9c55559074563874d61b0b98070d98fce09a17b23cc6"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_pullout.cast",
+      "sha256": "83af5128ed1e37deb7676486905081baab653a56ee87e3729b5624938769c944"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_pullout_quick.cast",
+      "sha256": "705f18dddaa0611b203c2476a8a6d83f37d3f7c1f4dabab1a11ab7ff27a698a8"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_putaway.cast",
+      "sha256": "f988d777d325aa0cda18f0ca92d7091245858a0139847a6e2641fe81a2b5a106"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_putaway_quick.cast",
+      "sha256": "1e30d7276ce688e5de31daa92fd1c4cc280dc63cd9be58a68f85a69fc849fe79"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_sprint_loop.cast",
+      "sha256": "f2043a528554662689c584e3af73a80db804e65c78830cab01eeb9fde1b0761a"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_sprint_offset_additive.cast",
+      "sha256": "62b09622f506de2e3414e497267bd40c391e1a263cf29bc63961970e64e2a8cb"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_sprint_to_jog.cast",
+      "sha256": "46c1159371525dbd717f03fb9d7e7f501a8ed7605d18b631776930ff9fa86b9e"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_sprint_to_super_sprint.cast",
+      "sha256": "65c6ea1a74c991b1a1b1cbe5713f3caffaa85a5c457f27fa92d61eceeb8a7cdb"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_sprint_to_walk.cast",
+      "sha256": "6bf60354f940ae73b373bf6c0234b03172dcaeee892e444efd499fb30c35d83d"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_super_sprint_loop.cast",
+      "sha256": "6d971a7a0ea6e32b93c9855896ef8713d32f93bb32ed77c9c71b5e6c69b1cbde"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_super_sprint_offset_additive.cast",
+      "sha256": "7ff8a4b2d9d4a2cc1ecce550c87f05b57300692419e32c3f5e9f0732207b07d7"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_super_sprint_to_jog.cast",
+      "sha256": "e67adecf906a62a75bac1126e766f77d12188dc4acc1e250f176b99a318ecc03"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_super_sprint_to_sprint.cast",
+      "sha256": "9129678294e32687a01af09faa9f97607eb22177e8f3de2a81ddac095cfd2fc0"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_super_sprint_to_walk.cast",
+      "sha256": "cb42f8175689f455ed5b170091a30c309ad32dcb41a6a8ce0feed2b103bb5c6b"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_walk_loop.cast",
+      "sha256": "2c94dbb57664049498a87181ceb66802a93349e415779b2502f9687ccd4f337c"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_walk_offset_additive.cast",
+      "sha256": "dfeab9fcb39706676a5d92b8f64f1abb776f5855b0adb114e9a17b2a0209c78e"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_walk_to_jog.cast",
+      "sha256": "fe9b8f21bac6ad1077cb0dff8cc7b7d8e1b0a9fa6df46b8b22a4e3f89a3dee19"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_walk_to_sprint.cast",
+      "sha256": "83f91d495de0995fdbbfe53b57dc57d7e60cbbd9933480f37301265dbd57a6e7"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_altmode_walk_to_super_sprint.cast",
+      "sha256": "7c49c2e1faba8c89c7111e3c979047d53e2edf983eeead6f9d6e2e5ce8c23dc9"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_crawl_in.cast",
+      "sha256": "ac2724c04c46c2c63b486001db739733c55f5696b468413115a199bd19147b93"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_crawl_left.cast",
+      "sha256": "a3dc8b00c1d89283ced67db1bdce5ceeb83c7d68b4c1223259b20e2790a4d8d1"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_crawl_right.cast",
+      "sha256": "2279a67b61f33ec077fd57a20d343edb61c03041651cac4596762260db24142b"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_fire.cast",
+      "sha256": "3cb86df5544c8614762270ef6299bb76c6cc9659c2f6e0062634d619d670c6a4"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_first_raise.cast",
+      "sha256": "dc13c7d194f1c300472e3cc5200437b4705b9f59db95e0e1a242973a91ba03d3"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_idle.cast",
+      "sha256": "7bc0c07429062a3d4a27c3c11621715c4230372b0fa45abab67dca894e395a01"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_idle_active.cast",
+      "sha256": "1c4a8c7c382f02e4f01a0529bc4787fd39526076a2918cd07a8fd650d54075e9"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_idle_non_loop.cast",
+      "sha256": "b43935bf0c9b31c523d18c48fbaf2c6a7cdbb58a81a086b5b65a348a07b41239"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_inspect.cast",
+      "sha256": "f357564f4f5fa49bcd878b17b960e1b438cb6489b633e374741bd20f142ff51c"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_jog_loop.cast",
+      "sha256": "ac56b464ec0525ee5b1254483d59fe2ae727f7ed4d15f47420c34da03b8d212c"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_jog_offset_additive.cast",
+      "sha256": "d9323ae8af0ed3a2d0ecfab9ea97cd2db7db25c469855c7ad6ea2e607e4e3364"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_jog_to_sprint.cast",
+      "sha256": "5e57de790995845244afba022873bf28690f0ffbf243cf52d4f54fc420c572c5"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_jog_to_super_sprint.cast",
+      "sha256": "74fe505a4f7ec075e17c1fcc08409ee49d816612519e7036d67ec662497e5d40"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_jog_to_walk.cast",
+      "sha256": "6940f2d9ee482a47dd9db0e68af71de8f9f3191437828d09ab2b2b871c8f7f65"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_melee_hit_01.cast",
+      "sha256": "fa4580cd78a2ae174798c83588781b2ddc79a1ef4561640dbb937b243c1ae32e"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_melee_hit_02.cast",
+      "sha256": "a6ae44c656981d6a0155b9f625d888965c6b074023a77159ba98f311e73c39fa"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_melee_hit_03.cast",
+      "sha256": "4e1cfb6e18290f05ad8c30969e1bc644e50c6243142f3846292ba47be7917d31"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_melee_miss_01.cast",
+      "sha256": "6f056996b360633062a806b8166f5a94685a728913113b63d2f30a3b6816d15f"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_melee_miss_02.cast",
+      "sha256": "06a75ed2ad59296d14ef592d46a67d3c3153868c78e140fc081b76a26c27a6c7"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_melee_miss_03.cast",
+      "sha256": "70fb94ffd3c3fa71fef8528d55ce68831dd8111abccfbc6f8e4a8d8153b5af8e"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_omni_sprint_offset_additive_b.cast",
+      "sha256": "5c78fa94b0cf567fc05e56298b1d7ec1da0285f64a16cac285690fc29359c568"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_omni_sprint_offset_additive_f.cast",
+      "sha256": "dfeab9fcb39706676a5d92b8f64f1abb776f5855b0adb114e9a17b2a0209c78e"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_omni_sprint_offset_additive_l.cast",
+      "sha256": "2e9ee30f71273b7c07484cb68e9d596bd099e62b77cc1762986b4832c0594a03"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_omni_sprint_offset_additive_r.cast",
+      "sha256": "737dca8f35af4e79112f69fd061932fc68cd4da359c6bcb1356c40545df54f2d"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_pose_l.cast",
+      "sha256": "f95af2106e28972b4a86b47467e02cd710c4c1abdc566bed442a74a04a5ee3e1"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_pose_r.cast",
+      "sha256": "b1cfc3b635575e2dc2f687bf943995cf577587e3ce08f567207244b8ad8718e6"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_pullout.cast",
+      "sha256": "50928fd49cee54f1b343414a34a2032eb4713fc6f393db9bcd7e2789f72275c0"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_pullout_quick.cast",
+      "sha256": "9c93279261d669ca999e04e8593b12af55c3149f0119aa56473b87f45e5dd635"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_putaway.cast",
+      "sha256": "86d46d42fbde66f69afcbcba5b6960fc7bf9a83efcb4e7f33b2a2584527d8861"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_putaway_quick.cast",
+      "sha256": "e868360c7e641109cd178e078546bc88ebda2e01f5e44053651d12fc70a8c950"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_reload.cast",
+      "sha256": "869c25810e571c62d7f9b4c2d304dd8791270b36fa145b4b80005ad74feeb905"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_sprint_loop.cast",
+      "sha256": "bebbbef28ed6f76b2bfaf461970667c598a4b1ad1f6897a432977beb85b82740"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_sprint_offset_additive.cast",
+      "sha256": "4d70dc27dd689e54a93f30b3f66fdb31f324e995f4d523cd649885acfc8433d9"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_sprint_to_jog.cast",
+      "sha256": "29a61bf33a48fb62c6734906346f418899a46d3f90b39b0cf1916c72710e060a"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_sprint_to_super_sprint.cast",
+      "sha256": "56d65d790f7f5b9ae7f6dc99946c152cbed0eae46109315152ec14313b021c8e"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_sprint_to_walk.cast",
+      "sha256": "099f413fb34716ec84c75c8ebb4f230687b9d3522569ae2178527dfb39c620cf"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_super_sprint_loop.cast",
+      "sha256": "9ee49e62dd3997aeeece073af2cf2b0286f96e68e19547f0583486a9b91b677f"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_super_sprint_offset_additive.cast",
+      "sha256": "aa213eec50b03a05c2a7a7da639ecd25037284d2ff13c4b122ac9b65b93047ed"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_super_sprint_to_jog.cast",
+      "sha256": "26ba7c11a613f4d3e9a4fff50d0fee5d06628de8282b520b2d5a85c8436fd244"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_super_sprint_to_sprint.cast",
+      "sha256": "17d73489910dcbee84afcc671e0e6b73c3d698193c53df90b1857b84a020ca61"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_super_sprint_to_walk.cast",
+      "sha256": "e0dbbc5b242c25d51565fdb330ff4f6d06f99eefe22d85765b3bca7c37ef3afd"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_ads_fire.cast",
+      "sha256": "d7261b0b3f04fe19c7cb4d1eacf91cbe2b4fc5d5316e86b545ce624d37021c86"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_crawl_in.cast",
+      "sha256": "aaccf5fb61b579c098aed822e6395dbaa4cc5f23932b2e6c53528ce864a9863b"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_crawl_left.cast",
+      "sha256": "fe7699d966b7162ca8b2645ef2a4e00af85adf00af56f11308a350adcf7d6ea1"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_crawl_right.cast",
+      "sha256": "ba510ad15810dc64574478bb540c0cf63b827382379f4c122a585352c6275b09"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_fire.cast",
+      "sha256": "a426851ed103c48a1de03f856104a47d473facc2c95279ecacf6be51117a7d84"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_first_raise.cast",
+      "sha256": "8794e57a3714c57ff8e8d53d340548742b170f74696531ab865630c8b67898f7"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_from_altmode.cast",
+      "sha256": "9c3bf1dd20b4c55719febbc60ce80e10db5fcea4cbc6c6bd0c795361b3243ffe"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_idle.cast",
+      "sha256": "4154fd0ec5eca0f479ce1909f263c605764111668b1f7b8e9d9f6c18c043f6b6"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_inspect.cast",
+      "sha256": "04195ae81c29b009c74363fdce6177d9146f064ae563b26e79b6527f7c98f3c7"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_melee_hit_01.cast",
+      "sha256": "50ba80a50df9632b05c3bbfb8bc5d9b44b1059078f00bfd3aff82674e3d2a89e"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_melee_hit_02.cast",
+      "sha256": "56b51dd476f7266041962e85490ea9ca545034ac5e55926a301b1a09b8005c47"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_melee_hit_03.cast",
+      "sha256": "1bdbf1fc2da514c2573cda383448a4ca64a2530fcc1a7d391bc3bd474a94466a"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_melee_miss_01.cast",
+      "sha256": "bffc11f5481b95beaae52835bf7ef338871b63b181ce43230213395467822a16"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_melee_miss_02.cast",
+      "sha256": "797e946fde1a41a74f381713a65e98db763cd22a7f03ef93d71545153335c1c7"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_melee_miss_03.cast",
+      "sha256": "42d2f10b5de4d7cae749a357a14b1e18bdbe52917a64c739b57119fab52ada83"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_pullout.cast",
+      "sha256": "02af4562054241c1a1298cf4c12ee33b6a9c89232608737f82982933b1af3fce"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_pullout_quick.cast",
+      "sha256": "348d1ac0d3f2436b0690a2b7f836a1b30127a05666b0345e2d49ceea30363397"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_putaway.cast",
+      "sha256": "ae4df6ceb1847b1a48ddefebc79d99c8e6d20150fa8131ba0b97695c0dcd3f08"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_putaway_quick.cast",
+      "sha256": "4eaa91bc72498dd878b903f96e483e6d16f3c301f7449b1d529e5f58eb73eed7"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_reload.cast",
+      "sha256": "8ee1d0f3d6bca7d2351ecaebc04ad6e65e42fcb7fcb03fdc43e5cc8d9240f5bb"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_upg_to_altmode.cast",
+      "sha256": "13d598fe76cfc4e62a1107310bf79d001cae1deaacaf56e9e44a91f0c6dcb6d4"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_walk_loop.cast",
+      "sha256": "1a236d286c109afd06c2dd4022d58452464ebc70ddd577221f1b850089a4a333"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_walk_offset_additive.cast",
+      "sha256": "dfeab9fcb39706676a5d92b8f64f1abb776f5855b0adb114e9a17b2a0209c78e"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_walk_to_jog.cast",
+      "sha256": "454280ae4b7970fa88fe811c3618cf636662ee2a4333cad278d194760e6b46c9"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_walk_to_sprint.cast",
+      "sha256": "b3ef6750106f26923d38ab972963c03dc9ef7ff5f6f09d4e1271d48818ad5196"
+    },
+    {
+      "path": "C:\\Users\\jorda\\Downloads\\BO6_Pilot_Export\\bo6\\animations\\t10_vm_ww_staff_walk_to_super_sprint.cast",
+      "sha256": "7c34ebc036aae793731c4c7769ec8eced8d5d9a8a017bf0b600eda63a8e8ea8b"
+    }
+  ],
+  "native_verified": false
+}

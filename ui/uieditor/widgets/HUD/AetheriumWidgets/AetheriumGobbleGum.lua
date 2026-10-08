@@ -55,6 +55,8 @@ function CoD.AetheriumGobbleGum.new(menu, controller)
 		PostLoadFunc(self, controller)
 	end
 	
+
+	-- =========================================================================
 	return self
 end
 

@@ -65,15 +65,28 @@ function t9_pap_FX_idle( localClientNum, oldVal, newVal, bNewEnt, bInitialSnap, 
     // origin) with struct.angles = model.angles + 180, so self.angles + 270
     // reproduces the original struct.angles + 90 exactly — the crown is
     // pixel-identical, and each vendor finally wears its own glow.
-    fx_player = util::spawn_model(localClientNum, "tag_origin", self.origin, self.angles + (0, 270, 0));
     if(isdefined(self.fx))
     {
         DeleteFX(localClientNum, self.fx);
             self.fx = undefined;
     }
+    // [tod v19.4] THE HOST IS STORED AND DELETED — stock's own contract
+    // (_zm_pack_a_punch.csc::pap_play_fx spawns the tag_origin host, keeps it
+    // on self.mdl_fx and Delete()s the previous one beside its DeleteFX). Here
+    // it was a LOCAL, so every field change spawned an empty client entity
+    // that nothing ever removed and it leaked for the rest of the match. The
+    // host is spawned only when an FX is actually played, and the one carrying
+    // the live FX is never touched until that FX is deleted.
+    if(isdefined(self.fxhost))
+    {
+        self.fxhost Delete();
+            self.fxhost = undefined;
+    }
 
     if(newVal == 1)
     {
+            self.fxhost = util::spawn_model(localClientNum, "tag_origin", self.origin, self.angles + (0, 270, 0));
+            fx_player = self.fxhost;
             self.fx = PlayFXOnTag(localClientNum, level._effect["t9_pap_FX_idle"], fx_player, "tag_origin");
     }
 }
@@ -83,15 +96,22 @@ function t9_pap_FX_inuse( localClientNum, oldVal, newVal, bNewEnt, bInitialSnap,
     fx_player = undefined;
 
     // [tod v13.16] self-based FX anchor — full postmortem at t9_pap_FX_idle.
-    fx_player = util::spawn_model(localClientNum, "tag_origin", self.origin, self.angles + (0, 270, 0));
     if(isdefined(self.fxtwo))
     {
         DeleteFX(localClientNum, self.fxtwo);
             self.fxtwo = undefined;
     }
+    // [tod v19.4] host stored + deleted — see t9_pap_FX_idle.
+    if(isdefined(self.fxtwohost))
+    {
+        self.fxtwohost Delete();
+            self.fxtwohost = undefined;
+    }
 
     if(newVal == 1)
     {
+            self.fxtwohost = util::spawn_model(localClientNum, "tag_origin", self.origin, self.angles + (0, 270, 0));
+            fx_player = self.fxtwohost;
             self.fxtwo = PlayFXOnTag(localClientNum, level._effect["t9_pap_FX_inuse"], fx_player, "tag_origin");
     }
 }
@@ -102,11 +122,24 @@ function t9_pap_FX_inuse_aat( localClientNum, oldVal, newVal, weapon, bNewEnt, b
 
     keys = getarraykeys(level.aat);
     // [tod v13.16] self-based FX anchor — full postmortem at t9_pap_FX_idle.
-    fx_player = util::spawn_model(localClientNum, "tag_origin", self.origin, self.angles + (0, 270, 0));
     if(isdefined(self.fxthree))
     {
         DeleteFX(localClientNum, self.fxthree);
             self.fxthree = undefined;
+    }
+    // [tod v19.4] host stored + deleted — see t9_pap_FX_idle.
+    if(isdefined(self.fxthreehost))
+    {
+        self.fxthreehost Delete();
+            self.fxthreehost = undefined;
+    }
+
+    // ONE host for the six value branches below (only one can match), spawned
+    // only when a branch will actually play; newVal 0 spawns nothing.
+    if(newVal >= 1 && newVal <= 6)
+    {
+            self.fxthreehost = util::spawn_model(localClientNum, "tag_origin", self.origin, self.angles + (0, 270, 0));
+            fx_player = self.fxthreehost;
     }
 
     if(newVal == 1)

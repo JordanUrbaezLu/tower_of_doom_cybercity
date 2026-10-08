@@ -125,6 +125,10 @@ function powerup_activate( drop_item, player )
 	while( level.zombie_vars["zombie_powerup_timewarp_time"] > 0 )
 	{
 		wait( 0.05 );
+		// [tod v19.76] the clock stops while the upgrade cards hold the world
+		// (_tod_powerups::powerup_pause_hold has the map-wide list)
+		if ( IS_TRUE( level.tod_upgrade_pause ) )
+			continue;
 		level.zombie_vars["zombie_powerup_timewarp_time"] = level.zombie_vars["zombie_powerup_timewarp_time"] - 0.05;
 	}
 	level thread powerup_deactivate( player );
@@ -133,10 +137,13 @@ function powerup_activate( drop_item, player )
 function powerup_deactivate( player )
 {
 	level.zombie_vars["zombie_powerup_timewarp_on"] = 0;
-	// [tod] isdefined guard — a disconnect during the 30s effect otherwise
-	// dereferences a stale player here and ends the match (verify 2026-08-20).
-	if ( isdefined( player ) )
-		player._show_solo_hud = 0;
+	// [tod] v17.47: the pack's `player._show_solo_hud = 0` is REMOVED. That flag
+	// is the one gate stock's powerup_hud_monitor reads for EVERY grabber-only
+	// tray icon, and Time Warp is a level-wide powerup that never needed it —
+	// the write blanked a running ZOMBIE BLOOD icon the moment Time Warp ended
+	// (user 2026-09-04: "zombie blood wont show in the HUD sometimes"). The
+	// grabber-only owners (_tod_powerups::zombie_blood_clear, stock's minigun
+	// end) drop the flag themselves.
 
 	a_zombies = GetAISpeciesArray( "axis" );
 

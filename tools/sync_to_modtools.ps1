@@ -160,6 +160,8 @@ $mappings = @(
     # Aetherium HUD kit: custom TTF fonts (zone `ttf,` lines) + kill-feed strings
     @{ Label = "fonts";            RepoRel = "fonts";            ModRel = "fonts";            Mirror = $true  },
     @{ Label = "localizedstrings"; RepoRel = "localizedstrings"; ModRel = "localizedstrings"; Mirror = $true  },
+    # Keep installed third-party animation trees alongside this map's tree.
+    @{ Label = "animtrees";    RepoRel = "animtrees";    ModRel = "animtrees";    Mirror = $false },
     # Map-name vision (rawfile,vision/zm_tower_of_doom.vision). The engine sets
     # every client's base vision BY MAP NAME (visionset_mgr_shared.csc
     # finalize_initialization -> GetDvarString("mapname")); with no such file in
@@ -208,6 +210,29 @@ if ($Reverse) {
 # packs. Currently: the acc/light perk-glow recolours ported from map 1.
 if (-not $Reverse) {
     Copy-Tree (Join-Path $RepoRoot "share\raw\fx") (Join-Path $ModTools "share\raw\fx") "share\raw\fx" $false
+    # CUSTOM SHADER DEFINITIONS (2026-09-23): the SAT Widow's Wine machine's powered
+    # panel material is authored on lit_emissive_scroll_3layer_advanced_fullspec, a
+    # techsetdef the pack's CODE archive ships and this install never had. Without
+    # it the linker builds that material against missing_techsetdef_geometry and the
+    # whole front panel (sign, spider crest, red text glow) renders as the engine's
+    # grey stand-in once the machine is powered. The def is a stock
+    # lit_emissive_scroll_3layer_advanced + the fullspec additions and names only
+    # stock shader sources. COPY (never mirror): these trees hold every stock def.
+    # verify_perk_machine_presentation.py pins the file and checks both copies;
+    # build_map.ps1 fails the link if any material still lands on a missing techset.
+    Copy-Tree (Join-Path $RepoRoot "share\raw\techsetdefs_stable") (Join-Path $ModTools "share\raw\techsetdefs_stable") "custom techsetdefs" $false
+    Copy-Tree (Join-Path $RepoRoot "share\raw\techsetdefs_stable_toolsgfx") (Join-Path $ModTools "share\raw\techsetdefs_stable_toolsgfx") "custom techsetdefs (toolsgfx)" $false
+}
+
+# weaponfull reads this install-side table at link time. Merely zoning an AU
+# never enables it. Merge only our 21 presentation rows, preserving other maps.
+if (-not $Reverse) {
+    if ($DryRun) {
+        Write-Info "DRY: merge staff / Thunder Smash linker attachment mappings"
+    } else {
+        & python (Join-Path $PSScriptRoot "verify_weapon_attachments.py") --install $ModTools
+        if ($LASTEXITCODE -ne 0) { throw "Weapon attachment mapping setup failed" }
+    }
 }
 
 # GDT assets (repo source_data\...) land at the TOOLS ROOT source_data\ — the
@@ -217,6 +242,43 @@ if (-not $Reverse) {
 # locate asset in gdtdb" (build_map.ps1 runs it when repo GDTs are newer).
 if (-not $Reverse) {
     Copy-Tree (Join-Path $RepoRoot "source_data") (Join-Path $ModTools "source_data") "source_data (GDTs)" $false
+    Copy-Tree (Join-Path $RepoRoot "model_export\tod_cyber_zombie") (Join-Path $ModTools "model_export\tod_cyber_zombie") "cyber zombie models and textures" $false
+    Copy-Tree (Join-Path $RepoRoot "model_export\tod_heavenly_altar") (Join-Path $ModTools "model_export\tod_heavenly_altar") "Heavenly Altar models and baked textures" $false
+    Copy-Tree (Join-Path $RepoRoot "model_export\tod_baseball_bat") (Join-Path $ModTools "model_export\tod_baseball_bat") "baseball bat models" $false
+    Copy-Tree (Join-Path $RepoRoot "xanim_export\tod_baseball_bat") (Join-Path $ModTools "xanim_export\tod_baseball_bat") "baseball bat animations" $false
+    # Approved staff animations carry their conversion skeletons with them.
+    # Copy only our folders; never mirror the shared installed asset trees.
+    Copy-Tree (Join-Path $RepoRoot "xanim_export\tod_staff_approved") (Join-Path $ModTools "xanim_export\tod_staff_approved") "approved staff animations" $false
+    Copy-Tree (Join-Path $RepoRoot "model_export\tod_staff_anim") (Join-Path $ModTools "model_export\tod_staff_anim") "staff animation skeletons" $false
+    Copy-Tree (Join-Path $RepoRoot "model_export\tod_staff_pap") (Join-Path $ModTools "model_export\tod_staff_pap") "staff PaP models and skeleton" $false
+    Copy-Tree (Join-Path $RepoRoot "xanim_export\tod_staff_pap") (Join-Path $ModTools "xanim_export\tod_staff_pap") "staff first-equip flourishes" $false
+    # docs/164: Treyarch's fire/lightning staff crystals (world), written by
+    # tools/build_staff_crystal.py. Repo-owned, unlike the v18.33 shaft/heads,
+    # which still live ONLY in the tools root under model_export\sla\tod_staff.
+    Copy-Tree (Join-Path $RepoRoot "model_export\tod_staff_crystal") (Join-Path $ModTools "model_export\tod_staff_crystal") "staff crystals" $false
+    Copy-Tree (Join-Path $RepoRoot "model_export\tod_staff_assembly") (Join-Path $ModTools "model_export\tod_staff_assembly") "complete fire and lightning heads" $false
+    Copy-Tree (Join-Path $RepoRoot "model_export\tod_staff_retail") (Join-Path $ModTools "model_export\tod_staff_retail") "original BO3 staff material textures" $false
+    Copy-Tree (Join-Path $RepoRoot "model_export\tod_thunder_smash") (Join-Path $ModTools "model_export\tod_thunder_smash") "Thunder Smash conversion rig" $false
+    Copy-Tree (Join-Path $RepoRoot "xanim_export\tod_thunder_smash") (Join-Path $ModTools "xanim_export\tod_thunder_smash") "Thunder Smash bat lunge" $false
+    Copy-Tree (Join-Path $RepoRoot "model_export\tod_perk_machines") (Join-Path $ModTools "model_export\tod_perk_machines") "perk machine animation rigs" $false
+    Copy-Tree (Join-Path $RepoRoot "xanim_export\tod_perk_machines") (Join-Path $ModTools "xanim_export\tod_perk_machines") "perk machine purchase animations" $false
+    # v18.89: the BO6 ice staff assembly (both models + their _images), written by
+    # tools/bo6_extraction/install_ice_staff_bo3.py and pinned by its manifest.
+    Copy-Tree (Join-Path $RepoRoot "model_export\tod_bo6_ice") (Join-Path $ModTools "model_export\tod_bo6_ice") "BO6 ice staff models" $false
+    # v18.99h: the BO6 RAMPAGE INDUCER (the real one - an Aetherium essence
+    # container plus its four crystal shards), written by
+    # tools/bo6_extraction/install_inducer_bo3.py.
+    Copy-Tree (Join-Path $RepoRoot "model_export\tod_bo6_inducer") (Join-Path $ModTools "model_export\tod_bo6_inducer") "BO6 rampage inducer model (unzoned rollback since 2026-10-02)" $false
+    # 2026-10-02: the CYBER Rampage Inducer - one animated model + its baked maps,
+    # and its two looping clips, written by tools/inducer_cyber/install_native.py.
+    Copy-Tree (Join-Path $RepoRoot "model_export\tod_inducer_cyber") (Join-Path $ModTools "model_export\tod_inducer_cyber") "cyber rampage inducer model" $false
+    Copy-Tree (Join-Path $RepoRoot "xanim_export\tod_inducer_cyber") (Join-Path $ModTools "xanim_export\tod_inducer_cyber") "cyber rampage inducer loops" $false
+    # v19.64: the fan's Cyber Teddy, the song-hunt bear (model + colour + glow),
+    # written by tools/cyber_teddy/build_cyber_teddy.py.
+    Copy-Tree (Join-Path $RepoRoot "model_export\tod_cyber_teddy") (Join-Path $ModTools "model_export\tod_cyber_teddy") "fan Cyber Teddy model" $false
+    # v19.69: Nikolai's three props - the spawn sign, the crown uplink terminal and
+    # the ammo chest (models + maps), written by tools/fan_props/build_fan_props.py.
+    Copy-Tree (Join-Path $RepoRoot "model_export\tod_fan_props") (Join-Path $ModTools "model_export\tod_fan_props") "fan props (sign, uplink terminal, ammo chest)" $false
 }
 
 # Sound alias CSVs also have to land in share\raw\sound\aliases\ (the linker's

@@ -1,0 +1,80 @@
+{
+  "revision": "integrated_crystals_1",
+  "models": {
+    "tod_staff_fire_complete_view": {
+      "element": "fire",
+      "form": "view",
+      "root": "tag_tip_fire",
+      "crystal_mesh_start": 1,
+      "head_triangles": 3708,
+      "crystal_triangles": 120,
+      "triangles": 3828
+    },
+    "tod_staff_fire_complete_world": {
+      "element": "fire",
+      "form": "world",
+      "root": "tag_tip_fire",
+      "crystal_mesh_start": 1,
+      "head_triangles": 2592,
+      "crystal_triangles": 120,
+      "triangles": 2712
+    },
+    "tod_staff_fire_complete_pap": {
+      "element": "fire",
+      "form": "pap",
+      "root": "tag_tod_fire_packed_head",
+      "crystal_mesh_start": 1,
+      "head_triangles": 2592,
+      "crystal_triangles": 120,
+      "triangles": 2712
+    },
+    "tod_staff_lightning_complete_view": {
+      "element": "lightning",
+      "form": "view",
+      "root": "tag_tip_lightning",
+      "crystal_mesh_start": 1,
+      "head_triangles": 5848,
+      "crystal_triangles": 36,
+      "triangles": 5884
+    },
+    "tod_staff_lightning_complete_world": {
+      "element": "lightning",
+      "form": "world",
+      "root": "tag_tip_lightning",
+      "crystal_mesh_start": 1,
+      "head_triangles": 4002,
+      "crystal_triangles": 36,
+      "triangles": 4038
+    },
+    "tod_staff_lightning_complete_pap": {
+      "element": "lightning",
+      "form": "pap",
+      "root": "tag_tod_lightning_packed_head",
+      "crystal_mesh_start": 1,
+      "head_triangles": 4002,
+      "crystal_triangles": 36,
+      "triangles": 4038
+    }
+  },
+  "files": {
+    "model_export/tod_staff_assembly/tod_staff_fire_complete_view.XMODEL_BIN": "8861392857afec421e7888e310008cffc6b0f4aed0ecd428aca7a1bd2a7f35f3",
+    "model_export/tod_staff_assembly/tod_staff_fire_complete_world.XMODEL_BIN": "564d5de73cf23cc52935eb480bdd58c80bce6067ec5c004dade687d7352574ff",
+    "model_export/tod_staff_assembly/tod_staff_fire_complete_pap.XMODEL_BIN": "177ecf6e15fe5d2c9363629b37ab26e0d1b1703af194aaeddb2ad048261c0b79",
+    "model_export/tod_staff_assembly/tod_staff_lightning_complete_view.XMODEL_BIN": "a1aa0658d5bb338457cb63417664c99b2b52b486792a9c1f60ae9e37996e197e",
+    "model_export/tod_staff_assembly/tod_staff_lightning_complete_world.XMODEL_BIN": "bf98b9aad49d24f5a37acbd41c4ffa29d9f7da022fc62ac9fe5cb0e2aa4e55cb",
+    "model_export/tod_staff_assembly/tod_staff_lightning_complete_pap.XMODEL_BIN": "73cb42223fd1eec92f5d537372af104794b2373b17db02297e532b6d6cc7e923",
+    "source_data/tod_staff_assembly.gdt": "82760409006f8f8ade155a81bce6394d51aad7a4f6fbb8ff6f7f705dcdce0130"
+  },
+  "sources": {
+    "C:\\Users\\jorda\\Documents\\BO3_tools\\Greyhound\\exported_files\\black_ops_3\\xmodels\\wpn_t7_zmb_hd_staff_tip_fire_view\\wpn_t7_zmb_hd_staff_tip_fire_view_LOD0.XMODEL_BIN": "08be4b1796003d502a1d2b9dd5719bc9ea8dafde360c4af0b334c981bbdf8f97",
+    "C:\\Users\\jorda\\Documents\\BO3_tools\\Greyhound\\exported_files\\black_ops_3\\xmodels\\wpn_t7_zmb_hd_staff_crystal_fire_view\\wpn_t7_zmb_hd_staff_crystal_fire_view_LOD0.XMODEL_BIN": "671196310156ff739228ff16f2879878d02b025af7800cd8a0c69b817fb7a1df",
+    "C:\\Users\\jorda\\Documents\\BO3_tools\\Greyhound\\exported_files\\black_ops_3\\xmodels\\wpn_t7_zmb_hd_staff_tip_fire_world\\wpn_t7_zmb_hd_staff_tip_fire_world_LOD0.XMODEL_BIN": "7ff75e04ee67f622a9653b5d5da5a56962a4aa19dda36530a47da666cc6dfa15",
+    "C:\\Users\\jorda\\Documents\\BO3_tools\\Greyhound\\exported_files\\black_ops_3\\xmodels\\wpn_t7_zmb_hd_staff_crystal_fire_world\\wpn_t7_zmb_hd_staff_crystal_fire_world_LOD0.XMODEL_BIN": "671196310156ff739228ff16f2879878d02b025af7800cd8a0c69b817fb7a1df",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\model_export\\tod_staff_pap\\tod_staff_fire_pap_tip.XMODEL_BIN": "6d4f2efb9e37d772f8a58d0047f16d54f1e9fba04ba3552f1a3c4f4bc28835fc",
+    "C:\\Users\\jorda\\Documents\\BO3_tools\\Greyhound\\exported_files\\black_ops_3\\xmodels\\wpn_t7_zmb_hd_staff_tip_lightning_view\\wpn_t7_zmb_hd_staff_tip_lightning_view_LOD0.XMODEL_BIN": "bc80fc42a5deb08154ff798285535d3ca1dd8ba77e4d7d8f2fb33610b8696fe9",
+    "C:\\Users\\jorda\\Documents\\BO3_tools\\Greyhound\\exported_files\\black_ops_3\\xmodels\\wpn_t7_zmb_hd_staff_crystal_lightning_view\\wpn_t7_zmb_hd_staff_crystal_lightning_view_LOD0.XMODEL_BIN": "b5697e85c6446183a7689339f3d14c0e427bb99a3f4556fb95599c483ccc43dc",
+    "C:\\Users\\jorda\\Documents\\BO3_tools\\Greyhound\\exported_files\\black_ops_3\\xmodels\\wpn_t7_zmb_hd_staff_tip_lightning_world\\wpn_t7_zmb_hd_staff_tip_lightning_world_LOD0.XMODEL_BIN": "d0328dd2d10949ae06fbe3f6e149ec0f4682f951025dfdcc8e1cd7db3b8c576c",
+    "C:\\Users\\jorda\\Documents\\BO3_tools\\Greyhound\\exported_files\\black_ops_3\\xmodels\\wpn_t7_zmb_hd_staff_crystal_lightning_world\\wpn_t7_zmb_hd_staff_crystal_lightning_world_LOD0.XMODEL_BIN": "b5697e85c6446183a7689339f3d14c0e427bb99a3f4556fb95599c483ccc43dc",
+    "C:\\Users\\jorda\\Repositories\\tower_of_doom_cybercity\\model_export\\tod_staff_pap\\tod_staff_lightning_pap_tip.XMODEL_BIN": "7366872d50587f9cb19a29f83eb73f98a664314353baac2cefbf8484e4dcde5c"
+  }
+}

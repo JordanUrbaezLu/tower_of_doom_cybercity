@@ -2,6 +2,7 @@
 -- Shows recent kills with scrolling animation
 
 require( "ui.uieditor.widgets.HUD.AetheriumWidgets.AetheriumKillFeedText" )
+require( "ui.uieditor.widgets.HUD.AetheriumWidgets.TodGlyphText" )
 
 local SetKillTypeColor = function ( element, killName )
 	-- AAT Kill Colors (all use yellow like critical kills)
@@ -18,6 +19,17 @@ local SetKillTypeColor = function ( element, killName )
 	-- Critical Kill Colors
 	elseif killName:find( "Critical" ) then
 		element:setRGB( 0.92, 0.94, 0.17 ) -- Yellow for crits
+	-- v17.37 ELITE AND BOSS payouts (_tod_bosses::grant_elite_reward /
+	-- grant_boss_reward). These are the big-money rows — 500 and up against a
+	-- trash kill's 50 — so they do not read as white text in a white list.
+	-- THREE LABELS ONLY, by explicit instruction; the per-family names were
+	-- retired from localizedstrings/zm_aetherium.str with the first cut. None
+	-- collides with a pattern above ("Elite" is not "Elimination"), and a spire
+	-- TRIAL WIN takes the boss colour because it is the same team-wide payout.
+	elseif killName:find( "Boss" ) or killName:find( "Trial" ) then
+		element:setRGB( 1.00, 0.42, 0.18 ) -- boss orange
+	elseif killName:find( "Elite" ) then
+		element:setRGB( 1.00, 0.72, 0.20 ) -- elite amber
 	else
 		element:setRGB( 1, 1, 1 ) -- White for normal/melee/burned/elimination
 	end
@@ -103,12 +115,15 @@ CoD.AetheriumKillFeed.new = function ( menu, controller )
 	self.anyChildUsesUpdateState = true
 
 	-- Running total (top position, yellowish color)
-	self.total = LUI.UIText.new()
-	self.total:setLeftRight( true, false, 721, 781 )
-	self.total:setTopBottom( true, false, 317, 328 )
-	self.total:setTTF( "fonts/orbitron.ttf" )
-	self.total:setRGB( 0.933, 0.906, 0.522 ) -- Yellowish
-	self.total:setAlignment( Enum.LUIAlignment.LUI_ALIGNMENT_LEFT )
+	--
+	-- v17.34: the baked typeface. It is read back with tonumber( getText() ) on
+	-- every kill and blanked on the reset, and both survive the swap -- getText
+	-- returns the raw string, and "" cleans to "" and simply hides the row.
+	self.total = CoD.TodGlyphText.new( {
+		left = 721, right = 781, top = 317, bottom = 328,
+		align = "left", set = "digits", pool = 8,
+		rgb = { 0.933, 0.906, 0.522 }, -- Yellowish
+	} )
 	self.total:setAlpha( 0 ) -- Start hidden
 	self:addElement( self.total )
 

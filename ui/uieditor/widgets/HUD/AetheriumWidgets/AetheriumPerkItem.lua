@@ -8,13 +8,13 @@ CoD.AetheriumPerkItem.new = function ( menu, controller )
 	self:setClass( CoD.AetheriumPerkItem )
 	self.id = "AetheriumPerkItem"
 	self.soundSet = "default"
-	self:setLeftRight( true, false, 0, 28 )
-	self:setTopBottom( true, false, 0, 28 )
+	self:setLeftRight( true, false, 0, 32 )
+	self:setTopBottom( true, false, 0, 32 )
 
 	-- Perk Icon
 	self.PerkIcon = LUI.UIImage.new()
-	self.PerkIcon:setLeftRight( true, false, 0, 28 )
-	self.PerkIcon:setTopBottom( true, false, 0, 28 )
+	self.PerkIcon:setLeftRight( true, false, 0, 32 )
+	self.PerkIcon:setTopBottom( true, false, 0, 32 )
 	self.PerkIcon:linkToElementModel( self, "image", true, function ( model )
 		local image = Engine.GetModelValue( model )
 		if image then
@@ -37,5 +37,8 @@ CoD.AetheriumPerkItem.new = function ( menu, controller )
 		end
 	end )
 
+	LUI.OverrideFunction_CallOriginalSecond( self, "close", function( element )
+		element.PerkIcon:close()
+	end )
 	return self
 end

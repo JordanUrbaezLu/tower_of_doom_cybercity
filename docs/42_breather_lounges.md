@@ -157,3 +157,82 @@ same weapon, and the lane charged 5000 before verifying — the "PaP took my
 cash and changed nothing" live report. Now verifies `up != w` BEFORE charging,
 and the give-failure fallback refunds the 5000 alongside re-giving the
 original weapon.
+
+## v13.6 — the roof came off (2026-08-29)
+
+User, after walking v13: "The roof on the breathers I think look better when
+open. You cant look up and see the tower so it kinda makes it worse. Lets
+remove that." The lounges are OPEN-TOP rooms: roof slab, trim ring and the
+v13.1 ceiling halo are gone; walls, sills, windows, lintels and the corner
+pier stay; a glowing 8-tall cap band on the wall heads keeps the theme-colour
+outline at night. **Move 1 above describes a roof that no longer exists** —
+read the wall table with the last two rows deleted and a cap band in their
+place. (Same build: teleporter rules, ALXS PaP — see CHANGELOG v13.6.)
+
+## v16.7 — the polish pass (2026-09-01)
+
+User: "Can you look into enhancing the breather zones again? ... I want to
+continue enhance however we can." Brief re-read from source (the v13.6 roof
+removal above had not reached CLAUDE.md), the 96 Workshop comments pulled
+first (none names the lounges' look). The room was structurally complete and
+read as an empty box with machines pushed to the walls, floating over a void
+from below. Seven brushwork moves + two script moves, zero models, footprint
+untouched. Every geometry knob is a `BR_*` constant in the generator's v16.7
+block; the room block emits everything in the odd frame and `bb()` mirrors.
+
+| move | what | brushes/lounge |
+|------|------|----------------|
+| fixture panels | the window bay behind each machine becomes a solid `<theme>_tinted_edge` panel (the floor's grid stood up). Perk wall = one panel x[236,624] odd (replaces the N mullion + clip void); PaP (E wall) and crate (W wall) = the middle bay y[622,786] between the mullions; station (S wall) = the west bay x[436,604]. | +4 −2 |
+| finials | 36-sq glow posts on the four corners, 128 tall above the cap band | 4 |
+| floor inlay | 1-proud ring (outer half 120, 20 wide) at the room centre (528,704 odd) + spokes to the station/PaP/crate feet + a spoke to the perk wall ending in a bar over both pads | 9 |
+| pad pylons | 36-sq glow posts centred on the platform's rail-band corners, slab bottom to +240 | 4 |
+| gantry hoops | two post+lintel frames at y 1132/1212 odd (posts outside the rail bands, lintel in the 192..240 band ON the posts) | 6 |
+| underside | glow band (slab-thick) under all four wall bands; 3-tier pendants (half-widths 64/32/16, 48 each) under the E/W/N midpoints; a 48-sq thruster cube 64 under the pad | 14 |
+
+Plus four accent lights per lounge (PaP/station/crate/perks, radius 240, 40u
+into the room from each machine) — 288 → 304 map-wide.
+
+**Two furniture nudges** so each machine sits on its panel's axis: PaP y −680 →
+−704 (even frame), station x −500 → −520. Re-measured: the generator's
+pairwise assert (worst pair now station↔PaP 252u, needs 192), the two deck
+risers (PaP model 244u from the N riser), the respawn spots (≥130u from the
+station trigger, ≥230u from the PaP trigger — both still hold: 138u / 240u),
+the doorway (station model edge 54u clear of the jamb). The spire hubs read
+`BR_FURN` too, so the hub PaP moved with it.
+
+**Script (`_tod_atmosphere.gsc`)**: `lounge_fx()` places four stock LOOPING
+effects per lounge with server `PlayFX` under the blackscreen — motes from the
+open top, interior haze, ground fog on the pad, a soft vent at the gate's east
+post. The render lane is map 1's `fx_at` (loops render; one-shots need a
+tag_origin host). `lounge_arrival_watch()` plays `tod_lounge_arrive` (2D, once
+per player per lounge, alive + playing only) the first time a player's origin
+enters the lounge box — the same box `_tod_endless_rounds::tod_player_in_breather`
+uses for the spawn relief (LOCKSTEP). The wav is an ffmpeg-synthesised
+rising arpeggio (E5–G#5–B5–E6 over an E3 pad, 2.0 s, peak −1 dBFS).
+
+Lint: 0 misplaced walls, 0 unguarded edges, no baseline motion (the inlay is a
+1u step, the panels are 136 tall so never DECK, everything else is plain glow
+= BLOCK). Lit area: the spiral 59.1 → 63.2M u² (+0.3% of the map). Preview:
+`node tools/preview_crown.js --filter "^lap10 (breather|ammo)" --out <prefix>`.
+
+Left for the user (play changes, not looks): a station that pauses or slows
+the world (Workshop ask; the no-pause is a recorded design call), a guaranteed
+Max Ammo per breather door (docs/24 PK-09), perk info plaques (LUI lane only —
+hints are the 250-slot budget).
+
+**To revert the whole pass:** `BR_POLISH = false` (generator, geometry + lights
++ the two furniture nudges; regen + FULL build) and `TOD_LOUNGE_AMBIENCE 0`
+(`_tod_atmosphere.gsc`, FX + chime; `-GscOnly`). Both proven by hash: the
+switch-off regen equals the pre-pass map byte-for-byte (see CHANGELOG v16.7).
+
+## v16.57 — the window panels are OFF (2026-09-02)
+
+User: *"remove the windows blocking views in the breather rooms of the first
+tower"*. The v16.7 FIXTURE PANELS — the solid `mBoard` boards that filled the
+window bay behind every machine (the whole perk wall was one) — are gated by a
+new switch, `BR_WIN_PANELS` in `gen_tower_map.js`, now **false**. Every bay is
+the v13 open window again: mullions + the `clip_player` void, so bullets pass
+and players stay in. Everything else in the v16.7 pass (finials, inlay ring,
+pylons, hoops, under-glow, pendants, lights, the two BR_FURN nudges) stays
+under `BR_POLISH`. `BR_WIN_PANELS = true` restores the boards. Geometry ->
+regen + FULL build.

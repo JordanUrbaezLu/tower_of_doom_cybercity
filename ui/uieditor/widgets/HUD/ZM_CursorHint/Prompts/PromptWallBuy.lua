@@ -5,6 +5,19 @@ require( "ui.uieditor.widgets.HUD.Mappings.AetheriumWeapons" )  -- For weapon da
 
 CoD.PromptWallBuy = InheritFrom( LUI.UIElement )
 
+-- [tod 2026-09-02, KBM audit] One footer line carrying the engine's bind
+-- token, so the key is the player's real bound key or pad glyph (the kit
+-- hardcoded "F"). This card is UNREACHABLE on this map (no wall weapons;
+-- classifyHint has no WallBuy arm) and is patched only so no literal key
+-- name survives anywhere in Prompts/. Full note in PromptDefault.lua.
+local HOLD_KEY = "Hold ^3[{+activate}]^7 "
+function CoD.PromptWallBuy.SetFooter( self, verb )
+	if not self.footerLine then
+		return
+	end
+	self.footerLine:setText( Engine.Localize( HOLD_KEY .. ( verb or "" ) ) )
+end
+
 function CoD.PromptWallBuy.new( menu, controller )
 	local self = LUI.UIElement.new()
 	
@@ -91,41 +104,25 @@ function CoD.PromptWallBuy.new( menu, controller )
 	self.weaponDesc:setScale(1)
 	self:addElement(self.weaponDesc)
 	
-	-- Footer Text 1: "Hold "
-	self.footerText1 = LUI.UIText.new()
-	self.footerText1:setLeftRight(true, false, 620, 640)
-	self.footerText1:setTopBottom(true, false, 507, 514)
-	self.footerText1:setText("Hold ")
-	self.footerText1:setTTF("fonts/ltromatic.ttf")
-	self.footerText1:setRGB(1, 1, 1)
-	self.footerText1:setAlignment(Enum.LUIAlignment.LUI_ALIGNMENT_LEFT)
-	self:addElement(self.footerText1)
+	-- Footer: "Hold <key> To Buy" -- one line, key resolved by the engine
+	self.footerLine = LUI.UIText.new()
+	self.footerLine:setLeftRight(true, false, 620, 724)
+	self.footerLine:setTopBottom(true, false, 507, 515)
+	self.footerLine:setTTF("fonts/ltromatic.ttf")
+	self.footerLine:setRGB(1, 1, 1)
+	self.footerLine:setAlignment(Enum.LUIAlignment.LUI_ALIGNMENT_LEFT)
+	self:addElement(self.footerLine)
+	CoD.PromptWallBuy.SetFooter(self, "To Buy")
 	
-	-- Interact Button (reactive to button binding)
-	self.interactButton = LUI.UIText.new()
-	self.interactButton:setLeftRight(true, false, 643, 650)
-	self.interactButton:setTopBottom(true, false, 507, 514)
-	self.interactButton:setText("F")
-	self.interactButton:setTTF("fonts/ltromatic.ttf")
-	self.interactButton:setRGB(0.792156862745098, 0.7803921568627451, 0.3803921568627451)
-	self.interactButton:setAlignment(Enum.LUIAlignment.LUI_ALIGNMENT_LEFT)
-	self:addElement(self.interactButton)
+	-- (the kit's separate "F" and "To Buy" elements are gone -- the footer
+	-- line above carries both; see SetFooter)
 	
-	-- Footer Text 2: "To Buy"
-	self.footerText2 = LUI.UIText.new()
-	self.footerText2:setLeftRight(true, false, 650, 685)
-	self.footerText2:setTopBottom(true, false, 507, 515)
-	self.footerText2:setText("To Buy")
-	self.footerText2:setTTF("fonts/ltromatic.ttf")
-	self.footerText2:setRGB(1, 1, 1)
-	self.footerText2:setAlignment(Enum.LUIAlignment.LUI_ALIGNMENT_LEFT)
-	self:addElement(self.footerText2)
 	
 	-- Essence Icon
 	self.essenceIcon = LUI.UIImage.new()
 	self.essenceIcon:setLeftRight(true, false, 727, 742)
 	self.essenceIcon:setTopBottom(true, false, 503, 515)
-	self.essenceIcon:setImage(RegisterImage("i_mtl_ui_icons_zombie_essence"))
+	self.essenceIcon:setImage(RegisterImage("i_tod_hud_points_icon"))
 	self.essenceIcon:setRGB(1, 1, 1)
 	self:addElement(self.essenceIcon)
 	
@@ -192,5 +189,11 @@ function CoD.PromptWallBuy.new( menu, controller )
 		PostLoadFunc( self, controller, menu )
 	end
 	
+
+	-- =========================================================================
+	-- [tod 2026-09-22, bug review F23] this card is never routed to (classifyHint
+	-- has no arm for it) but is still built per HUD life; its children were
+	-- left open on close. Attach the shared owner so they close with it.
+	if CoD.TodUIOwnership then CoD.TodUIOwnership.Attach( self ) end
 	return self
 end

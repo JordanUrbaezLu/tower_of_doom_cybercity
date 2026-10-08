@@ -45,6 +45,7 @@ gen = gen.replace(/^const MAP_OUT\s*=.*$/m, `const MAP_OUT = ${j('scratch.map')}
          .replace(/^const DOOR_GSC_OUT\s*=.*$/m, `const DOOR_GSC_OUT = ${j('door.gsc')};`)
          .replace(/^const CROWN_GSC_OUT\s*=.*$/m, `const CROWN_GSC_OUT = ${j('crown.gsc')};`);
 const genPath = path.join(SCRATCH, 'gen.js');
+fs.copyFileSync(path.join(__dirname, 'convex_brush.js'), path.join(SCRATCH, 'convex_brush.js'));
 fs.writeFileSync(genPath, gen);
 
 const out = execFileSync(process.execPath, [genPath], { encoding: 'utf8', cwd: REPO });

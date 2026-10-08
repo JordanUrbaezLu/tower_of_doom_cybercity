@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1000" viewBox="0 0 1400 1000">
+<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050a18"/><stop offset="0.6" stop-color="#0d1330"/><stop offset="1" stop-color="#241a3a"/></linearGradient></defs>
+<rect width="1400" height="1000" fill="url(#sky)"/>
+<text x="14" y="26" font-family="monospace" font-size="15" fill="#8fa0bd">CROWN — THE APPROACH (standing on the terrace, start of the causeway)</text>
+<text x="14" y="46" font-family="monospace" font-size="11" fill="#5f6f8d">94 drawn / 115 selected / 11244 in map  •  x[-1204,-236] y[-1620,-396] z[3440,3996]</text>
+</svg>

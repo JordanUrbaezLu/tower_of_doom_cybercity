@@ -29,9 +29,6 @@ LANG_ENGLISH         "Thunderwall Kill"
 REFERENCE            KF_TURNED
 LANG_ENGLISH         "Turned Kill"
 
-REFERENCE            KF_ZOMBIE_DOG
-LANG_ENGLISH         "Zombie Dog"
-
 REFERENCE            KF_ROCKET_SHIELD
 LANG_ENGLISH         "Rocket Shield Kill"
 
@@ -61,5 +58,17 @@ LANG_ENGLISH         "Mega Bottle"
 
 REFERENCE            KF_MEGA_BOTTLES
 LANG_ENGLISH         "Mega Bottles"
+
+REFERENCE            KF_ELITE
+LANG_ENGLISH         "Elite Kill"
+
+REFERENCE            KF_BOSS
+LANG_ENGLISH         "Boss Kill"
+
+REFERENCE            KF_TRIAL
+LANG_ENGLISH         "Trial Win"
+
+REFERENCE            KF_HOOP
+LANG_ENGLISH         "Score"
 
 ENDMARKER
