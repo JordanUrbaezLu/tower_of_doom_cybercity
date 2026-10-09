@@ -386,7 +386,15 @@ def overlay_export(a):
            'file_count': len(records), 'total_bytes': sum(r['size'] for r in records), 'files': records}
     with open(os.path.join(a.dest, 'overlay_manifest.json'), 'w', encoding='utf-8') as f:
         json.dump(out, f)
-    shutil.copyfile(lp(prog_path), lp(legacy))      # the record travels with the bundle, for reference
+    # Write the COMPLETE record (every file in this bundle) to both places. Copying the local file
+    # over the share's record (2026-10-08) erased the share-only entries from earlier runs, and the
+    # next resume re-copied those files. Rewrite via .new + replace so a crash never leaves half.
+    for path in (prog_path, legacy):
+        tmp = path + '.new'
+        with open(lp(tmp), 'w', encoding='utf-8') as f:
+            for r in records:
+                f.write(json.dumps(r) + '\n')
+        os.replace(lp(tmp), lp(path))
     print('OVERLAY EXPORT OK: %d files, %s -> %s' % (len(records), gb(out['total_bytes']), a.dest))
     return 0
 
