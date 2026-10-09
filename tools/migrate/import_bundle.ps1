@@ -79,8 +79,11 @@ if ($toolsItem -and $toolsItem.LinkType -eq 'Junction') {
         Warn "BO3 itself is not installed at $Game - install it, then re-run (the game reads maps through $gu)"
     } elseif (Test-Path $gu) {
         $it = Get-Item -LiteralPath $gu -Force
-        if (Same-Path $gu $tu) { Info "game usermaps already reaches $tu" }
-        elseif ($it.LinkType -eq 'Junction') { Warn "$gu is a junction to $($it.Target), not to $tu - fix it by hand" }
+        # compare the junction's TARGET: Resolve-Path on a junction returns the junction's own path
+        $tgt = "$(@($it.Target)[0])".TrimEnd('\')
+        if ($it.LinkType -eq 'Junction' -and $tgt -eq $tu.TrimEnd('\')) { Info "game usermaps junction already -> $tu" }
+        elseif (Same-Path $gu $tu) { Info "game usermaps already reaches $tu" }
+        elseif ($it.LinkType -eq 'Junction') { Warn "$gu is a junction to $tgt, not to $tu - fix it by hand" }
         elseif (@(Get-ChildItem -LiteralPath $gu -Force).Count -eq 0) {
             Remove-Item -LiteralPath $gu -Force
             New-Item -ItemType Junction -Path $gu -Target $tu | Out-Null
