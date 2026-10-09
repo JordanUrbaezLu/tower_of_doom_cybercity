@@ -213,6 +213,11 @@ def summary(sel, depth=2, limit=40):
                                                      sum(v[0] for _, v in rest), len(rest)))
 
 
+def fold(path):
+    """Windows file names are case-insensitive: compare paths case-folded there."""
+    return path.lower() if os.name == 'nt' else path
+
+
 def tree_sizes(root):
     """{'a/b/c.ext': (size, mtime)} for every file under root, from ONE directory listing per folder.
     On a network share a per-file isfile+getsize is two round trips each: the resume check
@@ -232,7 +237,7 @@ def tree_sizes(root):
                         stack.append(r)
                     else:
                         st = e.stat(follow_symlinks=False)
-                        out[r] = (st.st_size, st.st_mtime)
+                        out[fold(r)] = (st.st_size, st.st_mtime)
         except FileNotFoundError:
             pass
     return out
@@ -343,7 +348,7 @@ def overlay_export(a):
     for rel, size, mtime, kind in sel:
         r = done.get(rel)
         if r and r['size'] == size and abs(r['mtime'] - mtime) < 2 and \
-                (have is None or (have.get(rel) or (None,))[0] == size):
+                (have is None or (have.get(fold(rel)) or (None,))[0] == size):
             finished[rel] = r
             pr.step(size)
         else:
@@ -543,7 +548,7 @@ def copylist(a):
                 n += 1
                 b += st.st_size
                 continue
-            cur = existing.get(r.replace(chr(92), '/'))
+            cur = existing.get(fold(r.replace(chr(92), '/')))
             if cur is not None:
                 if a.no_overwrite:
                     kept += 1          # import: a file the clone (or the user) already has wins
