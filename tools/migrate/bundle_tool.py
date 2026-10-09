@@ -378,6 +378,22 @@ def overlay_export(a):
             raise
         ex.shutdown(wait=True)
     records = [finished[rel] for rel, _, _, _ in sel]
+    # Final safety net (2026-10-09): list the bundle once and re-copy any file whose size disagrees
+    # with its record. A run stopped mid-copy truncates the file it was rewriting (copy_direct writes
+    # in place); if that file's earlier record survives, a resume would trust it - 5 such files once
+    # reached the new laptop (2 cut at 1 MiB, 3 empty). Up to 3 passes, then fail loudly.
+    for attempt in range(3):
+        on_disk = tree_sizes(os.path.join(a.dest, 'files'))
+        short = [r for r in records if (on_disk.get(fold(r['p'])) or (None,))[0] != r['size']]
+        if not short:
+            print('  size check: all %d files in the bundle match their records' % len(records))
+            break
+        print('  size check: %d file(s) short or missing - re-copying (pass %d)' % (len(short), attempt + 1))
+        for r in short:
+            copy_hash(os.path.join(tools, r['p']), os.path.join(a.dest, 'files', r['p']), r['mtime'], expect=r['sha1'])
+    else:
+        print('OVERLAY EXPORT FAIL: files still short after 3 passes: %s' % ', '.join(r['p'] for r in short[:10]))
+        return 1
     out = {'created': datetime.datetime.now().isoformat(timespec='seconds'),
            'source_tools_root': tools, 'stock_manifest': os.path.basename(man_path),
            'stock_depot_manifest_id': str(meta.get(2)), 'map': MAP, 'all_usermaps': a.all_usermaps,
