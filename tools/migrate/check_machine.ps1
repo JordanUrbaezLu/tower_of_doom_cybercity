@@ -59,6 +59,14 @@ Check (Test-Path (Join-Path $addons 'io_scene_cast')) 'Blender Cast addon (BO6 i
 Write-Host "== Steam / BO3"
 Check (Test-Path (Join-Path $Game 'BlackOps3.exe')) "BO3 at $Game" "BO3 not found at $Game"
 Check (Test-Path (Join-Path $Tools 'bin\modlauncher.exe')) "Mod Tools at $Tools" "Mod Tools not at $Tools - 47 tools scripts name this exact folder (import_bundle.ps1 makes a junction if Steam put them elsewhere)"
+# Runtimes the Mod Tools exes load (cod2map64 / linker / Radiant / modlauncher): VC++ 2012 x64 and
+# DirectX June 2010. Steam installs them only behind an admin prompt on the Mod Tools' first launch;
+# on a fresh machine they are missing ("MSVCR110.dll was not found", "d3dx9_43 not found").
+foreach ($dll in 'msvcr110.dll', 'msvcp110.dll', 'vcomp110.dll', 'd3dx9_43.dll') {
+    $found = (Test-Path "$env:WINDIR\System32\$dll") -or (Test-Path (Join-Path $Tools "bin\$dll"))
+    $which = if ($dll -like 'd3dx*') { 'DirectX End-User Runtime (June 2010)' } else { 'Visual C++ 2012 Redistributable (x64)' }
+    Check $found "runtime $dll" "runtime $dll missing - install the $which (Steam > Mod Tools > Play once and accept the admin prompt, or Steamworks Shared\_CommonRedist)"
+}
 $envv = Get-ItemProperty 'HKCU:\Environment' -ErrorAction SilentlyContinue
 $taOk = $true
 foreach ($k in 'TA_GAME_PATH', 'TA_TOOLS_PATH', 'TA_LOCAL_ASSET_CACHE') { if (-not $envv.$k -or -not (Test-Path -LiteralPath $envv.$k)) { $taOk = $false } }

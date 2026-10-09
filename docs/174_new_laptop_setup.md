@@ -102,6 +102,7 @@ USB cable between the two laptops showed up as nothing on this side — no drive
    | 7-Zip | — | `winget install 7zip.7zip` | pack archives |
    | VS Code + Claude Code | extension `anthropic.claude-code` | code.visualstudio.com | also `openai.chatgpt` (Codex) if used |
    | GitHub CLI (optional) | not installed on the old laptop | `winget install GitHub.cli` | |
+   | **Visual C++ 2012 x64 + DirectX June 2010 runtimes** | in System32 on the old laptop | **start the Mod Tools once from Steam and ACCEPT the admin prompt** (it installs both from `Steamworks Shared\_CommonRedist`) | cod2map64 / linker / Radiant / modlauncher load `msvcr110.dll`, `msvcp110.dll`, `vcomp110.dll`, `d3dx9_43.dll`; without them: "MSVCR110.dll was not found" / "UNRECOVERABLE ERROR: d3dx9_43 not found". Found on the new laptop 2026-10-09 (its Claude put the Microsoft-signed DLLs in the tools `bin\` without admin). `check_machine.ps1` FAILs when they are missing. |
 
    Not installed, they come in the bundle: Greyhound, Saluki, Cordycep, RSX (portable, in
    `Documents\BO3_tools`). Only for extracting NEW assets: Black Ops II (Greyhound), BO6 (Saluki),
