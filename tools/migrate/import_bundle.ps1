@@ -41,7 +41,7 @@ function Robo([string]$label, [string]$src, [string]$dst, [switch]$NoOverwrite) 
     $a = @($src, $dst, '/E', '/XO', '/COPY:DAT', '/DCOPY:T', '/R:1', '/W:1', '/MT:16', '/NFL', '/NDL', '/NP', '/NJH', '/NJS', "/LOG+:$RoboLog")
     if ($NoOverwrite) { $a += @('/XC', '/XN') }
     & robocopy @a | Out-Null
-    if ($LASTEXITCODE -ge 8) { Die "robocopy failed ($LASTEXITCODE): $src -> $dst (see $RoboLog)" }
+    if ($LASTEXITCODE -ge 8 -or $LASTEXITCODE -lt 0) { Die "robocopy failed ($LASTEXITCODE): $src -> $dst (see $RoboLog)" }
     Info "$label -> $dst"
 }
 function Same-Path([string]$a, [string]$b) {

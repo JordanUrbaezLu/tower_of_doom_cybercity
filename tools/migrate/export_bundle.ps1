@@ -92,9 +92,10 @@ function Robo([string]$label, [string]$src, [string]$dst, [string[]]$opts, [swit
         Warn "$label - source missing, skipped: $src"; return
     }
     $a = @($src, $dst) + $opts + @('/COPY:DAT', '/DCOPY:T', '/R:1', '/W:1', '/NFL', '/NDL', '/NP', '/BYTES', '/NJH')
-    if ($DryRun) { $a += '/L' } else { $a += @('/MT:16', '/TEE', "/LOG+:$RoboLog") }
+    if ($DryRun) { $a += '/L' } else { $a += @('/MT:64', '/TEE', "/LOG+:$RoboLog") }   # 64: Greyhound = 52k files ~465 KB; over Wi-Fi each file waits on round trips
     $out = & robocopy @a
-    if ($LASTEXITCODE -ge 8) { Die "robocopy failed ($LASTEXITCODE): $src -> $dst (see $RoboLog)" }
+    # >= 8 = robocopy failure; < 0 = robocopy killed from outside (-1) - never count either as copied
+    if ($LASTEXITCODE -ge 8 -or $LASTEXITCODE -lt 0) { Die "robocopy failed ($LASTEXITCODE): $src -> $dst (see $RoboLog)" }
     # summary columns: Total Copied Skipped ... - "Copied" (what this run moves; /L: would move).
     # Total also counts files a filter such as /MAX excluded, so it is not the bundle size.
     $bytes = 0
