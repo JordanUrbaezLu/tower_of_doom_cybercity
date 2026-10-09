@@ -612,13 +612,10 @@ def du(a):
         if os.path.isfile(lp(p)):
             n, s = 1, os.path.getsize(lp(p))
         elif os.path.isdir(lp(p)):
-            for dp, _, fns in os.walk(lp(p)):
-                for fn in fns:
-                    try:
-                        s += os.stat(os.path.join(dp, fn)).st_size
-                        n += 1
-                    except OSError:
-                        pass
+            # one listing per folder: a stat per file over a network share took over an hour for
+            # the ~150k-file bundle (2026-10-08); DirEntry sizes come free with the listing
+            sizes = tree_sizes(p)
+            n, s = len(sizes), sum(v[0] for v in sizes.values())
         out.append({'path': p, 'files': n, 'bytes': s, 'exists': os.path.exists(lp(p))})
     if a.json:
         print(json.dumps(out))
