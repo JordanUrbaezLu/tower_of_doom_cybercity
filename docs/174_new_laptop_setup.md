@@ -182,8 +182,22 @@ USB cable between the two laptops showed up as nothing on this side — no drive
   import, verify, untracked-file copy (stdlib only).
 - `tools/migrate/requirements.txt`, `requirements-blender-mcp.txt` — Python packages.
 
-## Status (2026-10-08)
+## Status (2026-10-09)
 
-Plan + scripts written, reviewed, fixed and tested on the old laptop. Everything committed and pushed
-to `map-content`. **Next:** the user picks the route (drive or network share) → the real export (A4)
-→ the new laptop (B1–B8). The new laptop can start B1–B3 now; they depend on nothing here.
+**Export done: `BUNDLE OK` 2026-10-09 00:03:47** over Wi-Fi into `\\10.0.0.149\tod_transfer`
+(= `C:\tod_transfer` on the new laptop JORDANURBAEZLU): **155,361 files / 147.25 GB**, matching the
+new laptop's own count; 0 warnings, 0 missing required items; scripts from `b0f941b`. The overlay is
+61,720 files: 30 resized + **71 same-size-but-different** stock files (only the full hash finds those)
+plus every pack. Next: the new laptop runs B5–B8 (import, check, first build, play).
+
+What the Wi-Fi export taught (each fixed in `tools/migrate`, all on `map-content`):
+- **Never a per-file network round trip.** One-at-a-time copy ran 2–4 MB/s on a link robocopy fills
+  at 24 MB/s; the fixes are parallel copies (Python 32, robocopy `/MT:64`), no `.part`/rename/set-time
+  on export, and folder LISTINGS instead of per-file stats for resume checks, copylist and `du`.
+- **Keep the progress record on the exporting machine** (`%LOCALAPPDATA%\tod_migrate`, keyed by the
+  bundle's `bundle_id.txt`); written over SMB it fell ~27k files behind the copiers and a drop lost
+  the backlog. At the end the COMPLETE record goes to both places — copying the local file over the
+  share's once erased share-only entries.
+- **A laptop that is unplugged and closed goes into Modern Standby with Wi-Fi off** (Kernel-Power 172
+  "Adaptive Connected Standby"); `SetThreadExecutionState` cannot stop that. Keep it plugged in and open.
+- PS 5.1: `New-Item` on a share root throws; a killed robocopy exits `-1` (treat as failure).
