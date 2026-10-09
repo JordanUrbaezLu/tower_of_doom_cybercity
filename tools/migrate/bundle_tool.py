@@ -213,6 +213,31 @@ def summary(sel, depth=2, limit=40):
                                                      sum(v[0] for _, v in rest), len(rest)))
 
 
+def tree_sizes(root):
+    """{'a/b/c.ext': (size, mtime)} for every file under root, from ONE directory listing per folder.
+    On a network share a per-file isfile+getsize is two round trips each: the resume check
+    of 16.5k finished files stalled ~25 min over Wi-Fi (2026-10-08). On Windows,
+    DirEntry.stat() reuses the listing's data, so this costs no per-file request."""
+    out = {}
+    base = lp(root)
+    stack = ['']
+    while stack:
+        rel = stack.pop()
+        here = os.path.join(base, rel.replace('/', chr(92))) if rel else base
+        try:
+            with os.scandir(here) as it:
+                for e in it:
+                    r = rel + '/' + e.name if rel else e.name
+                    if e.is_dir(follow_symlinks=False):
+                        stack.append(r)
+                    else:
+                        st = e.stat(follow_symlinks=False)
+                        out[r] = (st.st_size, st.st_mtime)
+        except FileNotFoundError:
+            pass
+    return out
+
+
 def copy_direct(src, dst):
     """Export-side copy: straight to the final name, hashing on the way, nothing else. Over SMB
     every extra step (a .part rename, a set-time) is more round trips per file, and the export
@@ -282,23 +307,43 @@ def overlay_export(a):
     if a.dry_run:
         return 0
     os.makedirs(lp(a.dest), exist_ok=True)
-    prog_path = os.path.join(a.dest, 'overlay_progress.jsonl')
+    # The progress record lives on THIS machine's disk (2026-10-08): written to the share, every
+    # record was a network round trip, 32 copy workers outran the one recorder by ~27k files and a
+    # Wi-Fi drop lost them all. Local appends are instant and survive any network drop; the file is
+    # copied into the bundle at the end. A legacy record on the share (earlier runs) is merged in.
+    legacy = os.path.join(a.dest, 'overlay_progress.jsonl')
+    # the local record is keyed by an id stored IN the bundle: wipe the bundle and its id goes too,
+    # so a stale local record can never skip files that are no longer there
+    tok_path = os.path.join(a.dest, 'bundle_id.txt')
+    if os.path.isfile(lp(tok_path)):
+        key = open(lp(tok_path), encoding='utf-8').read().strip()
+    else:
+        import uuid
+        key = uuid.uuid4().hex[:16]
+        open(lp(tok_path), 'w', encoding='utf-8').write(key)
+    local_dir = os.path.join(os.environ.get('LOCALAPPDATA', os.path.expanduser('~')), 'tod_migrate')
+    os.makedirs(local_dir, exist_ok=True)
+    prog_path = os.path.join(local_dir, key + '_overlay_progress.jsonl')
     done = {}
-    if os.path.isfile(prog_path):
-        for line in open(prog_path, encoding='utf-8'):
-            try:
-                r = json.loads(line)
-                done[r['p']] = r
-            except ValueError:
-                pass
+    for path in (legacy, prog_path):
+        if os.path.isfile(lp(path)):
+            for line in open(lp(path), encoding='utf-8'):
+                try:
+                    r = json.loads(line)
+                    done[r['p']] = r
+                except ValueError:
+                    pass
+    print('  progress record: %s (%d files recorded)' % (prog_path, len(done)))
     finished = {}
     todo = []
+    # --verify-remote: also confirm each recorded file is still in the bundle (one listing per
+    # folder; ~6 min over Wi-Fi). Off by default - the import re-hashes every file anyway.
+    have = tree_sizes(os.path.join(a.dest, 'files')) if (done and a.verify_remote) else None
     pr = Progress(len(sel), total, 'export')
     for rel, size, mtime, kind in sel:
-        dst = os.path.join(a.dest, 'files', rel)
         r = done.get(rel)
         if r and r['size'] == size and abs(r['mtime'] - mtime) < 2 and \
-                os.path.isfile(lp(dst)) and os.path.getsize(lp(dst)) == size:
+                (have is None or (have.get(rel) or (None,))[0] == size):
             finished[rel] = r
             pr.step(size)
         else:
@@ -336,6 +381,7 @@ def overlay_export(a):
            'file_count': len(records), 'total_bytes': sum(r['size'] for r in records), 'files': records}
     with open(os.path.join(a.dest, 'overlay_manifest.json'), 'w', encoding='utf-8') as f:
         json.dump(out, f)
+    shutil.copyfile(lp(prog_path), lp(legacy))      # the record travels with the bundle, for reference
     print('OVERLAY EXPORT OK: %d files, %s -> %s' % (len(records), gb(out['total_bytes']), a.dest))
     return 0
 
@@ -467,6 +513,9 @@ def copylist(a):
     n = b = skipped = kept = 0
     errors, links, absent, jobs = [], [], [], []
     onerr = lambda e: errors.append('%s: %s' % (e.filename, e.strerror))
+    # what is already at the destination: ONE listing per folder, not a stat per file (over a
+    # network share each stat is a round trip - 26k of them is ~25 min on Wi-Fi)
+    existing = {} if a.dry_run else tree_sizes(a.dest)
     for rel in items:
         src = os.path.join(a.src, rel)
         srcs = []
@@ -494,12 +543,12 @@ def copylist(a):
                 n += 1
                 b += st.st_size
                 continue
-            if os.path.isfile(lp(d)):
+            cur = existing.get(r.replace(chr(92), '/'))
+            if cur is not None:
                 if a.no_overwrite:
                     kept += 1          # import: a file the clone (or the user) already has wins
                     continue
-                dt = os.stat(lp(d))
-                if dt.st_size == st.st_size and abs(dt.st_mtime - st.st_mtime) < 2:
+                if cur[0] == st.st_size and abs(cur[1] - st.st_mtime) < 2:
                     skipped += 1
                     continue
             jobs.append((r, s, d, st.st_size))
@@ -576,6 +625,7 @@ def main():
     e.add_argument('--dry-run', action='store_true')
     e.add_argument('--all-usermaps', action='store_true', help="also keep the other maps' build output")
     e.add_argument('--workers', type=int, default=32, help='files copied at once (default 32: Wi-Fi SMB is latency-bound)')
+    e.add_argument('--verify-remote', action='store_true', help='on resume, also list the bundle to confirm recorded files are still there')
     i = sub.add_parser('overlay-import')
     i.add_argument('--src', required=True)
     i.add_argument('--tools')
